@@ -666,6 +666,30 @@ package net.flashpunk
 			moveBy(x - this.x, y - this.y, solidType, sweep);
 		}
 		
+		/**
+		 * Clamps the Entity's hitbox on the x-axis.
+		 * @param	left		Left bounds.
+		 * @param	right		Right bounds.
+		 * @param	padding		Optional padding on the clamp.
+		 */
+		public function clampHorizontal(left:Number, right:Number, padding:Number = 0):void
+		{
+			if (x - originX < left + padding) x = left + originX + padding;
+			if (x - originX + width > right - padding) x = right - width + originX - padding;
+		}
+		
+		/**
+		 * Clamps the Entity's hitbox on the y axis.
+		 * @param	top			Min bounds.
+		 * @param	bottom		Max bounds.
+		 * @param	padding		Optional padding on the clamp.
+		 */
+		public function clampVertical(top:Number, bottom:Number, padding:Number = 0):void
+		{
+			if (y - originY < top + padding) y = top + originY + padding;
+			if (y - originY + height > bottom - padding) y = bottom - height + originY - padding;
+		}
+		
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
