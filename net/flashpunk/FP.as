@@ -399,7 +399,7 @@
 		 * @param	width		Rectangle's width.
 		 * @param	height		Rectangle's height.
 		 */
-		public static function clampInRect(object:Object, x:Number, y:Number, width:Number, height:Number, padding:Number):void
+		public static function clampInRect(object:Object, x:Number, y:Number, width:Number, height:Number, padding:Number = 0):void
 		{
 			object.x = clamp(object.x, x + padding, x + width - padding);
 			object.y = clamp(object.y, y + padding, y + height - padding);
