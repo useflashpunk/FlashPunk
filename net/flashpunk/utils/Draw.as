@@ -1,0 +1,279 @@
+﻿package net.flashpunk.utils 
+{
+	import flash.display.BitmapData;
+	import flash.display.Graphics;
+	import flash.display.LineScaleMode;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import net.flashpunk.Entity;
+	import net.flashpunk.FP;
+	
+	/**
+	 * Static class with access to miscellanious drawing functions.
+	 * These functions are not meant to replace Graphic components
+	 * for Entities, but rather to help with testing and debugging.
+	 */
+	public class Draw 
+	{
+		/**
+		 * The blending mode used by Draw functions. This will not
+		 * apply to Draw.line(), but will apply to Draw.linePlus().
+		 */
+		public static var blend:String;
+		
+		/**
+		 * Sets the drawing target for Draw functions.
+		 * @param	target		The buffer to draw to.
+		 * @param	camera		The camera offset (use null for none).
+		 * @param	blend		The blend mode to use.
+		 */
+		public static function setTarget(target:BitmapData, camera:Point = null, blend:String = null):void
+		{
+			_target = target;
+			_camera = camera ? camera : FP.zero;
+			Draw.blend = blend;
+		}
+		
+		/**
+		 * Resets the drawing target to the default. The same as calling Draw.setTarget(FP.buffer, FP.camera).
+		 */
+		public static function resetTarget():void
+		{
+			_target = FP.buffer;
+			_camera = FP.camera;
+			blend = null;
+		}
+		
+		/**
+		 * Draws a pixelated, non-antialiased line.
+		 * @param	x1		Starting x position.
+		 * @param	y1		Starting y position.
+		 * @param	x2		Ending x position.
+		 * @param	y2		Ending y position.
+		 * @param	color	Color of the line.
+		 */
+		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
+		{
+			color &= 0xFFFFFF;
+			
+			// get the drawing positions
+			x1 -= _camera.x;
+			y1 -= _camera.y;
+			x2 -= _camera.x;
+			y2 -= _camera.y;
+			
+			// get the drawing difference
+			var screen:BitmapData = _target,
+				X:Number = Math.abs(x2 - x1),
+				Y:Number = Math.abs(y2 - y1),
+				xx:int,
+				yy:int;
+			
+			// draw a single pixel
+			if (X == 0)
+			{
+				if (Y == 0)
+				{
+					screen.setPixel(x1, y1, color);
+					return;
+				}
+				// draw a straight vertical line
+				yy = y2 > y1 ? 1 : -1;
+				while (y1 != y2)
+				{
+					screen.setPixel(x1, y1, color);
+					y1 += yy;
+				}
+				screen.setPixel(x2, y2, color);
+				return;
+			}
+			
+			if (Y == 0)
+			{
+				// draw a straight horizontal line
+				xx = x2 > x1 ? 1 : -1;
+				while (x1 != x2)
+				{
+					screen.setPixel(x1, y1, color);
+					x1 += xx;
+				}
+				screen.setPixel(x2, y2, color);
+				return;
+			}
+			
+			xx = x2 > x1 ? 1 : -1;
+			yy = y2 > y1 ? 1 : -1;
+			var c:Number = 0,
+				slope:Number;
+			
+			if (X > Y)
+			{
+				slope = Y / X;
+				c = .5;
+				while (x1 != x2)
+				{
+					screen.setPixel(x1, y1, color);
+					x1 += xx;
+					c += slope;
+					if (c >= 1)
+					{
+						y1 += yy;
+						c -= 1;
+					}
+				}
+				screen.setPixel(x2, y2, color);
+				return;
+			}
+			else
+			{
+				slope = X / Y;
+				c = .5;
+				while (y1 != y2)
+				{
+					screen.setPixel(x1, y1, color);
+					y1 += yy;
+					c += slope;
+					if (c >= 1)
+					{
+						x1 += xx;
+						c -= 1;
+					}
+				}
+				screen.setPixel(x2, y2, color);
+				return;
+			}
+		}
+		
+		/**
+		 * Draws a smooth, antialiased line with optional alpha and thickness.
+		 * @param	x1		Starting x position.
+		 * @param	y1		Starting y position.
+		 * @param	x2		Ending x position.
+		 * @param	y2		Ending y position.
+		 * @param	color	Color of the line.
+		 * @param	alpha	Alpha of the line.
+		 * @param	thick	The thickness of the line.
+		 */
+		public function linePlus(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
+		{
+			_graphics.clear();
+			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NONE);
+			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
+			_graphics.lineTo(x2 - _camera.x, y2 - _camera.y);
+			_target.draw(FP.sprite, null, null, blend);
+		}
+		
+		/**
+		 * Draws a filled rectangle.
+		 * @param	x			X position of the rectangle.
+		 * @param	y			Y position of the rectangle.
+		 * @param	width		Width of the rectangle.
+		 * @param	height		Height of the rectangle.
+		 * @param	color		Color of the rectangle.
+		 * @param	alpha		Alpha of the rectangle.
+		 */
+		public static function rect(x:int, y:int, width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1):void
+		{
+			if (alpha >= 1 && !blend)
+			{
+				if (color < 0xFF000000) color += 0xFF000000;
+				_rect.x = x - _camera.x;
+				_rect.y = y - _camera.y;
+				_rect.width = width;
+				_rect.height = height;
+				_target.fillRect(_rect, color);
+			}
+			_graphics.clear();
+			_graphics.beginFill(color, alpha);
+			_graphics.drawRect(x - _camera.x, y - _camera.y, width, height);
+			_target.draw(FP.sprite, null, null, blend);
+		}
+		
+		/**
+		 * Draws a filled circle.
+		 * @param	x			X position of the circle's center.
+		 * @param	y			Y position of the circle's center.
+		 * @param	radius		Radius of the circle.
+		 * @param	color		Color of the circle.
+		 * @param	alpha		Alpha of the circle.
+		 */
+		public static function circle(x:int, y:int, radius:Number, color:uint = 0x000000, alpha:Number = 1):void
+		{
+			_graphics.clear();
+			_graphics.beginFill(color & 0xFFFFFF, alpha);
+			_graphics.drawCircle(x - _camera.x, y - _camera.y, radius);
+			_graphics.endFill();
+			_target.draw(FP.sprite, null, null, blend);
+		}
+		
+		/**
+		 * Draws the Entity's hitbox.
+		 * @param	e			The Entity whose hitbox is to be drawn.
+		 * @param	outline		If just the hitbox's outline should be drawn.
+		 * @param	color		Color of the hitbox.
+		 * @param	alpha		Alpha of the hitbox.
+		 */
+		public static function hitbox(e:Entity, outline:Boolean = true, color:uint = 0xFFFFFF, alpha:Number = 1):void
+		{
+			if (outline)
+			{
+				if (color < 0xFF000000) color += 0xFF000000;
+				var x:int = e.x - e.originX - _camera.x,
+					y:int = e.y - e.originY - _camera.y;
+				_rect.x = x;
+				_rect.y = y;
+				_rect.width = e.width;
+				_rect.height = 1;
+				_target.fillRect(_rect, color);
+				_rect.y += e.height - 1;
+				_target.fillRect(_rect, color);
+				_rect.y = y;
+				_rect.width = 1;
+				_rect.height = e.height;
+				_target.fillRect(_rect, color);
+				_rect.x += e.width - 1;
+				_target.fillRect(_rect, color);
+				return;
+			}
+			if (alpha >= 1)
+			{
+				if (color < 0xFF000000) color += 0xFF000000;
+				_rect.x = e.x - e.originX - _camera.x;
+				_rect.y = e.y - e.originY - _camera.y;
+				_rect.width = e.width;
+				_rect.height = e.height;
+				_target.fillRect(_rect, color);
+			}
+			_graphics.clear();
+			_graphics.beginFill(color, alpha);
+			_graphics.drawRect(e.x - e.originX - _camera.x, e.y - e.originY - _camera.y, e.width, e.height);
+			_target.draw(FP.sprite, null, null, blend);
+		}
+		
+		/**
+		 * Draws a quadratic curve to the screen.
+		 * @param	x1		X start.
+		 * @param	y1		Y start.
+		 * @param	x2		X control point, used to determine the curve.
+		 * @param	y2		Y control point, used to determine the curve.
+		 * @param	x3		X finish.
+		 * @param	y3		Y finish.
+		 */
+		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int):void
+		{
+			_graphics.clear();
+			_graphics.lineStyle(1, 0xFF0000);
+			_graphics.moveTo(x1, y1);
+			_graphics.curveTo(x2, y2, x3, y3);
+			_target.draw(FP.sprite, null, null, blend);
+		}
+		
+		// Drawing information.
+		/** @private */ private static var _target:BitmapData;
+		/** @private */ private static var _camera:Point;
+		/** @private */ private static var _graphics:Graphics = FP.sprite.graphics;
+		/** @private */ private static var _rect:Rectangle = FP.rect;
+		/** @private */ private static var _matrix:Matrix = new Matrix;
+	}
+}
