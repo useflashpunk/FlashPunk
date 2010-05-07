@@ -9,7 +9,7 @@
 	import net.flashpunk.*;
 	
 	/**
-	 * Performance-optimized animated image. Can be drawn to the screen with transformations.
+	 * Performance-optimized non-animated image. Can be drawn to the screen with transformations.
 	 */
 	public class Image extends Graphic
 	{
@@ -51,7 +51,7 @@
 		
 		/**
 		 * If the image should be drawn transformed with pixel smoothing.
-		 * This will effect drawing performance, but look less pixelly.
+		 * This will affect drawing performance, but look less pixelly.
 		 */
 		public var smooth:Boolean;
 		
