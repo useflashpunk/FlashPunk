@@ -18,7 +18,7 @@
 		 */
 		public static function load(file:String = ""):void
 		{
-			var data:Object = loadData(_file);
+			var data:Object = loadData(file);
 			_data = { };
 			for (var i:String in data) _data[i] = data[i];
 		}
@@ -132,7 +132,6 @@
 			if (!file) file = DEFAULT_FILE;
 			if (id) _shared = SharedObject.getLocal(PREFIX + "/" + id + "/" + file, "/");
 			else _shared = SharedObject.getLocal(PREFIX + "/" + file);
-			_shared = SharedObject.getLocal(file);
 			return _shared.data;
 		}
 		
@@ -140,7 +139,6 @@
 		/** @private */ private static var _shared:SharedObject;
 		/** @private */ private static var _dir:String;
 		/** @private */ private static var _data:Object = { };
-		/** @private */ private static var _file:String;
 		/** @private */ private static const PREFIX:String = "FlashPunk";
 		/** @private */ private static const DEFAULT_FILE:String = "_file";
 		/** @private */ private static const SIZE:uint = 10000;
