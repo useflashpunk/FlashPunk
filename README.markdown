@@ -1,5 +1,3 @@
-# FlashPunk
-
 ## TIMESTEPS
 
 Support for both fixed-framerate and framerate-independent timesteps. Previously, FlashPunk used a fixed-framerate timestep decoupled from the drawing rate, meaning that if you set your game to run at 60 FPS, it would try to run at that rate constantly, and skip rendering frames occasionally if it was falling behind. Now, in Engine’s constructor, you can choose whether you want a fixed-framerate or not. If not, Flash Player will update using ENTER_FRAME using your frameRate as a target, and you can use FP’s elapsed property to determine how much time has passed since the last frame and use that to determine movement and timer rates, something that Flixel developers will be used to.
