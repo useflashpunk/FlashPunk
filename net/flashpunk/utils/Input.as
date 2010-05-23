@@ -38,6 +38,25 @@
 		public static var mouseReleased:Boolean = false;
 		
 		/**
+		 * If the mouse wheel was moved this frame.
+		 */
+		public static var mouseWheel:Boolean = false; 
+		
+		/**
+		 * If the mouse wheel was moved this frame, this was the delta.
+		 */
+		public static function get mouseWheelDelta():int
+		{
+		    if (mouseWheel)
+		    {
+		        mouseWheel = false;
+		        return _mouseWheelDelta;
+		    } else {
+		        return 0;
+		    }
+		}  
+		
+		/**
 		 * X position of the mouse on the screen.
 		 */
 		public static function get mouseX():int
@@ -147,6 +166,7 @@
 				FP.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 				FP.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 				FP.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				FP.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 				_enabled = true;
 			}
 		}
@@ -222,6 +242,13 @@
 			mouseReleased = true;
 		}
 		
+		/** @private Event handler for mouse wheel events */
+		private static function onMouseWheel(e:MouseEvent):void
+		{
+		    mouseWheel = true;
+		    _mouseWheelDelta = e.delta;
+		}
+		
 		// Max amount of characters stored by the keystring.
 		/** @private */ private static const KEYSTRING_MAX:uint = 100;
 		
@@ -234,5 +261,6 @@
 		/** @private */ private static var _pressNum:int = 0;
 		/** @private */ private static var _releaseNum:int = 0;
 		/** @private */ private static var _control:Array = [];
+		/** @private */ private static var _mouseWheelDelta:int = 0;
 	}
 }

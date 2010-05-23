@@ -218,7 +218,7 @@
 		}
 		
 		/**
-		 * Checks if ths Entity overlaps the specified rectangle.
+		 * Checks if this Entity overlaps the specified rectangle.
 		 * @param	x			Virtual x position to place this Entity.
 		 * @param	y			Virtual y position to place this Entity.
 		 * @param	rX			X position of the rectangle.
@@ -252,7 +252,7 @@
 		}
 		
 		/**
-		 * Checks if ths Entity overlaps the specified position.
+		 * Checks if this Entity overlaps the specified position.
 		 * @param	x			Virtual x position to place this Entity.
 		 * @param	y			Virtual y position to place this Entity.
 		 * @param	pX			X position.

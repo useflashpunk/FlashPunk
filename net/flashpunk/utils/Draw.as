@@ -155,7 +155,7 @@
 		 * @param	alpha	Alpha of the line.
 		 * @param	thick	The thickness of the line.
 		 */
-		public function linePlus(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
+		public static function linePlus(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
 			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NONE);
