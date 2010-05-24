@@ -26,7 +26,7 @@
 			_height = height - (height % tileHeight);
 			_columns = _width / tileWidth;
 			_rows = _height / tileHeight;
-			_map = new BitmapData(_width, _height, false, 0);
+			_map = new BitmapData(_columns, _rows, false, 0);
 			_tile = new Rectangle(0, 0, tileWidth, tileHeight);
 			
 			// create the canvas
