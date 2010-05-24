@@ -149,6 +149,17 @@
 			return (tilesRow % _setRows) * _setColumns + (tilesColumn % _setColumns);
 		}
 		
+		/**
+		 * The tile width.
+		 */
+		public function get tileWidth():uint { return _tile.width; }
+		
+		/**
+		 * The tile height.
+		 */
+		public function get tileHeight():uint { return _tile.height; }
+		
+		
 		// Tilemap information.
 		/** @private */ private var _map:BitmapData;
 		/** @private */ private var _columns:uint;
