@@ -169,11 +169,12 @@
 		 * Sets the current frame index. When you set this, any
 		 * animations playing will be stopped to force the frame.
 		 */
-		public function get frame():uint { return _frame; }
-		public function set frame(value:uint):void
+		public function get frame():int { return _frame; }
+		public function set frame(value:int):void
 		{
 			_anim = null;
 			value %= _frameCount;
+			if (value < 0) value = _frameCount + value;
 			if (_frame == value) return;
 			_frame = value;
 			update();
