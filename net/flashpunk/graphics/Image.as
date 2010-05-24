@@ -69,7 +69,13 @@
 			}
 			else if (source is BitmapData) _source = source;
 			if (!_source) throw new Error("Invalid source image.");
-			_sourceRect = clipRect ? clipRect : _source.rect;
+			_sourceRect = _source.rect;
+			if (clipRect)
+			{
+				if (!clipRect.width) clipRect.width = _sourceRect.width;
+				if (!clipRect.height) clipRect.height = _sourceRect.height;
+				_sourceRect = clipRect;
+			}
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
 			update();
