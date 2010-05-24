@@ -43,6 +43,8 @@
 			_sourceRect = _source.rect;
 			super(_source);
 			update();
+			this.x = x;
+			this.y = y;
 		}
 		
 		/** @private Updates the drawing buffer. */
