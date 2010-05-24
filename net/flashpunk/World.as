@@ -839,7 +839,7 @@
 				_renderFirst[e._layer] = e._renderNext
 				if (!e._renderNext)
 				{
-					_layerList[e._layer] = null;
+					_layerList[_layerList.indexOf(e._layer)] = null;
 					_layerSort = true;
 				}
 			}
