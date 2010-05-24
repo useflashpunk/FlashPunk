@@ -372,7 +372,7 @@
 		public function set type(value:String):void
 		{
 			if (_type == value) return;
-			if (!_world)
+			if (!_added)
 			{
 				_type = value;
 				return;
@@ -462,6 +462,7 @@
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
+		/** @private */ internal var _added:Boolean;
 		/** @private */ internal var _type:String = "";
 		/** @private */ internal var _layer:int;
 		/** @private */ internal var _updatePrev:Entity;

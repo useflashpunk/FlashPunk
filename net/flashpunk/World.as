@@ -745,6 +745,7 @@
 			{
 				for each (e in _remove)
 				{
+					e._added = false;
 					e.removed();
 					removeUpdate(e);
 					removeRender(e);
@@ -759,6 +760,7 @@
 			{
 				for each (e in _add)
 				{
+					e._added = true;
 					addUpdate(e);
 					addRender(e);
 					if (e._type) addType(e);
@@ -860,7 +862,7 @@
 			else
 			{
 				e._typeNext = null;
-				_typeCount[e._type] = 0;
+				_typeCount[e._type] = 1;
 			}
 			e._typePrev = null;
 			_typeFirst[e._type] = e;
