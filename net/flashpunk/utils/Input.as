@@ -47,13 +47,12 @@
 		 */
 		public static function get mouseWheelDelta():int
 		{
-		    if (mouseWheel)
-		    {
-		        mouseWheel = false;
-		        return _mouseWheelDelta;
-		    } else {
-		        return 0;
-		    }
+			if (mouseWheel)
+			{
+				mouseWheel = false;
+				return _mouseWheelDelta;
+			}
+			return 0;
 		}  
 		
 		/**
