@@ -205,6 +205,9 @@
 			// redraw buffers
 			FP.screen.redraw();
 			
+			// request immediate screen update
+			e.updateAfterEvent();
+			
 			// switch worlds
 			if (FP._goto) switchWorld();
 		}
