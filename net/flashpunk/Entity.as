@@ -230,8 +230,8 @@
 		public function collideRect(x:Number, y:Number, rX:Number, rY:Number, rWidth:Number, rHeight:Number):Boolean
 		{
 			if (!collidable) return false;
-			if (x - originX + width > rX && y - originY + height > rY
-			&& x - originX < rX - rWidth && y - originY < rY - rHeight)
+			if (x - originX + width >= rX && y - originY + height >= rY
+			&& x - originX <= rX + rWidth && y - originY <= rY + rHeight)
 			{
 				if (!_mask) return true;
 				_x = this.x; _y = this.y;
