@@ -2,6 +2,7 @@
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.Graphics;
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -120,6 +121,28 @@
 		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF):Image
 		{
 			var source:BitmapData = new BitmapData(width, height, true, 0xFF000000 | color);
+			return new Image(source);
+		}
+		
+		/**
+		 * Creates a new circle Image.
+		 * @param	r			Radius of the circle.
+		 * @param	color		Color of the circle.
+		 * @param	alpha		Alpha of the circle.
+		 * @return	A new Image object.
+		 */
+		public static function createCircle (r: uint, color:uint = 0xFFFFFF, alpha: Number = 1): Image
+		{
+			var source:BitmapData = new BitmapData(r*2, r*2, true, 0);
+			
+			var _graphics: Graphics = FP.sprite.graphics;
+			
+			_graphics.clear();
+			_graphics.beginFill(color & 0xFFFFFF, alpha);
+			_graphics.drawCircle(r, r, r);
+			_graphics.endFill();
+			source.draw(FP.sprite);
+			
 			return new Image(source);
 		}
 		
