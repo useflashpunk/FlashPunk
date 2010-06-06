@@ -119,11 +119,11 @@
 					i:int = v.length;
 				while (i --)
 				{
-					if ((v[i] < 0 && _press.length) || _press.indexOf(v[i]) >= 0) return true;
+					if ((v[i] < 0) ? _pressNum : _press.indexOf(v[i]) >= 0) return true;
 				}
 				return false;
 			}
-			return (input < 0 && _press.length) || _press.indexOf(input) >= 0;
+			return (input < 0) ? _pressNum : _press.indexOf(input) >= 0;
 		}
 		
 		/**
