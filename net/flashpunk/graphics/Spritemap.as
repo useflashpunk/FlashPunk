@@ -166,6 +166,14 @@
 		}
 		
 		/**
+		 * Assigns the Spritemap to a random frame.
+		 */
+		public function randFrame():void
+		{
+			frame = FP.rand(_frameCount);
+		}
+		
+		/**
 		 * Sets the current frame index. When you set this, any
 		 * animations playing will be stopped to force the frame.
 		 */
@@ -193,6 +201,26 @@
 			_frame = uint(_anim._frames[_index]);
 			update();
 		}
+		
+		/**
+		 * The amount of frames in the Spritemap.
+		 */
+		public function get frameCount():uint { return _frameCount; }
+		
+		/**
+		 * Columns in the Spritemap.
+		 */
+		public function get columns():uint { return _columns; }
+		
+		/**
+		 * Rows in the Spritemap.
+		 */
+		public function get rows():uint { return _rows; }
+		
+		/**
+		 * The currently playing animation.
+		 */
+		public function get currentAnim():String { return _anim._name; }
 		
 		// Spritemap information.
 		/** @private */ private var _rect:Rectangle;
