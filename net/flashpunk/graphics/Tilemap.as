@@ -139,6 +139,61 @@
 		}
 		
 		/**
+		 * Loads the Tilemap data from a string.
+		 * @param	str			The string data, which is a set of tile values separated by the columnSep and rowSep strings.
+		 * @param	columnSep	The string that separates each tile value on a row, default is ",".
+		 * @param	rowSep		The string that separates each row of tiles, default is "\n".
+		 */
+		public function loadFromString(str:String, columnSep:String = ",", rowSep:String = "\n"):void
+		{
+			var row: Array = str.split(rowSep);
+			var rows: int = row.length;
+			
+			for (var y:int = 0; y < rows; y++)
+			{
+				if (row[y] == '') { continue; }
+				
+				var col: Array = row[y].split(columnSep);
+				var cols: int = col.length;
+				
+				for (var x:int = 0; x < cols; x++)
+				{
+					if (col[x] == '') { continue; }
+					
+					setTile(x, y, uint(col[x]));
+				}
+			}
+		}
+		
+		/**
+		 * Saves the Tilemap data to a string.
+		 * @param	columnSep	The string that separates each tile value on a row, default is ",".
+		 * @param	rowSep		The string that separates each row of tiles, default is "\n".
+		 */
+		public function saveToString(columnSep:String = ",", rowSep:String = "\n"): String
+		{
+			var s: String = '';
+			
+			for (var y:int = 0; y < _rows; y++)
+			{
+				for (var x:int = 0; x < _columns; x++)
+				{
+					s += getTile(x, y);
+					
+					if (x != _columns - 1) {
+						s += columnSep;
+					}
+				}
+				
+				if (y != _rows - 1) {
+					s += rowSep;
+				}
+			}
+			
+			return s;
+		}
+		
+		/**
 		 * Gets the index of a tile, based on its column and row in the tileset.
 		 * @param	tilesColumn		Tileset column.
 		 * @param	tilesRow		Tileset row.
