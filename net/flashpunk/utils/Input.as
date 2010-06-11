@@ -228,7 +228,6 @@
 				mouseDown = true;
 				mouseUp = false;
 				mousePressed = true;
-				mouseReleased = false;
 			}
 		}
 		
@@ -237,7 +236,6 @@
 		{
 			mouseDown = false;
 			mouseUp = true;
-			mousePressed = false;
 			mouseReleased = true;
 		}
 		
