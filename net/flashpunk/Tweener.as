@@ -14,7 +14,7 @@
 		 * If the Tweener should clear on removal. For Entities, this is when they are
 		 * removed from a World, and for World this is when the active World is switched.
 		 */
-		public var autoClear:Boolean = true;
+		public var autoClear:Boolean = false;
 		
 		/**
 		 * Constructor.
