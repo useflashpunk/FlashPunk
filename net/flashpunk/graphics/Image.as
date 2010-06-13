@@ -82,7 +82,7 @@
 			update();
 		}
 		
-		/** @private Renders the image. */
+		/** @public Renders the image. */
 		override public function render(point:Point, camera:Point):void 
 		{
 			// quit if no graphic is assigned
@@ -254,26 +254,26 @@
 		 */
 		public function get clipRect():Rectangle { return _sourceRect; }
 		
-		/** @private Source BitmapData image. */
+		/** @protected Source BitmapData image. */
 		protected function get source():BitmapData { return _source; }
 		
 		// Source and buffer information.
-		/** @private */ private var _source:BitmapData;
-		/** @private */ private var _sourceRect:Rectangle;
-		/** @private */ private var _buffer:BitmapData;
-		/** @private */ private var _bufferRect:Rectangle;
+		/** @protected */ protected var _source:BitmapData;
+		/** @protected */ protected var _sourceRect:Rectangle;
+		/** @protected */ protected var _buffer:BitmapData;
+		/** @protected */ protected var _bufferRect:Rectangle;
 		
 		// Color and alpha information.
-		/** @private */ private var _alpha:Number = 1;
-		/** @private */ private var _color:uint = 0x00FFFFFF;
-		/** @private */ private var _tint:ColorTransform;
-		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
-		/** @private */ private var _matrix:Matrix = FP.matrix;
+		/** @protected */ protected var _alpha:Number = 1;
+		/** @protected */ protected var _color:uint = 0x00FFFFFF;
+		/** @protected */ protected var _tint:ColorTransform;
+		/** @protected */ protected var _colorTransform:ColorTransform = new ColorTransform;
+		/** @protected */ protected var _matrix:Matrix = FP.matrix;
 		
 		// Flipped image information.
-		/** @private */ private var _class:String;
-		/** @private */ protected var _flipped:Boolean;
-		/** @private */ private var _flip:BitmapData;
-		/** @private */ private static var _flips:Object = { };
+		/** @protected */ protected var _class:String;
+		/** @protected */ protected var _flipped:Boolean;
+		/** @protected */ protected var _flip:BitmapData;
+		/** @protected */ protected static var _flips:Object = { };
 	}
 }

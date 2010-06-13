@@ -25,6 +25,16 @@
 		public static var size:uint = 16;
 		
 		/**
+		 * The alignment to assign to new Text objects.
+		 */
+		public static var align:String = "left";
+		
+		/**
+		 * If the text field can resize if its contents grow.
+		 */
+		public var resizable: Boolean = true;
+		
+		/**
 		 * Constructor.
 		 * @param	text		Text to display.
 		 * @param	x			X offset.
@@ -34,14 +44,18 @@
 		 */
 		public function Text(text:String, x:Number = 0, y:Number = 0, width:uint = 0, height:uint = 0)
 		{
+			_font = Text.font;
+			_size = Text.size;
+			_align = Text.align;
+			
 			_field.embedFonts = true;
-			_field.defaultTextFormat = _form = new TextFormat(Text.font, Text.size, 0xFFFFFF);
+			_form = new TextFormat(_font, _size, 0xFFFFFF);
+			_form.align = _align;
+			_field.defaultTextFormat = _form;
 			_field.text = _text = text;
 			if (!width) width = _field.textWidth + 4;
 			if (!height) height = _field.textHeight + 4;
-			_source = new BitmapData(width, height, true, 0);
-			_sourceRect = _source.rect;
-			super(_source);
+			super(new BitmapData(width, height, true, 0));
 			update();
 			this.x = x;
 			this.y = y;
@@ -51,10 +65,28 @@
 		override public function update():void 
 		{
 			_field.setTextFormat(_form);
-			_field.width = _width = _field.textWidth + 4;
-			_field.height = _height = _field.textHeight + 4;
-			_source.fillRect(_sourceRect, 0);
+			_width = _field.textWidth + 4;
+			_height = _field.textHeight + 4;
+			
+			if (resizable && (_width > _source.width || _height > _source.height))
+			{
+				_source = new BitmapData(_width, _height, true, 0);
+				_sourceRect = _source.rect;
+				_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
+				_bufferRect = _buffer.rect;
+			}
+			else
+			{
+				if (_width > _source.width) _width = _source.width;
+				if (_height > _source.height) _height = _source.height;
+				_source.fillRect(_sourceRect, 0);
+			}
+			
+			_field.width = _width;
+			_field.height = _height;
+			
 			_source.draw(_field);
+			
 			super.update();
 		}
 		
@@ -92,6 +124,18 @@
 		}
 		
 		/**
+		 * Alignment ("left", "center" or "right").
+		 * Only relevant if text spans multiple lines.
+		 */
+		public function get align():String { return _align; }
+		public function set align(value:String):void
+		{
+			if (_align == value) return;
+			_form.align = _align = value;
+			update();
+		}
+		
+		/**
 		 * Width of the text image.
 		 */
 		override public function get width():uint { return _width; }
@@ -102,8 +146,6 @@
 		override public function get height():uint { return _height; }
 		
 		// Text information.
-		/** @private */ private var _source:BitmapData;
-		/** @private */ private var _sourceRect:Rectangle;
 		/** @private */ private var _field:TextField = new TextField;
 		/** @private */ private var _width:uint;
 		/** @private */ private var _height:uint;
@@ -111,6 +153,7 @@
 		/** @private */ private var _text:String;
 		/** @private */ private var _font:String;
 		/** @private */ private var _size:uint;
+		/** @private */ private var _align:String;
 		
 		// Default font family.
 		// Use this option when compiling with Flex SDK 4
