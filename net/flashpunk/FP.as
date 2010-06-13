@@ -352,6 +352,45 @@
 			_seed = (_seed * 16807) % 2147483647;
 			return (_seed / 2147483647) * amount;
 		}
+		
+		/**
+		 * Returns the next item after current in the list of options.
+		 * @param	current		The currently selected item (must be one of the options).
+		 * @param	options		An array of all the items to cycle through.
+		 * @param	loop		If true, will jump to the first item after the last item is reached.
+		 * @return	The next item in the list.
+		 */
+		public static function next(current:*, options:Array, loop:Boolean = true):*
+		{
+			if (loop) return options[(options.indexOf(current) + 1) % options.length];
+			return options[Math.max(options.indexOf(current) + 1, options.length - 1)];
+		}
+		
+		/**
+		 * Returns the item previous to the current in the list of options.
+		 * @param	current		The currently selected item (must be one of the options).
+		 * @param	options		An array of all the items to cycle through.
+		 * @param	loop		If true, will jump to the last item after the first is reached.
+		 * @return	The previous item in the list.
+		 */
+		public static function prev(current:*, options:Array, loop:Boolean = true):*
+		{
+			if (loop) return options[((options.indexOf(current) - 1) + options.length) % options.length];
+			return options[Math.max(options.indexOf(current) - 1, 0)];
+		}
+		
+		/**
+		 * Swaps the current item between a and b. Useful for quick state/string/value swapping.
+		 * @param	current		The currently selected item.
+		 * @param	a			Item a.
+		 * @param	b			Item b.
+		 * @return	Returns a if current is b, and b if current is a.
+		 */
+		public static function swap(current:*, a:*, b:*):*
+		{
+			return current == a ? b : a;
+		}
+		
 		/**
 		 * Creates a color value by combining the chosen RGB values.
 		 * @param	R		The red value of the color, from 0 to 255.

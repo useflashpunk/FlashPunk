@@ -249,6 +249,11 @@
 		 */
 		public function get height():uint { return _bufferRect.height; }
 		
+		/**
+		 * Clipping rectangle for the image.
+		 */
+		public function get clipRect():Rectangle { return _sourceRect; }
+		
 		/** @private Source BitmapData image. */
 		protected function get source():BitmapData { return _source; }
 		
