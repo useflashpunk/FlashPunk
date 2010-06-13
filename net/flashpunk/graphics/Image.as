@@ -231,11 +231,6 @@
 		 */
 		public function get clipRect():Rectangle { return _sourceRect; }
 		
-		/**
-		 * Clipping rectangle for the buffer.
-		 */
-		public function get bufferRect():Rectangle { return _bufferRect; }
-		
 		/** @private Source BitmapData image. */
 		protected function get source():BitmapData { return _source; }
 		
