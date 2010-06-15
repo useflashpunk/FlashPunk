@@ -104,6 +104,15 @@
 		 */
 		public function get scale():Number { return _t; }
 		
+		/**
+		 * The completion callback.
+		 */
+		public function get complete():Function { return _complete; }
+		public function set complete(value:Function):void
+		{
+			_complete = value;
+		}
+		
 		// Tween information.
 		/** @private */ private var _type:uint;
 		/** @private */ private var _complete:Function;
