@@ -79,6 +79,18 @@
 			if (FP._world.visible) FP._world.render();
 		}
 		
+		/**
+		 * Sets the game's stage properties. Override this to set them differently.
+		 */
+		public function setStageProperties():void
+		{
+			stage.frameRate = FP.frameRate;
+			stage.align = StageAlign.TOP_LEFT;
+			stage.quality = StageQuality.HIGH;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.displayState = StageDisplayState.NORMAL;
+		}
+		
 		/** @private Event handler for stage entry. */
 		private function onStage(e:Event = null):void
 		{
@@ -87,11 +99,7 @@
 			
 			// set stage properties
 			FP.stage = stage;
-			stage.frameRate = FP.frameRate;
-			stage.align = StageAlign.TOP_LEFT;
-			stage.quality = StageQuality.HIGH;
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			stage.displayState = StageDisplayState.NORMAL;
+			setStageProperties();
 			
 			// enable input
 			Input.enable();
