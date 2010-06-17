@@ -257,7 +257,7 @@
 		/** @private */ private static var _release:Vector.<int> = new Vector.<int>(256);
 		/** @private */ private static var _pressNum:int = 0;
 		/** @private */ private static var _releaseNum:int = 0;
-		/** @private */ private static var _control:Array = [];
+		/** @private */ private static var _control:Object = {};
 		/** @private */ private static var _mouseWheelDelta:int = 0;
 	}
 }
