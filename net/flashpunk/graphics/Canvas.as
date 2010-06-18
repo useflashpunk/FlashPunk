@@ -94,12 +94,78 @@
 		}
 		
 		/**
-		 * Fills the rectangular area of the canvas.
+		 * Mimics BitmapData's copyPixels method.
+		 * @param	source			Source BitmapData.
+		 * @param	rect			Area of the source image to draw from.
+		 * @param	destPoint		Position to draw at.
+		 * @param	alphaBitmapData	See BitmapData documentation for details.
+		 * @param	alphaPoint		See BitmapData documentation for details.
+		 * @param	mergeAlpha		See BitmapData documentation for details.
+		 */
+		public function copyPixels(source:BitmapData, rect:Rectangle, destPoint:Point, alphaBitmapData:BitmapData = null, alphaPoint:Point = null, mergeAlpha:Boolean = false):void
+		{
+			var xx:int, yy:int;
+			for each (var buffer:BitmapData in _buffers)
+			{
+				_point.x = destPoint.x - xx;
+				_point.y = destPoint.y - yy;
+				buffer.copyPixels(source, rect, _point, alphaBitmapData, alphaPoint, mergeAlpha);
+				xx += _maxWidth;
+				if (xx >= _width)
+				{
+					xx = 0;
+					yy += _maxHeight;
+				}
+			}
+		}
+		
+		/**
+		 * Fills the rectangular area of the canvas. The previous contents of that area are completely removed.
 		 * @param	rect		Fill rectangle.
 		 * @param	color		Fill color.
 		 * @param	alpha		Fill alpha.
 		 */
 		public function fill(rect:Rectangle, color:uint = 0, alpha:Number = 1):void
+		{
+			var xx:int, yy:int, buffer:BitmapData;
+			
+			_rect.width = rect.width;
+			_rect.height = rect.height;
+			
+			if (alpha >= 1)
+			{
+				color |= 0xFF000000;
+			}
+			else if (alpha <= 0)
+			{
+				color = 0;
+			}
+			else
+			{
+				color = (uint(alpha * 255) << 24) | (0xFFFFFF & color);
+			}
+			
+			for each (buffer in _buffers)
+			{
+				_rect.x = rect.x - xx;
+				_rect.y = rect.y - yy;
+				buffer.fillRect(_rect, color);
+				xx += _maxWidth;
+				if (xx >= _width)
+				{
+					xx = 0;
+					yy += _maxHeight;
+				}
+			}
+		}
+		
+		/**
+		 * Draws over a rectangular area of the canvas.
+		 * @param	rect		Drawing rectangle.
+		 * @param	color		Draw color.
+		 * @param	alpha		Draw alpha. If < 1, this rectangle will blend with existing contents of the canvas.
+		 */
+		public function drawRect(rect:Rectangle, color:uint = 0, alpha:Number = 1):void
 		{
 			var xx:int, yy:int, buffer:BitmapData;
 			if (alpha >= 1)
