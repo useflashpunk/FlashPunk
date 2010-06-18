@@ -232,7 +232,9 @@
 			}
 			FP._world = FP._goto;
 			FP._goto = null;
+			FP._world.updateLists(); // make newly added entities available in begin()
 			FP._world.begin();
+			FP._world.updateLists(); // make newly added entities available in first update()
 			FP.cleanup();
 		}
 		
