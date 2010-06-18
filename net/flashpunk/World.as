@@ -660,7 +660,7 @@
 		public function get uniqueTypes():uint
 		{
 			var i:uint = 0;
-			for (var type:String in _typeCount) i += _typeCount[type] as uint;
+			for (var type:String in _typeCount) i += 1;
 			return i;
 		}
 		
