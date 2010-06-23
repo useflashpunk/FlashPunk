@@ -129,6 +129,8 @@
 		 */
 		public static function choose(...objs):*
 		{
+			if (objs.length == 1 && objs[0] is Array) { objs = objs[0]; }
+			
 			return objs[int(objs.length * random)];
 		}
 		
