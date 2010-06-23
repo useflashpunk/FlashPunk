@@ -186,6 +186,21 @@
 		}
 		
 		/**
+		 * Gets the difference of two angles, wrapped around to the range -180 to 180.
+		 * @param	a	First angle in degrees.
+		 * @param	b	Second angle in degrees.
+		 * @return	Difference in angles, wrapped around to the range -180 to 180.
+		 */
+		public static function angleDiff(a:Number, b:Number):Number
+		{
+			var diff:Number = b - a;
+
+			while (diff > 180) { diff -= 360; }
+			while (diff <= -180) { diff += 360; }
+
+			return diff;
+		}
+		/**
 		 * Find the distance between two points.
 		 * @param	x1		The first x-position.
 		 * @param	y1		The first y-position.
@@ -280,6 +295,48 @@
 			}
 			value = value < min ? value : min;
 			return value > max ? value : max;
+		}
+		
+		/**
+		 * Linear interpolation between two values.
+		 * @param	a	First value.
+		 * @param	b	Second value.
+		 * @param	t	Interpolation value.
+		 * return	When t=0 returns a; when t=1 returns b; when t=0.5 returns average of a and b.
+		 */
+		public static function lerp(a:Number, b:Number, t:Number):Number
+		{
+			return a + (b-a)*t;
+		}
+		
+		/**
+		 * Linear interpolation between two colors.
+		 * @param	fromColor	First color.
+		 * @param	toColor		Second color.
+		 * @param	t			Interpolation value. Clamped to the range 0 to 1.
+		 * return	Component-wise interpolated color.
+		 */
+		public static function colorLerp(fromColor:uint, toColor:uint, t:Number):uint
+		{
+			if (t < 0) { return fromColor; }
+			if (t > 1) { return toColor; }
+			
+			var a:uint = fromColor >> 24 & 0xFF;
+			var r:uint = fromColor >> 16 & 0xFF;
+			var g:uint = fromColor >> 8 & 0xFF;
+			var b:uint = fromColor & 0xFF;
+			
+			var rangeA: int = (toColor >> 24 & 0xFF) - a;
+			var rangeR: int = (toColor >> 16 & 0xFF) - r;
+			var rangeG: int = (toColor >> 8 & 0xFF) - g;
+			var rangeB: int = (toColor & 0xFF) - b;
+			
+			a += rangeA * t;
+			r += rangeR * t;
+			g += rangeG * t;
+			b += rangeB * t;
+			
+			return a << 24 | r << 16 | g << 8 | b;
 		}
 		
 		/**
