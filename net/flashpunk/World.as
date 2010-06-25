@@ -884,6 +884,11 @@
 		{
 			var i:int = 0,
 				j:int = a.length;
+			if (j == 1 && a[0] == null)
+			{
+				a.length = 0;
+				return;
+			}
 			while (i < j)
 			{
 				while (a[i] != null) i ++;
@@ -1011,6 +1016,7 @@
 		private var _layerList:Array = [];
 		private var _layerCount:Array = [];
 		private var _layerSort:Boolean;
+		private var _tempArray:Array = [];
 		
 		/** @private */	private var _classCount:Dictionary = new Dictionary;
 		/** @private */	internal var _typeFirst:Object = { };
