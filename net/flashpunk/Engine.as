@@ -144,6 +144,9 @@
 			// swap buffers
 			FP.screen.swap();
 			
+			// switch worlds
+			if (FP._goto) switchWorld();
+			
 			// update loop
 			update();
 			
@@ -161,9 +164,6 @@
 			
 			// redraw buffers
 			FP.screen.redraw();
-			
-			// switch worlds
-			if (FP._goto) switchWorld();
 		}
 		
 		/** @private Fixed framerate game loop. */
@@ -184,6 +184,9 @@
 			if (_delta > _skip) _delta = _skip;
 			while (_delta > _rate)
 			{
+				// switch worlds
+				if (FP._goto) switchWorld();
+				
 				// update timer
 				_delta -= _rate;
 				_time = getTimer();
@@ -215,9 +218,6 @@
 			
 			// request immediate screen update
 			e.updateAfterEvent();
-			
-			// switch worlds
-			if (FP._goto) switchWorld();
 		}
 		
 		/** @private Switch Worlds if they've changed. */
