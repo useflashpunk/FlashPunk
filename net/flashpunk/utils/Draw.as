@@ -55,7 +55,7 @@
 		 */
 		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
 		{
-			color &= 0xFFFFFF;
+			color |= 0xFF000000;
 			
 			// get the drawing positions
 			x1 -= _camera.x;
@@ -75,17 +75,17 @@
 			{
 				if (Y == 0)
 				{
-					screen.setPixel(x1, y1, color);
+					screen.setPixel32(x1, y1, color);
 					return;
 				}
 				// draw a straight vertical line
 				yy = y2 > y1 ? 1 : -1;
 				while (y1 != y2)
 				{
-					screen.setPixel(x1, y1, color);
+					screen.setPixel32(x1, y1, color);
 					y1 += yy;
 				}
-				screen.setPixel(x2, y2, color);
+				screen.setPixel32(x2, y2, color);
 				return;
 			}
 			
@@ -95,10 +95,10 @@
 				xx = x2 > x1 ? 1 : -1;
 				while (x1 != x2)
 				{
-					screen.setPixel(x1, y1, color);
+					screen.setPixel32(x1, y1, color);
 					x1 += xx;
 				}
-				screen.setPixel(x2, y2, color);
+				screen.setPixel32(x2, y2, color);
 				return;
 			}
 			
@@ -113,7 +113,7 @@
 				c = .5;
 				while (x1 != x2)
 				{
-					screen.setPixel(x1, y1, color);
+					screen.setPixel32(x1, y1, color);
 					x1 += xx;
 					c += slope;
 					if (c >= 1)
@@ -122,7 +122,7 @@
 						c -= 1;
 					}
 				}
-				screen.setPixel(x2, y2, color);
+				screen.setPixel32(x2, y2, color);
 				return;
 			}
 			else
@@ -131,7 +131,7 @@
 				c = .5;
 				while (y1 != y2)
 				{
-					screen.setPixel(x1, y1, color);
+					screen.setPixel32(x1, y1, color);
 					y1 += yy;
 					c += slope;
 					if (c >= 1)
@@ -140,7 +140,7 @@
 						c -= 1;
 					}
 				}
-				screen.setPixel(x2, y2, color);
+				screen.setPixel32(x2, y2, color);
 				return;
 			}
 		}
