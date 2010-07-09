@@ -26,7 +26,7 @@
 			_repeatY = repeatY;
 			_textWidth = _texture.width;
 			_textHeight = _texture.height;
-			super(FP.width + _textWidth * uint(repeatX), FP.height + _textHeight * uint(repeatY));
+			super(FP.width * uint(repeatX) + _textWidth, FP.height * uint(repeatY) + _textHeight);
 			FP.rect.x = FP.rect.y = 0;
 			FP.rect.width = _width;
 			FP.rect.height = _height;
