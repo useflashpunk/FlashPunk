@@ -242,12 +242,12 @@
 		/**
 		 * Width of the image.
 		 */
-		public function get width():uint { return _bufferRect.width; }
+		public function get width():uint { return _bufferRect.width * scaleX * scale; }
 		
 		/**
 		 * Height of the image.
 		 */
-		public function get height():uint { return _bufferRect.height; }
+		public function get height():uint { return _bufferRect.height * scaleY * scale; }
 		
 		/**
 		 * Clipping rectangle for the image.
