@@ -29,8 +29,8 @@
 		 */
 		public static function save(file:String = ""):void
 		{
+			if (_shared) _shared.clear();
 			var data:Object = loadData(file);
-			_shared.clear();
 			for (var i:String in _data) data[i] = _data[i];
 			_shared.flush(SIZE);
 		}
