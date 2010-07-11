@@ -225,7 +225,9 @@
 			if (FP._world && FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
 			FP._world = FP._goto;
 			FP._goto = null;
+			FP._world.updateLists();
 			FP._world.begin();
+			FP._world.updateLists();
 			FP.cleanup();
 		}
 		
