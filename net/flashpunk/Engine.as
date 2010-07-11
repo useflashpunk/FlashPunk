@@ -153,6 +153,9 @@
 			// update input
 			Input.update();
 			
+			// switch worlds
+			if (FP._goto) switchWorld();
+			
 			// reset drawing target
 			Draw.resetTarget();
 			
@@ -161,9 +164,6 @@
 			
 			// redraw buffers
 			FP.screen.redraw();
-			
-			// switch worlds
-			if (FP._goto) switchWorld();
 		}
 		
 		/** @private Fixed framerate game loop. */
@@ -202,6 +202,9 @@
 				
 				// update input
 				Input.update();
+				
+				// switch worlds
+				if (FP._goto) switchWorld();
 			}
 			
 			// reset drawing target
@@ -212,9 +215,6 @@
 			
 			// redraw buffers
 			FP.screen.redraw();
-			
-			// switch worlds
-			if (FP._goto) switchWorld();
 		}
 		
 		/** @private Switch Worlds if they've changed. */
