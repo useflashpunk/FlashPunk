@@ -178,12 +178,12 @@
 		/**
 		 * X position of the mouse on the screen.
 		 */
-		public function get mouseX():int { return FP.stage.mouseX / (_scaleX * _scale); }
+		public function get mouseX():int { return (FP.stage.mouseX - _x) / (_scaleX * _scale); }
 		
 		/**
 		 * Y position of the mouse on the screen.
 		 */
-		public function get mouseY():int { return FP.stage.mouseY / (_scaleY * _scale); }
+		public function get mouseY():int { return (FP.stage.mouseY - _y) / (_scaleY * _scale); }
 		
 		// Screen infromation.
 		/** @private */ private var _bitmap:Vector.<Bitmap> = new Vector.<Bitmap>(2);
