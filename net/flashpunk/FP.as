@@ -141,6 +141,44 @@
 		}
 		
 		/**
+		 * Linear interpolation between two values.
+		 * @param	a		First value.
+		 * @param	b		Second value.
+		 * @param	t		Interpolation factor.
+		 * @return	When t=0, returns a. When t=1, returns b. When t=0.5, will return halfway between a and b. Etc.
+		 */
+		public static function lerp(a:Number, b:Number, t:Number = 1):Number
+		{
+			return a + (b - a) * t;
+		}
+		
+		/**
+		 * Linear interpolation between two colors.
+		 * @param	fromColor		First color.
+		 * @param	toColor			Second color.
+		 * @param	t				Interpolation value. Clamped to the range [0, 1].
+		 * return	RGB component-interpolated color value.
+		 */
+		public static function colorLerp(fromColor:uint, toColor:uint, t:Number = 1):uint
+		{
+			if (t <= 0) { return fromColor; }
+			if (t >= 1) { return toColor; }
+			var a:uint = fromColor >> 24 & 0xFF,
+				r:uint = fromColor >> 16 & 0xFF,
+				g:uint = fromColor >> 8 & 0xFF,
+				b:uint = fromColor & 0xFF,
+				dA: int = (toColor >> 24 & 0xFF) - a,
+				dR: int = (toColor >> 16 & 0xFF) - r,
+				dG: int = (toColor >> 8 & 0xFF) - g,
+				dB: int = (toColor & 0xFF) - b;
+			a += dA * t;
+			r += dR * t;
+			g += dG * t;
+			b += dB * t;
+			return a << 24 | r << 16 | g << 8 | b;
+		}
+		
+		/**
 		 * Finds the angle (in degrees) from point 1 to point 2.
 		 * @param	x1		The first x-position.
 		 * @param	y1		The first y-position.
