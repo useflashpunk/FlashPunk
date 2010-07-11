@@ -222,11 +222,7 @@
 		{
 			if (!FP._goto) return;
 			FP._world.end();
-			if (FP._world)
-			{
-				if (FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
-				if (FP._goto._inherit) FP._goto.inherit(FP._world, FP._goto._inheritAll);
-			}
+			if (FP._world && FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
 			FP._world = FP._goto;
 			FP._goto = null;
 			FP._world.begin();
