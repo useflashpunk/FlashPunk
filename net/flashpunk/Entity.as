@@ -355,7 +355,7 @@
 		public function set layer(value:int):void
 		{
 			if (_layer == value) return;
-			if (!_world)
+			if (!_added)
 			{
 				_layer = value;
 				return;
