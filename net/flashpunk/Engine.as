@@ -144,6 +144,9 @@
 			// swap buffers
 			FP.screen.swap();
 			
+			// switch worlds
+			if (FP._goto) switchWorld();
+			
 			// update loop
 			update();
 			
@@ -152,9 +155,6 @@
 			
 			// update input
 			Input.update();
-			
-			// switch worlds
-			if (FP._goto) switchWorld();
 			
 			// reset drawing target
 			Draw.resetTarget();
@@ -184,6 +184,9 @@
 			if (_delta > _skip) _delta = _skip;
 			while (_delta > _rate)
 			{
+				// switch worlds
+				if (FP._goto) switchWorld();
+				
 				// update timer
 				_delta -= _rate;
 				_time = getTimer();
@@ -202,9 +205,6 @@
 				
 				// update input
 				Input.update();
-				
-				// switch worlds
-				if (FP._goto) switchWorld();
 			}
 			
 			// reset drawing target
