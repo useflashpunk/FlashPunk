@@ -82,21 +82,6 @@
 			_goto = value;
 		}
 		
-		// switches world, optionally inheriting entities
-		/**
-		 * Switches the current World at the end of the frame. Call this only if
-		 * you want to use Entity persistence, otherwise just assign FP.world.
-		 * @param	to				The World to switch to.
-		 * @param	inheritAll		If all Entities (not just persistent ones) should be inherited.
-		 */
-		public static function switchWorld(to:World, inheritAll:Boolean = false):void
-		{
-			if (_world == to) return;
-			to._inherit = true;
-			to._inheritAll = inheritAll;
-			_goto = to;
-		}
-		
 		/**
 		 * Global volume factor for all sounds, a value from 0 to 1.
 		 */
