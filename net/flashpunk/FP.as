@@ -19,7 +19,7 @@
 		/**
 		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.0";
+		public static const VERSION:String = "1.1";
 		
 		/**
 		 * Width of the game.
@@ -82,21 +82,6 @@
 			_goto = value;
 		}
 		
-		// switches world, optionally inheriting entities
-		/**
-		 * Switches the current World at the end of the frame. Call this only if
-		 * you want to use Entity persistence, otherwise just assign FP.world.
-		 * @param	to				The World to switch to.
-		 * @param	inheritAll		If all Entities (not just persistent ones) should be inherited.
-		 */
-		public static function switchWorld(to:World, inheritAll:Boolean = false):void
-		{
-			if (_world == to) return;
-			to._inherit = true;
-			to._inheritAll = inheritAll;
-			_goto = to;
-		}
-		
 		/**
 		 * Global volume factor for all sounds, a value from 0 to 1.
 		 */
@@ -129,8 +114,7 @@
 		 */
 		public static function choose(...objs):*
 		{
-			if (objs.length == 1 && objs[0] is Array) { objs = objs[0]; }
-			
+			if (objs.length == 1 && objs[0] is Array) objs = objs[0];
 			return objs[int(objs.length * random)];
 		}
 		
@@ -154,6 +138,44 @@
 		public static function approach(value:Number, target:Number, amount:Number):Number
 		{
 			return value < target ? (target < value + amount ? target : value + amount) : (target > value - amount ? target : value - amount);
+		}
+		
+		/**
+		 * Linear interpolation between two values.
+		 * @param	a		First value.
+		 * @param	b		Second value.
+		 * @param	t		Interpolation factor.
+		 * @return	When t=0, returns a. When t=1, returns b. When t=0.5, will return halfway between a and b. Etc.
+		 */
+		public static function lerp(a:Number, b:Number, t:Number = 1):Number
+		{
+			return a + (b - a) * t;
+		}
+		
+		/**
+		 * Linear interpolation between two colors.
+		 * @param	fromColor		First color.
+		 * @param	toColor			Second color.
+		 * @param	t				Interpolation value. Clamped to the range [0, 1].
+		 * return	RGB component-interpolated color value.
+		 */
+		public static function colorLerp(fromColor:uint, toColor:uint, t:Number = 1):uint
+		{
+			if (t <= 0) { return fromColor; }
+			if (t >= 1) { return toColor; }
+			var a:uint = fromColor >> 24 & 0xFF,
+				r:uint = fromColor >> 16 & 0xFF,
+				g:uint = fromColor >> 8 & 0xFF,
+				b:uint = fromColor & 0xFF,
+				dA: int = (toColor >> 24 & 0xFF) - a,
+				dR: int = (toColor >> 16 & 0xFF) - r,
+				dG: int = (toColor >> 8 & 0xFF) - g,
+				dB: int = (toColor & 0xFF) - b;
+			a += dA * t;
+			r += dR * t;
+			g += dG * t;
+			b += dB * t;
+			return a << 24 | r << 16 | g << 8 | b;
 		}
 		
 		/**

@@ -156,6 +156,9 @@
 			// update input
 			Input.update();
 			
+			// switch worlds
+			if (FP._goto) switchWorld();
+			
 			// reset drawing target
 			Draw.resetTarget();
 			
@@ -205,6 +208,9 @@
 				
 				// update input
 				Input.update();
+				
+				// switch worlds
+				if (FP._goto) switchWorld();
 			}
 			
 			// reset drawing target
@@ -225,16 +231,12 @@
 		{
 			if (!FP._goto) return;
 			FP._world.end();
-			if (FP._world)
-			{
-				if (FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
-				if (FP._goto._inherit) FP._goto.inherit(FP._world, FP._goto._inheritAll);
-			}
+			if (FP._world && FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
 			FP._world = FP._goto;
 			FP._goto = null;
-			FP._world.updateLists(); // make newly added entities available in begin()
+			FP._world.updateLists();
 			FP._world.begin();
-			FP._world.updateLists(); // make newly added entities available in first update()
+			FP._world.updateLists();
 			FP.cleanup();
 		}
 		

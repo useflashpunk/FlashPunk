@@ -660,7 +660,7 @@
 		public function get uniqueTypes():uint
 		{
 			var i:uint = 0;
-			for (var type:String in _typeCount) i += 1;
+			for (var type:String in _typeCount) i ++;
 			return i;
 		}
 		
@@ -976,32 +976,6 @@
 			return squarePoints(px, py, rx, ry);
 		}
 		
-		/** @private Inherits all persistent Entities from the world. */
-		internal function inherit(from:World, inheritAll:Boolean = false):void
-		{
-			var e:Entity = from._updateFirst,
-				a:Array = [],
-				n:uint = 0;
-			if (inheritAll)
-			{
-				while (e)
-				{
-					a[n ++] = from.remove(e);
-					e = e._updateNext;
-				}
-			}
-			else
-			{
-				while (e)
-				{
-					if (e.persist) a[n ++] = from.remove(e);
-					e = e._updateNext;
-				}
-			}
-			from.updateLists();
-			addList(a);
-		}
-		
 		// Adding and removal.
 		/** @private */	private var _add:Vector.<Entity> = new Vector.<Entity>;
 		/** @private */	private var _remove:Vector.<Entity> = new Vector.<Entity>;
@@ -1022,7 +996,5 @@
 		/** @private */	internal var _typeFirst:Object = { };
 		/** @private */	private var _typeCount:Object = { };
 		/** @private */	private static var _recycled:Dictionary = new Dictionary;
-		/** @private */	internal var _inherit:Boolean = false;
-		/** @private */	internal var _inheritAll:Boolean = false;
 	}
 }
