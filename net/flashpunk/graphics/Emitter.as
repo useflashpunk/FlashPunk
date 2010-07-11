@@ -114,6 +114,7 @@
 					p._prev = null;
 					_cache = p;
 					p = n;
+					_particleCount --;
 					continue;
 				}
 				
@@ -208,6 +209,7 @@
 			p._moveY = Math.sin(a) * d;
 			p._x = x;
 			p._y = y;
+			_particleCount ++;
 			return (_particle = p);
 		}
 		
