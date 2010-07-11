@@ -144,9 +144,6 @@
 			// swap buffers
 			FP.screen.swap();
 			
-			// switch worlds
-			if (FP._goto) switchWorld();
-			
 			// update loop
 			update();
 			
@@ -187,9 +184,6 @@
 			if (_delta > _skip) _delta = _skip;
 			while (_delta > _rate)
 			{
-				// switch worlds
-				if (FP._goto) switchWorld();
-				
 				// update timer
 				_delta -= _rate;
 				_time = getTimer();
