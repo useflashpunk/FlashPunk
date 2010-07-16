@@ -255,6 +255,16 @@
 		public function get height():uint { return _bufferRect.height * scaleY * scale; }
 		
 		/**
+		 * Width of image rendering buffer
+		 */
+		public function get bufferWidth():uint { return _bufferRect.width; }
+		
+		/**
+		 * Height of image rendering buffer
+		 */
+		public function get bufferHeight():uint { return _bufferRect.height; }
+		
+		/**
 		 * Clipping rectangle for the image.
 		 */
 		public function get clipRect():Rectangle { return _sourceRect; }
