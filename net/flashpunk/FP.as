@@ -497,8 +497,7 @@
 		 */
 		public static function sort(object:Object, ascending:Boolean = true):void
 		{
-			if (!object.hasOwnProperty("length")) throw new Error("Object not sortable type, must use Array or Vector.");
-			quicksort(object, 0, object.length - 1, ascending);
+			if (object is Array || object is Vector.<*>) quicksort(object, 0, object.length - 1, ascending);
 		}
 		
 		/**
@@ -509,8 +508,7 @@
 		 */
 		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
 		{
-			if (!object.hasOwnProperty("length")) throw new Error("Object not sortable type, must use Array or Vector.");
-			quicksortBy(object, 0, object.length - 1, ascending, property);
+			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
 		}
 		
 		/** @private Quicksorts the array. */ 
