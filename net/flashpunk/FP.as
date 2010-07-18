@@ -42,6 +42,11 @@
 		public static var frameRate:Number;
 		
 		/**
+		 * The framerate assigned to the stage.
+		 */
+		public static var assignedFrameRate:Number;
+		
+		/**
 		 * Time elapsed since the last frame (non-fixed framerate only).
 		 */
 		public static var elapsed:Number;
