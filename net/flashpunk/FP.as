@@ -492,31 +492,27 @@
 		
 		/**
 		 * Sorts the elements in the array.
-		 * @param	a			The array to sort.
+		 * @param	a			The Array or Vector to sort.
 		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
-		 * @return	The provided array with elements sorted.
 		 */
-		public static function sort(a:Array, ascending:Boolean = true):Array
+		public static function sort(a:*, ascending:Boolean = true):void
 		{
 			quicksort(a, 0, a.length - 1, ascending);
-			return a;
 		}
 		
 		/**
 		 * Sorts the elements in the array by a property of the element.
-		 * @param	a			The array to sort.
+		 * @param	a			The Array or Vector to sort.
 		 * @param	property	The numeric property to sort by.
 		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
-		 * @return	The provided array with elements sorted.
 		 */
-		public static function sortBy(a:Array, property:String, ascending:Boolean = true):Array
+		public static function sortBy(a:*, property:String, ascending:Boolean = true):void
 		{
 			quicksortBy(a, 0, a.length - 1, ascending, property);
-			return a;
 		}
 		
 		/** @private Quicksorts the array. */ 
-		private static function quicksort(a:Array, left:int, right:int, ascending:Boolean):void
+		private static function quicksort(a:*, left:int, right:int, ascending:Boolean):void
 		{
 			var i:int = left, j:int = right, t:Number,
 				p:Number = a[Math.round((left + right) * .5)];
@@ -553,7 +549,7 @@
 		}
 		
 		/** @private Quicksorts the array by the property. */ 
-		private static function quicksortBy(a:Array, left:int, right:int, ascending:Boolean, property:String):void
+		private static function quicksortBy(a:*, left:int, right:int, ascending:Boolean, property:String):void
 		{
 			var i:int = left, j:int = right, t:Object,
 				p:Number = a[Math.round((left + right) * .5)][property];
