@@ -569,6 +569,11 @@
 		public function get first():Entity { return _updateFirst; }
 		
 		/**
+		 * How many Entity layers the World has.
+		 */
+		public function get layers():uint { return _layerList.length; }
+		
+		/**
 		 * The first Entity of the type.
 		 * @param	type		The type to check.
 		 * @return	The Entity.
@@ -735,8 +740,10 @@
 			return into;
 		}
 		
-		/** @private Updates the add/remove lists at the end of the frame. */
-		internal function updateLists():void
+		/**
+		 * Updates the add/remove lists at the end of the frame.
+		 */
+		public function updateLists():void
 		{
 			var e:Entity;
 			
@@ -772,8 +779,7 @@
 			// sort the depth list
 			if (_layerSort)
 			{
-				if (_layerList.indexOf(null) >= 0) removeNulls(_layerList);
-				if (_layerList.length > 1) sort(_layerList, 0, _layerList.length - 1);
+				if (_layerList.length > 1) FP.sort(_layerList, true);
 				_layerSort = false;
 			}
 		}
@@ -814,12 +820,14 @@
 			var f:Entity = _renderFirst[e._layer];
 			if (f)
 			{
+				// Append entity to existing layer.
 				e._renderNext = f;
 				f._renderPrev = e;
 				_layerCount[e._layer] ++;
 			}
 			else
 			{
+				// Create new layer with entity.
 				_renderLast[e._layer] = e;
 				_layerList[_layerList.length] = e._layer;
 				_layerSort = true;
@@ -838,11 +846,17 @@
 			if (e._renderPrev) e._renderPrev._renderNext = e._renderNext;
 			else
 			{
+				// Remove this entity from the layer.
 				_renderFirst[e._layer] = e._renderNext
 				if (!e._renderNext)
 				{
-					_layerList[_layerList.indexOf(e._layer)] = null;
-					_layerSort = true;
+					// Remove the layer from the layer list if this was the last entity.
+					if (_layerList.length > 1)
+					{
+						_layerList[_layerList.indexOf(e._layer)] = _layerList[_layerList.length - 1];
+						_layerSort = true;
+					}
+					_layerList.length --;
 				}
 			}
 			_layerCount[e._layer] --;
@@ -877,51 +891,6 @@
 			if (e._typePrev) e._typePrev._typeNext = e._typeNext;
 			e._typeNext = e._typePrev = null;
 			_typeCount[e._type] --;
-		}
-		
-		/** @private Removes all nulls from the array. */
-		private static function removeNulls(a:Array):void
-		{
-			var i:int = 0,
-				j:int = a.length;
-			if (j == 1 && a[0] == null)
-			{
-				a.length = 0;
-				return;
-			}
-			while (i < j)
-			{
-				while (a[i] != null) i ++;
-				while (a[j] == null) j --;
-				a[i] = a[j];
-				a[j] = null;
-			}
-			a[j] = a[i];
-			a[i] = null;
-			a.length -= a.length - a.indexOf(null);
-		}
-		
-		/** @private Quicksorts the values in the array. */
-		private static function sort(a:Array, left:int, right:int):void
-		{
-			var i:int = left,
-				j:int = right,
-				p:int = a[Math.round((left + right) * .5)],
-				t:int;
-			while (i <= j)
-			{
-				while (a[i] < p) i ++;
-				while (a[j] > p) j --;
-				if (i <= j)
-				{
-					t = a[i];
-					a[i ++] = a[j];
-					a[j --] = t;
-				}
-			}
-			if (left < j) sort(a, left, j);
-			if (i < right) sort(a, i, right);
-			return;
 		}
 		
 		/** @private Calculates the squared distance between two rectangles. */
