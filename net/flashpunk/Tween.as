@@ -103,6 +103,7 @@
 		 * The completion percentage of the Tween.
 		 */
 		public function get percent():Number { return _time / _target; }
+		public function set percent(value:Number):void { _time = _target * value; }
 		
 		/**
 		 * The current time scale of the Tween (after easer has been applied).
