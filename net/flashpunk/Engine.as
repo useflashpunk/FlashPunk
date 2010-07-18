@@ -44,7 +44,6 @@
 			// miscellanious startup stuff
 			if (FP.randomSeed == 0) FP.randomizeSeed();
 			FP.entity = new Entity;
-			FP.cleanup();
 			
 			// on-stage event listener
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
@@ -233,7 +232,6 @@
 			FP._world.updateLists();
 			FP._world.begin();
 			FP._world.updateLists();
-			FP.cleanup();
 		}
 		
 		// Timing information.
