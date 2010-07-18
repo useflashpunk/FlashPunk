@@ -267,7 +267,7 @@
 		{
 			if (!collidable) return false;
 			if (pX >= x - originX && pY >= y - originY
-			&& pX <= x - originX + width && pY <= y - originY + height)
+			&& pX < x - originX + width && pY < y - originY + height)
 			{
 				if (!_mask) return true;
 				_x = this.x; _y = this.y;
