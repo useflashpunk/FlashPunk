@@ -92,8 +92,12 @@
 		{
 			if (_graphic && _graphic.visible)
 			{
-				_point.x = x;
-				_point.y = y;
+				if (_graphic.relative)
+				{
+					_point.x = x;
+					_point.y = y;
+				}
+				else _point.x = _point.y = 0;
 				_camera.x = FP.camera.x;
 				_camera.y = FP.camera.y;
 				_graphic.render(_point, _camera);
