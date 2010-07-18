@@ -134,7 +134,6 @@
 				e._world = null;
 				e = e._updateNext;
 			}
-			FP.cleanup();
 		}
 		
 		/**
@@ -237,7 +236,6 @@
 				e = n;
 			}
 			delete _recycled[classType];
-			FP.cleanup();
 		}
 		
 		/**
@@ -246,7 +244,6 @@
 		public function clearRecycledAll():void
 		{
 			for (var classType:Object in _recycled) clearRecycled(classType as Class);
-			FP.cleanup();
 		}
 		
 		/**
