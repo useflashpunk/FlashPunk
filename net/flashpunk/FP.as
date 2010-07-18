@@ -492,27 +492,29 @@
 		
 		/**
 		 * Sorts the elements in the array.
-		 * @param	a			The Array or Vector to sort.
+		 * @param	object		The Object to sort (an Array or Vector).
 		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
 		 */
-		public static function sort(a:*, ascending:Boolean = true):void
+		public static function sort(object:Object, ascending:Boolean = true):void
 		{
-			quicksort(a, 0, a.length - 1, ascending);
+			if (!object.hasOwnProperty("length")) throw new Error("Object not sortable type, must use Array or Vector.");
+			quicksort(object, 0, object.length - 1, ascending);
 		}
 		
 		/**
 		 * Sorts the elements in the array by a property of the element.
-		 * @param	a			The Array or Vector to sort.
-		 * @param	property	The numeric property to sort by.
+		 * @param	object		The Object to sort (an Array or Vector).
+		 * @param	property	The numeric property of object's elements to sort by.
 		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
 		 */
-		public static function sortBy(a:*, property:String, ascending:Boolean = true):void
+		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
 		{
-			quicksortBy(a, 0, a.length - 1, ascending, property);
+			if (!object.hasOwnProperty("length")) throw new Error("Object not sortable type, must use Array or Vector.");
+			quicksortBy(object, 0, object.length - 1, ascending, property);
 		}
 		
 		/** @private Quicksorts the array. */ 
-		private static function quicksort(a:*, left:int, right:int, ascending:Boolean):void
+		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
 		{
 			var i:int = left, j:int = right, t:Number,
 				p:Number = a[Math.round((left + right) * .5)];
@@ -549,7 +551,7 @@
 		}
 		
 		/** @private Quicksorts the array by the property. */ 
-		private static function quicksortBy(a:*, left:int, right:int, ascending:Boolean, property:String):void
+		private static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
 		{
 			var i:int = left, j:int = right, t:Object,
 				p:Number = a[Math.round((left + right) * .5)][property];
