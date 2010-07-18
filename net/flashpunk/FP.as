@@ -502,13 +502,24 @@
 			return a;
 		}
 		
-		/** @private Quicksorts the array ascending. */ 
+		/**
+		 * Sorts the elements in the array by a property of the element.
+		 * @param	a			The array to sort.
+		 * @param	property	The numeric property to sort by.
+		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
+		 * @return	The provided array with elements sorted.
+		 */
+		public static function sortBy(a:Array, property:String, ascending:Boolean = true):Array
+		{
+			quicksortBy(a, 0, a.length - 1, ascending, property);
+			return a;
+		}
+		
+		/** @private Quicksorts the array. */ 
 		private static function quicksort(a:Array, left:int, right:int, ascending:Boolean):void
 		{
-			var i:int = left,
-				j:int = right,
-				p:Number = a[Math.round((left + right) * .5)],
-				t:Number;
+			var i:int = left, j:int = right, t:Number,
+				p:Number = a[Math.round((left + right) * .5)];
 			if (ascending)
 			{
 				while (i <= j)
@@ -539,6 +550,43 @@
 			}
 			if (left < j) quicksort(a, left, j, ascending);
 			if (i < right) quicksort(a, i, right, ascending);
+		}
+		
+		/** @private Quicksorts the array by the property. */ 
+		private static function quicksortBy(a:Array, left:int, right:int, ascending:Boolean, property:String):void
+		{
+			var i:int = left, j:int = right, t:Object,
+				p:Number = a[Math.round((left + right) * .5)][property];
+			if (ascending)
+			{
+				while (i <= j)
+				{
+					while (a[i][property] < p) i ++;
+					while (a[j][property] > p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			else
+			{
+				while (i <= j)
+				{
+					while (a[i][property] > p) i ++;
+					while (a[j][property] < p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			if (left < j) quicksortBy(a, left, j, ascending, property);
+			if (i < right) quicksortBy(a, i, right, ascending, property);
 		}
 		
 		// World information
