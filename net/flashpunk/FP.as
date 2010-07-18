@@ -478,7 +478,7 @@
 		 * @param	a		The array to shuffle.
 		 * @return	The provided array with elements shuffled.
 		 */
-		public function shuffle(a:Array):Array
+		public static function shuffle(a:Array):Array
 		{
 			var l:int = a.length,
 				b:Array = a.concat(),
