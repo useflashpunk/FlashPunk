@@ -480,16 +480,12 @@
 		 */
 		public static function shuffle(a:Array):Array
 		{
-			var l:int = a.length,
-				b:Array = a.concat(),
-				n:int = 0,
-				r:int;
-			a.length = 0;
-			while (l)
+			var i:int = a.length, j:int, t:Number;
+			while (i --)
 			{
-				r = FP.rand(l --);
-				a[n ++] = b[r];
-				if (r < l) b[r] = b[l];
+				t = a[i];
+				a[i] = a[j = FP.rand(i + 1)];
+				a[j] = t;
 			}
 			return a;
 		}
