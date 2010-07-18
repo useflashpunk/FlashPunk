@@ -469,34 +469,84 @@
 		}
 		
 		/**
-		 * Removes all nulls from the array.
-		 * @param	a		The array to clean.
-		 * @return	The provided array with nulls removed.
-		 */
-		public static function removeNulls(a:Array):Array
-		{
-			var i:int = 0,
-				j:int = a.length;
-			while (i < j)
-			{
-				while (a[i] != null) i ++;
-				while (a[j] == null) j --;
-				a[i] = a[j];
-				a[j] = null;
-			}
-			a[j] = a[i];
-			a[i] = null;
-			a.length -= a.length - a.indexOf(null);
-			return a;
-		}
-		
-		/**
 		 * Forces a garbage collector sweep.
 		 */
 		public static function cleanup():void
 		{
 			System.gc();
 			System.gc();
+		}
+		
+		/**
+		 * Shuffles the elements in the array.
+		 * @param	a		The array to shuffle.
+		 * @return	The provided array with elements shuffled.
+		 */
+		public function shuffle(a:Array):Array
+		{
+			var l:int = a.length,
+				b:Array = a.concat(),
+				n:int = 0,
+				r:int;
+			a.length = 0;
+			while (l)
+			{
+				r = FP.rand(l --);
+				a[n ++] = b[r];
+				if (r < l) b[r] = b[l];
+			}
+			return a;
+		}
+		
+		/**
+		 * Sorts the elements in the array.
+		 * @param	a			The array to sort.
+		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
+		 * @return	The provided array with elements sorted.
+		 */
+		public static function sort(a:Array, ascending:Boolean = true):Array
+		{
+			quicksort(a, 0, a.length - 1, ascending);
+			return a;
+		}
+		
+		/** @private Quicksorts the array ascending. */ 
+		private static function quicksort(a:Array, left:int, right:int, ascending:Boolean):void
+		{
+			var i:int = left,
+				j:int = right,
+				p:Number = a[Math.round((left + right) * .5)],
+				t:Number;
+			if (ascending)
+			{
+				while (i <= j)
+				{
+					while (a[i] < p) i ++;
+					while (a[j] > p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			else
+			{
+				while (i <= j)
+				{
+					while (a[i] > p) i ++;
+					while (a[j] < p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			if (left < j) quicksort(a, left, j, ascending);
+			if (i < right) quicksort(a, i, right, ascending);
 		}
 		
 		// World information
