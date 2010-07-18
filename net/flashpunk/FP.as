@@ -489,15 +489,6 @@
 		}
 		
 		/**
-		 * Forces a garbage collector sweep.
-		 */
-		public static function cleanup():void
-		{
-			System.gc();
-			System.gc();
-		}
-		
-		/**
 		 * Shuffles the elements in the array.
 		 * @param	a		The array to shuffle.
 		 * @return	The provided array with elements shuffled.
