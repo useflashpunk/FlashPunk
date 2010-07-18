@@ -30,8 +30,12 @@
 			{
 				if (g.visible)
 				{
-					_point.x = point.x;
-					_point.y = point.y;
+					if (g.relative)
+					{
+						_point.x = point.x;
+						_point.y = point.y;
+					}
+					else _point.x = _point.y = 0;
 					_camera.x = camera.x;
 					_camera.y = camera.y;
 					g.render(_point, _camera);
