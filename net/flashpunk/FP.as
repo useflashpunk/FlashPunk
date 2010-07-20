@@ -9,6 +9,7 @@
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
 	import flash.system.System;
+	import flash.utils.getTimer;
 	import net.flashpunk.*;
 	
 	/**
@@ -474,6 +475,18 @@
 		}
 		
 		/**
+		 * Sets a time flag.
+		 * @return	Time elapsed (in milliseconds) since the last time flag was set.
+		 */
+		public static function timeFlag():uint
+		{
+			var t:uint = getTimer(),
+				e:uint = t - _time;
+			_time = t;
+			return e;
+		}
+		
+		/**
 		 * Shuffles the elements in the array.
 		 * @param	a		The Object to shuffle (an Array or Vector).
 		 * @return	The provided array with elements shuffled.
@@ -587,9 +600,12 @@
 			if (i < right) quicksortBy(a, i, right, ascending, property);
 		}
 		
-		// World information
+		// World information.
 		/** @private */ internal static var _world:World;
 		/** @private */ internal static var _goto:World;
+		
+		// Time information.
+		/** @private */ internal static var _time:uint;
 		
 		// Bitmap storage.
 		/** @private */ private static var _bitmap:Object = { };

@@ -44,6 +44,7 @@
 			// miscellanious startup stuff
 			if (FP.randomSeed == 0) FP.randomizeSeed();
 			FP.entity = new Entity;
+			FP._time = getTimer();
 			
 			// on-stage event listener
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
