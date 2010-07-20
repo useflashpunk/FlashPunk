@@ -495,7 +495,7 @@
 		 */
 		public static function shuffle(a:Array):Array
 		{
-			var i:int = a.length, j:int, t:Number;
+			var i:int = a.length, j:int, t:*;
 			while (i --)
 			{
 				t = a[i];
@@ -530,7 +530,7 @@
 		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
 		{
 			var i:int = left, j:int = right, t:Number,
-				p:Number = a[Math.round((left + right) * .5)];
+				p:* = a[Math.round((left + right) * .5)];
 			if (ascending)
 			{
 				while (i <= j)
@@ -567,7 +567,7 @@
 		private static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
 		{
 			var i:int = left, j:int = right, t:Object,
-				p:Number = a[Math.round((left + right) * .5)][property];
+				p:* = a[Math.round((left + right) * .5)][property];
 			if (ascending)
 			{
 				while (i <= j)
