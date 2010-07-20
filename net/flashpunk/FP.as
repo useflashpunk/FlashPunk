@@ -625,7 +625,7 @@
 		
 		// Global Flash objects.
 		/** @private */ public static var stage:Stage;
-		/** @private */ public static var engine:Sprite;
+		/** @private */ public static var engine:Engine;
 		
 		// Global objects used for rendering, collision, etc.
 		/** @private */ public static var point:Point = new Point;
