@@ -402,7 +402,7 @@
 		{
 			if (_graphic == value) return;
 			_graphic = value;
-			if (_graphic._assign != null) _graphic._assign();
+			if (value && value._assign != null) value._assign();
 		}
 		
 		/**
