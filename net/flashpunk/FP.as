@@ -475,19 +475,21 @@
 		
 		/**
 		 * Shuffles the elements in the array.
-		 * @param	a		The array to shuffle.
+		 * @param	a		The Object to shuffle (an Array or Vector).
 		 * @return	The provided array with elements shuffled.
 		 */
-		public static function shuffle(a:Array):Array
+		public static function shuffle(a:Object):void
 		{
-			var i:int = a.length, j:int, t:*;
-			while (i --)
+			if (a is Array || a is Vector.<*>)
 			{
-				t = a[i];
-				a[i] = a[j = FP.rand(i + 1)];
-				a[j] = t;
+				var i:int = a.length, j:int, t:*;
+				while (-- i)
+				{
+					t = a[i];
+					a[i] = a[j = FP.rand(i + 1)];
+					a[j] = t;
+				}
 			}
-			return a;
 		}
 		
 		/**
