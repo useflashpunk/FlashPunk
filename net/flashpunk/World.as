@@ -524,19 +524,20 @@
 		 * @param	rY			Y position of the rectangle.
 		 * @param	rWidth		Width of the rectangle.
 		 * @param	rHeight		Height of the rectangle.
-		 * @param	array		The Array to populate with collided Entities.
-		 * @return	The provided Array.
+		 * @param	into		The Array or Vector to populate with collided Entities.
 		 */
-		public function collideRectInto(type:String, rX:Number, rY:Number, rWidth:Number, rHeight:Number, array:Array):Array
+		public function collideRectInto(type:String, rX:Number, rY:Number, rWidth:Number, rHeight:Number, into:Object):void
 		{
-			var e:Entity = _typeFirst[type],
-				n:uint = array.length;
-			while (e)
+			if (into is Array || into is Vector.<*>)
 			{
-				if (e.collideRect(e.x, e.y, rX, rY, rWidth, rHeight)) array[n ++] = e;
-				e = e._typeNext;
+				var e:Entity = _typeFirst[type],
+					n:uint = into.length;
+				while (e)
+				{
+					if (e.collideRect(e.x, e.y, rX, rY, rWidth, rHeight)) into[n ++] = e;
+					e = e._typeNext;
+				}
 			}
-			return array;
 		}
 		
 		/**
@@ -545,19 +546,21 @@
 		 * @param	type		The Entity type to check for.
 		 * @param	pX			X position.
 		 * @param	pY			Y position.
-		 * @param	array		The Array to populate with collided Entities.
+		 * @param	into		The Array or Vector to populate with collided Entities.
 		 * @return	The provided Array.
 		 */
-		public function collidePointInto(type:String, pX:Number, pY:Number, array:Array):Array
+		public function collidePointInto(type:String, pX:Number, pY:Number, into:Object):void
 		{
-			var e:Entity = _typeFirst[type],
-				n:uint = array.length;
-			while (e)
+			if (into is Array || into is Vector.<*>)
 			{
-				if (e.collidePoint(e.x, e.y, pX, pY)) array[n ++] = e;
-				e = e._typeNext;
+				var e:Entity = _typeFirst[type],
+					n:uint = into.length;
+				while (e)
+				{
+					if (e.collidePoint(e.x, e.y, pX, pY)) into[n ++] = e;
+					e = e._typeNext;
+				}
 			}
-			return array;
 		}
 		
 		/**
@@ -662,7 +665,7 @@
 		
 		/**
 		 * Returns the amount of Entities of the type are in the World.
-		 * @param	type		The type to count.
+		 * @param	type		The type (or Class type) to count.
 		 * @return	How many Entities of type exist in the World.
 		 */
 		public function typeCount(type:String):uint
@@ -797,74 +800,82 @@
 		}
 		
 		/**
-		 * Pushes all Entities in the World of the type into the array.
+		 * Pushes all Entities in the World of the type into the Array or Vector.
 		 * @param	type		The type to check.
-		 * @param	into		The array to populate.
+		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
 		 */
-		public function getType(type:String, into:Array):Array
+		public function getType(type:String, into:Object):void
 		{
-			var e:Entity = _typeFirst[type],
-				n:uint = into.length;
-			while (e)
+			if (into is Array || into is Vector.<*>)
 			{
-				into[n ++] = e;
-				e = e._typeNext;
+				var e:Entity = _typeFirst[type],
+					n:uint = into.length;
+				while (e)
+				{
+					into[n ++] = e;
+					e = e._typeNext;
+				}
 			}
-			return into;
 		}
 		
 		/**
-		 * Pushes all Entities in the World of the Class into the array.
+		 * Pushes all Entities in the World of the Class into the Array or Vector.
 		 * @param	c			The Class type to check.
-		 * @param	into		The array to populate.
+		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
 		 */
-		public function getClass(c:Class, into:Array):Array
+		public function getClass(c:Class, into:Object):void
 		{
-			var e:Entity = _updateFirst,
-				n:uint = into.length;
-			while (e)
+			if (into is Array || into is Vector.<*>)
 			{
-				if (e is c) into[n ++] = e;
-				e = e._updateNext;
+				var e:Entity = _updateFirst,
+					n:uint = into.length;
+				while (e)
+				{
+					if (e is c) into[n ++] = e;
+					e = e._updateNext;
+				}
 			}
-			return into;
 		}
 		
 		/**
-		 * Pushes all Entities in the World on the layer into the array.
+		 * Pushes all Entities in the World on the layer into the Array or Vector.
 		 * @param	layer		The layer to check.
-		 * @param	into		The array to populate.
+		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
 		 */
-		public function getLayer(layer:int, into:Array):Array
+		public function getLayer(layer:int, into:Object):void
 		{
-			var e:Entity = _renderLast[layer],
-				n:uint = into.length;
-			while (e)
+			if (into is Array || into is Vector.<*>)
 			{
-				into[n ++] = e;
-				e = e._updatePrev;
+				var e:Entity = _renderLast[layer],
+					n:uint = into.length;
+				while (e)
+				{
+					into[n ++] = e;
+					e = e._updatePrev;
+				}
 			}
-			return into;
 		}
 		
 		/**
 		 * Pushes all Entities in the World into the array.
-		 * @param	into		The array to populate.
+		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
 		 */
-		public function getAll(into:Array):Array
+		public function getAll(into:Object):void
 		{
-			var e:Entity = _updateFirst,
-				n:uint = into.length;
-			while (e)
+			if (into is Array || into is Vector.<*>)
 			{
-				into[n ++] = e;
-				e = e._updateNext;
+				var e:Entity = _updateFirst,
+					n:uint = into.length;
+				while (e)
+				{
+					into[n ++] = e;
+					e = e._updateNext;
+				}
 			}
-			return into;
 		}
 		
 		/**

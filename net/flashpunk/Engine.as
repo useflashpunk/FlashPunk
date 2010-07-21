@@ -40,6 +40,7 @@
 			FP.screen = new Screen;
 			FP.bounds = new Rectangle(0, 0, width, height);
 			FP._world = new World;
+			FP.console = new Console;
 			
 			// miscellanious startup stuff
 			if (FP.randomSeed == 0) FP.randomizeSeed();
@@ -82,6 +83,7 @@
 		{
 			FP.screen.refresh();
 			if (FP._world.visible) FP._world.render();
+			if (FP.console._visible) FP.console.update();
 		}
 		
 		/**
@@ -137,6 +139,9 @@
 		/** @private Framerate independent game loop. */
 		private function onEnterFrame(e:Event):void
 		{
+			_gameTime = getTimer();
+			FP._flashTime = _gameTime - _flashTime;
+			
 			// update timer
 			_time = getTimer();
 			FP.elapsed = (_time - _last) / 1000;
@@ -150,25 +155,23 @@
 			FP.screen.swap();
 			
 			// update loop
+			_updateTime = getTimer();
 			update();
-			
-			// update entity lists
 			FP._world.updateLists();
-			
-			// update input
 			Input.update();
-			
-			// switch worlds
 			if (FP._goto) switchWorld();
-			
-			// reset drawing target
-			Draw.resetTarget();
+			FP._updateTime = _updateTime - getTimer();
 			
 			// render loop
+			_renderTime = getTimer();
+			Draw.resetTarget();
 			render();
-			
-			// redraw buffers
 			FP.screen.redraw();
+			
+			var t:uint = getTimer();
+			FP._renderTime = t - _renderTime;
+			FP._gameTime = t - _gameTime;
+			_flashTime = t;
 		}
 		
 		/** @private Fixed framerate game loop. */
@@ -243,6 +246,12 @@
 		/** @private */ private var	_rate:Number;
 		/** @private */ private var	_skip:Number;
 		/** @private */ private var _prev:Number;
+		
+		// Debug timing information.
+		/** @private */ private var _updateTime:uint;
+		/** @private */ private var _renderTime:uint;
+		/** @private */ private var _gameTime:uint;
+		/** @private */ private var _flashTime:uint;
 		
 		// Game constants.
 		/** @private */ private const MAX_ELAPSED:Number = 0.0333;
