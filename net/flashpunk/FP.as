@@ -489,7 +489,6 @@
 		/**
 		 * Shuffles the elements in the array.
 		 * @param	a		The Object to shuffle (an Array or Vector).
-		 * @return	The provided array with elements shuffled.
 		 */
 		public static function shuffle(a:Object):void
 		{
@@ -604,12 +603,8 @@
 		/** @private */ internal static var _world:World;
 		/** @private */ internal static var _goto:World;
 		
-		// Time information.
+		// Timing information.
 		/** @private */ internal static var _time:uint;
-		/** @private */ public static var _updateTime:uint;
-		/** @private */ public static var _renderTime:uint;
-		/** @private */ public static var _gameTime:uint;
-		/** @private */ public static var _flashTime:uint;
 		
 		// Bitmap storage.
 		/** @private */ private static var _bitmap:Object = { };
@@ -630,7 +625,6 @@
 		// Global Flash objects.
 		/** @private */ public static var stage:Stage;
 		/** @private */ public static var engine:Engine;
-		/** @private */ public static var console:Console;
 		
 		// Global objects used for rendering, collision, etc.
 		/** @private */ public static var point:Point = new Point;
