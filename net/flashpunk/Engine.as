@@ -146,9 +146,6 @@
 			if (FP.elapsed > MAX_ELAPSED) FP.elapsed = MAX_ELAPSED;
 			FP.elapsed *= FP.rate;
 			
-			// swap buffers
-			FP.screen.swap();
-			
 			// update loop
 			update();
 			
@@ -160,6 +157,9 @@
 			
 			// switch worlds
 			if (FP._goto) switchWorld();
+			
+			// swap buffers
+			FP.screen.swap();
 			
 			// reset drawing target
 			Draw.resetTarget();
@@ -181,9 +181,6 @@
 			
 			// quit if a frame hasn't passed
 			if (_delta < _rate) return;
-			
-			// swap buffers
-			FP.screen.swap();
 			
 			// update the game
 			if (_delta > _skip) _delta = _skip;
@@ -211,6 +208,9 @@
 				// switch worlds
 				if (FP._goto) switchWorld();
 			}
+			
+			// swap buffers
+			FP.screen.swap();
 			
 			// reset drawing target
 			Draw.resetTarget();
