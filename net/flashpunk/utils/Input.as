@@ -74,7 +74,7 @@
 		/**
 		 * The absolute mouse x position on the screen (unscaled).
 		 */
-		public static function get mouseAbsX():int
+		public static function get mouseFlashX():int
 		{
 			return FP.stage.mouseX;
 		}
@@ -82,7 +82,7 @@
 		/**
 		 * The absolute mouse y position on the screen (unscaled).
 		 */
-		public static function get mouseAbsY():int
+		public static function get mouseFlashY():int
 		{
 			return FP.stage.mouseY;
 		}
