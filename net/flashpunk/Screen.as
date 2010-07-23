@@ -3,6 +3,7 @@
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.PixelSnapping;
+	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Transform;
@@ -20,8 +21,9 @@
 			// create screen buffers
 			_bitmap[0] = new Bitmap(new BitmapData(FP.width, FP.height, false, 0), PixelSnapping.NEVER);
 			_bitmap[1] = new Bitmap(new BitmapData(FP.width, FP.height, false, 0), PixelSnapping.NEVER);
-			FP.engine.addChild(_bitmap[0]).visible = true;
-			FP.engine.addChild(_bitmap[1]).visible = false;
+			FP.engine.addChild(_sprite);
+			_sprite.addChild(_bitmap[0]).visible = true;
+			_sprite.addChild(_bitmap[1]).visible = false;
 			FP.buffer = _bitmap[0].bitmapData;
 			_width = FP.width;
 			_height = FP.height;
@@ -67,7 +69,7 @@
 			if (_angle != 0) _matrix.rotate(_angle);
 			_matrix.tx += _originX + _x;
 			_matrix.ty += _originY + _y;
-			FP.engine.transform.matrix = _matrix;
+			_sprite.transform.matrix = _matrix;
 		}
 		
 		/**
@@ -166,6 +168,12 @@
 		}
 		
 		/**
+		 * Whether screen smoothing should be used or not.
+		 */
+		public function get smoothing():Boolean { return _bitmap[0].smoothing; }
+		public function set smoothing(value:Boolean):void { _bitmap[0].smoothing = _bitmap[1].smoothing = value; }
+		
+		/**
 		 * Width of the screen.
 		 */
 		public function get width():uint { return _width; }
@@ -186,6 +194,7 @@
 		public function get mouseY():int { return (FP.stage.mouseY - _y) / (_scaleY * _scale); }
 		
 		// Screen infromation.
+		/** @private */ private var _sprite:Sprite = new Sprite;
 		/** @private */ private var _bitmap:Vector.<Bitmap> = new Vector.<Bitmap>(2);
 		/** @private */ private var _current:int = 0;
 		/** @private */ private var _matrix:Matrix = new Matrix;
