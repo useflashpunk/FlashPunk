@@ -91,7 +91,7 @@
 		 */
 		override public function update():void 
 		{
-			if (_graphic && _graphic.active) _graphic.update();
+			
 		}
 		
 		/**
