@@ -85,7 +85,7 @@
 				_frame.x = _frame.width * _last;
 				_frame.y = uint(_frame.x / _width) * _frame.height;
 				_frame.x %= _width;
-				update();
+				updateBuffer();
 			}
 			super.render(point, camera);
 		}

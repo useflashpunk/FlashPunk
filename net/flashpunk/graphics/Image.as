@@ -78,7 +78,7 @@
 			}
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
-			update();
+			updateBuffer();
 		}
 		
 		/** @private Renders the image. */
@@ -126,7 +126,7 @@
 		/**
 		 * Updates the image buffer.
 		 */
-		public function update():void
+		public function updateBuffer():void
 		{
 			if (!_source) return;
 			_buffer.copyPixels(_source, _sourceRect, FP.zero);
@@ -153,14 +153,14 @@
 			if (_alpha == 1 && _color == 0xFFFFFF)
 			{
 				_tint = null;
-				return update();
+				return updateBuffer();
 			}
 			_tint = _colorTransform;
 			_tint.redMultiplier = (_color >> 16 & 0xFF) / 255;
 			_tint.greenMultiplier = (_color >> 8 & 0xFF) / 255;
 			_tint.blueMultiplier = (_color & 0xFF) / 255;
 			_tint.alphaMultiplier = _alpha;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -175,14 +175,14 @@
 			if (_alpha == 1 && _color == 0xFFFFFF)
 			{
 				_tint = null;
-				return update();
+				return updateBuffer();
 			}
 			_tint = _colorTransform;
 			_tint.redMultiplier = (_color >> 16 & 0xFF) / 255;
 			_tint.greenMultiplier = (_color >> 8 & 0xFF) / 255;
 			_tint.blueMultiplier = (_color & 0xFF) / 255;
 			_tint.alphaMultiplier = _alpha;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -199,13 +199,13 @@
 			{
 				_source = _flip;
 				_flip = temp;
-				return update();
+				return updateBuffer();
 			}
 			if (_flips[_class])
 			{
 				_source = _flips[_class];
 				_flip = temp;
-				return update();
+				return updateBuffer();
 			}
 			_source = _flips[_class] = new BitmapData(_source.width, _source.height, true, 0);
 			_flip = temp;
@@ -213,7 +213,7 @@
 			FP.matrix.a = -1;
 			FP.matrix.tx = _source.width;
 			_source.draw(temp, FP.matrix);
-			update();
+			updateBuffer();
 		}
 		
 		/**
