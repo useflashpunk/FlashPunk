@@ -186,6 +186,28 @@
 		}
 		
 		/**
+		 * Steps the object towards a point.
+		 * @param	object		Object to move (must have an x and y property).
+		 * @param	x			X position to step towards.
+		 * @param	y			Y position to step towards.
+		 * @param	distance	The distance to step (will not overshoot target).
+		 */
+		public static function stepTowards(object:Object, x:Number, y:Number, distance:Number = 1):void
+		{
+			point.x = x - object.x;
+			point.y = y - object.y;
+			if (point.length > distance)
+			{
+				object.x = x;
+				object.y = y;
+				return;
+			}
+			point.normalize(distance);
+			object.x += point.x;
+			object.y += point.y;
+		}
+		
+		/**
 		 * Finds the angle (in degrees) from point 1 to point 2.
 		 * @param	x1		The first x-position.
 		 * @param	y1		The first y-position.
