@@ -11,6 +11,7 @@
 	import flash.system.System;
 	import flash.utils.getTimer;
 	import net.flashpunk.*;
+	import net.flashpunk.debug.Console;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -487,6 +488,50 @@
 		}
 		
 		/**
+		 * The global Console object.
+		 */
+		public static function get console():Console
+		{
+			if (!_console) _console = new Console;
+			return _console;
+		}
+		
+		/**
+		 * Logs data to the console.
+		 * @param	...data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
+		 */
+		public static function log(...data):void
+		{
+			if (_console)
+			{
+				if (data.length > 1)
+				{
+					var i:int = 0, s:String = "";
+					while (i < data.length)
+					{
+						if (i > 0) s += " ";
+						s += data[i ++].toString();
+					}
+					_console.log(s);
+				}
+				else _console.log(data[0]);
+			}
+		}
+		
+		/**
+		 * Adds properties to watch in the console's debug panel.
+		 * @param	...properties		The properties (strings) to watch.
+		 */
+		public static function watch(...properties):void
+		{
+			if (_console)
+			{
+				if (properties.length > 1) _console.watch(properties);
+				else _console.watch(properties[0]);
+			}
+		}
+		
+		/**
 		 * Shuffles the elements in the array.
 		 * @param	a		The Object to shuffle (an Array or Vector).
 		 */
@@ -603,8 +648,15 @@
 		/** @private */ internal static var _world:World;
 		/** @private */ internal static var _goto:World;
 		
-		// Timing information.
+		// Console information.
+		/** @private */ internal static var _console:Console;
+		
+		// Time information.
 		/** @private */ internal static var _time:uint;
+		/** @private */ public static var _updateTime:uint;
+		/** @private */ public static var _renderTime:uint;
+		/** @private */ public static var _gameTime:uint;
+		/** @private */ public static var _flashTime:uint;
 		
 		// Bitmap storage.
 		/** @private */ private static var _bitmap:Object = { };
