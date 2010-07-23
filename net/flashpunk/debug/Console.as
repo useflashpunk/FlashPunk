@@ -244,7 +244,7 @@ package net.flashpunk.debug
 						if (Input.mousePressed)
 						{
 							// Mouse is within clickable area.
-							if (Input.mouseAbsY > 20 && (Input.mouseAbsX > _debReadText1.width || Input.mouseAbsY < _debRead.y))
+							if (Input.mouseFlashY > 20 && (Input.mouseFlashX > _debReadText1.width || Input.mouseFlashY < _debRead.y))
 							{
 								if (Input.check(Key.SHIFT))
 								{
@@ -449,8 +449,8 @@ package net.flashpunk.debug
 		private function startSelection():void
 		{
 			_selecting = true;
-			_entRect.x = Input.mouseAbsX;
-			_entRect.y = Input.mouseAbsY;
+			_entRect.x = Input.mouseFlashX;
+			_entRect.y = Input.mouseFlashY;
 			_entRect.width = 0;
 			_entRect.height = 0;
 		}
@@ -458,8 +458,8 @@ package net.flashpunk.debug
 		/** @private Updates Entity selection. */
 		private function updateSelection():void
 		{
-			_entRect.width = Input.mouseAbsX - _entRect.x;
-			_entRect.height = Input.mouseAbsY - _entRect.y;
+			_entRect.width = Input.mouseFlashX - _entRect.x;
+			_entRect.height = Input.mouseFlashY - _entRect.y;
 			if (Input.mouseReleased)
 			{
 				selectEntities(_entRect);
@@ -525,14 +525,14 @@ package net.flashpunk.debug
 		/** @private Starts log text scrolling. */
 		private function startScrolling():void
 		{
-			if (LOG.length > _logLines) _scrolling = _logBarGlobal.contains(Input.mouseAbsX, Input.mouseAbsY);
+			if (LOG.length > _logLines) _scrolling = _logBarGlobal.contains(Input.mouseFlashX, Input.mouseFlashY);
 		}
 		
 		/** @private Updates log text scrolling. */
 		private function updateScrolling():void
 		{
 			_scrolling = Input.mouseDown;
-			_logScroll = FP.scaleClamp(Input.mouseAbsY, _logBarGlobal.y, _logBarGlobal.bottom, 0, 1);
+			_logScroll = FP.scaleClamp(Input.mouseFlashY, _logBarGlobal.y, _logBarGlobal.bottom, 0, 1);
 			updateLog();
 		}
 		
