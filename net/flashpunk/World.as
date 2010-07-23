@@ -54,6 +54,7 @@
 				{
 					if (e._tween) e.updateTweens();
 					e.update();
+					if (e._graphic && e._graphic.active) e._graphic.update();
 				}
 				e = e._updateNext;
 			}
