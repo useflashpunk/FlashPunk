@@ -8,7 +8,12 @@
 	public class Graphic
 	{
 		/**
-		 * If the graphic is visible.
+		 * If the graphic should update.
+		 */
+		public var active:Boolean = false;
+		
+		/**
+		 * If the graphic should render.
 		 */
 		public var visible:Boolean = true;
 		
@@ -45,6 +50,14 @@
 		 * Constructor.
 		 */
 		public function Graphic() 
+		{
+			
+		}
+		
+		/**
+		 * Updates the graphic.
+		 */
+		public function update():void
 		{
 			
 		}
