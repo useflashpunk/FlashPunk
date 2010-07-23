@@ -85,6 +85,16 @@
 		}
 		
 		/**
+		 * Updates the Entity's graphic. If you override this for
+		 * update logic, remember to call super.update() if you're
+		 * using a Graphic type that animates (eg. Spritemap).
+		 */
+		override public function update():void 
+		{
+			if (_graphic && _graphic.active) _graphic.update();
+		}
+		
+		/**
 		 * Renders the Entity. If you override this for special behaviour,
 		 * remember to call super.render() to render the Entity's graphic.
 		 */
@@ -228,7 +238,6 @@
 		 */
 		public function collideRect(x:Number, y:Number, rX:Number, rY:Number, rWidth:Number, rHeight:Number):Boolean
 		{
-			if (!collidable) return false;
 			if (x - originX + width >= rX && y - originY + height >= rY
 			&& x - originX <= rX + rWidth && y - originY <= rY + rHeight)
 			{
@@ -260,7 +269,6 @@
 		 */
 		public function collidePoint(x:Number, y:Number, pX:Number, pY:Number):Boolean
 		{
-			if (!collidable) return false;
 			if (pX >= x - originX && pY >= y - originY
 			&& pX < x - originX + width && pY < y - originY + height)
 			{
@@ -456,6 +464,16 @@
 		public function distanceToRect(rx:Number, ry:Number, rwidth:Number, rheight:Number):Number
 		{
 			return FP.distanceRects(rx, ry, rwidth, rheight, x - originX, y - originY, width, height);
+		}
+		
+		/**
+		 * Gets the class name as a string.
+		 * @return	A string representing the class name.
+		 */
+		public function toString():String
+		{
+			var s:String = String(_class);
+			return s.substring(7, s.length - 1);
 		}
 		
 		// Entity information.
