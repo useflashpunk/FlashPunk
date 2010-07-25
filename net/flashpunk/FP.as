@@ -42,6 +42,11 @@
 		public static var frameRate:Number;
 		
 		/**
+		 * The framerate assigned to the stage.
+		 */
+		public static var assignedFrameRate:Number;
+		
+		/**
 		 * Time elapsed since the last frame (non-fixed framerate only).
 		 */
 		public static var elapsed:Number;
@@ -484,34 +489,71 @@
 		}
 		
 		/**
-		 * Removes all nulls from the array.
-		 * @param	a		The array to clean.
-		 * @return	The provided array with nulls removed.
+		 * Shuffles the elements in the array.
+		 * @param	a		The array to shuffle.
+		 * @return	The provided array with elements shuffled.
 		 */
-		public static function removeNulls(a:Array):Array
+		public static function shuffle(a:Array):Array
 		{
-			var i:int = 0,
-				j:int = a.length;
-			while (i < j)
+			var i:int = a.length, j:int, t:Number;
+			while (i --)
 			{
-				while (a[i] != null) i ++;
-				while (a[j] == null) j --;
-				a[i] = a[j];
-				a[j] = null;
+				t = a[i];
+				a[i] = a[j = FP.rand(i + 1)];
+				a[j] = t;
 			}
-			a[j] = a[i];
-			a[i] = null;
-			a.length -= a.length - a.indexOf(null);
 			return a;
 		}
 		
 		/**
-		 * Forces a garbage collector sweep.
+		 * Sorts the elements in the array.
+		 * @param	a			The array to sort.
+		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
+		 * @return	The provided array with elements sorted.
 		 */
-		public static function cleanup():void
+		public static function sort(a:Array, ascending:Boolean = true):Array
 		{
-			System.gc();
-			System.gc();
+			quicksort(a, 0, a.length - 1, ascending);
+			return a;
+		}
+		
+		/** @private Quicksorts the array ascending. */ 
+		private static function quicksort(a:Array, left:int, right:int, ascending:Boolean):void
+		{
+			var i:int = left,
+				j:int = right,
+				p:Number = a[Math.round((left + right) * .5)],
+				t:Number;
+			if (ascending)
+			{
+				while (i <= j)
+				{
+					while (a[i] < p) i ++;
+					while (a[j] > p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			else
+			{
+				while (i <= j)
+				{
+					while (a[i] > p) i ++;
+					while (a[j] < p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			if (left < j) quicksort(a, left, j, ascending);
+			if (i < right) quicksort(a, i, right, ascending);
 		}
 		
 		// World information

@@ -32,7 +32,7 @@
 			// global game properties
 			FP.width = width;
 			FP.height = height;
-			FP.frameRate = frameRate;
+			FP.assignedFrameRate = frameRate;
 			FP.fixed = fixed;
 			
 			// global game objects
@@ -44,7 +44,6 @@
 			// miscellanious startup stuff
 			if (FP.randomSeed == 0) FP.randomizeSeed();
 			FP.entity = new Entity;
-			FP.cleanup();
 			
 			// on-stage event listener
 			addEventListener(Event.ADDED_TO_STAGE, onStage);
@@ -63,11 +62,16 @@
 		 */
 		public function update():void
 		{
+			if (!frameLast) frameLast = getTimer();
 			if (FP._world.active)
 			{
 				if (FP._world._tween) FP._world.updateTweens();
 				FP._world.update();
 			}
+			frameListSum += (frameList[frameList.length] = getTimer() - frameLast);
+			if (frameList.length > 10) frameListSum -= frameList.shift();
+			FP.frameRate = 1000 / (frameListSum / frameList.length);
+			frameLast = getTimer();
 		}
 		
 		/**
@@ -84,7 +88,7 @@
 		 */
 		public function setStageProperties():void
 		{
-			stage.frameRate = FP.frameRate;
+			stage.frameRate = FP.assignedFrameRate;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.quality = StageQuality.HIGH;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -111,10 +115,10 @@
 			init();
 			
 			// start game loop
+			_rate = 1000 / FP.assignedFrameRate;
 			if (FP.fixed)
 			{
 				// fixed framerate
-				_rate = 1000 / FP.frameRate;
 				_skip = _rate * MAX_FRAMESKIP;
 				_last = _prev = getTimer();
 				_timer = new Timer(TICK_RATE);
@@ -231,7 +235,6 @@
 			FP._world.updateLists();
 			FP._world.begin();
 			FP._world.updateLists();
-			FP.cleanup();
 		}
 		
 		// Timing information.
@@ -247,5 +250,10 @@
 		/** @private */ private const MAX_ELAPSED:Number = 0.0333;
 		/** @private */ private const MAX_FRAMESKIP:Number = 5;
 		/** @private */ private const TICK_RATE:uint = 4;
+		
+		// FrameRate tracking.
+		/** @private */ private var frameLast:uint = 0;
+		/** @private */ private var frameListSum:uint = 0;
+		/** @private */ private var frameList:Vector.<uint> = new Vector.<uint>;
 	}
 }
