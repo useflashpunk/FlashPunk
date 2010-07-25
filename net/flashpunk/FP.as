@@ -9,6 +9,7 @@
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
 	import flash.system.System;
+	import flash.utils.getTimer;
 	import net.flashpunk.*;
 	
 	/**
@@ -19,7 +20,7 @@
 		/**
 		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.1";
+		public static const VERSION:String = "1.2";
 		
 		/**
 		 * Width of the game.
@@ -119,8 +120,8 @@
 		 */
 		public static function choose(...objs):*
 		{
-			if (objs.length == 1 && objs[0] is Array) objs = objs[0];
-			return objs[int(objs.length * random)];
+			if (objs.length == 1 && (objs[0] is Array || objs[0] is Vector.<*>)) objs = objs[0];
+			return objs[rand(objs.length)];
 		}
 		
 		/**
@@ -489,20 +490,34 @@
 		}
 		
 		/**
+		 * Sets a time flag.
+		 * @return	Time elapsed (in milliseconds) since the last time flag was set.
+		 */
+		public static function timeFlag():uint
+		{
+			var t:uint = getTimer(),
+				e:uint = t - _time;
+			_time = t;
+			return e;
+		}
+		
+		/**
 		 * Shuffles the elements in the array.
-		 * @param	a		The array to shuffle.
+		 * @param	a		The Object to shuffle (an Array or Vector).
 		 * @return	The provided array with elements shuffled.
 		 */
-		public static function shuffle(a:Array):Array
+		public static function shuffle(a:Object):void
 		{
-			var i:int = a.length, j:int, t:Number;
-			while (i --)
+			if (a is Array || a is Vector.<*>)
 			{
-				t = a[i];
-				a[i] = a[j = FP.rand(i + 1)];
-				a[j] = t;
+				var i:int = a.length, j:int, t:*;
+				while (-- i)
+				{
+					t = a[i];
+					a[i] = a[j = FP.rand(i + 1)];
+					a[j] = t;
+				}
 			}
-			return a;
 		}
 		
 		/**
@@ -556,9 +571,97 @@
 			if (i < right) quicksort(a, i, right, ascending);
 		}
 		
-		// World information
+		/**
+		 * Sorts the elements in the array by a property of the element.
+		 * @param	object		The Object to sort (an Array or Vector).
+		 * @param	property	The numeric property of object's elements to sort by.
+		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
+		 */
+		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
+		{
+			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
+		}
+		
+		/** @private Quicksorts the array. */ 
+		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
+		{
+			var i:int = left, j:int = right, t:Number,
+				p:* = a[Math.round((left + right) * .5)];
+			if (ascending)
+			{
+				while (i <= j)
+				{
+					while (a[i] < p) i ++;
+					while (a[j] > p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			else
+			{
+				while (i <= j)
+				{
+					while (a[i] > p) i ++;
+					while (a[j] < p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			if (left < j) quicksort(a, left, j, ascending);
+			if (i < right) quicksort(a, i, right, ascending);
+		}
+		
+		/** @private Quicksorts the array by the property. */ 
+		private static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
+		{
+			var i:int = left, j:int = right, t:Object,
+				p:* = a[Math.round((left + right) * .5)][property];
+			if (ascending)
+			{
+				while (i <= j)
+				{
+					while (a[i][property] < p) i ++;
+					while (a[j][property] > p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			else
+			{
+				while (i <= j)
+				{
+					while (a[i][property] > p) i ++;
+					while (a[j][property] < p) j --;
+					if (i <= j)
+					{
+						t = a[i];
+						a[i ++] = a[j];
+						a[j --] = t;
+					}
+				}
+			}
+			if (left < j) quicksortBy(a, left, j, ascending, property);
+			if (i < right) quicksortBy(a, i, right, ascending, property);
+		}
+		
+		// World information.
 		/** @private */ internal static var _world:World;
 		/** @private */ internal static var _goto:World;
+		
+		// Time information.
+		/** @private */ internal static var _time:uint;
 		
 		// Bitmap storage.
 		/** @private */ private static var _bitmap:Object = { };
@@ -578,7 +681,7 @@
 		
 		// Global Flash objects.
 		/** @private */ public static var stage:Stage;
-		/** @private */ public static var engine:Sprite;
+		/** @private */ public static var engine:Engine;
 		
 		// Global objects used for rendering, collision, etc.
 		/** @private */ public static var point:Point = new Point;

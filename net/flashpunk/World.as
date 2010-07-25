@@ -134,7 +134,6 @@
 				e._world = null;
 				e = e._updateNext;
 			}
-			FP.cleanup();
 		}
 		
 		/**
@@ -237,7 +236,6 @@
 				e = n;
 			}
 			delete _recycled[classType];
-			FP.cleanup();
 		}
 		
 		/**
@@ -246,7 +244,6 @@
 		public static function clearRecycledAll():void
 		{
 			for (var classType:Object in _recycled) clearRecycled(classType as Class);
-			FP.cleanup();
 		}
 		
 		/**
@@ -385,6 +382,136 @@
 			{
 				if (e.collidePoint(e.x, e.y, pX, pY)) return e;
 				e = e._typeNext;
+			}
+			return null;
+		}
+		
+		/**
+		 * Returns the first Entity found that collides with the line.
+		 * @param	type		The Entity type to check for.
+		 * @param	fromX		Start x of the line.
+		 * @param	fromY		Start y of the line.
+		 * @param	toX			End x of the line.
+		 * @param	toY			End y of the line.
+		 * @param	precision		
+		 * @param	p
+		 * @return
+		 */
+		public function collideLine(type:String, fromX:int, fromY:int, toX:int, toY:int, precision:uint = 1, p:Point = null):Entity
+		{
+			// If the distance is less than precision, do the short sweep.
+			if (precision < 1) precision = 1;
+			if (FP.distance(fromX, fromY, toX, toY) < precision)
+			{
+				if (p)
+				{
+					if (fromX == toX && fromY == toY)
+					{
+						p.x = toX; p.y = toY;
+						return collidePoint(type, toX, toY);
+					}
+					return collideLine(type, fromX, fromY, toX, toY, 1, p);
+				}
+				else return collidePoint(type, fromX, toY);
+			}
+			
+			// Get information about the line we're about to raycast.
+			var xDelta:int = Math.abs(toX - fromX),
+				yDelta:int = Math.abs(toY - fromY),
+				xSign:Number = toX > fromX ? precision : -precision,
+				ySign:Number = toY > fromY ? precision : -precision,
+				x:Number = fromX, y:Number = fromY, e:Entity;
+			
+			// Do a raycast from the start to the end point.
+			if (xDelta > yDelta)
+			{
+				ySign *= yDelta / xDelta;
+				if (xSign > 0)
+				{
+					while (x < toX)
+					{
+						if ((e = collidePoint(type, x, y)))
+						{
+							if (!p) return e;
+							if (precision < 2)
+							{
+								p.x = x - xSign; p.y = y - ySign;
+								return e;
+							}
+							return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
+						}
+						x += xSign; y += ySign;
+					}
+				}
+				else
+				{
+					while (x > toX)
+					{
+						if ((e = collidePoint(type, x, y)))
+						{
+							if (!p) return e;
+							if (precision < 2)
+							{
+								p.x = x - xSign; p.y = y - ySign;
+								return e;
+							}
+							return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
+						}
+						x += xSign; y += ySign;
+					}
+				}
+			}
+			else
+			{
+				xSign *= xDelta / yDelta;
+				if (ySign > 0)
+				{
+					while (y < toY)
+					{
+						if ((e = collidePoint(type, x, y)))
+						{
+							if (!p) return e;
+							if (precision < 2)
+							{
+								p.x = x - xSign; p.y = y - ySign;
+								return e;
+							}
+							return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
+						}
+						x += xSign; y += ySign;
+					}
+				}
+				else
+				{
+					while (y > toY)
+					{
+						if ((e = collidePoint(type, x, y)))
+						{
+							if (!p) return e;
+							if (precision < 2)
+							{
+								p.x = x - xSign; p.y = y - ySign;
+								return e;
+							}
+							return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
+						}
+						x += xSign; y += ySign;
+					}
+				}
+			}
+			
+			// Check the last position.
+			if (precision > 1)
+			{
+				if (!p) return collidePoint(type, toX, toY);
+				if (collidePoint(type, toX, toY)) return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
+			}
+			
+			// No collision, return the end point.
+			if (p)
+			{
+				p.x = toX;
+				p.y = toY;
 			}
 			return null;
 		}

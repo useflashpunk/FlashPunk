@@ -22,11 +22,6 @@
 		public var collidable:Boolean = true;
 		
 		/**
-		 * If the Entity is persistent across Worlds when FP.switchWorld() is called.
-		 */
-		public var persist:Boolean = false;
-		
-		/**
 		 * X position of the Entity in the World.
 		 */
 		public var x:Number = 0;
@@ -267,7 +262,7 @@
 		{
 			if (!collidable) return false;
 			if (pX >= x - originX && pY >= y - originY
-			&& pX <= x - originX + width && pY <= y - originY + height)
+			&& pX < x - originX + width && pY < y - originY + height)
 			{
 				if (!_mask) return true;
 				_x = this.x; _y = this.y;
@@ -407,7 +402,7 @@
 		{
 			if (_graphic == value) return;
 			_graphic = value;
-			if (_graphic._assign != null) _graphic._assign();
+			if (value && value._assign != null) value._assign();
 		}
 		
 		/**
