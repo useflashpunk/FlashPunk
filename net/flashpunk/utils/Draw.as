@@ -252,7 +252,7 @@
 		}
 		
 		/**
-		 * Draws a quadratic curve to the screen.
+		 * Draws a quadratic curve.
 		 * @param	x1		X start.
 		 * @param	y1		Y start.
 		 * @param	x2		X control point, used to determine the curve.
