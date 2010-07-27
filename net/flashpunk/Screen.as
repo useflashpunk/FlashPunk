@@ -67,8 +67,8 @@
 			_matrix.tx = -_originX * _matrix.a;
 			_matrix.ty = -_originY * _matrix.d;
 			if (_angle != 0) _matrix.rotate(_angle);
-			_matrix.tx += _originX + _x;
-			_matrix.ty += _originY + _y;
+			_matrix.tx += _originX * _scaleX * _scale + _x;
+			_matrix.ty += _originY * _scaleX * _scale + _y;
 			_sprite.transform.matrix = _matrix;
 		}
 		
