@@ -24,6 +24,7 @@
 		public function Emitter(source:*, frameWidth:uint = 0, frameHeight:uint = 0) 
 		{
 			setSource(source, frameWidth, frameHeight);
+			active = true;
 		}
 		
 		/**
@@ -44,6 +45,43 @@
 			_frameCount = uint(_width / _frameWidth) * uint(_height / _frameHeight);
 		}
 		
+		override public function update():void 
+		{
+			// quit if there are no particles
+			if (!_particle) return;
+			
+			// particle info
+			var e:Number = FP.fixed ? 1 : FP.elapsed,
+				p:Particle = _particle,
+				n:Particle, t:Number;
+			
+			// loop through the particles
+			while (p)
+			{
+				// update time scale
+				p._time += e;
+				t = p._time / p._duration;
+				
+				// remove on time-out
+				if (p._time >= p._duration)
+				{
+					if (p._next) p._next._prev = p._prev;
+					if (p._prev) p._prev._next = p._next;
+					else _particle = p._next;
+					n = p._next;
+					p._next = _cache;
+					p._prev = null;
+					_cache = p;
+					p = n;
+					_particleCount --;
+					continue;
+				}
+				
+				// get next particle
+				p = p._next;
+			}
+		}
+		
 		/** @private Renders the particles. */
 		override public function render(point:Point, camera:Point):void 
 		{
@@ -54,24 +92,21 @@
 			point.x += x - camera.x * scrollX;
 			point.y += y - camera.y * scrollY;
 			
-			// update the particles
-			var e:Number = FP.fixed ? 1 : FP.elapsed,
-				t:Number, td:Number,
-				r:uint, g:uint, b:uint,
+			// particle info
+			var t:Number, td:Number,
 				p:Particle = _particle,
-				n:Particle, f:uint,
 				type:ParticleType,
 				rect:Rectangle;
 			
+			// loop through the particles
 			while (p)
 			{
+				// get time scale
+				t = p._time / p._duration;
+				
 				// get particle type
 				type = p._type;
 				rect = type._frame;
-				
-				// get time scale
-				p._time += e;
-				t = p._time / p._duration;
 				
 				// get position
 				td = (type._ease == null) ? t : type._ease(t);
@@ -102,21 +137,6 @@
 					FP.buffer.copyPixels(type._buffer, type._bufferRect, _point, null, null, true);
 				}
 				else FP.buffer.copyPixels(type._source, rect, _point, null, null, true);
-				
-				// remove on time-out
-				if (p._time >= p._duration)
-				{
-					if (p._next) p._next._prev = p._prev;
-					if (p._prev) p._prev._next = p._next;
-					else _particle = p._next;
-					n = p._next;
-					p._next = _cache;
-					p._prev = null;
-					_cache = p;
-					p = n;
-					_particleCount --;
-					continue;
-				}
 				
 				// get next particle
 				p = p._next;

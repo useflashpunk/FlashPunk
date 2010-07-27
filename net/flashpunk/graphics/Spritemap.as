@@ -47,13 +47,14 @@
 			_rows = _height / _rect.height;
 			_frameCount = _columns * _rows;
 			this.callback = callback;
-			update();
+			updateBuffer();
+			active = true;
 		}
 		
 		/**
 		 * Updates the spritemap's buffer.
 		 */
-		override public function update():void 
+		override public function updateBuffer():void 
 		{
 			// get position of the current frame
 			_rect.x = _rect.width * _frame;
@@ -62,13 +63,12 @@
 			if (_flipped) _rect.x = (_width - _rect.width) - _rect.x;
 			
 			// update the buffer
-			super.update();
+			super.updateBuffer();
 		}
 		
-		/** @private Updates the animation and renders the Image. */
-		override public function render(point:Point, camera:Point):void 
+		/** @private Updates the animation. */
+		override public function update():void 
 		{
-			// update the animation
 			if (_anim && !complete)
 			{
 				_timer += (FP.fixed ? _anim._frameRate : _anim._frameRate * FP.elapsed) * rate;
@@ -91,12 +91,9 @@
 						}
 					}
 					_frame = uint(_anim._frames[_index]);
-					update();
+					updateBuffer();
 				}
 			}
-			
-			// render it to the screen
-			super.render(point, camera);
 		}
 		
 		/**
@@ -128,14 +125,14 @@
 			{
 				_frame = _index = 0;
 				complete = true;
-				update();
+				updateBuffer();
 				return null;
 			}
 			_index = 0;
 			_timer = 0;
 			_frame = uint(_anim._frames[0]);
 			complete = false;
-			update();
+			updateBuffer();
 			return _anim;
 		}
 		
@@ -162,7 +159,7 @@
 			var frame:uint = (row % _rows) * _columns + (column % _columns);
 			if (_frame == frame) return;
 			_frame = frame;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -185,7 +182,7 @@
 			if (value < 0) value = _frameCount + value;
 			if (_frame == value) return;
 			_frame = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -199,7 +196,7 @@
 			if (_index == value) return;
 			_index = value;
 			_frame = uint(_anim._frames[_index]);
-			update();
+			updateBuffer();
 		}
 		
 		/**
