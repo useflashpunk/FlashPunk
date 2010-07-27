@@ -80,17 +80,21 @@
 						_index ++;
 						if (_index == _anim._frameCount)
 						{
-							if (callback != null) callback();
-							if (_anim._loop) _index = 0;
+							if (_anim._loop)
+							{
+								_index = 0;
+								if (callback != null) callback();
+							}
 							else
 							{
 								_index = _anim._frameCount - 1;
 								complete = true;
+								if (callback != null) callback();
 								break;
 							}
 						}
 					}
-					_frame = uint(_anim._frames[_index]);
+					if (_anim) _frame = uint(_anim._frames[_index]);
 					updateBuffer();
 				}
 			}
@@ -217,7 +221,7 @@
 		/**
 		 * The currently playing animation.
 		 */
-		public function get currentAnim():String { return _anim._name; }
+		public function get currentAnim():String { return _anim ? _anim._name : ""; }
 		
 		// Spritemap information.
 		/** @private */ private var _rect:Rectangle;
