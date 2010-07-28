@@ -240,6 +240,25 @@
 		}
 		
 		/**
+		 * Centers the Image's originX/Y to its center.
+		 */
+		public function centerOrigin():void
+		{
+			originX = _bufferRect.width / 2;
+			originY = _bufferRect.height / 2;
+		}
+		
+		/**
+		 * Centers the Image's originX/Y to its center, and negates the offset by the same amount.
+		 */
+		public function centerOO():void
+		{
+			centerOrigin();
+			x = -originX;
+			y = -originY;
+		}
+		
+		/**
 		 * Width of the image.
 		 */
 		public function get width():uint { return _bufferRect.width * scaleX * scale; }
