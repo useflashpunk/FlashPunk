@@ -58,6 +58,13 @@
 			super.updateBuffer();
 		}
 		
+		/** @private Centers the Text's originX/Y to its center. */
+		override public function centerOrigin():void 
+		{
+			originX = _width / 2;
+			originY = _height / 2;
+		}
+		
 		/**
 		 * Text string.
 		 */

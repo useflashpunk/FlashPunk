@@ -230,9 +230,11 @@
 		 */
 		public function centerOO():void
 		{
+			x += originX;
+			y += originY;
 			centerOrigin();
-			x = -originX;
-			y = -originY;
+			x -= originX;
+			y -= originY;
 		}
 		
 		/**
