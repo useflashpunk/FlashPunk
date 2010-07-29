@@ -196,7 +196,7 @@
 		{
 			point.x = x - object.x;
 			point.y = y - object.y;
-			if (point.length > distance)
+			if (point.length <= distance)
 			{
 				object.x = x;
 				object.y = y;
