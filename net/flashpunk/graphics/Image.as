@@ -76,9 +76,15 @@
 				if (!clipRect.height) clipRect.height = _sourceRect.height;
 				_sourceRect = clipRect;
 			}
+			createBuffer();
+			updateBuffer();
+		}
+		
+		/** @private Creates the buffer. */
+		protected function createBuffer():void
+		{
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
-			updateBuffer();
 		}
 		
 		/** @private Renders the image. */
@@ -256,15 +262,15 @@
 		protected function get source():BitmapData { return _source; }
 		
 		// Source and buffer information.
-		/** @private */ private var _source:BitmapData;
-		/** @private */ private var _sourceRect:Rectangle;
-		/** @private */ private var _buffer:BitmapData;
-		/** @private */ private var _bufferRect:Rectangle;
+		/** @private */ protected var _source:BitmapData;
+		/** @private */ protected var _sourceRect:Rectangle;
+		/** @private */ protected var _buffer:BitmapData;
+		/** @private */ protected var _bufferRect:Rectangle;
 		
 		// Color and alpha information.
 		/** @private */ private var _alpha:Number = 1;
 		/** @private */ private var _color:uint = 0x00FFFFFF;
-		/** @private */ private var _tint:ColorTransform;
+		/** @private */ protected var _tint:ColorTransform;
 		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
 		/** @private */ private var _matrix:Matrix = FP.matrix;
 		

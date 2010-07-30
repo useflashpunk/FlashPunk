@@ -224,16 +224,16 @@
 		public function get currentAnim():String { return _anim ? _anim._name : ""; }
 		
 		// Spritemap information.
-		/** @private */ private var _rect:Rectangle;
-		/** @private */ private var _width:uint;
-		/** @private */ private var _height:uint;
+		/** @private */ protected var _rect:Rectangle;
+		/** @private */ protected var _width:uint;
+		/** @private */ protected var _height:uint;
 		/** @private */ private var _columns:uint;
 		/** @private */ private var _rows:uint;
 		/** @private */ private var _frameCount:uint;
 		/** @private */ private var _anims:Object = { };
 		/** @private */ private var _anim:Anim;
 		/** @private */ private var _index:uint;
-		/** @private */ private var _frame:uint;
+		/** @private */ protected var _frame:uint;
 		/** @private */ private var _timer:Number = 0;
 	}
 }
