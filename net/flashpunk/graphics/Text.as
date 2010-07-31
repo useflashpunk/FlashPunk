@@ -40,7 +40,6 @@
 			if (!width) width = _field.textWidth + 4;
 			if (!height) height = _field.textHeight + 4;
 			_source = new BitmapData(width, height, true, 0);
-			_sourceRect = _source.rect;
 			super(_source);
 			updateBuffer();
 			this.x = x;
@@ -109,8 +108,6 @@
 		override public function get height():uint { return _height; }
 		
 		// Text information.
-		/** @private */ private var _source:BitmapData;
-		/** @private */ private var _sourceRect:Rectangle;
 		/** @private */ private var _field:TextField = new TextField;
 		/** @private */ private var _width:uint;
 		/** @private */ private var _height:uint;
