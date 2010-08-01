@@ -9,6 +9,7 @@
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
 	import flash.system.System;
+	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	import net.flashpunk.*;
 	import net.flashpunk.debug.Console;
@@ -222,18 +223,16 @@
 		}
 		
 		/**
-		 * Sets the x/y values of the provided point to a vector of the specified angle and length.
-		 * @param	point		The point object to return.
+		 * Sets the x/y values of the provided object to a vector of the specified angle and length.
+		 * @param	object		The object whose x/y properties should be set.
 		 * @param	angle		The angle of the vector, in degrees.
 		 * @param	length		The distance to the vector from (0, 0).
-		 * @return	The point object with x/y set to the length and angle from (0, 0).
 		 */
-		public static function angleXY(point:Point, angle:Number, length:Number = 1):Point
+		public static function angleXY(object:Object, angle:Number, length:Number = 1):void
 		{
 			angle *= RAD;
-			point.x = Math.cos(angle) * length;
-			point.y = Math.sin(angle) * length;
-			return point;
+			object.x = Math.cos(angle) * length;
+			object.y = Math.sin(angle) * length;
 		}
 		
 		/**
@@ -551,6 +550,17 @@
 				if (properties.length > 1) _console.watch(properties);
 				else _console.watch(properties[0]);
 			}
+		}
+		
+		/**
+		 * Loads the file as an XML object.
+		 * @param	file		The embedded file to load.
+		 * @return	An XML object representing the file.
+		 */
+		public static function getXML(file:Class):XML
+		{
+			var bytes:ByteArray = new file;
+			return XML(bytes.readUTFBytes(bytes.length));
 		}
 		
 		/**
