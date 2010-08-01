@@ -587,37 +587,6 @@
 		}
 		
 		/**
-		 * Adds properties to watch in the console's debug panel.
-		 * @param	...properties		The properties (strings) to watch.
-		 */
-		public static function watch(...properties):void
-		{
-			if (_console)
-			{
-				if (properties.length > 1) _console.watch(properties);
-				else _console.watch(properties[0]);
-			}
-		}
-		
-		/**
-		 * Shuffles the elements in the array.
-		 * @param	a		The Object to shuffle (an Array or Vector).
-		 */
-		public static function shuffle(a:Object):void
-		{
-			if (a is Array || a is Vector.<*>)
-			{
-				var i:int = a.length, j:int, t:*;
-				while (-- i)
-				{
-					t = a[i];
-					a[i] = a[j = FP.rand(i + 1)];
-					a[j] = t;
-				}
-			}
-		}
-		
-		/**
 		 * Sorts the elements in the array.
 		 * @param	a			The array to sort.
 		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
