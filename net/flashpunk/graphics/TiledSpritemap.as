@@ -44,7 +44,12 @@ package net.flashpunk.graphics
 			if (_flipped) _rect.x = (_width - _rect.width) - _rect.x;
 			
 			// render it repeated to the buffer
-			FP.point.x = FP.point.y = 0;
+			var xx:int = int(_offsetX) % _imageWidth,
+				yy:int = int(_offsetY) % _imageHeight;
+			if (xx >= 0) xx -= _imageWidth;
+			if (yy >= 0) yy -= _imageHeight;
+			FP.point.x = xx;
+			FP.point.y = yy;
 			while (FP.point.y < _imageHeight)
 			{
 				while (FP.point.x < _imageWidth)
@@ -52,7 +57,7 @@ package net.flashpunk.graphics
 					_buffer.copyPixels(_source, _sourceRect, FP.point);
 					FP.point.x += _sourceRect.width;
 				}
-				FP.point.x = 0;
+				FP.point.x = xx;
 				FP.point.y += _sourceRect.height;
 			}
 			
@@ -60,8 +65,45 @@ package net.flashpunk.graphics
 			if (_tint) _buffer.colorTransform(_bufferRect, _tint);
 		}
 		
+		/**
+		 * The x-offset of the texture.
+		 */
+		public function get offsetX():Number { return _offsetX; }
+		public function set offsetX(value:Number):void
+		{
+			if (_offsetX == value) return;
+			_offsetX = value;
+			updateBuffer();
+		}
+		
+		/**
+		 * The y-offset of the texture.
+		 */
+		public function get offsetY():Number { return _offsetY; }
+		public function set offsetY(value:Number):void
+		{
+			if (_offsetY == value) return;
+			_offsetY = value;
+			updateBuffer();
+		}
+		
+		/**
+		 * Sets the texture offset.
+		 * @param	x		The x-offset.
+		 * @param	y		The y-offset.
+		 */
+		public function setOffset(x:Number, y:Number):void
+		{
+			if (_offsetX == x && _offsetY == y) return;
+			_offsetX = x;
+			_offsetY = y;
+			updateBuffer();
+		}
+		
 		/** @private */ private var _graphics:Graphics = FP.sprite.graphics;
 		/** @private */ private var _imageWidth:uint;
 		/** @private */ private var _imageHeight:uint;
+		/** @private */ private var _offsetX:Number = 0;
+		/** @private */ private var _offsetY:Number = 0;
 	}
 }
