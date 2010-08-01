@@ -44,9 +44,51 @@ package net.flashpunk.graphics
 			}
 			_buffer.fillRect(_bufferRect, 0);
 			_graphics.clear();
-			_graphics.beginBitmapFill(_texture);
+			if (_offsetX != 0 || _offsetY != 0)
+			{
+				FP.matrix.identity();
+				FP.matrix.tx = Math.round(_offsetX);
+				FP.matrix.ty = Math.round(_offsetY);
+				_graphics.beginBitmapFill(_texture, FP.matrix);
+			}
+			else _graphics.beginBitmapFill(_texture);
 			_graphics.drawRect(0, 0, _width, _height);
 			_buffer.draw(FP.sprite, null, _tint);
+		}
+		
+		/**
+		 * The x-offset of the texture.
+		 */
+		public function get offsetX():Number { return _offsetX; }
+		public function set offsetX(value:Number):void
+		{
+			if (_offsetX == value) return;
+			_offsetX = value;
+			updateBuffer();
+		}
+		
+		/**
+		 * The y-offset of the texture.
+		 */
+		public function get offsetY():Number { return _offsetY; }
+		public function set offsetY(value:Number):void
+		{
+			if (_offsetY == value) return;
+			_offsetY = value;
+			updateBuffer();
+		}
+		
+		/**
+		 * Sets the texture offset.
+		 * @param	x		The x-offset.
+		 * @param	y		The y-offset.
+		 */
+		public function setOffset(x:Number, y:Number):void
+		{
+			if (_offsetX == x && _offsetY == y) return;
+			_offsetX = x;
+			_offsetY = y;
+			updateBuffer();
 		}
 		
 		// Drawing information.
@@ -54,5 +96,7 @@ package net.flashpunk.graphics
 		/** @private */ private var _texture:BitmapData;
 		/** @private */ private var _width:uint;
 		/** @private */ private var _height:uint;
+		/** @private */ private var _offsetX:Number = 0;
+		/** @private */ private var _offsetY:Number = 0;
 	}
 }
