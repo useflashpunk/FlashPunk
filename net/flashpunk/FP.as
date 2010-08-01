@@ -237,21 +237,6 @@
 		}
 		
 		/**
-		 * Gets the difference of two angles, wrapped around to the range -180 to 180.
-		 * @param	a	First angle in degrees.
-		 * @param	b	Second angle in degrees.
-		 * @return	Difference in angles, wrapped around to the range -180 to 180.
-		 */
-		public static function angleDiff(a:Number, b:Number):Number
-		{
-			var diff:Number = b - a;
-
-			while (diff > 180) { diff -= 360; }
-			while (diff <= -180) { diff += 360; }
-
-			return diff;
-		}
-		/**
 		 * Find the distance between two points.
 		 * @param	x1		The first x-position.
 		 * @param	y1		The first y-position.
