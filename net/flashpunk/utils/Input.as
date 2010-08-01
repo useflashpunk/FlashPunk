@@ -72,6 +72,22 @@
 		}
 		
 		/**
+		 * The absolute mouse x position on the screen (unscaled).
+		 */
+		public static function get mouseFlashX():int
+		{
+			return FP.stage.mouseX;
+		}
+		
+		/**
+		 * The absolute mouse y position on the screen (unscaled).
+		 */
+		public static function get mouseFlashY():int
+		{
+			return FP.stage.mouseY;
+		}
+		
+		/**
 		 * Defines a new input.
 		 * @param	name		String to map the input to.
 		 * @param	...keys		The keys to use for the Input.
@@ -181,8 +197,20 @@
 			if (mouseReleased) mouseReleased = false;
 		}
 		
+		/**
+		 * Clears all input states.
+		 */
+		public static function clear():void
+		{
+			_press.length = _pressNum = 0;
+			_release.length = _releaseNum = 0;
+			var i:int = _key.length;
+			while (i --) _key[i] = false;
+			_keyNum = 0;
+		}
+		
 		/** @private Event handler for key press. */
-		private static function onKeyDown(e:KeyboardEvent):void
+		private static function onKeyDown(e:KeyboardEvent = null):void
 		{
 			// get the keycode
 			var code:int = e.keyCode;

@@ -14,6 +14,7 @@ FEATURES
 * Z-sorted render lists for easy depth management.
 * Simple keyboard and mouse input state checking.
 * Quick & efficent particle effects and emitters.
+* Handy console for real-time debugging and information tracking.
 
 OVERVIEW
 ========
@@ -32,6 +33,9 @@ Collision works largely the same, except has also been improved using a componen
 
 ### TWEENING
 One of FlashPunk’s more specific and powerful features are the new Tween classes. All Entities and Worlds can have any amount of Tweens added to it. Currently the Tweens are divided into 3 categories: motion, sound, and miscellaneous tweens. Motion tweens provide you with a powerful set of objects useful for planned motion. For example, if I wanted an Entity to move from one point to another, I could assign it a LinearMotion tween and have its position sync with that tween’s x and y position when it updates (an Entity’s tweens are updated immediately before the Entity’s update() function itself is called). Classes for curved (quadratic and cubic bezier), paths (linear paths and quadtratic paths), and circular motion are also provided. Tweens can be made even more effective when combined with Easing functions, allowing smooth transitions and other functionality.
+
+### DEBUGGING
+FlashPunk now has a console which lets you view lots of useful information in real-time, such as FPS, frame timing info, Entity count, and user-logged information. The user can select Entities and move them around while the console is paused, pan the camera, and also view user-specified properties for each Entity in the debug panel.
 
 ### AND MORE...
 There are also many other various changes and improvements across the board, all which I cannot list off the top of my head. Suffice to say, version 0.87 has a total of 16 different classes, and the new version has over 40. FlashPunk is still simple to use and prototype in, but with version 1.0 onward, I aim to make it not only effectively simple and fast, but contain powerful and efficent internal systems for those who know how to use them.

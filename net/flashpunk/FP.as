@@ -11,6 +11,7 @@
 	import flash.system.System;
 	import flash.utils.getTimer;
 	import net.flashpunk.*;
+	import net.flashpunk.debug.Console;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -20,7 +21,7 @@
 		/**
 		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.2";
+		public static const VERSION:String = "1.3";
 		
 		/**
 		 * Width of the game.
@@ -182,6 +183,28 @@
 			g += dG * t;
 			b += dB * t;
 			return a << 24 | r << 16 | g << 8 | b;
+		}
+		
+		/**
+		 * Steps the object towards a point.
+		 * @param	object		Object to move (must have an x and y property).
+		 * @param	x			X position to step towards.
+		 * @param	y			Y position to step towards.
+		 * @param	distance	The distance to step (will not overshoot target).
+		 */
+		public static function stepTowards(object:Object, x:Number, y:Number, distance:Number = 1):void
+		{
+			point.x = x - object.x;
+			point.y = y - object.y;
+			if (point.length <= distance)
+			{
+				object.x = x;
+				object.y = y;
+				return;
+			}
+			point.normalize(distance);
+			object.x += point.x;
+			object.y += point.y;
 		}
 		
 		/**
@@ -502,9 +525,52 @@
 		}
 		
 		/**
+		 * The global Console object.
+		 */
+		public static function get console():Console
+		{
+			if (!_console) _console = new Console;
+			return _console;
+		}
+		
+		/**
+		 * Logs data to the console.
+		 * @param	...data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
+		 */
+		public static function log(...data):void
+		{
+			if (_console)
+			{
+				if (data.length > 1)
+				{
+					var i:int = 0, s:String = "";
+					while (i < data.length)
+					{
+						if (i > 0) s += " ";
+						s += data[i ++].toString();
+					}
+					_console.log(s);
+				}
+				else _console.log(data[0]);
+			}
+		}
+		
+		/**
+		 * Adds properties to watch in the console's debug panel.
+		 * @param	...properties		The properties (strings) to watch.
+		 */
+		public static function watch(...properties):void
+		{
+			if (_console)
+			{
+				if (properties.length > 1) _console.watch(properties);
+				else _console.watch(properties[0]);
+			}
+		}
+		
+		/**
 		 * Shuffles the elements in the array.
 		 * @param	a		The Object to shuffle (an Array or Vector).
-		 * @return	The provided array with elements shuffled.
 		 */
 		public static function shuffle(a:Object):void
 		{
@@ -582,43 +648,6 @@
 			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
 		}
 		
-		/** @private Quicksorts the array. */ 
-		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
-		{
-			var i:int = left, j:int = right, t:Number,
-				p:* = a[Math.round((left + right) * .5)];
-			if (ascending)
-			{
-				while (i <= j)
-				{
-					while (a[i] < p) i ++;
-					while (a[j] > p) j --;
-					if (i <= j)
-					{
-						t = a[i];
-						a[i ++] = a[j];
-						a[j --] = t;
-					}
-				}
-			}
-			else
-			{
-				while (i <= j)
-				{
-					while (a[i] > p) i ++;
-					while (a[j] < p) j --;
-					if (i <= j)
-					{
-						t = a[i];
-						a[i ++] = a[j];
-						a[j --] = t;
-					}
-				}
-			}
-			if (left < j) quicksort(a, left, j, ascending);
-			if (i < right) quicksort(a, i, right, ascending);
-		}
-		
 		/** @private Quicksorts the array by the property. */ 
 		private static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
 		{
@@ -660,8 +689,15 @@
 		/** @private */ internal static var _world:World;
 		/** @private */ internal static var _goto:World;
 		
+		// Console information.
+		/** @private */ internal static var _console:Console;
+		
 		// Time information.
 		/** @private */ internal static var _time:uint;
+		/** @private */ public static var _updateTime:uint;
+		/** @private */ public static var _renderTime:uint;
+		/** @private */ public static var _gameTime:uint;
+		/** @private */ public static var _flashTime:uint;
 		
 		// Bitmap storage.
 		/** @private */ private static var _bitmap:Object = { };

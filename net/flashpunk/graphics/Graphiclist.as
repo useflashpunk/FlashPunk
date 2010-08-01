@@ -19,6 +19,15 @@
 			for each (var g:Graphic in graphic) add(g);
 		}
 		
+		/** @private Updates the graphics in the list. */
+		override public function update():void 
+		{
+			for each (var g:Graphic in _graphics)
+			{
+				if (g.active) g.update();
+			}
+		}
+		
 		/** @private Renders the Graphics in the list. */
 		override public function render(point:Point, camera:Point):void 
 		{
@@ -51,6 +60,7 @@
 		public function add(graphic:Graphic):Graphic
 		{
 			_graphics[_count ++] = graphic;
+			if (!active) active = graphic.active;
 			return graphic;
 		}
 		
@@ -71,6 +81,7 @@
 			var temp:Vector.<Graphic> = _graphics;
 			_graphics = _temp;
 			_temp = temp;
+			updateCheck();
 			return graphic;
 		}
 		
@@ -83,6 +94,7 @@
 			if (!_graphics.length) return;
 			index %= _graphics.length;
 			remove(_graphics[index % _graphics.length]);
+			updateCheck();
 		}
 		
 		/**
@@ -91,6 +103,7 @@
 		public function removeAll():void
 		{
 			_graphics.length = _temp.length = _count = 0;
+			active = false;
 		}
 		
 		/**
@@ -102,6 +115,22 @@
 		 * Amount of Graphics in this list.
 		 */
 		public function get count():uint { return _count; }
+		
+		/**
+		 * Check if the Graphiclist should update.
+		 */
+		private function updateCheck():void
+		{
+			active = false;
+			for each (var g:Graphic in _graphics)
+			{
+				if (g.active)
+				{
+					active = true;
+					return;
+				}
+			}
+		}
 		
 		// List information.
 		/** @private */ private var _graphics:Vector.<Graphic> = new Vector.<Graphic>;

@@ -29,7 +29,7 @@
 		 */
 		public function update():void
 		{
-			if (active) updateTweens();
+			
 		}
 		
 		/**
@@ -81,8 +81,10 @@
 			}
 		}
 		
-		/** @private Updates all contained tweens. */
-		internal function updateTweens():void
+		/** 
+		 * Updates all contained tweens.
+		 */
+		public function updateTweens():void
 		{
 			var t:Tween = _tween;
 			while (t)

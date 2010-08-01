@@ -60,16 +60,17 @@
 			_form.align = _align;
 			_field.defaultTextFormat = _form;
 			_field.text = _text = text;
-			_width = width || _field.textWidth + 4;
-			_height = height || _field.textHeight + 4;
-			super(new BitmapData(_width, _height, true, 0));
-			update();
+			if (!width) width = _field.textWidth + 4;
+			if (!height) height = _field.textHeight + 4;
+			_source = new BitmapData(width, height, true, 0);
+			super(_source);
+			updateBuffer();
 			this.x = x;
 			this.y = y;
 		}
 		
 		/** @private Updates the drawing buffer. */
-		override public function update():void 
+		override public function updateBuffer():void 
 		{
 			_field.setTextFormat(_form);
 			_field.width = _width;
@@ -102,8 +103,14 @@
 			_field.height = _height;
 			
 			_source.draw(_field);
-			
-			super.update();
+			super.updateBuffer();
+		}
+		
+		/** @private Centers the Text's originX/Y to its center. */
+		override public function centerOrigin():void 
+		{
+			originX = _width / 2;
+			originY = _height / 2;
 		}
 		
 		/**
@@ -114,7 +121,7 @@
 		{
 			if (_text == value) return;
 			_field.text = _text = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -125,7 +132,7 @@
 		{
 			if (_font == value) return;
 			_form.font = _font = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -136,7 +143,7 @@
 		{
 			if (_size == value) return;
 			_form.size = _size = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**

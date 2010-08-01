@@ -42,7 +42,7 @@
 		{
 			_target = FP.buffer;
 			_camera = FP.camera;
-			blend = null;
+			Draw.blend = null;
 		}
 		
 		/**
@@ -55,7 +55,7 @@
 		 */
 		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
 		{
-			color |= 0xFF000000;
+			if (color < 0xFF000000) color = 0xFF000000 | color;
 			
 			// get the drawing positions
 			x1 -= _camera.x;
@@ -244,6 +244,7 @@
 				_rect.width = e.width;
 				_rect.height = e.height;
 				_target.fillRect(_rect, color);
+				return;
 			}
 			_graphics.clear();
 			_graphics.beginFill(color, alpha);
@@ -252,7 +253,7 @@
 		}
 		
 		/**
-		 * Draws a quadratic curve to the screen.
+		 * Draws a quadratic curve.
 		 * @param	x1		X start.
 		 * @param	y1		Y start.
 		 * @param	x2		X control point, used to determine the curve.

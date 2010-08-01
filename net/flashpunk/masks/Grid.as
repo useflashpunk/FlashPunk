@@ -13,6 +13,11 @@
 	public class Grid extends Hitbox
 	{
 		/**
+		 * If x/y positions should be used instead of columns/rows.
+		 */
+		public var usePositions:Boolean;
+		
+		/**
 		 * Constructor.
 		 * @param	width			Width of the grid, in pixels.
 		 * @param	height			Height of the grid, in pixels.
@@ -116,6 +121,11 @@
 		 */
 		public function setCell(x:uint = 0, y:uint = 0, solid:Boolean = true):void
 		{
+			if (usePositions)
+			{
+				x /= _cell.width;
+				y /= _cell.height;
+			}
 			_data.setPixel32(x, y, solid ? 0xFFFFFFFF : 0);
 		}
 		
@@ -129,6 +139,13 @@
 		 */
 		public function setRect(x:uint = 0, y:uint = 0, width:int = 1, height:int = 1, solid:Boolean = true):void
 		{
+			if (usePositions)
+			{
+				x /= _cell.width;
+				y /= _cell.height;
+				width /= _cell.width;
+				height /= _cell.height;
+			}
 			_rect.x = x;
 			_rect.y = y;
 			_rect.width = width;
@@ -144,6 +161,11 @@
 		 */
 		public function getCell(x:uint = 0, y:uint = 0):Boolean
 		{
+			if (usePositions)
+			{
+				x /= _cell.width;
+				y /= _cell.height;
+			}
 			return _data.getPixel32(x, y) > 0;
 		}
 		

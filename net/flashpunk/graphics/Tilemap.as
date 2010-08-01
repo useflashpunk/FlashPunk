@@ -12,6 +12,11 @@
 	public class Tilemap extends Canvas
 	{
 		/**
+		 * If x/y positions should be used instead of columns/rows.
+		 */
+		public var usePositions:Boolean;
+		
+		/**
 		 * Constructor.
 		 * @param	tileset			The source tileset image.
 		 * @param	width			Width of the tilemap, in pixels.
@@ -51,6 +56,11 @@
 		 */
 		public function setTile(column:uint, row:uint, index:uint = 0):void
 		{
+			if (usePositions)
+			{
+				column /= _tile.width;
+				row /= _tile.height;
+			}
 			index %= _setCount;
 			column %= _columns;
 			row %= _rows;
@@ -69,6 +79,11 @@
 		 */
 		public function clearTile(column:uint, row:uint):void
 		{
+			if (usePositions)
+			{
+				column /= _tile.width;
+				row /= _tile.height;
+			}
 			column %= _columns;
 			row %= _rows;
 			_tile.x = column * _tile.width;
@@ -84,6 +99,11 @@
 		 */
 		public function getTile(column:uint, row:uint):uint
 		{
+			if (usePositions)
+			{
+				column /= _tile.width;
+				row /= _tile.height;
+			}
 			return _map.getPixel(column % _columns, row % _rows);
 		}
 		
@@ -97,11 +117,20 @@
 		 */
 		public function setRegion(column:uint, row:uint, width:uint = 1, height:uint = 1, index:uint = 0):void
 		{
+			if (usePositions)
+			{
+				column /= _tile.width;
+				row /= _tile.height;
+				width /= _tile.width;
+				height /= _tile.height;
+			}
 			column %= _columns;
 			row %= _rows;
 			var c:uint = column,
 				r:uint = column + width,
-				b:uint = row + height;
+				b:uint = row + height,
+				u:Boolean = usePositions;
+			usePositions = false;
 			while (row < b)
 			{
 				while (column < r)
@@ -112,6 +141,7 @@
 				column = c;
 				row ++;
 			}
+			usePositions = u;
 		}
 		
 		/**
@@ -123,11 +153,20 @@
 		 */
 		public function clearRegion(column:uint, row:uint, width:uint = 1, height:uint = 1):void
 		{
+			if (usePositions)
+			{
+				column /= _tile.width;
+				row /= _tile.height;
+				width /= _tile.width;
+				height /= _tile.height;
+			}
 			column %= _columns;
 			row %= _rows;
 			var c:uint = column,
 				r:uint = column + width,
-				b:uint = row + height;
+				b:uint = row + height,
+				u:Boolean = usePositions;
+			usePositions = false;
 			while (row < b)
 			{
 				while (column < r)
@@ -138,6 +177,7 @@
 				column = c;
 				row ++;
 			}
+			usePositions = u;
 		}
 		
 		/**
