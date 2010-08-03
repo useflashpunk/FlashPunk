@@ -122,8 +122,8 @@
 		 */
 		public static function choose(...objs):*
 		{
-			if (objs.length == 1 && (objs[0] is Array || objs[0] is Vector.<*>)) objs = objs[0];
-			return objs[rand(objs.length)];
+			var c:* = (objs.length == 1 && (objs[0] is Array || objs[0] is Vector.<*>)) ? objs[0] : objs;
+			return c[rand(c.length)];
 		}
 		
 		/**
