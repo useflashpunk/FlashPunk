@@ -61,7 +61,7 @@
 		 * @param	source		Source image.
 		 * @param	clipRect	Optional rectangle defining area of the source image to draw.
 		 */
-		public function Image(source:* = null, clipRect:Rectangle = null) 
+		public function Image(source:*, clipRect:Rectangle = null) 
 		{
 			if (source is Class)
 			{
