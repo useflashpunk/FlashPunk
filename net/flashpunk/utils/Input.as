@@ -197,6 +197,18 @@
 			if (mouseReleased) mouseReleased = false;
 		}
 		
+		/**
+		 * Clears all input states.
+		 */
+		public static function clear():void
+		{
+			_press.length = _pressNum = 0;
+			_release.length = _releaseNum = 0;
+			var i:int = _key.length;
+			while (i --) _key[i] = false;
+			_keyNum = 0;
+		}
+		
 		/** @private Event handler for key press. */
 		private static function onKeyDown(e:KeyboardEvent = null):void
 		{

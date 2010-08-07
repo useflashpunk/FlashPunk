@@ -77,9 +77,15 @@
 				if (!clipRect.height) clipRect.height = _sourceRect.height;
 				_sourceRect = clipRect;
 			}
+			createBuffer();
+			updateBuffer();
+		}
+		
+		/** @private Creates the buffer. */
+		protected function createBuffer():void
+		{
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
-			updateBuffer();
 		}
 		
 		/** @public Renders the image. */
@@ -253,9 +259,11 @@
 		 */
 		public function centerOO():void
 		{
+			x += originX;
+			y += originY;
 			centerOrigin();
-			x = -originX;
-			y = -originY;
+			x -= originX;
+			y -= originY;
 		}
 		
 		/**
@@ -283,11 +291,11 @@
 		/** @protected */ protected var _bufferRect:Rectangle;
 		
 		// Color and alpha information.
-		/** @protected */ protected var _alpha:Number = 1;
-		/** @protected */ protected var _color:uint = 0x00FFFFFF;
+		/** @private */ private var _alpha:Number = 1;
+		/** @private */ private var _color:uint = 0x00FFFFFF;
 		/** @protected */ protected var _tint:ColorTransform;
-		/** @protected */ protected var _colorTransform:ColorTransform = new ColorTransform;
-		/** @protected */ protected var _matrix:Matrix = FP.matrix;
+		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
+		/** @private */ private var _matrix:Matrix = FP.matrix;
 		
 		// Flipped image information.
 		/** @protected */ protected var _class:String;

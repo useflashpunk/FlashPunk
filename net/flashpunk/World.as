@@ -28,7 +28,7 @@
 		 */
 		public function begin():void
 		{
-			
+			FP.camera.x = FP.camera.y = 0;
 		}
 		
 		/**

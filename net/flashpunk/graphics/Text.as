@@ -63,7 +63,6 @@
 			_width = width || _field.textWidth + 4;
 			_height = height || _field.textHeight + 4;
 			_source = new BitmapData(_width, _height, true, 0);
-			_sourceRect = _source.rect;
 			super(_source);
 			updateBuffer();
 			this.x = x;
@@ -105,6 +104,13 @@
 			
 			_source.draw(_field);
 			super.updateBuffer();
+		}
+		
+		/** @private Centers the Text's originX/Y to its center. */
+		override public function centerOrigin():void 
+		{
+			originX = _width / 2;
+			originY = _height / 2;
 		}
 		
 		/**
