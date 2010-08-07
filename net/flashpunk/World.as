@@ -111,6 +111,42 @@
 		}
 		
 		/**
+		 * Creates a new Entity for this Graphic and adds it to the World at the end of the frame.
+		 * @param	graphic		Graphic object you want to add.
+		 * @param	x		X position to place the Graphic.
+		 * @param	y		Y position to place the Graphic.
+		 * @param	layer		The rendering layer of this Graphic. Higher layers are rendered first.
+		 * @return	The created Entity object.
+		 */
+		public function addGraphic(graphic:Graphic, x:Number = 0, y:Number = 0, layer:int = 0):Entity
+		{
+			var e:Entity = new Entity(x, y, graphic);
+			e.layer = layer;
+			e.active = false;
+			e.collidable = false;
+			add(e);
+			return e;
+		}
+		
+		/**
+		 * Creates a new Entity for this Mask and adds it to the World at the end of the frame.
+		 * @param	mask		Mask object you want to add.
+		 * @param	x		X position to place the Mask.
+		 * @param	y		Y position to place the Mask.
+		 * @param	type		The collision type, used for collision checking.
+		 * @return	The created Entity object.
+		 */
+		public function addMask(mask:Mask, x:Number = 0, y:Number = 0, type:String = null):Entity
+		{
+			var e:Entity = new Entity(x, y, null, mask);
+			e.type = type;
+			e.active = false;
+			e.visible = false;
+			add(e);
+			return e;
+		}
+		
+		/**
 		 * Removes the Entity from the World at the end of the frame.
 		 * @param	e		Entity object you want to remove.
 		 * @return	The removed Entity object.
