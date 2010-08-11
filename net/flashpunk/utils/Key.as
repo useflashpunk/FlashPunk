@@ -81,6 +81,9 @@
 		public static const DIGIT_8:int = 56;
 		public static const DIGIT_9:int = 57;
 		
+		public static const LEFT_SQUARE_BRACKET:int = 219;
+		public static const RIGHT_SQUARE_BRACKET:int = 221;
+		
 		public static const NUMPAD_0:int = 96;
 		public static const NUMPAD_1:int = 97;
 		public static const NUMPAD_2:int = 98;
