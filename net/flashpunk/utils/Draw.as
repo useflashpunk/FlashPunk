@@ -18,7 +18,8 @@
 	{
 		/**
 		 * The blending mode used by Draw functions. This will not
-		 * apply to Draw.line(), but will apply to Draw.linePlus().
+		 * apply to Draw.line() or Draw.circle(), but will apply
+		 * to Draw.linePlus() and Draw.circlePlus().
 		 */
 		public static var blend:String;
 		
@@ -55,7 +56,7 @@
 		 */
 		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
 		{
-			if (color >= 0xFF000000) color &= 0xFFFFFF;
+			if (color < 0xFF000000) color = 0xFF000000 | color;
 			
 			// get the drawing positions
 			x1 -= _camera.x;
@@ -207,10 +208,10 @@
 				fy:int = -2 * radius,
 				xx:int = 0,
 				yy:int = radius;
-			_target.setPixel(x, y + radius, color);
-			_target.setPixel(x, y - radius, color);
-			_target.setPixel(x + radius, y, color);
-			_target.setPixel(x - radius, y, color);
+			_target.setPixel32(x, y + radius, color);
+			_target.setPixel32(x, y - radius, color);
+			_target.setPixel32(x + radius, y, color);
+			_target.setPixel32(x - radius, y, color);
 			while (xx < yy)
 			{
 				if (f >= 0) 
@@ -222,14 +223,14 @@
 				xx ++;
 				fx += 2;
 				f += fx;    
-				_target.setPixel(x + xx, y + yy, color);
-				_target.setPixel(x - xx, y + yy, color);
-				_target.setPixel(x + xx, y - yy, color);
-				_target.setPixel(x - xx, y - yy, color);
-				_target.setPixel(x + yy, y + xx, color);
-				_target.setPixel(x - yy, y + xx, color);
-				_target.setPixel(x + yy, y - xx, color);
-				_target.setPixel(x - yy, y - xx, color);
+				_target.setPixel32(x + xx, y + yy, color);
+				_target.setPixel32(x - xx, y + yy, color);
+				_target.setPixel32(x + xx, y - yy, color);
+				_target.setPixel32(x - xx, y - yy, color);
+				_target.setPixel32(x + yy, y + xx, color);
+				_target.setPixel32(x - yy, y + xx, color);
+				_target.setPixel32(x + yy, y - xx, color);
+				_target.setPixel32(x - yy, y - xx, color);
 			}
 		}
 		
