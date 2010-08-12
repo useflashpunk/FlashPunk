@@ -154,28 +154,17 @@
 		
 		/**
 		 * Removes multiple Entities from the world.
-		 * @param	...list		The Entities you want to remove, or arrays of Entities.
+		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function removeList(...list):void
 		{
-			if (!list) return;
-			var i:uint = 0, n:uint = list.length,
-				j:uint, m:uint, a:Array;
-			while (i < n)
+			var e:Entity;
+			if (list[0] is Array || list[0] is Vector.<*>)
 			{
-				if (list[i] is Entity)
-				{
-					remove(list[i ++] as Entity);
-					continue;
-					
-				}
-				if ((a = list[i ++] as Array))
-				{
-					j = 0;
-					m = a.length;
-					while (j < m) removeList(a[j ++]);
-				}
+				for each (e in list[0]) remove(e);
+				return;
 			}
+			for each (e in list) remove(e);
 		}
 		
 		/**
