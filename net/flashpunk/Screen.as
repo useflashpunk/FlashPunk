@@ -42,7 +42,7 @@
 		/**
 		 * Refreshes the screen.
 		 */
-		internal function refresh():void
+		public function refresh():void
 		{
 			// refreshes the screen
 			FP.buffer.fillRect(FP.bounds, _color);
@@ -51,7 +51,7 @@
 		/**
 		 * Redraws the screen.
 		 */
-		internal function redraw():void
+		public function redraw():void
 		{
 			// refresh the buffers
 			_bitmap[_current].visible = true;
@@ -59,7 +59,7 @@
 		}
 		
 		/** @private Re-applies transformation matrix. */
-		private function update():void
+		public function update():void
 		{
 			_matrix.b = _matrix.c = 0;
 			_matrix.a = _scaleX * _scale;

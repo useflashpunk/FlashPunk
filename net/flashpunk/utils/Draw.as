@@ -55,7 +55,7 @@
 		 */
 		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
 		{
-			if (color < 0xFF000000) color = 0xFF000000 | color;
+			if (color >= 0xFF000000) color &= 0xFFFFFF;
 			
 			// get the drawing positions
 			x1 -= _camera.x;
@@ -123,7 +123,6 @@
 					}
 				}
 				screen.setPixel32(x2, y2, color);
-				return;
 			}
 			else
 			{
@@ -141,7 +140,6 @@
 					}
 				}
 				screen.setPixel32(x2, y2, color);
-				return;
 			}
 		}
 		
@@ -185,7 +183,6 @@
 				_target.fillRect(_rect, color);
 				return;
 			}
-			
 			if (color >= 0xFF000000) color = 0xFFFFFF & color;
 			_graphics.clear();
 			_graphics.beginFill(color, alpha);
@@ -194,19 +191,72 @@
 		}
 		
 		/**
-		 * Draws a filled circle.
+		 * Draws a non-filled, pixelated circle.
+		 * @param	x			Center x position.
+		 * @param	y			Center y position.
+		 * @param	radius		Radius of the circle.
+		 * @param	color		Color of the circle.
+		 */
+		public static function circle(x:int, y:int, radius:int, color:uint = 0xFFFFFF):void
+		{
+			if (color < 0xFF000000) color = 0xFF000000 | color;
+			x -= _camera.x;
+			y -= _camera.y;
+			var f:int = 1 - radius,
+				fx:int = 1,
+				fy:int = -2 * radius,
+				xx:int = 0,
+				yy:int = radius;
+			_target.setPixel(x, y + radius, color);
+			_target.setPixel(x, y - radius, color);
+			_target.setPixel(x + radius, y, color);
+			_target.setPixel(x - radius, y, color);
+			while (xx < yy)
+			{
+				if (f >= 0) 
+				{
+					yy --;
+					fy += 2;
+					f += fy;
+				}
+				xx ++;
+				fx += 2;
+				f += fx;    
+				_target.setPixel(x + xx, y + yy, color);
+				_target.setPixel(x - xx, y + yy, color);
+				_target.setPixel(x + xx, y - yy, color);
+				_target.setPixel(x - xx, y - yy, color);
+				_target.setPixel(x + yy, y + xx, color);
+				_target.setPixel(x - yy, y + xx, color);
+				_target.setPixel(x + yy, y - xx, color);
+				_target.setPixel(x - yy, y - xx, color);
+			}
+		}
+		
+		/**
+		 * Draws a circle to the screen.
 		 * @param	x			X position of the circle's center.
 		 * @param	y			Y position of the circle's center.
 		 * @param	radius		Radius of the circle.
 		 * @param	color		Color of the circle.
 		 * @param	alpha		Alpha of the circle.
+		 * @param	fill		If the circle should be filled with the color (true) or just an outline (false).
+		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 */
-		public static function circle(x:int, y:int, radius:Number, color:uint = 0x000000, alpha:Number = 1):void
+		public static function circlePlus(x:int, y:int, radius:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:int = 1):void
 		{
 			_graphics.clear();
-			_graphics.beginFill(color & 0xFFFFFF, alpha);
-			_graphics.drawCircle(x - _camera.x, y - _camera.y, radius);
-			_graphics.endFill();
+			if (fill)
+			{
+				_graphics.beginFill(color & 0xFFFFFF, alpha);
+				_graphics.drawCircle(x - _camera.x, y - _camera.y, radius);
+				_graphics.endFill();
+			}
+			else
+			{
+				_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
+				_graphics.drawCircle(x - _camera.x, y - _camera.y, radius);
+			}
 			_target.draw(FP.sprite, null, null, blend);
 		}
 		

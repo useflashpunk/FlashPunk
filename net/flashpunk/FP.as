@@ -22,7 +22,7 @@
 		/**
 		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.3";
+		public static const VERSION:String = "1.4";
 		
 		/**
 		 * Width of the game.
@@ -88,6 +88,14 @@
 		{
 			if (_world == value) return;
 			_goto = value;
+		}
+		
+		/**
+		 * Resets the camera position.
+		 */
+		public static function resetCamera():void
+		{
+			camera.x = camera.y = 0;
 		}
 		
 		/**
