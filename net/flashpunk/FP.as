@@ -13,6 +13,7 @@
 	import flash.utils.getTimer;
 	import net.flashpunk.*;
 	import net.flashpunk.debug.Console;
+	import net.flashpunk.tweens.misc.MultipleVarTween;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -192,6 +193,47 @@
 			g += dG * t;
 			b += dB * t;
 			return a << 24 | r << 16 | g << 8 | b;
+		}
+		
+		/**
+		 * Tweens numeric public properties of an Object.
+		 * Shorthand for creating a MultipleVarTween tween, starting it and adding it to a Tweener.
+		 * @param	object		The object containing the properties to tween.
+		 * @param	values		An object containing key/value pairs of properties and target values.
+		 * @param	duration	Duration of the tween.
+		 * @param	options		An object containing key/value pairs of optional parameters.
+		 * 				Optional parameters:
+		 * 					type		Tween type.
+		 * 					complete	Optional completion callback.
+		 * 					ease		Optional easer function.
+		 * 					tweener		The Tweener to add this Tween to.
+		 * @return	The newly added Tween.
+		 * 
+		 * Example:
+		 * 
+		 * FP.tween(object, {x: 500, y: 350}, 2.0, {ease: easeFunction});
+		 */
+		public static function tween(object:Object, values:Object, duration:Number, options:Object = null):Tween
+		{
+			var type:uint = Tween.ONESHOT;
+			var complete:Function = null;
+			var ease:Function = null;
+			var tweener:Tweener = FP.world;
+			if (object is Tweener)
+			{
+				tweener = object as Tweener;
+			}
+			if (options)
+			{
+				if (options.hasOwnProperty("type")) type = options.type;
+				if (options.hasOwnProperty("complete")) complete = options.complete;
+				if (options.hasOwnProperty("ease")) ease = options.ease;
+				if (options.hasOwnProperty("tweener")) tweener = options.tweener;
+			}
+			var tween:MultipleVarTween = new MultipleVarTween(complete, type);
+			tween.tween(object, values, duration, ease);
+			tweener.addTween(tween);
+			return tween;
 		}
 		
 		/**
