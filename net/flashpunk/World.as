@@ -16,6 +16,11 @@
 		public var visible:Boolean = true;
 		
 		/**
+		 * Point used to determine drawing offset in the render loop.
+		 */
+		public var camera: Point = new Point;
+		
+		/**
 		 * Constructor.
 		 */
 		public function World() 
