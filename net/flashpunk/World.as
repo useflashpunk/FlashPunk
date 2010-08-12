@@ -139,28 +139,17 @@
 		
 		/**
 		 * Adds multiple Entities to the world.
-		 * @param	...list		The Entities you want to add, or arrays of Entities.
+		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function addList(...list):void
 		{
-			if (!list) return;
-			var i:uint = 0, n:uint = list.length,
-				j:uint, m:uint, a:Array;
-			while (i < n)
+			var e:Entity;
+			if (list[0] is Array || list[0] is Vector.<*>)
 			{
-				if (list[i] is Entity)
-				{
-					add(list[i ++] as Entity);
-					continue;
-					
-				}
-				if ((a = list[i ++] as Array))
-				{
-					j = 0;
-					m = a.length;
-					while (j < m) addList(a[j ++]);
-				}
+				for each (e in list[0]) add(e);
+				return;
 			}
+			for each (e in list) add(e);
 		}
 		
 		/**
