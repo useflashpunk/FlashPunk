@@ -168,6 +168,38 @@
 		}
 		
 		/**
+		 * Adds an Entity to the World with the Graphic object.
+		 * @param	graphic		Graphic to assign the Entity.
+		 * @param	x			X position of the Entity.
+		 * @param	y			Y position of the Entity.
+		 * @param	layer		Layer of the Entity.
+		 * @return	The Entity that was added.
+		 */
+		public function addGraphic(graphic:Graphic, layer:int = 0, x:int = 0, y:int = 0):Entity
+		{
+			var e:Entity = new Entity(x, y, graphic);
+			if (layer != 0) e.layer = layer;
+			e.active = false;
+			return add(e);
+		}
+		
+		/**
+		 * Adds an Entity to the World with the Mask object.
+		 * @param	mask	Mask to assign the Entity.
+		 * @param	type	Collision type of the Entity.
+		 * @param	x		X position of the Entity.
+		 * @param	y		Y position of the Entity.
+		 * @return	The Entity that was added.
+		 */
+		public function addMask(mask:Mask, type:String, x:int = 0, y:int = 0):Entity
+		{
+			var e:Entity = new Entity(x, y, null, mask);
+			if (type) e.type = type;
+			e.active = e.visible = false;
+			return add(e);
+		}
+		
+		/**
 		 * Returns a new Entity, or a stored recycled Entity if one exists.
 		 * @param	classType		The Class of the Entity you want to add.
 		 * @param	addToWorld		Add it to the World immediately.
