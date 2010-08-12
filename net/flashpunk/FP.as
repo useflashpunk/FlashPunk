@@ -91,6 +91,14 @@
 		}
 		
 		/**
+		 * Resets the camera position.
+		 */
+		public static function resetCamera():void
+		{
+			camera.x = camera.y = 0;
+		}
+		
+		/**
 		 * Global volume factor for all sounds, a value from 0 to 1.
 		 */
 		public static function get volume():Number { return _volume; }
