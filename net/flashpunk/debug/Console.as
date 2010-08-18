@@ -721,7 +721,7 @@ package net.flashpunk.debug
 					s += "\n\n- " + String(e) + " -\n";
 					for each (var i:String in WATCH_LIST)
 					{
-						if (e.hasOwnProperty(i)) s += "\n" + i + ": " + e[i].toString();
+						if (e.hasOwnProperty(i)) s += "\n" + i + ": " + e[i];
 					}
 				}
 			}
