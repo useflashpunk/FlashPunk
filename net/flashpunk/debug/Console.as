@@ -76,6 +76,10 @@ package net.flashpunk.debug
 			{
 				for each (i in properties[0]) WATCH_LIST.push(i);
 			}
+			else
+			{
+				WATCH_LIST.push(properties[0]);
+			}
 		}
 		
 		/**
