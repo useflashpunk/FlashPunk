@@ -475,6 +475,11 @@
 			return s.substring(7, s.length - 1);
 		}
 		
+		/**
+		 * The World this Entity is in (read-only).
+		 */
+		public function get world():World { return _world; }
+		
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
