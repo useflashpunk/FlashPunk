@@ -355,6 +355,14 @@
 		}
 		
 		/**
+		 * If the Entity collides with the camera rectangle.
+		 */
+		public function get onCamera():Boolean
+		{
+			return collideRect(x, y, FP.camera.x, FP.camera.y, FP.width, FP.height);
+		}
+		
+		/**
 		 * The rendering layer of this Entity. Higher layers are rendered first.
 		 */
 		public function get layer():int { return _layer; }
@@ -425,6 +433,15 @@
 			this.height = height;
 			this.originX = originX;
 			this.originY = originY;
+		}
+		
+		/**
+		 * Center's the Entity's origin (half width & height).
+		 */
+		public function centerOrigin():void
+		{
+			originX = width / 2;
+			originY = height / 2;
 		}
 		
 		/**
