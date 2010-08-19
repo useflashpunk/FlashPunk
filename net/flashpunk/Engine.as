@@ -243,6 +243,7 @@
 		{
 			if (!FP._goto) return;
 			FP._world.end();
+			FP._world.updateLists();
 			if (FP._world && FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
 			FP._world = FP._goto;
 			FP._goto = null;
