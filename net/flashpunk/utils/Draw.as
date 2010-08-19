@@ -271,7 +271,7 @@
 		{
 			if (outline)
 			{
-				if (color < 0xFF000000) color += 0xFF000000;
+				if (color < 0xFF000000) color = 0xFF000000 | color;
 				var x:int = e.x - e.originX - _camera.x,
 					y:int = e.y - e.originY - _camera.y;
 				_rect.x = x;
@@ -289,9 +289,9 @@
 				_target.fillRect(_rect, color);
 				return;
 			}
-			if (alpha >= 1)
+			if (alpha >= 1 && !blend)
 			{
-				if (color < 0xFF000000) color += 0xFF000000;
+				if (color < 0xFF000000) color = 0xFF000000 | color;
 				_rect.x = e.x - e.originX - _camera.x;
 				_rect.y = e.y - e.originY - _camera.y;
 				_rect.width = e.width;
@@ -299,6 +299,7 @@
 				_target.fillRect(_rect, color);
 				return;
 			}
+			if (color >= 0xFF000000) color = 0xFFFFFF & color;
 			_graphics.clear();
 			_graphics.beginFill(color, alpha);
 			_graphics.drawRect(e.x - e.originX - _camera.x, e.y - e.originY - _camera.y, e.width, e.height);
