@@ -13,7 +13,7 @@
 	import flash.utils.getTimer;
 	import net.flashpunk.*;
 	import net.flashpunk.debug.Console;
-	import net.flashpunk.tweens.misc.MultipleVarTween;
+	import net.flashpunk.tweens.misc.MultiVarTween;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -193,47 +193,6 @@
 			g += dG * t;
 			b += dB * t;
 			return a << 24 | r << 16 | g << 8 | b;
-		}
-		
-		/**
-		 * Tweens numeric public properties of an Object.
-		 * Shorthand for creating a MultipleVarTween tween, starting it and adding it to a Tweener.
-		 * @param	object		The object containing the properties to tween.
-		 * @param	values		An object containing key/value pairs of properties and target values.
-		 * @param	duration	Duration of the tween.
-		 * @param	options		An object containing key/value pairs of optional parameters.
-		 * 				Optional parameters:
-		 * 					type		Tween type.
-		 * 					complete	Optional completion callback.
-		 * 					ease		Optional easer function.
-		 * 					tweener		The Tweener to add this Tween to.
-		 * @return	The newly added Tween.
-		 * 
-		 * Example:
-		 * 
-		 * FP.tween(object, {x: 500, y: 350}, 2.0, {ease: easeFunction});
-		 */
-		public static function tween(object:Object, values:Object, duration:Number, options:Object = null):Tween
-		{
-			var type:uint = Tween.ONESHOT;
-			var complete:Function = null;
-			var ease:Function = null;
-			var tweener:Tweener = FP.world;
-			if (object is Tweener)
-			{
-				tweener = object as Tweener;
-			}
-			if (options)
-			{
-				if (options.hasOwnProperty("type")) type = options.type;
-				if (options.hasOwnProperty("complete")) complete = options.complete;
-				if (options.hasOwnProperty("ease")) ease = options.ease;
-				if (options.hasOwnProperty("tweener")) tweener = options.tweener;
-			}
-			var tween:MultipleVarTween = new MultipleVarTween(complete, type);
-			tween.tween(object, values, duration, ease);
-			tweener.addTween(tween);
-			return tween;
 		}
 		
 		/**
@@ -626,6 +585,40 @@
 		{
 			var bytes:ByteArray = new file;
 			return XML(bytes.readUTFBytes(bytes.length));
+		}
+		
+		/**
+		 * Tweens numeric public properties of an Object. Shorthand for creating a MultiVarTween tween, starting it and adding it to a Tweener.
+		 * @param	object		The object containing the properties to tween.
+		 * @param	values		An object containing key/value pairs of properties and target values.
+		 * @param	duration	Duration of the tween.
+		 * @param	options		An object containing key/value pairs of the following optional parameters:
+		 * 						type		Tween type.
+		 * 						complete	Optional completion callback function.
+		 * 						ease		Optional easer function.
+		 * 						tweener		The Tweener to add this Tween to.
+		 * @return	The added MultiVarTween object.
+		 * 
+		 * Example: FP.tween(object, { x: 500, y: 350 }, 2.0, { ease: easeFunction, complete: onComplete } );
+		 */
+		public static function tween(object:Object, values:Object, duration:Number, options:Object = null):MultiVarTween
+		{
+			var type:uint = Tween.ONESHOT,
+				complete:Function = null,
+				ease:Function = null,
+				tweener:Tweener = FP.world;
+			if (object is Tweener) tweener = object as Tweener;
+			if (options)
+			{
+				if (options.hasOwnProperty("type")) type = options.type;
+				if (options.hasOwnProperty("complete")) complete = options.complete;
+				if (options.hasOwnProperty("ease")) ease = options.ease;
+				if (options.hasOwnProperty("tweener")) tweener = options.tweener;
+			}
+			var tween:MultiVarTween = new MultiVarTween(complete, type);
+			tween.tween(object, values, duration, ease);
+			tweener.addTween(tween);
+			return tween;
 		}
 		
 		/**

@@ -363,6 +363,14 @@
 		}
 		
 		/**
+		 * The World object this Entity has been added to.
+		 */
+		public function get world():World
+		{
+			return _world;
+		}
+		
+		/**
 		 * The rendering layer of this Entity. Higher layers are rendered first.
 		 */
 		public function get layer():int { return _layer; }
@@ -491,11 +499,6 @@
 			var s:String = String(_class);
 			return s.substring(7, s.length - 1);
 		}
-		
-		/**
-		 * The World this Entity is in (read-only).
-		 */
-		public function get world():World { return _world; }
 		
 		// Entity information.
 		/** @private */ internal var _class:Class;

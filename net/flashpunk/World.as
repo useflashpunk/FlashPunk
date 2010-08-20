@@ -18,7 +18,7 @@
 		/**
 		 * Point used to determine drawing offset in the render loop.
 		 */
-		public var camera: Point = new Point;
+		public var camera:Point = new Point;
 		
 		/**
 		 * Constructor.
