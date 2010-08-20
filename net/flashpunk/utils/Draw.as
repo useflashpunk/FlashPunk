@@ -184,7 +184,7 @@
 				_target.fillRect(_rect, color);
 				return;
 			}
-			if (color >= 0xFF000000) color = 0xFFFFFF & color;
+			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
 			_graphics.clear();
 			_graphics.beginFill(color, alpha);
 			_graphics.drawRect(x - _camera.x, y - _camera.y, width, height);
@@ -300,7 +300,7 @@
 				_target.fillRect(_rect, color);
 				return;
 			}
-			if (color >= 0xFF000000) color = 0xFFFFFF & color;
+			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
 			_graphics.clear();
 			_graphics.beginFill(color, alpha);
 			_graphics.drawRect(e.x - e.originX - _camera.x, e.y - e.originY - _camera.y, e.width, e.height);
