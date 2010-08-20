@@ -18,6 +18,11 @@
 		public static var keyString:String = "";
 		
 		/**
+		 * The last key pressed.
+		 */
+		public static var lastKey:int;
+		
+		/**
 		 * If the mouse button is down.
 		 */
 		public static var mouseDown:Boolean = false;
@@ -213,7 +218,7 @@
 		private static function onKeyDown(e:KeyboardEvent = null):void
 		{
 			// get the keycode
-			var code:int = e.keyCode;
+			var code:int = lastKey = e.keyCode;
 			
 			// update the keystring
 			if (code == Key.BACKSPACE) keyString = keyString.substring(0, keyString.length - 1);
