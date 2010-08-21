@@ -607,6 +607,34 @@
 		}
 		
 		/**
+		 * Gets an array of frame indices.
+		 * @param	from	Starting frame.
+		 * @param	to		Ending frame.
+		 * @param	skip	Skip amount every frame (eg. use 1 for every 2nd frame).
+		 */
+		public static function frames(from:uint, to:uint, skip:uint = 0):Array
+		{
+			var a:Array = [], sign:uint = 1 + skip;
+			if (from < to)
+			{
+				while (from <= to)
+				{
+					a.push(from);
+					from += sign;
+				}
+			}
+			else
+			{
+				while (from >= to)
+				{
+					a.push(from);
+					from -= sign;
+				}
+			}
+			return a;
+		}
+		
+		/**
 		 * Shuffles the elements in the array.
 		 * @param	a		The Object to shuffle (an Array or Vector).
 		 */
