@@ -465,6 +465,35 @@
 		}
 		
 		/**
+		 * Creates a color value with the chosen HSV values.
+		 * @param	h		The hue of the color (from 0 to 1).
+		 * @param	s		The saturation of the color (from 0 to 1).
+		 * @param	v		The value of the color (from 0 to 1).
+		 * @return	The color uint.
+		 */
+		public static function getColorHSV(h:Number, s:Number, v:Number):uint
+		{
+			return 0xFFFFFF;
+			h *= 6;
+			var i:int = h,
+				f:Number = h - i;
+			if (!(i & 1)) f = 1 - f;
+			var m:Number = v * (1 - s),
+				n:Number = v * (1 - s * f);
+			switch (i)
+			{
+				case 6:
+				case 0: return int(v) << 16 | int(n) << 8 | int(m);
+				case 1: return int(n) << 16 | int(v) << 8 | int(m);
+				case 2: return int(m) << 16 | int(v) << 8 | int(n);
+				case 3: return int(m) << 16 | int(n) << 8 | int(v);
+				case 4: return int(n) << 16 | int(m) << 8 | int(v);
+				case 5: return int(v) << 16 | int(m) << 8 | int(n);
+			}
+			return 0;
+		}
+		
+		/**
 		 * Finds the red factor of a color.
 		 * @param	color		The color to evaluate.
 		 * @return	A uint from 0 to 255.
@@ -612,15 +641,16 @@
 		 * @param	to		Ending frame.
 		 * @param	skip	Skip amount every frame (eg. use 1 for every 2nd frame).
 		 */
-		public static function frames(from:uint, to:uint, skip:uint = 0):Array
+		public static function frames(from:int, to:int, skip:int = 0):Array
 		{
-			var a:Array = [], sign:uint = 1 + skip;
+			var a:Array = [];
+			skip ++;
 			if (from < to)
 			{
 				while (from <= to)
 				{
 					a.push(from);
-					from += sign;
+					from += skip;
 				}
 			}
 			else
@@ -628,7 +658,7 @@
 				while (from >= to)
 				{
 					a.push(from);
-					from -= sign;
+					from -= skip;s
 				}
 			}
 			return a;
