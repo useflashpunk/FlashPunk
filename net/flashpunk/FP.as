@@ -473,22 +473,21 @@
 		 */
 		public static function getColorHSV(h:Number, s:Number, v:Number):uint
 		{
-			return 0xFFFFFF;
-			h *= 6;
-			var i:int = h,
-				f:Number = h - i;
-			if (!(i & 1)) f = 1 - f;
-			var m:Number = v * (1 - s),
-				n:Number = v * (1 - s * f);
-			switch (i)
+			h = int(h * 360);
+			var hi:int = Math.floor(h / 60) % 6,
+				f:Number = h / 60 - Math.floor(h / 60),
+				p:Number = (v * (1 - s)),
+				q:Number = (v * (1 - f * s)),
+				t:Number = (v * (1 - (1 - f) * s));
+			switch (hi)
 			{
-				case 6:
-				case 0: return int(v) << 16 | int(n) << 8 | int(m);
-				case 1: return int(n) << 16 | int(v) << 8 | int(m);
-				case 2: return int(m) << 16 | int(v) << 8 | int(n);
-				case 3: return int(m) << 16 | int(n) << 8 | int(v);
-				case 4: return int(n) << 16 | int(m) << 8 | int(v);
-				case 5: return int(v) << 16 | int(m) << 8 | int(n);
+				case 0: return int(v * 255) << 16 | int(t * 255) << 8 | int(p * 255);
+				case 1: return int(q * 255) << 16 | int(v * 255) << 8 | int(p * 255);
+				case 2: return int(p * 255) << 16 | int(v * 255) << 8 | int(t * 255);
+				case 3: return int(p * 255) << 16 | int(q * 255) << 8 | int(v * 255);
+				case 4: return int(t * 255) << 16 | int(p * 255) << 8 | int(v * 255);
+				case 5: return int(v * 255) << 16 | int(p * 255) << 8 | int(q * 255);
+				default: return 0;
 			}
 			return 0;
 		}
