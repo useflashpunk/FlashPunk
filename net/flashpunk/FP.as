@@ -658,7 +658,7 @@
 				while (from >= to)
 				{
 					a.push(from);
-					from -= skip;s
+					from -= skip;
 				}
 			}
 			return a;
