@@ -10,6 +10,7 @@ package net.flashpunk.debug
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.system.System;
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	import net.flashpunk.utils.Draw;
@@ -152,6 +153,15 @@ package net.flashpunk.debug
 			_fpsInfo.x = 75;
 			_fpsInfoText1.x = 60;
 			
+			// The memory usage
+			_fpsRead.addChild(_memReadText);
+			_memReadText.defaultTextFormat = format(16);
+			_memReadText.embedFonts = true;
+			_memReadText.width = 110;
+			_memReadText.height = 20;
+			_memReadText.x = _fpsInfo.x + _fpsInfo.width + 5;
+			_memReadText.y = 1;
+			
 			// The output log text.
 			_sprite.addChild(_logRead);
 			_logRead.addChild(_logReadText0);
@@ -206,6 +216,9 @@ package net.flashpunk.debug
 			_butRead.graphics.clear();
 			_butRead.graphics.beginFill(0, .75);
 			_butRead.graphics.drawRoundRectComplex(-20, 0, 100, 20, 0, 0, 20, 20);
+			
+			// Default the display to debug view
+			debug = true;
 			
 			// Set the state to unpaused.
 			paused = false;
@@ -659,6 +672,7 @@ package net.flashpunk.debug
 				_fpsReadText.selectable = true;
 				_fpsInfoText0.selectable = true;
 				_fpsInfoText1.selectable = true;
+				_memReadText.selectable = true;
 				_entReadText.selectable = true;
 				_debReadText1.selectable = true;
 			}
@@ -682,6 +696,7 @@ package net.flashpunk.debug
 				_fpsReadText.selectable = false;
 				_fpsInfoText0.selectable = false;
 				_fpsInfoText1.selectable = false;
+				_memReadText.selectable = false;
 				_entReadText.selectable = false;
 				_debReadText0.selectable = false;
 				_debReadText1.selectable = false;
@@ -698,6 +713,7 @@ package net.flashpunk.debug
 			_fpsInfoText1.text =
 				"Game: " + String(FP._gameTime) + "ms\n" + 
 				"Flash: " + String(FP._flashTime) + "ms";
+			_memReadText.text = "MEM: " + Number(System.totalMemory/1024/1024).toFixed(2) + "MB";
 		}
 		
 		/** @private Update the debug panel text. */
@@ -821,6 +837,7 @@ package net.flashpunk.debug
 		/** @private */ private var _fpsInfo:Sprite = new Sprite;
 		/** @private */ private var _fpsInfoText0:TextField = new TextField;
 		/** @private */ private var _fpsInfoText1:TextField = new TextField;
+		/** @private */ private var _memReadText:TextField = new TextField;
 		
 		// Output panel information.
 		/** @private */ private var _logRead:Sprite = new Sprite;
