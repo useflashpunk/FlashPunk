@@ -60,9 +60,9 @@
 			_form.align = _align;
 			_field.defaultTextFormat = _form;
 			_field.text = _text = text;
-			if (!width) width = _field.textWidth + 4;
-			if (!height) height = _field.textHeight + 4;
-			_source = new BitmapData(width, height, true, 0);
+			_width = width || _field.textWidth + 4;
+			_height = height || _field.textHeight + 4;
+			_source = new BitmapData(_width, _height, true, 0);
 			super(_source);
 			updateBuffer();
 			this.x = x;
@@ -155,7 +155,7 @@
 		{
 			if (_align == value) return;
 			_form.align = _align = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -167,7 +167,7 @@
 		{
 			if (_wordWrap == value) return;
 			_field.wordWrap = _wordWrap = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -179,7 +179,7 @@
 			value /= scaleX * scale;
 			if (_width == value) return;
 			_width = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**
@@ -191,7 +191,7 @@
 			value /= scaleY * scale;
 			if (_height == value) return;
 			_height = value;
-			update();
+			updateBuffer();
 		}
 		
 		/**

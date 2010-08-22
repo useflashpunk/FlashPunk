@@ -16,6 +16,11 @@
 		public var visible:Boolean = true;
 		
 		/**
+		 * Point used to determine drawing offset in the render loop.
+		 */
+		public var camera:Point = new Point;
+		
+		/**
 		 * Constructor.
 		 */
 		public function World() 
@@ -28,7 +33,7 @@
 		 */
 		public function begin():void
 		{
-			FP.camera.x = FP.camera.y = 0;
+			
 		}
 		
 		/**
@@ -139,54 +144,64 @@
 		
 		/**
 		 * Adds multiple Entities to the world.
-		 * @param	...list		The Entities you want to add, or arrays of Entities.
+		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function addList(...list):void
 		{
-			if (!list) return;
-			var i:uint = 0, n:uint = list.length,
-				j:uint, m:uint, a:Array;
-			while (i < n)
+			var e:Entity;
+			if (list[0] is Array || list[0] is Vector.<*>)
 			{
-				if (list[i] is Entity)
-				{
-					add(list[i ++] as Entity);
-					continue;
-					
-				}
-				if ((a = list[i ++] as Array))
-				{
-					j = 0;
-					m = a.length;
-					while (j < m) addList(a[j ++]);
-				}
+				for each (e in list[0]) add(e);
+				return;
 			}
+			for each (e in list) add(e);
 		}
 		
 		/**
 		 * Removes multiple Entities from the world.
-		 * @param	...list		The Entities you want to remove, or arrays of Entities.
+		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function removeList(...list):void
 		{
-			if (!list) return;
-			var i:uint = 0, n:uint = list.length,
-				j:uint, m:uint, a:Array;
-			while (i < n)
+			var e:Entity;
+			if (list[0] is Array || list[0] is Vector.<*>)
 			{
-				if (list[i] is Entity)
-				{
-					remove(list[i ++] as Entity);
-					continue;
-					
-				}
-				if ((a = list[i ++] as Array))
-				{
-					j = 0;
-					m = a.length;
-					while (j < m) removeList(a[j ++]);
-				}
+				for each (e in list[0]) remove(e);
+				return;
 			}
+			for each (e in list) remove(e);
+		}
+		
+		/**
+		 * Adds an Entity to the World with the Graphic object.
+		 * @param	graphic		Graphic to assign the Entity.
+		 * @param	x			X position of the Entity.
+		 * @param	y			Y position of the Entity.
+		 * @param	layer		Layer of the Entity.
+		 * @return	The Entity that was added.
+		 */
+		public function addGraphic(graphic:Graphic, layer:int = 0, x:int = 0, y:int = 0):Entity
+		{
+			var e:Entity = new Entity(x, y, graphic);
+			if (layer != 0) e.layer = layer;
+			e.active = false;
+			return add(e);
+		}
+		
+		/**
+		 * Adds an Entity to the World with the Mask object.
+		 * @param	mask	Mask to assign the Entity.
+		 * @param	type	Collision type of the Entity.
+		 * @param	x		X position of the Entity.
+		 * @param	y		Y position of the Entity.
+		 * @return	The Entity that was added.
+		 */
+		public function addMask(mask:Mask, type:String, x:int = 0, y:int = 0):Entity
+		{
+			var e:Entity = new Entity(x, y, null, mask);
+			if (type) e.type = type;
+			e.active = e.visible = false;
+			return add(e);
 		}
 		
 		/**

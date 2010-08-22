@@ -61,7 +61,7 @@
 		 * @param	source		Source image.
 		 * @param	clipRect	Optional rectangle defining area of the source image to draw.
 		 */
-		public function Image(source:* = null, clipRect:Rectangle = null) 
+		public function Image(source:*, clipRect:Rectangle = null) 
 		{
 			if (source is Class)
 			{
@@ -300,15 +300,15 @@
 		protected function get source():BitmapData { return _source; }
 		
 		// Source and buffer information.
-		/** @private */ protected var _source:BitmapData;
-		/** @private */ protected var _sourceRect:Rectangle;
-		/** @private */ protected var _buffer:BitmapData;
-		/** @private */ protected var _bufferRect:Rectangle;
+		/** @protected */ protected var _source:BitmapData;
+		/** @protected */ protected var _sourceRect:Rectangle;
+		/** @protected */ protected var _buffer:BitmapData;
+		/** @protected */ protected var _bufferRect:Rectangle;
 		
 		// Color and alpha information.
 		/** @private */ private var _alpha:Number = 1;
 		/** @private */ private var _color:uint = 0x00FFFFFF;
-		/** @private */ protected var _tint:ColorTransform;
+		/** @protected */ protected var _tint:ColorTransform;
 		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
 		/** @private */ private var _matrix:Matrix = FP.matrix;
 		

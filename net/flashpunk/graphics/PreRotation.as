@@ -91,7 +91,6 @@
 		}
 		
 		// Rotation information.
-		/** @private */ private var _source:BitmapData;
 		/** @private */ private var _width:uint;
 		/** @private */ private var _frame:Rectangle;
 		/** @private */ private var _frameCount:uint;

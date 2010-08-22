@@ -76,6 +76,7 @@ package net.flashpunk.debug
 			{
 				for each (i in properties[0]) WATCH_LIST.push(i);
 			}
+			else WATCH_LIST.push(properties[0]);
 		}
 		
 		/**
@@ -721,7 +722,7 @@ package net.flashpunk.debug
 					s += "\n\n- " + String(e) + " -\n";
 					for each (var i:String in WATCH_LIST)
 					{
-						if (e.hasOwnProperty(i)) s += "\n" + i + ": " + e[i].toString();
+						if (e.hasOwnProperty(i)) s += "\n" + i + ": " + e[i];
 					}
 				}
 			}

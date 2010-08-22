@@ -68,11 +68,6 @@
 		 */
 		public function update():void
 		{
-			// timing stuff
-			var t:Number = getTimer();
-			if (!_frameLast) _frameLast = t;
-			
-			// update loop
 			if (FP._world.active)
 			{
 				if (FP._world._tween) FP._world.updateTweens();
@@ -80,13 +75,6 @@
 			}
 			FP._world.updateLists();
 			if (FP._goto) checkWorld();
-			
-			// more timing stuff
-			t = getTimer();
-			_frameListSum += (_frameList[_frameList.length] = t - _frameLast);
-			if (_frameList.length > 10) _frameListSum -= _frameList.shift();
-			FP.frameRate = 1000 / (_frameListSum / _frameList.length);
-			_frameLast = t;
 		}
 		
 		/**
@@ -94,11 +82,23 @@
 		 */
 		public function render():void
 		{
+			// timing stuff
+			var t:Number = getTimer();
+			if (!_frameLast) _frameLast = t;
+			
+			// render loop
 			FP.screen.swap();
 			Draw.resetTarget();
 			FP.screen.refresh();
 			if (FP._world.visible) FP._world.render();
 			FP.screen.redraw();
+			
+			// more timing stuff
+			t = getTimer();
+			_frameListSum += (_frameList[_frameList.length] = t - _frameLast);
+			if (_frameList.length > 10) _frameListSum -= _frameList.shift();
+			FP.frameRate = 1000 / (_frameListSum / _frameList.length);
+			_frameLast = t;
 		}
 		
 		/**
@@ -243,9 +243,11 @@
 		{
 			if (!FP._goto) return;
 			FP._world.end();
+			FP._world.updateLists();
 			if (FP._world && FP._world.autoClear && FP._world._tween) FP._world.clearTweens();
 			FP._world = FP._goto;
 			FP._goto = null;
+			FP.camera = FP._world.camera;
 			FP._world.updateLists();
 			FP._world.begin();
 			FP._world.updateLists();
