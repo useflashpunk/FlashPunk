@@ -54,9 +54,9 @@
 		 * @param	y2		Ending y position.
 		 * @param	color	Color of the line.
 		 */
-		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
+		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF, alpha:Number = 1.0):void
 		{
-			if (color < 0xFF000000) color = 0xFF000000 | color;
+			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
 			
 			// get the drawing positions
 			x1 -= _camera.x;
