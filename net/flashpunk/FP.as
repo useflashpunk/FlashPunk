@@ -480,6 +480,34 @@
 		}
 		
 		/**
+		 * Creates a color value with the chosen HSV values.
+		 * @param	h		The hue of the color (from 0 to 1).
+		 * @param	s		The saturation of the color (from 0 to 1).
+		 * @param	v		The value of the color (from 0 to 1).
+		 * @return	The color uint.
+		 */
+		public static function getColorHSV(h:Number, s:Number, v:Number):uint
+		{
+			h = int(h * 360);
+			var hi:int = Math.floor(h / 60) % 6,
+				f:Number = h / 60 - Math.floor(h / 60),
+				p:Number = (v * (1 - s)),
+				q:Number = (v * (1 - f * s)),
+				t:Number = (v * (1 - (1 - f) * s));
+			switch (hi)
+			{
+				case 0: return int(v * 255) << 16 | int(t * 255) << 8 | int(p * 255);
+				case 1: return int(q * 255) << 16 | int(v * 255) << 8 | int(p * 255);
+				case 2: return int(p * 255) << 16 | int(v * 255) << 8 | int(t * 255);
+				case 3: return int(p * 255) << 16 | int(q * 255) << 8 | int(v * 255);
+				case 4: return int(t * 255) << 16 | int(p * 255) << 8 | int(v * 255);
+				case 5: return int(v * 255) << 16 | int(p * 255) << 8 | int(q * 255);
+				default: return 0;
+			}
+			return 0;
+		}
+		
+		/**
 		 * Finds the red factor of a color.
 		 * @param	color		The color to evaluate.
 		 * @return	A uint from 0 to 255.
@@ -619,6 +647,35 @@
 			tween.tween(object, values, duration, ease);
 			tweener.addTween(tween);
 			return tween;
+		}
+		
+		/**
+		 * Gets an array of frame indices.
+		 * @param	from	Starting frame.
+		 * @param	to		Ending frame.
+		 * @param	skip	Skip amount every frame (eg. use 1 for every 2nd frame).
+		 */
+		public static function frames(from:int, to:int, skip:int = 0):Array
+		{
+			var a:Array = [];
+			skip ++;
+			if (from < to)
+			{
+				while (from <= to)
+				{
+					a.push(from);
+					from += skip;
+				}
+			}
+			else
+			{
+				while (from >= to)
+				{
+					a.push(from);
+					from -= skip;
+				}
+			}
+			return a;
 		}
 		
 		/**
