@@ -316,10 +316,10 @@
 		 * @param	x3		X finish.
 		 * @param	y3		Y finish.
 		 */
-		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int):void
+		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int, color:uint = 0xFFFFFF, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
-			_graphics.lineStyle(1, 0xFF0000);
+			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
 			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
 			_graphics.curveTo(x2 - _camera.x, y2 - _camera.y, x3 - _camera.x, y3 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);
