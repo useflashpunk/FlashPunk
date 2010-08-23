@@ -319,8 +319,8 @@
 		{
 			_graphics.clear();
 			_graphics.lineStyle(1, 0xFF0000);
-			_graphics.moveTo(x1, y1);
-			_graphics.curveTo(x2, y2, x3, y3);
+			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
+			_graphics.curveTo(x2 - _camera.x, y2 - _camera.y, x3 - _camera.x, y3 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);
 		}
 		
