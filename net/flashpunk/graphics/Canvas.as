@@ -1,5 +1,6 @@
 ﻿package net.flashpunk.graphics 
 {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.ColorTransform;
@@ -68,7 +69,8 @@
 					{
 						_matrix.tx = point.x;
 						_matrix.ty = point.y;
-						FP.buffer.draw(buffer, _matrix, _tint, blend);
+						_bitmap.bitmapData = buffer;
+						FP.buffer.draw(_bitmap, _matrix, _tint, blend);
 					}
 					else FP.buffer.copyPixels(buffer, buffer.rect, point, null, null, true);
 					point.x += _maxWidth;
@@ -323,6 +325,7 @@
 		/** @private */ protected var _height:uint;
 		/** @private */ protected var _maxWidth:uint = 4000;
 		/** @private */ protected var _maxHeight:uint = 4000;
+		/** @private */ protected var _bitmap:Bitmap = new Bitmap;
 		
 		// Color tinting information.
 		/** @private */ private var _color:uint = 0xFFFFFF;

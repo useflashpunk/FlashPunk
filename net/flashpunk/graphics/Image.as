@@ -86,6 +86,7 @@
 		{
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
+			_bitmap = new Bitmap(_buffer);
 		}
 		
 		/** @public Renders the image. */
@@ -114,7 +115,7 @@
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
 			_matrix.tx += originX + point.x;
 			_matrix.ty += originY + point.y;
-			FP.buffer.draw(_buffer, _matrix, null, blend, null, smooth);
+			FP.buffer.draw(_bitmap, _matrix, null, blend, null, smooth);
 		}
 		
 		/**
@@ -289,6 +290,7 @@
 		/** @protected */ protected var _sourceRect:Rectangle;
 		/** @protected */ protected var _buffer:BitmapData;
 		/** @protected */ protected var _bufferRect:Rectangle;
+		/** @protected */ protected var _bitmap:Bitmap;
 		
 		// Color and alpha information.
 		/** @private */ private var _alpha:Number = 1;
