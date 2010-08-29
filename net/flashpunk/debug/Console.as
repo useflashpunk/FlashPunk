@@ -138,7 +138,7 @@ package net.flashpunk.debug
 			// The FPS and frame timing panel.
 			_fpsRead.graphics.clear();
 			_fpsRead.graphics.beginFill(0, .75);
-			_fpsRead.graphics.drawRoundRectComplex(0, 0, big ? 200 : 100, 20, 0, 0, 0, 20);
+			_fpsRead.graphics.drawRoundRectComplex(0, 0, big ? 320 : 160, 20, 0, 0, 0, 20);
 			
 			// The frame timing text.
 			if (big) _sprite.addChild(_fpsInfo);
