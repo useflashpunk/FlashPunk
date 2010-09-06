@@ -95,16 +95,17 @@
 			if (!_buffer) return;
 			
 			// determine drawing location
-			point.x += x - camera.x * scrollX;
-			point.y += y - camera.y * scrollY;
+			point.x += (x - camera.x) * scrollX;
+			point.y += (y - camera.y) * scrollY;
 			
 			renderToBitmapDataAtPoint(FP.buffer, point);
 		}
 		
 		/** @public Renders the scaled, rotated, translated image onto a bitmapData at the specified point. */
 		public function renderToBitmapDataAtPoint(dest:BitmapData, point:Point):void {
+			var sc:Number = scale * FP.world.scale;
 			// render without transformation
-			if (angle == 0 && scaleX * scale == 1 && scaleY * scale == 1 && !blend)
+			if (angle == 0 && scaleX * sc == 1 && scaleY * sc == 1 && !blend)
 			{
 				dest.copyPixels(_buffer, _bufferRect, point, null, null, true);
 				return;
@@ -112,13 +113,13 @@
 			
 			// render with transformation
 			_matrix.b = _matrix.c = 0;
-			_matrix.a = scaleX * scale;
-			_matrix.d = scaleY * scale;
+			_matrix.a = scaleX * sc;
+			_matrix.d = scaleY * sc;
 			_matrix.tx = -originX * _matrix.a;
 			_matrix.ty = -originY * _matrix.d;
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
-			_matrix.tx += originX + point.x;
-			_matrix.ty += originY + point.y;
+			_matrix.tx += (originX + point.x) * sc;
+			_matrix.ty += (originY + point.y) * sc;
 			dest.draw(_buffer, _matrix, null, blend, null, smooth);
 		}
 		

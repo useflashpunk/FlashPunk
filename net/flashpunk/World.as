@@ -21,6 +21,11 @@
 		public var camera:Point = new Point;
 		
 		/**
+		 * Multiplier used to globally-scale bitmap drawing operations
+		 */
+		public var scale:Number = 1;
+		
+		/**
 		 * Constructor.
 		 */
 		public function World() 
