@@ -1,5 +1,6 @@
 ﻿package net.flashpunk.graphics 
 {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -71,13 +72,21 @@
 			
 			if (options)
 			{
-				if (options.hasOwnProperty("font")) _font = options.font;
-				if (options.hasOwnProperty("size")) _size = options.size;
-				if (options.hasOwnProperty("align")) _align = options.align;
-				if (options.hasOwnProperty("wordWrap")) _wordWrap = options.wordWrap;
-				if (options.hasOwnProperty("resizable")) resizable = options.resizable;
-				if (options.hasOwnProperty("width")) width = options.width;
-				if (options.hasOwnProperty("height")) height = options.height;
+				if (options is Number) // Backwards compatibility: options parameter has replaced width
+				{
+					width = Number(options);
+				}
+				else
+				{
+					if (options.hasOwnProperty("font")) _font = options.font;
+					if (options.hasOwnProperty("size")) _size = options.size;
+					if (options.hasOwnProperty("align")) _align = options.align;
+					if (options.hasOwnProperty("wordWrap")) _wordWrap = options.wordWrap;
+					if (options.hasOwnProperty("resizable")) resizable = options.resizable;
+					if (options.hasOwnProperty("resizeable")) resizable = options.resizeable;
+					if (options.hasOwnProperty("width")) width = options.width;
+					if (options.hasOwnProperty("height")) height = options.height;
+				}
 			}
 			
 			_field.embedFonts = true;
@@ -124,6 +133,7 @@
 				_sourceRect = _source.rect;
 				_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 				_bufferRect = _buffer.rect;
+				_bitmap = new Bitmap(_buffer);
 			}
 			else
 			{
