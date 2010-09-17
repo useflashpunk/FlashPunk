@@ -123,7 +123,7 @@
 		 */
 		public function collide(type:String, x:Number, y:Number):Entity
 		{
-			var e:Entity = FP._world._typeFirst[type];
+			var e:Entity = _world._typeFirst[type];
 			if (!collidable || !e) return null;
 			
 			_x = this.x; _y = this.y;
@@ -300,7 +300,7 @@
 		 */
 		public function collideInto(type:String, x:Number, y:Number, array:Object):void
 		{
-			var e:Entity = FP._world._typeFirst[type];
+			var e:Entity = _world._typeFirst[type];
 			if (!collidable || !e) return;
 			
 			_x = this.x; _y = this.y;
