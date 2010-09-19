@@ -99,7 +99,6 @@
 			_height = height || _field.textHeight + 4;
 			_source = new BitmapData(_width, _height, true, 0);
 			super(_source);
-			updateBuffer();
 			this.x = x;
 			this.y = y;
 			
@@ -110,7 +109,7 @@
 		}
 		
 		/** @private Updates the drawing buffer. */
-		override public function updateBuffer():void 
+		override public function updateBuffer():void
 		{
 			_field.setTextFormat(_form);
 			_field.width = _width;
@@ -133,7 +132,7 @@
 				_sourceRect = _source.rect;
 				_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 				_bufferRect = _buffer.rect;
-				_bitmap = new Bitmap(_buffer);
+				_bitmap.bitmapData = _buffer;
 			}
 			else
 			{
