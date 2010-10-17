@@ -85,9 +85,7 @@
 		}
 		
 		/**
-		 * Updates the Entity's graphic. If you override this for
-		 * update logic, remember to call super.update() if you're
-		 * using a Graphic type that animates (eg. Spritemap).
+		 * Override this, used to update the Entity's state.
 		 */
 		override public function update():void 
 		{
