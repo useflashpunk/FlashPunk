@@ -130,9 +130,7 @@
 					true, 0);
 				
 				_sourceRect = _source.rect;
-				_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
-				_bufferRect = _buffer.rect;
-				_bitmap.bitmapData = _buffer;
+				createBuffer();
 			}
 			else
 			{
