@@ -51,8 +51,8 @@
 		/**
 		 * Constructor.
 		 * @param	text		Text to display.
-		 * @param	x			X offset.
-		 * @param	y			Y offset.
+		 * @param	x		X offset.
+		 * @param	y		Y offset.
 		 * @param	options		An object containing key/value pairs of the following optional parameters:
 		 * 						font		Font family.
 		 * 						size		Font size.
@@ -62,8 +62,10 @@
 		 * 						width		Initial buffer width.
 		 * 						height		Initial buffer height.
 		 * 						color		Text color.
+		 *				For backwards compatibility, if options is a Number, it will determine the initial buffer width.
+		 * @param	h		Deprecated. For backwards compatibility: if set and there is no options.height parameter set, will determine the initial buffer height.
 		 */
-		public function Text(text:String, x:Number = 0, y:Number = 0, options:Object = null)
+		public function Text(text:String, x:Number = 0, y:Number = 0, options:Object = null, h:Number = 0)
 		{
 			_font = Text.font;
 			_size = Text.size;
@@ -71,7 +73,7 @@
 			_wordWrap = Text.wordWrap;
 			resizable = Text.resizable;
 			var width:uint = 0;
-			var height:uint = 0;
+			var height:uint = h;
 			
 			if (options)
 			{
