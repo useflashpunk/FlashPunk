@@ -13,7 +13,7 @@
 	/**
 	 * Used for drawing text using embedded fonts.
 	 * 
-	 * Note that users of Flex 4 must edit this class to get text working.
+	 * Note that users of Flex 3 must edit this class to get FlashPunk games to compile.
 	 * The details of this can be found at the bottom of the file net/flashpunk/graphics/Text.as
 	 */
 	public class Text extends Image
@@ -260,10 +260,10 @@
 		/** @private */ private var _wordWrap:Boolean;
 		
 		// Default font family.
+		// Use this option when compiling with Flex SDK 3 or lower
+		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
 		// Use this option when compiling with Flex SDK 4
-		// [Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
-		// Use this option when compiling with Flex SDK <4
-		[Embed(source = '04B_03__.TTF', fontFamily = 'default')]
+		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
 		/** @private */ private static var _FONT_DEFAULT:Class;
 	}
 }
