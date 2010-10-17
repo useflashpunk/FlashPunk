@@ -12,6 +12,9 @@
 	
 	/**
 	 * Used for drawing text using embedded fonts.
+	 * 
+	 * Note that users of Flex 4 must edit this class to get text working.
+	 * The details of this can be found at the bottom of the file net/flashpunk/graphics/Text.as
 	 */
 	public class Text extends Image
 	{
