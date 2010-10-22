@@ -906,6 +906,13 @@
 			{
 				for each (e in _remove)
 				{
+					if (e._added != true && _add.indexOf(e) >= 0) {
+						// the entity hasn't been added yet, is on the add list, 
+						// but is also on the remove list, so just remove it 
+						// from the add list and move on.
+						_add.splice(_add.indexOf(e), 1);
+						continue;
+					}
 					e._added = false;
 					e.removed();
 					removeUpdate(e);
