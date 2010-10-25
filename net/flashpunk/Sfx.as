@@ -41,8 +41,8 @@
 			_pan = _transform.pan = pan < -1 ? -1 : (pan > 1 ? 1 : pan);
 			_channel = _sound.play(0, 0, _transform);
 			_channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
-			_position = 0;
 			_looping = false;
+			_position = 0;
 		}
 		
 		/**
@@ -52,12 +52,7 @@
 		 */
 		public function loop(vol:Number = 1, pan:Number = 0):void
 		{
-			if (_channel) stop();
-			_vol = _transform.volume = vol < 0 ? 0 : vol;
-			_pan = _transform.pan = pan < -1 ? -1 : (pan > 1 ? 1 : pan);
-			_channel = _sound.play(0, 0xFFFFFF, _transform);
-			_channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
-			_position = 0;
+			play(vol, pan);
 			_looping = true;
 		}
 		
@@ -80,20 +75,17 @@
 		 */
 		public function resume():void
 		{
-			_channel = _sound.play(_position, _looping ? 0xFFFFFF : 0, _transform);
+			_channel = _sound.play(_position, 0, _transform);
 			_channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
+			_position = 0;
 		}
 		
 		/** @private Event handler for sound completion. */
 		private function onComplete(e:Event = null):void
 		{
-			if (!_looping)
-			{
-				_channel.removeEventListener(Event.SOUND_COMPLETE, onComplete);
-				_channel.stop();
-				_channel = null;
-				_position = 0;
-			}
+			if (_looping) loop(_vol, _pan);
+			else stop();
+			_position = 0;
 			if (complete != null) complete();
 		}
 		
