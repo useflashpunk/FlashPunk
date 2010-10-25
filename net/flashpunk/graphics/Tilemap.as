@@ -33,6 +33,7 @@
 			_columns = _width / tileWidth;
 			_rows = _height / tileHeight;
 			_map = new BitmapData(_columns, _rows, false, 0);
+			_temp = _map.clone();
 			_tile = new Rectangle(0, 0, tileWidth, tileHeight);
 			
 			// create the canvas
@@ -342,6 +343,7 @@
 		
 		// Tilemap information.
 		/** @private */ private var _map:BitmapData;
+		/** @private */ private var _temp:BitmapData;
 		/** @private */ private var _columns:uint;
 		/** @private */ private var _rows:uint;
 		
