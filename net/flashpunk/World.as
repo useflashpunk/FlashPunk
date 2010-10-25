@@ -906,6 +906,11 @@
 			{
 				for each (e in _remove)
 				{
+					if (e._added != true && _add.indexOf(e) >= 0)
+					{
+						_add.splice(_add.indexOf(e), 1);
+						continue;
+					}
 					e._added = false;
 					e.removed();
 					removeUpdate(e);
