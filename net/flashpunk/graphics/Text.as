@@ -117,10 +117,10 @@
 		/** @private */ private var _size:uint;
 		
 		// Default font family.
+		// Use this option when compiling with Flex SDK 3 or lower
+		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
 		// Use this option when compiling with Flex SDK 4
-		// [Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
-		// Use this option when compiling with Flex SDK <4
-		[Embed(source = '04B_03__.TTF', fontFamily = 'default')]
+		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
 		/** @private */ private static var _FONT_DEFAULT:Class;
 	}
 }

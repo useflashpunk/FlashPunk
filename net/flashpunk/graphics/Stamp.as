@@ -31,12 +31,12 @@
 		}
 		
 		/** @private Renders the Graphic. */
-		override public function render(point:Point, camera:Point):void 
+		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			if (!_source) return;
-			point.x += x - camera.x * scrollX;
-			point.y += y - camera.y * scrollY;
-			FP.buffer.copyPixels(_source, _sourceRect, point, null, null, true);
+			_point.x = point.x + x - camera.x * scrollX;
+			_point.y = point.y + y - camera.y * scrollY;
+			target.copyPixels(_source, _sourceRect, _point, null, null, true);
 		}
 		
 		/**
@@ -52,6 +52,5 @@
 		// Stamp information.
 		/** @private */ private var _source:BitmapData;
 		/** @private */ private var _sourceRect:Rectangle;
-		/** @private */ private var _point:Point = FP.point;
 	}
 }

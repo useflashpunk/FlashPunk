@@ -5,6 +5,7 @@
 	import flash.geom.Rectangle;
 	import net.flashpunk.Graphic;
 	import net.flashpunk.FP;
+	import net.flashpunk.masks.Grid;
 	
 	/**
 	 * A canvas to which Tiles can be drawn for fast multiple tile rendering.
@@ -86,7 +87,7 @@
 			row %= _rows;
 			_tile.x = column * _tile.width;
 			_tile.y = row * _tile.height;
-			fill(_tile, 0);
+			fill(_tile, 0, 0);
 		}
 		
 		/**
@@ -106,14 +107,14 @@
 		}
 		
 		/**
-		 * Sets a region of tiles to the index.
+		 * Sets a rectangular region of tiles to the index.
 		 * @param	column		First tile column.
 		 * @param	row			First tile row.
 		 * @param	width		Width in tiles.
 		 * @param	height		Height in tiles.
 		 * @param	index		Tile index.
 		 */
-		public function setRegion(column:uint, row:uint, width:uint = 1, height:uint = 1, index:uint = 0):void
+		public function setRect(column:uint, row:uint, width:uint = 1, height:uint = 1, index:uint = 0):void
 		{
 			if (usePositions)
 			{
@@ -143,13 +144,13 @@
 		}
 		
 		/**
-		 * Clears the region of tiles.
+		 * Clears the rectangular region of tiles.
 		 * @param	column		First tile column.
 		 * @param	row			First tile row.
 		 * @param	width		Width in tiles.
 		 * @param	height		Height in tiles.
 		 */
-		public function clearRegion(column:uint, row:uint, width:uint = 1, height:uint = 1):void
+		public function clearRect(column:uint, row:uint, width:uint = 1, height:uint = 1):void
 		{
 			if (usePositions)
 			{
@@ -215,7 +216,7 @@
 			{
 				for (x = 0; x < _columns; x ++)
 				{
-					s += getTile(x, y);
+					s += String(getTile(x, y));
 					if (x != _columns - 1) s += columnSep;
 				}
 				if (y != _rows - 1) s += rowSep;
@@ -235,6 +236,91 @@
 		}
 		
 		/**
+		 * Shifts all the tiles in the tilemap.
+		 * @param	columns		Horizontal shift.
+		 * @param	rows		Vertical shift.
+		 * @param	wrap		If tiles shifted off the canvas should wrap around to the other side.
+		 */
+		public function shiftTiles(columns:int, rows:int, wrap:Boolean = false):void
+		{
+			if (usePositions)
+			{
+				columns /= _tile.width;
+				rows /= _tile.height;
+			}
+			
+			if (!wrap) _temp.fillRect(_temp.rect, 0);
+			
+			if (columns != 0)
+			{
+				shift(columns * _tile.width, 0);
+				if (wrap) _temp.copyPixels(_map, _map.rect, FP.zero);
+				_map.scroll(columns, 0);
+				_point.y = 0;
+				_point.x = columns > 0 ? columns - _columns : columns + _columns;
+				_map.copyPixels(_temp, _temp.rect, _point);
+				
+				_rect.x = columns > 0 ? 0 : _columns + columns;
+				_rect.y = 0;
+				_rect.width = Math.abs(columns);
+				_rect.height = _rows;
+				updateRect(_rect, !wrap);
+			}
+			
+			if (rows != 0)
+			{
+				shift(0, rows * _tile.height);
+				if (wrap) _temp.copyPixels(_map, _map.rect, FP.zero);
+				_map.scroll(0, rows);
+				_point.x = 0;
+				_point.y = rows > 0 ? rows - _rows : rows + _rows;
+				_map.copyPixels(_temp, _temp.rect, _point);
+				
+				_rect.x = 0;
+				_rect.y = rows > 0 ? 0 : _rows + rows;
+				_rect.width = _columns;
+				_rect.height = Math.abs(rows);
+				updateRect(_rect, !wrap);
+			}
+		}
+		
+		/** @private Used by shiftTiles to update a rectangle of tiles from the tilemap. */
+		private function updateRect(rect:Rectangle, clear:Boolean):void
+		{
+			var x:int = rect.x,
+				y:int = rect.y,
+				w:int = x + rect.width,
+				h:int = y + rect.height,
+				u:Boolean = usePositions;
+			usePositions = false;
+			if (clear)
+			{
+				while (y < h)
+				{
+					while (x < w) clearTile(x ++, y);
+					x = rect.x;
+					y ++;
+				}
+			}
+			else
+			{
+				while (y < h)
+				{
+					while (x < w) updateTile(x ++, y);
+					x = rect.x;
+					y ++;
+				}
+			}
+			usePositions = u;
+		}
+		
+		/** @private Used by shiftTiles to update a tile from the tilemap. */
+		private function updateTile(column:uint, row:uint):void
+		{
+			setTile(column, row, _map.getPixel(column % _columns, row % _rows));
+		}
+		
+		/**
 		 * The tile width.
 		 */
 		public function get tileWidth():uint { return _tile.width; }
@@ -244,6 +330,15 @@
 		 */
 		public function get tileHeight():uint { return _tile.height; }
 		
+		/**
+		 * How many columns the tilemap has.
+		 */
+		public function get columns():uint { return _columns; }
+		
+		/**
+		 * How many rows the tilemap has.
+		 */
+		public function get rows():uint { return _rows; }
 		
 		// Tilemap information.
 		/** @private */ private var _map:BitmapData;
@@ -258,7 +353,6 @@
 		/** @private */ private var _tile:Rectangle;
 		
 		// Global objects.
-		/** @private */ private var _point:Point = FP.point;
 		/** @private */ private var _rect:Rectangle = FP.rect;
 	}
 }
