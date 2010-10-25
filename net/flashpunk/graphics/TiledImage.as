@@ -34,7 +34,7 @@ package net.flashpunk.graphics
 		}
 		
 		/** @private Updates the buffer. */
-		override public function updateBuffer():void
+		override public function updateBuffer(clearBefore:Boolean = false):void
 		{
 			if (!_source) return;
 			if (!_texture)
