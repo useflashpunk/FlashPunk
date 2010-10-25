@@ -35,7 +35,7 @@ package net.flashpunk.graphics
 		}
 		
 		/** @private Updates the buffer. */
-		override public function updateBuffer():void 
+		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			// get position of the current frame
 			_rect.x = _rect.width * _frame;
