@@ -26,6 +26,8 @@
 		public static const TAB:int = 9;
 		public static const PAGE_DOWN:int = 34;
 		public static const PAGE_UP:int = 33;
+		public static const LEFT_SQUARE_BRACKET:int = 219;
+		public static const RIGHT_SQUARE_BRACKET:int = 221;
 		
 		public static const A:int = 65;
 		public static const B:int = 66;
