@@ -371,7 +371,7 @@ package net.flashpunk
 		 */
 		public function collideTypesInto(types:Object, x:Number, y:Number, array:Object):void
 		{
-			if (!_world) return null;
+			if (!_world) return;
 			for each (var type:String in types) collideInto(type, x, y, array);
 		}
 		
