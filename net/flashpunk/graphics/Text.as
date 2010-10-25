@@ -47,7 +47,7 @@
 		}
 		
 		/** @private Updates the drawing buffer. */
-		override public function updateBuffer():void 
+		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			_field.setTextFormat(_form);
 			_field.width = _width = _field.textWidth + 4;
