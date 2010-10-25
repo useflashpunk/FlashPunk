@@ -1,4 +1,4 @@
-﻿package net.flashpunk
+package net.flashpunk
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -138,6 +138,8 @@
 		 */
 		public function collide(type:String, x:Number, y:Number):Entity
 		{
+			if (!_world) return null;
+			
 			var e:Entity = _world._typeFirst[type];
 			if (!collidable || !e) return null;
 			
@@ -195,6 +197,7 @@
 		 */
 		public function collideTypes(types:Object, x:Number, y:Number):Entity
 		{
+			if (!_world) return null;
 			var e:Entity;
 			for each (var type:String in types)
 			{
@@ -315,6 +318,8 @@
 		 */
 		public function collideInto(type:String, x:Number, y:Number, array:Object):void
 		{
+			if (!_world) return;
+			
 			var e:Entity = _world._typeFirst[type];
 			if (!collidable || !e) return;
 			
@@ -366,6 +371,7 @@
 		 */
 		public function collideTypesInto(types:Object, x:Number, y:Number, array:Object):void
 		{
+			if (!_world) return null;
 			for each (var type:String in types) collideInto(type, x, y, array);
 		}
 		
