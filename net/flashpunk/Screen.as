@@ -7,6 +7,7 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Transform;
+	import net.flashpunk.graphics.Image;
 	
 	/**
 	 * Container for the main screen buffer. Can be used to transform the screen.
@@ -162,7 +163,7 @@
 		public function get angle():Number { return _angle * FP.DEG; }
 		public function set angle(value:Number):void
 		{
-			if (_angle == value) return;
+			if (_angle == value * FP.RAD) return;
 			_angle = value * FP.RAD;
 			update();
 		}
@@ -192,6 +193,15 @@
 		 * Y position of the mouse on the screen.
 		 */
 		public function get mouseY():int { return (FP.stage.mouseY - _y) / (_scaleY * _scale); }
+		
+		/**
+		 * Captures the current screen as an Image object.
+		 * @return	A new Image object.
+		 */
+		public function capture():Image
+		{
+			return new Image(_bitmap[_current].bitmapData.clone());
+		}
 		
 		// Screen infromation.
 		/** @private */ private var _sprite:Sprite = new Sprite;
