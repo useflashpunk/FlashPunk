@@ -867,7 +867,7 @@ package net.flashpunk.debug
 		/** @private */ private const WATCH_LIST:Vector.<String> = Vector.<String>(["x", "y"]);
 		
 		// Embedded assets.
-		[Embed(source = '../graphics/04B_03__.TTF', fontFamily = 'console')] private const FONT_SMALL:Class;
+		[Embed(source = '../graphics/04B_03__.TTF', embedAsCFF="false", fontFamily = 'console')] private const FONT_SMALL:Class;
 		[Embed(source = 'console_logo.png')] private const CONSOLE_LOGO:Class;
 		[Embed(source = 'console_debug.png')] private const CONSOLE_DEBUG:Class;
 		[Embed(source = 'console_output.png')] private const CONSOLE_OUTPUT:Class;
