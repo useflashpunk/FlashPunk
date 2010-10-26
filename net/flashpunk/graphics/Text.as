@@ -54,7 +54,7 @@
 			_field.height = _height = _field.textHeight + 4;
 			_source.fillRect(_sourceRect, 0);
 			_source.draw(_field);
-			super.updateBuffer();
+			super.updateBuffer(clearBefore);
 		}
 		
 		/** @private Centers the Text's originX/Y to its center. */
