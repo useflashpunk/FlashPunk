@@ -54,16 +54,6 @@ package net.flashpunk
 		public var originY:int;
 		
 		/**
-		 * Optional callback for horizontal collision using moveTo() or moveBy().
-		 */
-		public var callbackX:Function;
-		
-		/**
-		 * Optional callback for vertical collision using moveTo() or moveBy().
-		 */
-		public var callbackY:Function;
-		
-		/**
 		 * The BitmapData target to draw the Entity to. Leave as null to render to the current screen buffer (default).
 		 */
 		public var renderTarget:BitmapData;
@@ -412,6 +402,26 @@ package net.flashpunk
 		public function get centerY():Number { return y - originY + height / 2; }
 		
 		/**
+		 * The leftmost position of the Entity's hitbox.
+		 */
+		public function get left():Number { return x - originX; }
+		
+		/**
+		 * The rightmost position of the Entity's hitbox.
+		 */
+		public function get right():Number { return x - originX + width; }
+		
+		/**
+		 * The topmost position of the Entity's hitbox.
+		 */
+		public function get top():Number { return y - originY; }
+		
+		/**
+		 * The bottommost position of the Entity's hitbox.
+		 */
+		public function get bottom():Number { return y - originY + height; }
+		
+		/**
 		 * The rendering layer of this Entity. Higher layers are rendered first.
 		 */
 		public function get layer():int { return _layer; }
@@ -606,14 +616,14 @@ package net.flashpunk
 				var sign:int, e:Entity;
 				if (x != 0)
 				{
-					if (sweep || collide(solidType, this.x + x, this.y))
+					if (collidable && (sweep || collide(solidType, this.x + x, this.y)))
 					{
 						sign = x > 0 ? 1 : -1;
 						while (x != 0)
 						{
-							if (collide(solidType, this.x + sign, this.y))
+							if ((e = collide(solidType, this.x + sign, this.y)))
 							{
-								if (callbackX != null) callbackX();
+								moveCollideX(e);
 								break;
 							}
 							else
@@ -627,14 +637,14 @@ package net.flashpunk
 				}
 				if (y != 0)
 				{
-					if (sweep || collide(solidType, this.x, this.y + y))
+					if (collidable && (sweep || collide(solidType, this.x, this.y + y)))
 					{
 						sign = y > 0 ? 1 : -1;
 						while (y != 0)
 						{
-							if (collide(solidType, this.x, this.y + sign))
+							if ((e = collide(solidType, this.x, this.y + sign)))
 							{
-								if (callbackY != null) callbackY();
+								moveCollideY(e);
 								break;
 							}
 							else
@@ -664,6 +674,40 @@ package net.flashpunk
 		public function moveTo(x:Number, y:Number, solidType:String = null, sweep:Boolean = false):void
 		{
 			moveBy(x - this.x, y - this.y, solidType, sweep);
+		}
+		
+		/**
+		 * Moves towards the target position, retaining integer values for its x and y.
+		 * @param	x			X target.
+		 * @param	y			Y target.
+		 * @param	amount		Amount to move.
+		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
+		 */
+		public function moveTowards(x:Number, y:Number, amount:Number, solidType:String = null, sweep:Boolean = false):void
+		{
+			FP.point.x = x - this.x;
+			FP.point.y = y - this.y;
+			FP.point.normalize(amount);
+			moveBy(FP.point.x, FP.point.y, solidType, sweep);
+		}
+		
+		/**
+		 * When you collide with an Entity on the x-axis with moveTo() or moveBy().
+		 * @param	e		The Entity you collided with.
+		 */
+		public function moveCollideX(e:Entity):void
+		{
+			
+		}
+		
+		/**
+		 * When you collide with an Entity on the y-axis with moveTo() or moveBy().
+		 * @param	e		The Entity you collided with.
+		 */
+		public function moveCollideY(e:Entity):void
+		{
+			
 		}
 		
 		/**
