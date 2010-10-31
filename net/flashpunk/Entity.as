@@ -686,10 +686,10 @@ package net.flashpunk
 		 */
 		public function moveTowards(x:Number, y:Number, amount:Number, solidType:String = null, sweep:Boolean = false):void
 		{
-			FP.point.x = x - this.x;
-			FP.point.y = y - this.y;
-			FP.point.normalize(amount);
-			moveBy(FP.point.x, FP.point.y, solidType, sweep);
+			_point.x = x - this.x;
+			_point.y = y - this.y;
+			_point.normalize(amount);
+			moveBy(_point.x, _point.y, solidType, sweep);
 		}
 		
 		/**
