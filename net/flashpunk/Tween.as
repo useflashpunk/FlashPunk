@@ -135,6 +135,15 @@
 			_tweens.push(t);
 		}
 		
+		/**
+		 * Clears any active static tweens called by Tween.to().
+		 */
+		public static function clear():void
+		{
+			for each (var tween:TweenInfo in _tweens) tween.destroy();
+			_tweens.length = 0;
+		}
+		
 		/** @private Updates the static tweens. */ 
 		internal static function update():void
 		{
@@ -177,6 +186,5 @@
 		
 		// Static tweening information.
 		/** @private */ private static var _tweens:Vector.<TweenInfo> = new Vector.<TweenInfo>;
-		/** @private */ private static var _cache:Vector.<TweenInfo> = new Vector.<TweenInfo>;
 	}
 }
