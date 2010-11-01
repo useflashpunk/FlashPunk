@@ -215,10 +215,9 @@
 		/**
 		 * Width of the text image.
 		 */
-		override public function get width():uint { return _width * scaleX * scale; }
+		override public function get width():uint { return _width; }
 		public function set width(value:uint):void
 		{
-			value /= scaleX * scale;
 			if (_width == value) return;
 			_width = value;
 			updateBuffer();
@@ -227,14 +226,23 @@
 		/**
 		 * Height of the text image.
 		 */
-		override public function get height():uint { return _height * scaleY * scale; }
+		override public function get height():uint { return _height; }
 		public function set height(value:uint):void
 		{
-			value /= scaleY * scale;
 			if (_height == value) return;
 			_height = value;
 			updateBuffer();
 		}
+		
+		/**
+		 * The scaled width of the text image.
+		 */
+		override public function get scaledWidth():uint { return _width * scaleX * scale; }
+		
+		/**
+		 * The scaled height of the text image.
+		 */
+		override public function get scaledHeight():uint { return _height * scaleY * scale; }
 		
 		/**
 		 * Width of the text within the image.
