@@ -29,6 +29,7 @@
 		{
 			_object = object;
 			_property = property;
+			_ease = ease;
 			if (!object.hasOwnProperty(property)) throw new Error("The Object does not have the property\"" + property + "\", or it is not accessible.");
 			var a:* = _object[property] as Number;
 			if (a == null) throw new Error("The property \"" + property + "\" is not numeric.");

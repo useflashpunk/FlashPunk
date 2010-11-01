@@ -83,14 +83,14 @@
 		}
 		
 		/** @private Renders the particles. */
-		override public function render(point:Point, camera:Point):void 
+		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			// quit if there are no particles
 			if (!_particle) return;
 			
 			// get rendering position
-			point.x += x - camera.x * scrollX;
-			point.y += y - camera.y * scrollY;
+			_point.x = point.x + x - camera.x * scrollX;
+			_point.y = point.y + y - camera.y * scrollY;
 			
 			// particle info
 			var t:Number, td:Number,
@@ -110,8 +110,8 @@
 				
 				// get position
 				td = (type._ease == null) ? t : type._ease(t);
-				_point.x = point.x + p._x + p._moveX * td;
-				_point.y = point.y + p._y + p._moveY * td;
+				_p.x = _point.x + p._x + p._moveX * td;
+				_p.y = _point.y + p._y + p._moveY * td;
 				
 				// get frame
 				rect.x = rect.width * type._frames[uint(td * type._frameCount)];
@@ -134,9 +134,9 @@
 					type._buffer.colorTransform(type._bufferRect, _tint);
 					
 					// draw particle
-					FP.buffer.copyPixels(type._buffer, type._bufferRect, _point, null, null, true);
+					target.copyPixels(type._buffer, type._bufferRect, _p, null, null, true);
 				}
-				else FP.buffer.copyPixels(type._source, rect, _point, null, null, true);
+				else target.copyPixels(type._source, rect, _p, null, null, true);
 				
 				// get next particle
 				p = p._next;
@@ -253,7 +253,7 @@
 		/** @private */ private var _frameCount:uint;
 		
 		// Drawing information.
-		/** @private */ private var _point:Point = new Point;
+		/** @private */ private var _p:Point = new Point;
 		/** @private */ private var _tint:ColorTransform = new ColorTransform;
 		/** @private */ private static const SIN:Number = Math.PI / 2;
 	}

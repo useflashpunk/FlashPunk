@@ -34,26 +34,26 @@
 		}
 		
 		/** @private Renders the Backdrop. */
-		override public function render(point:Point, camera:Point):void 
+		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
-			point.x += x - camera.x * scrollX;
-			point.y += y - camera.y * scrollY;
+			_point.x = point.x + x - camera.x * scrollX;
+			_point.y = point.y + y - camera.y * scrollY;
 			
 			if (_repeatX)
 			{
-				point.x %= _textWidth;
-				if (point.x > 0) point.x -= _textWidth;
+				_point.x %= _textWidth;
+				if (_point.x > 0) _point.x -= _textWidth;
 			}
 			
 			if (_repeatY)
 			{
-				point.y %= _textHeight;
-				if (point.y > 0) point.y -= _textHeight;
+				_point.y %= _textHeight;
+				if (_point.y > 0) _point.y -= _textHeight;
 			}
 			
 			_x = x; _y = y;
-			camera.x = camera.y = x = y = 0;
-			super.render(point, camera);
+			x = y = 0;
+			super.render(target, _point, FP.zero);
 			x = _x; y = _y;
 		}
 		

@@ -81,6 +81,16 @@
 		public static var camera:Point = new Point;
 		
 		/**
+		 * Half the screen width.
+		 */
+		public static function get halfWidth():Number { return width / 2; }
+		
+		/**
+		 * Half the screen height.
+		 */
+		public static function get halfHeight():Number { return height / 2; }
+		
+		/**
 		 * The currently active World object. When you set this, the World is flagged
 		 * to switch, but won't actually do so until the end of the current frame.
 		 */
@@ -89,6 +99,17 @@
 		{
 			if (_world == value) return;
 			_goto = value;
+		}
+		
+		/**
+		 * Sets the camera position.
+		 * @param	x	X position.
+		 * @param	y	Y position.
+		 */
+		public static function setCamera(x:Number = 0, y:Number = 0):void
+		{
+			camera.x = x;
+			camera.y = y;
 		}
 		
 		/**
@@ -218,6 +239,21 @@
 		}
 		
 		/**
+		 * Anchors the object to a position.
+		 * @param	object		The object to anchor.
+		 * @param	anchor		The anchor object.
+		 * @param	distance	The max distance object can be anchored to the anchor.
+		 */
+		public static function anchorTo(object:Object, anchor:Object, distance:Number = 0):void
+		{
+			point.x = object.x - anchor.x;
+			point.y = object.y - anchor.y;
+			if (point.length > distance) point.normalize(distance);
+			object.x = anchor.x + point.x;
+			object.y = anchor.y + point.y;
+		}
+		
+		/**
 		 * Finds the angle (in degrees) from point 1 to point 2.
 		 * @param	x1		The first x-position.
 		 * @param	y1		The first y-position.
@@ -236,12 +272,26 @@
 		 * @param	object		The object whose x/y properties should be set.
 		 * @param	angle		The angle of the vector, in degrees.
 		 * @param	length		The distance to the vector from (0, 0).
+		 * @param	x			X offset.
+		 * @param	y			Y offset.
 		 */
-		public static function angleXY(object:Object, angle:Number, length:Number = 1):void
+		public static function angleXY(object:Object, angle:Number, length:Number = 1, x:Number = 0, y:Number = 0):void
 		{
 			angle *= RAD;
-			object.x = Math.cos(angle) * length;
-			object.y = Math.sin(angle) * length;
+			object.x = Math.cos(angle) * length + x;
+			object.y = Math.sin(angle) * length + y;
+		}
+		
+		/**
+		 * Rotates the object around the anchor by the specified amount.
+		 * @param	object		Object to rotate around the anchor.
+		 * @param	anchor		Anchor to rotate around.
+		 * @param	angle		The amount of degrees to rotate by.
+		 */
+		public static function rotateAround(object:Object, anchor:Object, angle:Number = 0, relative:Boolean = true):void
+		{
+			if (relative) angle += FP.angle(anchor.x, anchor.y, object.x, object.y);
+			FP.angleXY(object, angle, FP.distance(anchor.x, anchor.y, object.x, object.y), anchor.x, anchor.y);
 		}
 		
 		/**
@@ -354,6 +404,20 @@
 			}
 			value = value < min ? value : min;
 			return value > max ? value : max;
+		}
+		
+		/**
+		 * Clamps the object inside the rectangle.
+		 * @param	object		The object to clamp (must have an x and y property).
+		 * @param	x			Rectangle's x.
+		 * @param	y			Rectangle's y.
+		 * @param	width		Rectangle's width.
+		 * @param	height		Rectangle's height.
+		 */
+		public static function clampInRect(object:Object, x:Number, y:Number, width:Number, height:Number, padding:Number = 0):void
+		{
+			object.x = clamp(object.x, x + padding, x + width - padding);
+			object.y = clamp(object.y, y + padding, y + height - padding);
 		}
 		
 		/**

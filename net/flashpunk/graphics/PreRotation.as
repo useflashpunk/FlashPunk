@@ -74,7 +74,7 @@
 		}
 		
 		/** @private Renders the PreRotated graphic. */
-		override public function render(point:Point, camera:Point):void 
+		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			frameAngle %= 360;
 			if (frameAngle < 0) frameAngle += 360;
@@ -87,7 +87,7 @@
 				_frame.x %= _width;
 				updateBuffer();
 			}
-			super.render(point, camera);
+			super.render(target, point, camera);
 		}
 		
 		// Rotation information.

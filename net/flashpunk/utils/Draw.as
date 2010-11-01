@@ -8,6 +8,7 @@
 	import flash.geom.Rectangle;
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
+	import net.flashpunk.Graphic;
 	
 	/**
 	 * Static class with access to miscellanious drawing functions.
@@ -315,14 +316,54 @@
 		 * @param	y2		Y control point, used to determine the curve.
 		 * @param	x3		X finish.
 		 * @param	y3		Y finish.
+		 * @param	color	Color of the curve
+		 * @param	alpha	Alpha transparency.
 		 */
-		public static function curve(x1:Number, y1:Number, x2:Number, y2:Number, x3:Number, y3:Number, color:uint = 0xFFFFFF, alpha:Number = 1, thick:Number = 1):void
+		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int, thick:Number = 1, color:uint = 0, alpha:Number = 1):void
 		{
 			_graphics.clear();
-			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
+			_graphics.lineStyle(thick, color, alpha);
 			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
 			_graphics.curveTo(x2 - _camera.x, y2 - _camera.y, x3 - _camera.x, y3 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);
+		}
+		
+		/**
+		 * Draws a graphic object.
+		 * @param	g		The Graphic to draw.
+		 * @param	x		X position.
+		 * @param	y		Y position.
+		 */
+		public static function graphic(g:Graphic, x:int = 0, y:int = 0):void
+		{
+			if (g.visible)
+			{
+				if (g.relative)
+				{
+					FP.point.x = x;
+					FP.point.y = y;
+				}
+				else FP.point.x = FP.point.y = 0;
+				FP.point2.x = FP.camera.x;
+				FP.point2.y = FP.camera.y;
+				g.render(_target, FP.point, FP.point2);
+			}
+		}
+		
+		/**
+		 * Draws an Entity object.
+		 * @param	e					The Entity to draw.
+		 * @param	x					X position.
+		 * @param	y					Y position.
+		 * @param	addEntityPosition	Adds the Entity's x and y position to the target position.
+		 */
+		public static function entity(e:Entity, x:int = 0, y:int = 0, addEntityPosition:Boolean = false):void
+		{
+			if (e.visible && e.graphic)
+			{
+				if (addEntityPosition) graphic(e.graphic, x + e.x, y + e.y);
+				else graphic(e.graphic, x, y);
+			}
 		}
 		
 		// Drawing information.

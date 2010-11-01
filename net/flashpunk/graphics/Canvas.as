@@ -52,14 +52,14 @@
 		}
 		
 		/** @private Renders the canvas. */
-		override public function render(point:Point, camera:Point):void 
+		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			// determine drawing location
-			point.x += x - camera.x * scrollX;
-			point.y += y - camera.y * scrollY;
+			_point.x = point.x + x - camera.x * scrollX;
+			_point.y = point.y + y - camera.y * scrollY;
 			
 			// render the buffers
-			var xx:int, yy:int, buffer:BitmapData, px:Number = point.x;
+			var xx:int, yy:int, buffer:BitmapData, px:Number = _point.x;
 			while (yy < _refHeight)
 			{
 				while (xx < _refWidth)
@@ -67,17 +67,17 @@
 					buffer = _buffers[_ref.getPixel(xx, yy)];
 					if (_tint || blend)
 					{
-						_matrix.tx = point.x;
-						_matrix.ty = point.y;
+						_matrix.tx = _point.x;
+						_matrix.ty = _point.y;
 						_bitmap.bitmapData = buffer;
-						FP.buffer.draw(_bitmap, _matrix, _tint, blend);
+						target.draw(buffer, _matrix, _tint, blend);
 					}
-					else FP.buffer.copyPixels(buffer, buffer.rect, point, null, null, true);
-					point.x += _maxWidth;
+					else target.copyPixels(buffer, buffer.rect, _point, null, null, true);
+					_point.x += _maxWidth;
 					xx ++;
 				}
-				point.x = px;
-				point.y += _maxHeight;
+				_point.x = px;
+				_point.y += _maxHeight;
 				xx = 0;
 				yy ++;
 			}
@@ -142,23 +142,11 @@
 		public function fill(rect:Rectangle, color:uint = 0, alpha:Number = 1):void
 		{
 			var xx:int, yy:int, buffer:BitmapData;
-			
 			_rect.width = rect.width;
 			_rect.height = rect.height;
-			
-			if (alpha >= 1)
-			{
-				color |= 0xFF000000;
-			}
-			else if (alpha <= 0)
-			{
-				color = 0;
-			}
-			else
-			{
-				color = (uint(alpha * 255) << 24) | (0xFFFFFF & color);
-			}
-			
+			if (alpha >= 1) color |= 0xFF000000;
+			else if (alpha <= 0) color = 0;
+			else color = (uint(alpha * 255) << 24) | (0xFFFFFF & color);
 			for each (buffer in _buffers)
 			{
 				_rect.x = rect.x - xx;
@@ -249,13 +237,12 @@
 		 */
 		public function drawGraphic(x:int, y:int, source:Graphic):void
 		{
-			var temp:BitmapData = FP.buffer, xx:int, yy:int;
+			var xx:int, yy:int;
 			for each (var buffer:BitmapData in _buffers)
 			{
-				FP.buffer = buffer;
 				_point.x = x - xx;
 				_point.y = y - yy;
-				source.render(_point, FP.zero);
+				source.render(buffer, _point, FP.zero);
 				xx += _maxWidth;
 				if (xx >= _width)
 				{
@@ -263,7 +250,6 @@
 					yy += _maxHeight;
 				}
 			}
-			FP.buffer = temp;
 		}
 		
 		/**
@@ -310,6 +296,16 @@
 		}
 		
 		/**
+		 * Shifts the canvas' pixels by the offset.
+		 * @param	x	Horizontal shift.
+		 * @param	y	Vertical shift.
+		 */
+		public function shift(x:int = 0, y:int = 0):void
+		{
+			drawGraphic(x, y, this);
+		}
+		
+		/**
 		 * Width of the canvas.
 		 */
 		public function get width():uint { return _width; }
@@ -340,7 +336,6 @@
 		/** @private */ private var _refHeight:uint;
 		
 		// Global objects.
-		/** @private */ private var _point:Point = FP.point;
 		/** @private */ private var _rect:Rectangle = new Rectangle;
 		/** @private */ private var _graphics:Graphics = FP.sprite.graphics;
 	}

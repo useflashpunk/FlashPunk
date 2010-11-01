@@ -26,6 +26,21 @@
 		public var paused:Boolean = false;
 		
 		/**
+		 * Cap on the elapsed time (default at 30 FPS). Raise this to allow for lower framerates (eg. 1 / 10).
+		 */
+		public var maxElapsed:Number = 0.0333;
+		
+		/**
+		 * The max amount of frames that can be skipped in fixed framerate mode.
+		 */
+		public var maxFrameSkip:uint = 5;
+		
+		/**
+		 * The amount of milliseconds between ticks in fixed framerate mode.
+		 */
+		public var tickRate:uint = 4;
+		
+		/**
 		 * Constructor. Defines startup information about your game.
 		 * @param	width			The width of your game.
 		 * @param	height			The height of your game.
@@ -137,9 +152,9 @@
 			if (FP.fixed)
 			{
 				// fixed framerate
-				_skip = _rate * MAX_FRAMESKIP;
+				_skip = _rate * maxFrameSkip;
 				_last = _prev = getTimer();
-				_timer = new Timer(TICK_RATE);
+				_timer = new Timer(tickRate);
 				_timer.addEventListener(TimerEvent.TIMER, onTimer);
 				_timer.start();
 			}
@@ -159,7 +174,7 @@
 			FP._flashTime = _time - _flashTime;
 			_updateTime = _time;
 			FP.elapsed = (_time - _last) / 1000;
-			if (FP.elapsed > MAX_ELAPSED) FP.elapsed = MAX_ELAPSED;
+			if (FP.elapsed > maxElapsed) FP.elapsed = maxElapsed;
 			FP.elapsed *= FP.rate;
 			_last = _time;
 			
@@ -211,7 +226,7 @@
 				_updateTime = _time;
 				_delta -= _rate;
 				FP.elapsed = (_time - _prev) / 1000;
-				if (FP.elapsed > MAX_ELAPSED) FP.elapsed = MAX_ELAPSED;
+				if (FP.elapsed > maxElapsed) FP.elapsed = maxElapsed;
 				FP.elapsed *= FP.rate;
 				_prev = _time;
 				
@@ -267,11 +282,6 @@
 		/** @private */ private var _renderTime:uint;
 		/** @private */ private var _gameTime:uint;
 		/** @private */ private var _flashTime:uint;
-		
-		// Game constants.
-		/** @private */ private const MAX_ELAPSED:Number = 0.0333;
-		/** @private */ private const MAX_FRAMESKIP:Number = 5;
-		/** @private */ private const TICK_RATE:uint = 4;
 		
 		// FrameRate tracking.
 		/** @private */ private var _frameLast:uint = 0;

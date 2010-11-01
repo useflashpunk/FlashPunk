@@ -86,23 +86,23 @@
 		{
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
-			_bitmap = new Bitmap(_buffer);
+			_bitmap.bitmapData = _buffer;
 		}
 		
-		/** @public Renders the image. */
-		override public function render(point:Point, camera:Point):void 
+		/** @private Renders the image. */
+		override public function render(target:BitmapData, point:Point, camera:Point):void
 		{
 			// quit if no graphic is assigned
 			if (!_buffer) return;
 			
 			// determine drawing location
-			point.x += x - camera.x * scrollX;
-			point.y += y - camera.y * scrollY;
+			_point.x = point.x + x - camera.x * scrollX;
+			_point.y = point.y + y - camera.y * scrollY;
 			
 			// render without transformation
 			if (angle == 0 && scaleX * scale == 1 && scaleY * scale == 1 && !blend)
 			{
-				FP.buffer.copyPixels(_buffer, _bufferRect, point, null, null, true);
+				target.copyPixels(_buffer, _bufferRect, _point, null, null, true);
 				return;
 			}
 			
@@ -113,9 +113,9 @@
 			_matrix.tx = -originX * _matrix.a;
 			_matrix.ty = -originY * _matrix.d;
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
-			_matrix.tx += originX + point.x;
-			_matrix.ty += originY + point.y;
-			FP.buffer.draw(_bitmap, _matrix, null, blend, null, smooth);
+			_matrix.tx += originX + _point.x;
+			_matrix.ty += originY + _point.y;
+			target.draw(_bitmap, _matrix, null, blend, null, smooth);
 		}
 		
 		/**
@@ -133,32 +133,27 @@
 		
 		/**
 		 * Creates a new circle Image.
-		 * @param	r			Radius of the circle.
+		 * @param	radius		Radius of the circle.
 		 * @param	color		Color of the circle.
-		 * @param	alpha		Alpha of the circle.
-		 * @return	A new Image object.
+		 * @return	A new Circle object.
 		 */
-		public static function createCircle (r: uint, color:uint = 0xFFFFFF, alpha: Number = 1): Image
+		public static function createCircle(radius:uint, color:uint = 0xFFFFFF):Image
 		{
-			var source:BitmapData = new BitmapData(r*2, r*2, true, 0);
-			
-			var _graphics: Graphics = FP.sprite.graphics;
-			
-			_graphics.clear();
-			_graphics.beginFill(color & 0xFFFFFF, alpha);
-			_graphics.drawCircle(r, r, r);
-			_graphics.endFill();
-			source.draw(FP.sprite);
-			
-			return new Image(source);
+			FP.sprite.graphics.clear();
+			FP.sprite.graphics.beginFill(color);
+			FP.sprite.graphics.drawCircle(radius, radius, radius);
+			var data:BitmapData = new BitmapData(radius * 2, radius * 2, true, 0);
+			data.draw(FP.sprite);
+			return new Image(data);
 		}
 		
 		/**
 		 * Updates the image buffer.
 		 */
-		public function updateBuffer():void
+		public function updateBuffer(clearBefore:Boolean = false):void
 		{
 			if (!_source) return;
+			if (clearBefore) _buffer.fillRect(_bufferRect, 0);
 			_buffer.copyPixels(_source, _sourceRect, FP.zero);
 			if (_tint) _buffer.colorTransform(_bufferRect, _tint);
 		}
@@ -270,12 +265,22 @@
 		/**
 		 * Width of the image.
 		 */
-		public function get width():uint { return _bufferRect.width * scaleX * scale; }
+		public function get width():uint { return _bufferRect.width; }
 		
 		/**
 		 * Height of the image.
 		 */
-		public function get height():uint { return _bufferRect.height * scaleY * scale; }
+		public function get height():uint { return _bufferRect.height; }
+		
+		/**
+		 * The scaled width of the image.
+		 */
+		public function get scaledWidth():uint { return _bufferRect.width * scaleX * scale; }
+		
+		/**
+		 * The scaled height of the image.
+		 */
+		public function get scaledHeight():uint { return _bufferRect.height * scaleY * scale; }
 		
 		/**
 		 * Clipping rectangle for the image.
@@ -286,11 +291,11 @@
 		protected function get source():BitmapData { return _source; }
 		
 		// Source and buffer information.
-		/** @protected */ protected var _source:BitmapData;
-		/** @protected */ protected var _sourceRect:Rectangle;
-		/** @protected */ protected var _buffer:BitmapData;
-		/** @protected */ protected var _bufferRect:Rectangle;
-		/** @protected */ protected var _bitmap:Bitmap;
+		/** @private */ protected var _source:BitmapData;
+		/** @private */ protected var _sourceRect:Rectangle;
+		/** @private */ protected var _buffer:BitmapData;
+		/** @private */ protected var _bufferRect:Rectangle;
+		/** @private */ protected var _bitmap:Bitmap = new Bitmap;
 		
 		// Color and alpha information.
 		/** @private */ private var _alpha:Number = 1;
