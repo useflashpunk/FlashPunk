@@ -135,12 +135,13 @@
 		 * Creates a new circle Image.
 		 * @param	radius		Radius of the circle.
 		 * @param	color		Color of the circle.
-		 * @return	A new Circle object.
+		 * @param	alpha		Alpha of the circle.
+		 * @return	A new Image object.
 		 */
-		public static function createCircle(radius:uint, color:uint = 0xFFFFFF):Image
+		public static function createCircle(radius:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
 		{
 			FP.sprite.graphics.clear();
-			FP.sprite.graphics.beginFill(color);
+			FP.sprite.graphics.beginFill(color & 0xFFFFFF, alpha);
 			FP.sprite.graphics.drawCircle(radius, radius, radius);
 			var data:BitmapData = new BitmapData(radius * 2, radius * 2, true, 0);
 			data.draw(FP.sprite);
