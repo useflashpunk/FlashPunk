@@ -319,10 +319,10 @@
 		 * @param	color	Color of the curve
 		 * @param	alpha	Alpha transparency.
 		 */
-		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int, thick:Number = 1, color:uint = 0, alpha:Number = 1):void
+		public static function curve(x1:Number, y1:Number, x2:Number, y2:Number, x3:Number, y3:Number, color:uint = 0, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
-			_graphics.lineStyle(thick, color, alpha);
+			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
 			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
 			_graphics.curveTo(x2 - _camera.x, y2 - _camera.y, x3 - _camera.x, y3 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);
