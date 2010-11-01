@@ -154,7 +154,7 @@
 		 * @param	alpha	Alpha of the line.
 		 * @param	thick	The thickness of the line.
 		 */
-		public static function linePlus(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
+		public static function linePlus(x1:Number, y1:Number, x2:Number, y2:Number, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
 			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NONE);
@@ -172,7 +172,7 @@
 		 * @param	color		Color of the rectangle.
 		 * @param	alpha		Alpha of the rectangle.
 		 */
-		public static function rect(x:int, y:int, width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1):void
+		public static function rect(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1):void
 		{
 			if (alpha >= 1 && !blend)
 			{
@@ -244,7 +244,7 @@
 		 * @param	fill		If the circle should be filled with the color (true) or just an outline (false).
 		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 */
-		public static function circlePlus(x:int, y:int, radius:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:int = 1):void
+		public static function circlePlus(x:Number, y:Number, radius:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):void
 		{
 			_graphics.clear();
 			if (fill)
@@ -316,7 +316,7 @@
 		 * @param	x3		X finish.
 		 * @param	y3		Y finish.
 		 */
-		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int, color:uint = 0xFFFFFF, alpha:Number = 1, thick:Number = 1):void
+		public static function curve(x1:Number, y1:Number, x2:Number, y2:Number, x3:Number, y3:Number, color:uint = 0xFFFFFF, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
 			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
