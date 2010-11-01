@@ -85,6 +85,7 @@
 		{
 			if (FP._world.active)
 			{
+				Tween.update();
 				if (FP._world._tween) FP._world.updateTweens();
 				FP._world.update();
 			}

@@ -490,6 +490,7 @@ package net.flashpunk
 			{
 				var list:Graphiclist = new Graphiclist;
 				if (graphic) list.add(graphic);
+				list.add(g);
 				graphic = list;
 			}
 			return g;
