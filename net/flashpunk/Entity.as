@@ -3,6 +3,7 @@ package net.flashpunk
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getDefinitionByName;
 	import net.flashpunk.masks.*;
@@ -490,7 +491,6 @@ package net.flashpunk
 			{
 				var list:Graphiclist = new Graphiclist;
 				if (graphic) list.add(graphic);
-				list.add(g);
 				graphic = list;
 			}
 			return g;
@@ -624,11 +624,14 @@ package net.flashpunk
 						{
 							if ((e = collide(solidType, this.x + sign, this.y)))
 							{
-								if (moveCollideX(e)) break;
-								else this.x += sign;
+								moveCollideX(e);
+								break;
 							}
-							else this.x += sign;
-							x -= sign;
+							else
+							{
+								this.x += sign;
+								x -= sign;
+							}
 						}
 					}
 					else this.x += x;
@@ -642,11 +645,14 @@ package net.flashpunk
 						{
 							if ((e = collide(solidType, this.x, this.y + sign)))
 							{
-								if (moveCollideY(e)) break;
-								else this.y += sign;
+								moveCollideY(e);
+								break;
 							}
-							else this.y += sign;
-							y -= sign;
+							else
+							{
+								this.y += sign;
+								y -= sign;
+							}
 						}
 					}
 					else this.y += y;
@@ -691,18 +697,18 @@ package net.flashpunk
 		 * When you collide with an Entity on the x-axis with moveTo() or moveBy().
 		 * @param	e		The Entity you collided with.
 		 */
-		public function moveCollideX(e:Entity):Boolean
+		public function moveCollideX(e:Entity):void
 		{
-			return true;
+			
 		}
 		
 		/**
 		 * When you collide with an Entity on the y-axis with moveTo() or moveBy().
 		 * @param	e		The Entity you collided with.
 		 */
-		public function moveCollideY(e:Entity):Boolean
+		public function moveCollideY(e:Entity):void
 		{
-			return true;
+			
 		}
 		
 		/**
@@ -729,11 +735,23 @@ package net.flashpunk
 			if (y - originY + height > bottom - padding) y = bottom - height + originY - padding;
 		}
 		
+		/**
+		 * The Entity's instance name. Use this to uniquely identify single
+		 * game Entities, which can then be looked-up with World.getInstance().
+		 */
+		public function get name():String { return _name; }
+		public function set name(value:String):void
+		{
+			if (_world) _world.registerName(this);
+			_name = value;
+		}
+		
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
 		/** @private */ internal var _added:Boolean;
 		/** @private */ internal var _type:String = "";
+		/** @private */ internal var _name:String = "";
 		/** @private */ internal var _layer:int;
 		/** @private */ internal var _updatePrev:Entity;
 		/** @private */ internal var _updateNext:Entity;
