@@ -162,7 +162,7 @@
 			{
 				for (x = 0; x < _columns; x ++)
 				{
-					s += String(getTile(x, y));
+					s += getTile(x, y) ? '1' : '0';
 					if (x != _columns - 1) s += columnSep;
 				}
 				if (y != _rows - 1) s += rowSep;
