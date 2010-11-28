@@ -96,8 +96,8 @@
 			if (!_buffer) return;
 			
 			// determine drawing location
-			_point.x = point.x + x - camera.x * scrollX;
-			_point.y = point.y + y - camera.y * scrollY;
+			_point.x = point.x + x - originX - camera.x * scrollX;
+			_point.y = point.y + y - originY - camera.y * scrollY;
 			
 			// render without transformation
 			if (angle == 0 && scaleX * scale == 1 && scaleY * scale == 1 && !blend)
@@ -253,15 +253,11 @@
 		}
 		
 		/**
-		 * Centers the Image's originX/Y to its center, and negates the offset by the same amount.
+		 * Centers the Image's originX/Y to its center.
 		 */
 		public function centerOO():void
 		{
-			x += originX;
-			y += originY;
 			centerOrigin();
-			x -= originX;
-			y -= originY;
 		}
 		
 		/**
