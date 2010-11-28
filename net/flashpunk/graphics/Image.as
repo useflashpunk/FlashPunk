@@ -115,6 +115,7 @@
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
 			_matrix.tx += originX + _point.x;
 			_matrix.ty += originY + _point.y;
+			_bitmap.smoothing = smooth;
 			target.draw(_bitmap, _matrix, null, blend, null, smooth);
 		}
 		
