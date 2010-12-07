@@ -145,7 +145,34 @@
 			_field.width = _width;
 			_field.height = _height;
 			
-			_source.draw(_field);
+			var offsetRequired: Boolean = false;
+			
+			for (var i: int = 0; i < _field.numLines; i++) {
+				var tlm: TextLineMetrics = _field.getLineMetrics(i);
+				var remainder: Number = tlm.x % 1;
+				if (remainder > 0.1 && remainder < 0.9) {
+					offsetRequired = true;
+					break;
+				}
+			}
+			
+			if (offsetRequired) {
+				for (i = 0; i < _field.numLines; i++) {
+					tlm = _field.getLineMetrics(i);
+					remainder = tlm.x % 1;
+					_field.x = -remainder;
+					
+					FP.rect.x = 0;
+					FP.rect.y = 2 + tlm.height * i;
+					FP.rect.width = _width;
+					FP.rect.height = tlm.height;
+					
+					_source.draw(_field, _field.transform.matrix, null, null, FP.rect);
+				}
+			} else {
+				_source.draw(_field);
+			}
+			
 			super.updateBuffer(clearBefore);
 		}
 		
