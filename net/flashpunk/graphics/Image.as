@@ -84,6 +84,10 @@
 		/** @private Creates the buffer. */
 		protected function createBuffer():void
 		{
+			if (_buffer) {
+				_buffer.dispose();
+				_buffer = null;
+			}
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
 			_bitmap.bitmapData = _buffer;
