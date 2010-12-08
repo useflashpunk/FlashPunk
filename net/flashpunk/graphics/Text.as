@@ -62,6 +62,13 @@
 		 * 						width		Initial buffer width.
 		 * 						height		Initial buffer height.
 		 * 						color		Text color.
+		 * 						alpha		Text alpha.
+		 * 						angle		Rotation angle (see Image.angle).
+		 * 						blend		Blend mode (see Image.blend).
+		 * 						visible		Visibility (see Graphic.visible).
+		 * 						scrollX		See Graphic.scrollX.
+		 * 						scrollY		See Graphic.scrollY.
+		 * 						relative	See Graphic.relative.
 		 *				For backwards compatibility, if options is a Number, it will determine the initial buffer width.
 		 * @param	h		Deprecated. For backwards compatibility: if set and there is no options.height parameter set, will determine the initial buffer height.
 		 */
@@ -80,6 +87,7 @@
 				if (options is Number) // Backwards compatibility: options parameter has replaced width
 				{
 					width = Number(options);
+					options = null;
 				}
 				else
 				{
@@ -109,7 +117,17 @@
 			
 			if (options)
 			{
+				// Image properties
 				if (options.hasOwnProperty("color")) color = options.color;
+				if (options.hasOwnProperty("alpha")) alpha = options.alpha;
+				if (options.hasOwnProperty("angle")) angle = options.angle;
+				if (options.hasOwnProperty("blend")) blend = options.blend;
+				
+				// Graphic properties
+				if (options.hasOwnProperty("scrollX")) scrollX = options.scrollX;
+				if (options.hasOwnProperty("scrollY")) scrollY = options.scrollY;
+				if (options.hasOwnProperty("visible")) visible = options.visible;
+				if (options.hasOwnProperty("relative")) relative = options.relative;
 			}
 		}
 		
