@@ -737,8 +737,8 @@ package net.flashpunk
 		public function get name():String { return _name; }
 		public function set name(value:String):void
 		{
-			if (_world) _world.registerName(this);
 			_name = value;
+			if (_world) _world.registerName(this);
 		}
 		
 		// Entity information.
