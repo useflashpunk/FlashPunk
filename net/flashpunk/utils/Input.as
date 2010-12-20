@@ -228,6 +228,8 @@
 				keyString += String.fromCharCode(e.charCode);
 			}
 			
+			if (code < 0 || code > 255) return;
+			
 			// update the keystate
 			if (!_key[code])
 			{
@@ -242,6 +244,9 @@
 		{
 			// get the keycode and update the keystate
 			var code:int = e.keyCode;
+			
+			if (code < 0 || code > 255) return;
+			
 			if (_key[code])
 			{
 				_key[code] = false;
