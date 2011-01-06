@@ -87,6 +87,22 @@
 		}
 		
 		/**
+		 * Override this; called when game gains focus.
+		 */
+		public function focusGained():void
+		{
+			
+		}
+		
+		/**
+		 * Override this; called when game loses focus.
+		 */
+		public function focusLost():void
+		{
+			
+		}
+		
+		/**
 		 * X position of the mouse in the World.
 		 */
 		public function get mouseX():int

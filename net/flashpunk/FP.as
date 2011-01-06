@@ -86,6 +86,11 @@
 		public static var tweener:Tweener = new Tweener;
 		
 		/**
+		 * If the game currently has input focus or not. Note: may not be correct initially.
+		 */
+		public static var focused:Boolean = true;
+		
+		/**
 		 * Half the screen width.
 		 */
 		public static function get halfWidth():Number { return width / 2; }
