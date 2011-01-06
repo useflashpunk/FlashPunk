@@ -81,6 +81,11 @@
 		public static var camera:Point = new Point;
 		
 		/**
+		 * Global Tweener for tweening values across multiple worlds.
+		 */
+		public static var tweener:Tweener = new Tweener;
+		
+		/**
 		 * Half the screen width.
 		 */
 		public static function get halfWidth():Number { return width / 2; }
@@ -698,7 +703,7 @@
 			var type:uint = Tween.ONESHOT,
 				complete:Function = null,
 				ease:Function = null,
-				tweener:Tweener = FP.world;
+				tweener:Tweener = FP.tweener;
 			if (object is Tweener) tweener = object as Tweener;
 			if (options)
 			{

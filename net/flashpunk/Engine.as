@@ -83,6 +83,7 @@
 		 */
 		public function update():void
 		{
+			if (FP.tweener.active && FP.tweener._tween) FP.tweener.updateTweens();
 			if (FP._world.active)
 			{
 				Tween.update();
