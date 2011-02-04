@@ -49,6 +49,16 @@
 			if (_source) _sourceRect = _source.rect;
 		}
 		
+		/**
+		 * Width of the stamp.
+		 */
+		public function get width():uint { return _source.width; }
+		
+		/**
+		 * Height of the stamp.
+		 */
+		public function get height():uint { return _source.height; }
+		
 		// Stamp information.
 		/** @private */ private var _source:BitmapData;
 		/** @private */ private var _sourceRect:Rectangle;
