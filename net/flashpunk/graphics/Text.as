@@ -96,7 +96,6 @@
 					if (options.hasOwnProperty("align")) _align = options.align;
 					if (options.hasOwnProperty("wordWrap")) _wordWrap = options.wordWrap;
 					if (options.hasOwnProperty("resizable")) resizable = options.resizable;
-					if (options.hasOwnProperty("resizeable")) resizable = options.resizeable;
 					if (options.hasOwnProperty("width")) width = options.width;
 					if (options.hasOwnProperty("height")) height = options.height;
 				}
@@ -118,17 +117,13 @@
 			
 			if (options)
 			{
-				// Image properties
-				if (options.hasOwnProperty("color")) color = options.color;
-				if (options.hasOwnProperty("alpha")) alpha = options.alpha;
-				if (options.hasOwnProperty("angle")) angle = options.angle;
-				if (options.hasOwnProperty("blend")) blend = options.blend;
-				
-				// Graphic properties
-				if (options.hasOwnProperty("scrollX")) scrollX = options.scrollX;
-				if (options.hasOwnProperty("scrollY")) scrollY = options.scrollY;
-				if (options.hasOwnProperty("visible")) visible = options.visible;
-				if (options.hasOwnProperty("relative")) relative = options.relative;
+				for (var property:String in options) {
+					if (hasOwnProperty(property)) {
+						this[property] = options[property];
+					} else {
+						throw new Error('"' + property + '" is not a property of Text');
+					}
+				}
 			}
 		}
 		
