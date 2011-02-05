@@ -126,10 +126,16 @@
 		 * @param	color		Color of the rectangle.
 		 * @return	A new Image object.
 		 */
-		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF):Image
+		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
 		{
-			var source:BitmapData = new BitmapData(width, height, true, 0xFF000000 | color);
-			return new Image(source);
+			var source:BitmapData = new BitmapData(width, height, true, 0xFFFFFFFF);
+			
+			var image:Image = new Image(source);
+			
+			image.color = color;
+			image.alpha = 1;
+			
+			return image;
 		}
 		
 		/**
