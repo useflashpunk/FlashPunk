@@ -14,6 +14,7 @@
 	import net.flashpunk.*;
 	import net.flashpunk.debug.Console;
 	import net.flashpunk.tweens.misc.MultiVarTween;
+	import net.flashpunk.tweens.misc.Alarm;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -721,6 +722,27 @@
 			tween.tween(object, values, duration, ease);
 			tweener.addTween(tween);
 			return tween;
+		}
+		
+		/**
+		 * Schedules a callback for the future. Shorthand for creating an Alarm tween, starting it and adding it to a Tweener.
+		 * @param	delay		The duration to wait before calling the callback.
+		 * @param	callback	The function to be called.
+		 * @param	type		The tween type (PERSIST, LOOPING or ONESHOT). Defaults to ONESHOT.
+		 * @param	tweener		The Tweener object to add this Alarm to. Defaults to FP.tweener.
+		 * @return	The added Alarm object.
+		 * 
+		 * Example: FP.alarm(5.0, callbackFunction, Tween.LOOPING); // Calls callbackFunction every 5 seconds
+		 */
+		public static function alarm(delay:Number, callback:Function, type:uint = 2, tweener:Tweener = null):Alarm
+		{
+			if (! tweener) tweener = FP.tweener;
+			
+			var alarm:Alarm = new Alarm(delay, callback, type);
+			
+			tweener.addTween(alarm, true);
+			
+			return alarm;
 		}
 		
 		/**
