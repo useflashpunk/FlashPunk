@@ -225,27 +225,30 @@
 		public function get flipped():Boolean { return _flipped; }
 		public function set flipped(value:Boolean):void
 		{
-			if (_flipped == value || !_class) return;
+			if (_flipped == value) return;
 			_flipped = value;
 			var temp:BitmapData = _source;
-			if (!value || _flip)
+			if (_flip)
 			{
 				_source = _flip;
 				_flip = temp;
-				return updateBuffer();
+				updateBuffer();
 			}
-			if (_flips[_class])
+			if (_class && _flips[_class])
 			{
 				_source = _flips[_class];
 				_flip = temp;
-				return updateBuffer();
+				updateBuffer();
 			}
-			_source = _flips[_class] = new BitmapData(_source.width, _source.height, true, 0);
+			_source = new BitmapData(_source.width, _source.height, true, 0);
 			_flip = temp;
 			FP.matrix.identity();
 			FP.matrix.a = -1;
 			FP.matrix.tx = _source.width;
 			_source.draw(temp, FP.matrix);
+			
+			if (_class) _flips[_class] = _source;
+			
 			updateBuffer();
 		}
 		
