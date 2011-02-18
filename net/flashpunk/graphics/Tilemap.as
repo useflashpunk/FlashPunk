@@ -3,9 +3,11 @@
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.Graphic;
+	
 	import net.flashpunk.FP;
+	import net.flashpunk.Graphic;
 	import net.flashpunk.masks.Grid;
+	import net.flashpunk.utils.Draw;
 	
 	/**
 	 * A canvas to which Tiles can be drawn for fast multiple tile rendering.
@@ -144,6 +146,77 @@
 				row ++;
 			}
 			usePositions = u;
+		}
+		
+		/**
+		 * Makes a flood fill on the tilemap
+		 * @param	column		Column to place the flood fill
+		 * @param	row			Row to place the flood fill
+		 * @param	index		Tile index.
+		 */
+		public function floodFill(column:uint, row:uint, index:uint = 0):void
+		{
+			if(usePositions)
+			{
+				column /= _tile.width;
+				row /= _tile.height;
+			}
+			
+			column %= _columns;
+			row %= _rows;
+			
+			_map.floodFill(column, row, index);
+			
+			updateAll();
+		}
+		
+		/**
+		 * Draws a line of tiles
+		 *  
+		 * @param	x		The x coordinate to start
+		 * @param	y		The y coordinate to start
+		 * @param	x2		The x coordinate to end
+		 * @param	y2		The y coordinate to end
+		 * @param	id		The tiles id to draw
+		 * 
+		 */		
+		public function line(x:int, y:int, x2:int, y2:int, id:int):void
+		{
+			Draw.setTarget(_map);
+			Draw.line(x, y, x2, y2, id, 0);
+			updateAll();
+		}
+		
+		/**
+		 * Draws an outline of a rectangle of tiles
+		 *  
+		 * @param	x		The x coordinate of the rectangle
+		 * @param	y		The y coordinate of the rectangle
+		 * @param	width	The width of the rectangle
+		 * @param	height	The height of the rectangle
+		 * @param	id		The tiles id to draw
+		 * 
+		 */		
+		public function outlinedRectangle(x:int, y:int, width:int, height:int, id:int):void
+		{
+			Draw.setTarget(_map);
+			Draw.line(x, y, x + width, y, id, 0);
+			Draw.line(x, y + height, x + width, y + height, id, 0);
+			Draw.line(x, y, x, y + height, id, 0);
+			Draw.line(x + width, y, x + width, y + height, id, 0);
+			updateAll();
+		}
+		
+		/**
+		 * Updates the whole tilemap. Used by floodFill, line and outlineRectangle. 
+		 */		
+		protected function updateAll():void
+		{
+			_rect.x = 0;
+			_rect.y = 0;
+			_rect.width = _columns;
+			_rect.height = _rows;
+			updateRect(_rect, false);
 		}
 		
 		/**
