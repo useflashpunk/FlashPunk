@@ -96,7 +96,6 @@
 					if (options.hasOwnProperty("align")) _align = options.align;
 					if (options.hasOwnProperty("wordWrap")) _wordWrap = options.wordWrap;
 					if (options.hasOwnProperty("resizable")) resizable = options.resizable;
-					if (options.hasOwnProperty("resizeable")) resizable = options.resizeable;
 					if (options.hasOwnProperty("width")) width = options.width;
 					if (options.hasOwnProperty("height")) height = options.height;
 				}
@@ -112,27 +111,24 @@
 			_height = height || _field.textHeight + 4;
 			_source = new BitmapData(_width, _height, true, 0);
 			super(_source);
+			updateTextBuffer();
 			this.x = x;
 			this.y = y;
 			
 			if (options)
 			{
-				// Image properties
-				if (options.hasOwnProperty("color")) color = options.color;
-				if (options.hasOwnProperty("alpha")) alpha = options.alpha;
-				if (options.hasOwnProperty("angle")) angle = options.angle;
-				if (options.hasOwnProperty("blend")) blend = options.blend;
-				
-				// Graphic properties
-				if (options.hasOwnProperty("scrollX")) scrollX = options.scrollX;
-				if (options.hasOwnProperty("scrollY")) scrollY = options.scrollY;
-				if (options.hasOwnProperty("visible")) visible = options.visible;
-				if (options.hasOwnProperty("relative")) relative = options.relative;
+				for (var property:String in options) {
+					if (hasOwnProperty(property)) {
+						this[property] = options[property];
+					} else {
+						throw new Error('"' + property + '" is not a property of Text');
+					}
+				}
 			}
 		}
 		
-		/** @private Updates the drawing buffer. */
-		override public function updateBuffer(clearBefore:Boolean = false):void
+		/** Updates the text buffer, which is the source for the image buffer. */
+		public function updateTextBuffer():void
 		{
 			_field.setTextFormat(_form);
 			_field.width = _width;
@@ -191,7 +187,7 @@
 				_source.draw(_field);
 			}
 			
-			super.updateBuffer(clearBefore);
+			super.updateBuffer();
 		}
 		
 		/** @private Centers the Text's originX/Y to its center. */
@@ -209,7 +205,7 @@
 		{
 			if (_text == value) return;
 			_field.text = _text = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**
@@ -220,7 +216,7 @@
 		{
 			if (_font == value) return;
 			_form.font = _font = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**
@@ -231,7 +227,7 @@
 		{
 			if (_size == value) return;
 			_form.size = _size = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**
@@ -243,7 +239,7 @@
 		{
 			if (_align == value) return;
 			_form.align = _align = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**
@@ -254,7 +250,7 @@
 		{
 			if (_wordWrap == value) return;
 			_field.wordWrap = _wordWrap = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**
@@ -265,7 +261,7 @@
 		{
 			if (_width == value) return;
 			_width = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**
@@ -276,7 +272,7 @@
 		{
 			if (_height == value) return;
 			_height = value;
-			updateBuffer();
+			updateTextBuffer();
 		}
 		
 		/**

@@ -4,6 +4,7 @@
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
+	import flash.ui.Mouse;
 	import net.flashpunk.*;
 	
 	/**
@@ -21,6 +22,11 @@
 		 * The last key pressed.
 		 */
 		public static var lastKey:int;
+		
+		/**
+		 * The mouse cursor. Set to null (the default) if you set Mouse.cursor directly in your code.
+		 */
+		public static var mouseCursor:String;
 		
 		/**
 		 * If the mouse button is down.
@@ -200,6 +206,8 @@
 			_releaseNum = 0;
 			if (mousePressed) mousePressed = false;
 			if (mouseReleased) mouseReleased = false;
+			
+			if (mouseCursor) Mouse.cursor = mouseCursor;
 		}
 		
 		/**
