@@ -59,10 +59,10 @@
 		}
 		
 		/** @private Assigns the mask to the parent. */
-		internal function assignTo(parent:Entity):void
+		public function assignTo(parent:Entity):void
 		{
 			this.parent = parent;
-			if (parent) update();
+			if (!list && parent) update();
 		}
 		
 		/** @private Updates the parent's bounds for this mask. */

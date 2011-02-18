@@ -49,6 +49,7 @@
 		{
 			_masks[_count ++] = mask;
 			mask.list = this;
+			mask.parent = parent;
 			update();
 			return mask;
 		}
@@ -67,6 +68,7 @@
 				if (m == mask)
 				{
 					mask.list = null;
+					mask.parent = null;
 					_count --;
 					update();
 				}
@@ -120,6 +122,12 @@
 		public function getMask(index:uint = 0):Mask
 		{
 			return _masks[index % _masks.length];
+		}
+		
+		override public function assignTo(parent:Entity):void
+		{
+			for each (var m:Mask in _masks) m.parent = parent;
+			super.assignTo(parent);
 		}
 		
 		/** @private Updates the parent's bounds for this mask. */
