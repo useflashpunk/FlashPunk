@@ -133,7 +133,7 @@
 			var image:Image = new Image(source);
 			
 			image.color = color;
-			image.alpha = 1;
+			image.alpha = alpha;
 			
 			return image;
 		}
