@@ -11,10 +11,11 @@
 	import flash.system.System;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
+	
 	import net.flashpunk.*;
 	import net.flashpunk.debug.Console;
-	import net.flashpunk.tweens.misc.MultiVarTween;
 	import net.flashpunk.tweens.misc.Alarm;
+	import net.flashpunk.tweens.misc.MultiVarTween;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -35,6 +36,16 @@
 		 * Height of the game.
 		 */
 		public static var height:uint;
+		
+		/**
+		 * Half width of the game.
+		 */
+		public static var halfWidth:Number;
+		
+		/**
+		 * Half height of the game.
+		 */
+		public static var halfHeight:Number;
 		
 		/**
 		 * If the game is running at a fixed framerate.
@@ -90,16 +101,6 @@
 		 * If the game currently has input focus or not. Note: may not be correct initially.
 		 */
 		public static var focused:Boolean = true;
-		
-		/**
-		 * Half the screen width.
-		 */
-		public static function get halfWidth():Number { return width / 2; }
-		
-		/**
-		 * Half the screen height.
-		 */
-		public static function get halfHeight():Number { return height / 2; }
 		
 		/**
 		 * The currently active World object. When you set this, the World is flagged
