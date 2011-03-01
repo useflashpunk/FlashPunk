@@ -109,9 +109,7 @@
 		 */
 		public function add(e:Entity):Entity
 		{
-			if (e._world) return e;
 			_add[_add.length] = e;
-			e._world = this;
 			return e;
 		}
 		
@@ -122,9 +120,7 @@
 		 */
 		public function remove(e:Entity):Entity
 		{
-			if (e._world !== this) return e;
 			_remove[_remove.length] = e;
-			e._world = null;
 			return e;
 		}
 		
@@ -137,7 +133,6 @@
 			while (e)
 			{
 				_remove[_remove.length] = e;
-				e._world = null;
 				e = e._updateNext;
 			}
 		}
@@ -231,9 +226,7 @@
 		 */
 		public function recycle(e:Entity):Entity
 		{
-			if (e._world !== this) return e;
-			e._recycleNext = _recycled[e._class];
-			_recycled[e._class] = e;
+			_recycle[_recycle.length] = e;
 			return remove(e);
 		}
 		
@@ -927,13 +920,20 @@
 			{
 				for each (e in _remove)
 				{
-					if (e._added != true && _add.indexOf(e) >= 0)
+					if (!e._added)
 					{
-						_add.splice(_add.indexOf(e), 1);
+						if(_add.indexOf(e) >= 0)
+							_add.splice(_add.indexOf(e), 1);
+						
 						continue;
 					}
-					e._added = false;
+					if (e._world !== this)
+						continue;
+					
 					e.removed();
+					e._added = false;
+					e._world = null;
+					
 					removeUpdate(e);
 					removeRender(e);
 					if (e._type) removeType(e);
@@ -948,14 +948,33 @@
 			{
 				for each (e in _add)
 				{
-					e._added = true;
+					if (e._added)
+						continue;
+					
 					addUpdate(e);
 					addRender(e);
 					if (e._type) addType(e);
 					if (e._name) registerName(e);
+					
+					e._added = true;
+					e._world = this;
 					e.added();
 				}
 				_add.length = 0;
+			}
+			
+			// recycle entities
+			if (_recycle.length)
+			{
+				for each (e in _recycle)
+				{
+					if (e._added || e._recycleNext)
+						continue;
+					
+					e._recycleNext = _recycled[e._class];
+					_recycled[e._class] = e;
+				}
+				_recycle.length = 0;
 			}
 			
 			// sort the depth list
@@ -1143,6 +1162,7 @@
 		// Adding and removal.
 		/** @private */	private var _add:Vector.<Entity> = new Vector.<Entity>;
 		/** @private */	private var _remove:Vector.<Entity> = new Vector.<Entity>;
+		/** @private */	private var _recycle:Vector.<Entity> = new Vector.<Entity>;
 		
 		// Update information.
 		/** @private */	private var _updateFirst:Entity;
