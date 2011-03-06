@@ -429,7 +429,7 @@ package net.flashpunk
 		public function set layer(value:int):void
 		{
 			if (_layer == value) return;
-			if (!_added)
+			if (!_world)
 			{
 				_layer = value;
 				return;
@@ -446,7 +446,7 @@ package net.flashpunk
 		public function set type(value:String):void
 		{
 			if (_type == value) return;
-			if (!_added)
+			if (!_world)
 			{
 				_type = value;
 				return;
@@ -744,7 +744,6 @@ package net.flashpunk
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
-		/** @private */ internal var _added:Boolean;
 		/** @private */ internal var _type:String = "";
 		/** @private */ internal var _name:String = "";
 		/** @private */ internal var _layer:int;

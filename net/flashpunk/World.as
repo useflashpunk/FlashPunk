@@ -936,7 +936,7 @@
 			{
 				for each (e in _remove)
 				{
-					if (!e._added)
+					if (!e._world)
 					{
 						if(_add.indexOf(e) >= 0)
 							_add.splice(_add.indexOf(e), 1);
@@ -947,7 +947,6 @@
 						continue;
 					
 					e.removed();
-					e._added = false;
 					e._world = null;
 					
 					removeUpdate(e);
@@ -964,7 +963,7 @@
 			{
 				for each (e in _add)
 				{
-					if (e._added)
+					if (e._world)
 						continue;
 					
 					addUpdate(e);
@@ -972,7 +971,6 @@
 					if (e._type) addType(e);
 					if (e._name) registerName(e);
 					
-					e._added = true;
 					e._world = this;
 					e.added();
 				}
@@ -984,7 +982,7 @@
 			{
 				for each (e in _recycle)
 				{
-					if (e._added || e._recycleNext)
+					if (e._world || e._recycleNext)
 						continue;
 					
 					e._recycleNext = _recycled[e._class];
