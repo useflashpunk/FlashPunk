@@ -155,6 +155,7 @@
 			{
 				_outlineFilter.blurX = _outlineFilter.blurY = outlineStrength;
 				_outlineFilter.strength = outlineStrength * 4;
+				_outlineFilter.color = outlineColor;
 				_field.filters = [_outlineFilter];
 			}
 			
