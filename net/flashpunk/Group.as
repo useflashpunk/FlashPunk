@@ -26,8 +26,6 @@ package net.flashpunk
 			for each(var c:Entity in children) add(c);
 			
 			collidable = false;
-			_first = true;
-			_last = new Point;
 		}
 		
 		/**
@@ -39,61 +37,6 @@ package net.flashpunk
 		{
 			updateLists();
 			updateChildren();
-			saveOldPosition();
-			updatePositions();
-		}
-		
-		/**
-		 * Update members' positions according to the group position. 
-		 */		
-		public function updatePositions():void
-		{
-			if((x == _last.x) && (y == _last.y)) return;
-			
-			var mx:Number = x - _last.x;
-			var my:Number = y - _last.y;
-			
-			var e:Entity = _updateFirst;
-			while(e)
-			{
-				if(e is Group)
-					Group(e).reset(e.x + mx, e.y + my);
-				else
-				{
-					e.x += mx;
-					e.y += my;
-				}
-				
-				e = e._updateNext;
-			}
-		}
-	
-		/**
-		 * If the group's position is reset, we want to reset all its members too.
-		 * 
-		 * @param	X	The new X position of this object.
-		 * @param	Y	The new Y position of this object.
-		 */
-		public function reset(X:Number,Y:Number):void
-		{
-			saveOldPosition();
-			updatePositions();
-		}
-		
-		/**
-		 * Internal function, helps with the moving/updating of group members.
-		 */
-		protected function saveOldPosition():void
-		{
-			if(_first)
-			{
-				_first = false;
-				_last.x = 0;
-				_last.y = 0;
-				return;
-			}
-			_last.x = x;
-			_last.y = y;
 		}
 	
 		/**
@@ -1151,7 +1094,5 @@ package net.flashpunk
 		/** @private */	private var _typeCount:Object = { };
 		/** @private */	private static var _recycled:Dictionary = new Dictionary;
 		/** @private */	internal var _entityNames:Dictionary = new Dictionary;
-		/** @private */ private var _last:Point;
-		/** @private */ private var _first:Boolean;
 	}
 }
