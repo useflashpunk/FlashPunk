@@ -4,10 +4,11 @@ package net.flashpunk
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-	import flash.utils.getQualifiedClassName;
 	import flash.utils.getDefinitionByName;
-	import net.flashpunk.masks.*;
+	import flash.utils.getQualifiedClassName;
+	
 	import net.flashpunk.graphics.*;
+	import net.flashpunk.masks.*;
 	
 	/**
 	 * Main game Entity class updated by World.
@@ -129,9 +130,17 @@ package net.flashpunk
 		 */
 		public function collide(type:String, x:Number, y:Number):Entity
 		{
-			if (!_world) return null;
+			if (!_world && !_group) return null;
 			
-			var e:Entity = _world._typeFirst[type];
+			var e:Entity;
+			if(_world)
+			{
+				e = _world._typeFirst[type];
+			}
+			else
+			{
+				e = _group._typeFirst[type];
+			}
 			if (!collidable || !e) return null;
 			
 			_x = this.x; _y = this.y;
@@ -188,7 +197,7 @@ package net.flashpunk
 		 */
 		public function collideTypes(types:Object, x:Number, y:Number):Entity
 		{
-			if (!_world) return null;
+			if (!_world && !_group) return null;
 			var e:Entity;
 			for each (var type:String in types)
 			{
@@ -309,9 +318,17 @@ package net.flashpunk
 		 */
 		public function collideInto(type:String, x:Number, y:Number, array:Object):void
 		{
-			if (!_world) return;
+			if (!_world && !_group) return;
 			
-			var e:Entity = _world._typeFirst[type];
+			var e:Entity;
+			if(_world)
+			{
+				e = _world._typeFirst[type];
+			}
+			else
+			{
+				e = _group._typeFirst[type];
+			}
 			if (!collidable || !e) return;
 			
 			_x = this.x; _y = this.y;
@@ -362,7 +379,7 @@ package net.flashpunk
 		 */
 		public function collideTypesInto(types:Object, x:Number, y:Number, array:Object):void
 		{
-			if (!_world) return;
+			if (!_world && !_group) return;
 			for each (var type:String in types) collideInto(type, x, y, array);
 		}
 		
@@ -380,6 +397,14 @@ package net.flashpunk
 		public function get world():World
 		{
 			return _world;
+		}
+		
+		/**
+		 * The Group object this Entity has been added to.
+		 */
+		public function get group():Group
+		{
+			return _group;
 		}
 		
 		/**
@@ -429,14 +454,16 @@ package net.flashpunk
 		public function set layer(value:int):void
 		{
 			if (_layer == value) return;
-			if (!_world)
+			if (!_world && !_group)
 			{
 				_layer = value;
 				return;
 			}
-			_world.removeRender(this);
+			if(_world) _world.removeRender(this);
+			else _group.removeRender(this);
 			_layer = value;
-			_world.addRender(this);
+			if(_world) _world.addRender(this);
+			else _group.addRender(this);
 		}
 		
 		/**
@@ -446,14 +473,22 @@ package net.flashpunk
 		public function set type(value:String):void
 		{
 			if (_type == value) return;
-			if (!_world)
+			if (!_world && !_group)
 			{
 				_type = value;
 				return;
 			}
-			if (_type) _world.removeType(this);
+			if (_type)
+			{
+				if(_world) _world.removeType(this);
+				else _group.removeType(this);
+			}
 			_type = value;
-			if (value) _world.addType(this);
+			if (value)
+			{
+				if(_world) _world.addType(this);
+				else _group.addType(this);
+			}
 		}
 		
 		/**
@@ -738,12 +773,14 @@ package net.flashpunk
 		public function set name(value:String):void
 		{
 			if (_world) _world.registerName(this);
+			else _group.registerName(this);
 			_name = value;
 		}
 		
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
+		/** @private */ internal var _group:Group;
 		/** @private */ internal var _type:String = "";
 		/** @private */ internal var _name:String = "";
 		/** @private */ internal var _layer:int;
