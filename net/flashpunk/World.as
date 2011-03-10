@@ -2,6 +2,7 @@
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
+	
 	import net.flashpunk.utils.Input;
 	
 	/**
@@ -408,6 +409,30 @@
 				if (e.collidePoint(e.x, e.y, pX, pY)) return e;
 				e = e._typeNext;
 			}
+			return null;
+		}
+		
+		/**
+		 * Returns the Entity at front which collides with the point.
+		 * @param	x		X position
+		 * @param	y		Y position
+		 * @return The Entity at front which collides with the point, or null if not found.
+		 */
+		public function frontCollidePoint(x:Number, y:Number):Entity
+		{
+			var e:Entity,
+			i:int = 0;
+			do
+			{
+				e = _renderFirst[_layerList[i]];
+				while (e)
+				{
+					if(e.collidePoint(e.x, e.y, x, y)) return e;
+					e = e._renderNext
+				}
+			}
+			while(++i);
+			
 			return null;
 		}
 		
