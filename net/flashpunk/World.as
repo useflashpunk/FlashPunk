@@ -421,7 +421,8 @@
 		public function frontCollidePoint(x:Number, y:Number):Entity
 		{
 			var e:Entity,
-			i:int = 0;
+			i:int = 0,
+			l:int = _layerList.length;
 			do
 			{
 				e = _renderFirst[_layerList[i]];
@@ -430,6 +431,7 @@
 					if(e.collidePoint(e.x, e.y, x, y)) return e;
 					e = e._renderNext
 				}
+				if(i > l) break;
 			}
 			while(++i);
 			
