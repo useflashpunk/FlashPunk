@@ -1,4 +1,4 @@
-﻿package net.flashpunk.utils 
+﻿package flashpunk.utils 
 {
 	/**
 	 * Static class with useful easer functions that can be used by Tweens.

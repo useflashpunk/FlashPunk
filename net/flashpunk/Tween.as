@@ -1,6 +1,6 @@
-﻿package net.flashpunk 
+﻿package flashpunk 
 {
-	import net.flashpunk.tweens.TweenInfo;
+	import flashpunk.tweens.TweenInfo;
 	
 	/**
 	 * Base class for all Tween objects, can be added to any Core-extended classes.

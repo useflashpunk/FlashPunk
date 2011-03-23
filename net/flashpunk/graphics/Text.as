@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -9,8 +9,8 @@
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
-	import net.flashpunk.FP;
-	import net.flashpunk.Graphic;
+	import flashpunk.FP;
+	import flashpunk.Graphic;
 	
 	/**
 	 * Used for drawing text using embedded fonts.

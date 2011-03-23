@@ -1,6 +1,6 @@
-﻿package net.flashpunk.masks 
+﻿package flashpunk.masks 
 {
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * Uses parent's hitbox to determine collision. This class is used

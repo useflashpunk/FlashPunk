@@ -1,8 +1,8 @@
-package net.flashpunk.utils
+package flashpunk.utils
 {
-	import net.flashpunk.Entity;
-	import net.flashpunk.World;
-	import net.flashpunk.utils.Input;
+	import flashpunk.Entity;
+	import flashpunk.World;
+	import flashpunk.utils.Input;
 	
 	public class MaskInput
 	{

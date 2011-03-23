@@ -1,4 +1,4 @@
-﻿package net.flashpunk 
+﻿package flashpunk 
 {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -12,10 +12,10 @@
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
-	import net.flashpunk.*;
-	import net.flashpunk.debug.Console;
-	import net.flashpunk.tweens.misc.Alarm;
-	import net.flashpunk.tweens.misc.MultiVarTween;
+	import flashpunk.*;
+	import flashpunk.debug.Console;
+	import flashpunk.tweens.misc.Alarm;
+	import flashpunk.tweens.misc.MultiVarTween;
 	
 	/**
 	 * Static catch-all class used to access global properties and functions.

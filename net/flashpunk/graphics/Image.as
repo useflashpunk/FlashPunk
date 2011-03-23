@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -7,7 +7,7 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * Performance-optimized non-animated image. Can be drawn to the screen with transformations.

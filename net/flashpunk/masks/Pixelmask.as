@@ -1,9 +1,9 @@
-﻿package net.flashpunk.masks
+﻿package flashpunk.masks
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * A bitmap mask used for pixel-perfect collision. 

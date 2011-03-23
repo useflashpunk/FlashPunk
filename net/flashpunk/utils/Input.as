@@ -1,11 +1,11 @@
-﻿package net.flashpunk.utils
+﻿package flashpunk.utils
 {
 	import flash.display.Stage;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * Static class updated by Engine. Use for defining and checking keyboard/mouse input.

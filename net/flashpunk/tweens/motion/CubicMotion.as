@@ -1,7 +1,7 @@
-﻿package net.flashpunk.tweens.motion 
+﻿package flashpunk.tweens.motion 
 {
 	import flash.geom.Point;
-	import net.flashpunk.utils.Ease;
+	import flashpunk.utils.Ease;
 	
 	/**
 	 * Determines motion along a cubic curve.

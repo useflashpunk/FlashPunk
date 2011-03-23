@@ -1,13 +1,13 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import net.flashpunk.FP;
-	import net.flashpunk.Graphic;
-	import net.flashpunk.masks.Grid;
-	import net.flashpunk.utils.Draw;
+	import flashpunk.FP;
+	import flashpunk.Graphic;
+	import flashpunk.masks.Grid;
+	import flashpunk.utils.Draw;
 	
 	/**
 	 * A canvas to which Tiles can be drawn for fast multiple tile rendering.

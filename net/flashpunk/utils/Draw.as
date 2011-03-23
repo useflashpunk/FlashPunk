@@ -1,4 +1,4 @@
-﻿package net.flashpunk.utils 
+﻿package flashpunk.utils 
 {
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
@@ -6,9 +6,9 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.Entity;
-	import net.flashpunk.FP;
-	import net.flashpunk.Graphic;
+	import flashpunk.Entity;
+	import flashpunk.FP;
+	import flashpunk.Graphic;
 	
 	/**
 	 * Static class with access to miscellanious drawing functions.

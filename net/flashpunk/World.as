@@ -1,9 +1,9 @@
-﻿package net.flashpunk
+﻿package flashpunk
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	
-	import net.flashpunk.utils.Input;
+	import flash.utils.getQualifiedClassName;
+	import flashpunk.utils.Input;
 	
 	/**
 	 * Updated by Engine, main game container that holds all currently active Entities.
@@ -42,7 +42,7 @@
 		 */
 		public function end():void
 		{
-			
+			removeAll();
 		}
 		
 		/**
@@ -62,6 +62,49 @@
 					e.update();
 				}
 				if (e._graphic && e._graphic.active) e._graphic.update();
+				e = e._updateNext;
+			}
+		}
+		
+		/**
+		 * Performed by the game loop, updates all contained Entities.
+		 * If you override this to give your World update code, remember
+		 * to call super.updateByPart() or your Entities will not be updated.
+		 */
+		public function updateByPart():void 
+		{
+			// update the position, tween, and graphics of entities
+			var e:Entity = _updateFirst;
+			while (e)
+			{
+				if (e.active)
+				{
+					if (e._tween) e.updateTweens();
+					e.updatePosition();
+				}
+				if (e._graphic && e._graphic.active) e._graphic.update();
+				e = e._updateNext;
+			}
+			
+			//update the collisions of entities
+			e = _updateFirst;
+			while (e)
+			{
+				if (e.active)
+				{
+					e.updateCollisions();
+				}
+				e = e._updateNext;
+			}
+			
+			//finish the update of entities
+			e = _updateFirst;
+			while (e)
+			{
+				if (e.active)
+				{
+					e.updateFinish();
+				}
 				e = e._updateNext;
 			}
 		}
@@ -151,6 +194,22 @@
 			{
 				_remove[_remove.length] = e;
 				e = e._updateNext;
+			}
+			destroyMasterList();
+		}
+		
+		/**
+		 * Meant to be called on ending the world. Destroys the entire Master list.
+		 * Does not use updateLists because there's no need to -> done at the end of World
+		 */
+		public function destroyMasterList():void
+		{
+			var e:Entity = _firstEntity;
+			while (e)
+			{		
+				e.removed();
+				e._world = null;
+				e = e._next;
 			}
 		}
 		
@@ -245,6 +304,21 @@
 		{
 			_recycle[_recycle.length] = e;
 			return remove(e);
+		}
+		
+		/**
+		 * Returns the unrecycled Entity.
+		 * @param	e				The Entity to unrecycle.
+		 * @param	addToWorld		Add it to the World immediately.
+		 * @return	The Entity object.
+		 */
+		public function unrecycle(e:Entity, addToWorld:Boolean = true):Entity
+		{
+			//not sure if this works
+			_recycled[getQualifiedClassName(e)] = e._recycleNext;
+			e._recycleNext = null;
+			if (addToWorld) return add(e);
+				return e;
 		}
 		
 		/**
@@ -990,9 +1064,22 @@
 			{
 				for each (e in _add)
 				{
-					if (e._world)
-						continue;
+					//add to master list
+					if (!e._created)
+					{
+						e._created = true;
+						addToMasterList(e);
+					}
 					
+					//add brand new Entity to recycled list
+					if (e._world)
+					{
+						e._world = null;
+						_recycle[_recycle.length] = e;
+						continue;
+					}
+					
+					//add to update and render
 					addUpdate(e);
 					addRender(e);
 					if (e._type) addType(e);
@@ -1024,6 +1111,70 @@
 				if (_layerList.length > 1) FP.sort(_layerList, true);
 				_layerSort = false;
 			}
+		}
+		
+		/**
+		 * Rolls back primitive values of current World's Entities to the old World's Entities
+		 * @param	w	World to be rolled back to
+		 */
+		public function rollback(w:World):void
+		{
+			//declare vars
+			var thisCurrentEntity:Entity = _firstEntity;
+			var oldCurrentEntity:Entity = w._firstEntity;
+			
+			//loop through all entities to be rolled back to
+			while (oldCurrentEntity)
+			{
+				//rollback
+				if (thisCurrentEntity.changed)
+				{
+					thisCurrentEntity.changed = false;
+					if (oldCurrentEntity._world && !thisCurrentEntity._world)
+					{
+						//unrecycle entity and rollback
+						unrecycle(thisCurrentEntity);
+						thisCurrentEntity.rollback(oldCurrentEntity);
+					}else if (!oldCurrentEntity._world && thisCurrentEntity._world)
+					{
+						//recycle entity
+						recycle(thisCurrentEntity);
+					}else
+					{
+						//just rollback
+						thisCurrentEntity.rollback(oldCurrentEntity);
+					}
+				}
+				
+				//increment
+				thisCurrentEntity = thisCurrentEntity._next;
+				oldCurrentEntity = oldCurrentEntity._next;
+			}
+			
+			//add new recycled entities to old world
+			while (thisCurrentEntity)
+			{
+				//add unrecycled
+				w.add(new getQualifiedClassName(thisCurrentEntity));
+				
+				//increment
+				thisCurrentEntity = thisCurrentEntity._next;
+			}
+			
+			//update lists
+			updateLists();
+			w.updateLists();
+		}
+		
+		/** @private Adds Entity to the master list. */
+		private function addToMasterList(e:Entity):void
+		{
+			// add to master list
+			if (_firstEntity)
+				e._next = _firstEntity;
+			else
+				e._next = null;
+			_firstEntity = e;
 		}
 		
 		/** @private Adds Entity to the update list. */
@@ -1204,6 +1355,9 @@
 		/** @private */	private var _add:Vector.<Entity> = new Vector.<Entity>;
 		/** @private */	private var _remove:Vector.<Entity> = new Vector.<Entity>;
 		/** @private */	private var _recycle:Vector.<Entity> = new Vector.<Entity>;
+		
+		// Rollback information.
+		/** @private */ private var _firstEntity:Entity;
 		
 		// Update information.
 		/** @private */	private var _updateFirst:Entity;

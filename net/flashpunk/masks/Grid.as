@@ -1,10 +1,10 @@
-﻿package net.flashpunk.masks
+﻿package flashpunk.masks
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * Uses a hash grid to determine collision, faster than
