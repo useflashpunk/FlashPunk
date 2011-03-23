@@ -2,7 +2,6 @@
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	import flash.utils.getQualifiedClassName;
 	import flashpunk.utils.Input;
 	
 	/**
@@ -204,12 +203,15 @@
 		 */
 		public function destroyMasterList():void
 		{
-			var e:Entity = _firstEntity;
+			var e:Entity = _firstEntity,
+				n:Entity = null;
 			while (e)
-			{		
-				e.removed();
+			{
+				n = e._next;
+				e._next = null;
 				e._world = null;
-				e = e._next;
+				e.removed();
+				e = n;
 			}
 		}
 		
@@ -288,6 +290,7 @@
 			{
 				_recycled[classType] = e._recycleNext;
 				e._recycleNext = null;
+				_recycled[classType].recyclePrev = null;
 			}
 			else e = new classType;
 			if (addToWorld) return add(e);
@@ -314,9 +317,20 @@
 		 */
 		public function unrecycle(e:Entity, addToWorld:Boolean = true):Entity
 		{
-			//not sure if this works
-			_recycled[getQualifiedClassName(e)] = e._recycleNext;
+			//connect the surrounding elements
+			(e._recycleNext)._recyclePrev = e._recyclePrev;
+			(e._recyclePrev)._recycleNext = e._recycleNext;
+			
+			//move head
+			if (e == _recycled[e._class])
+			{
+				_recycled[e._class] = e._recycleNext;
+			}
+			
+			//make connects null
+			e._recyclePrev = null;
 			e._recycleNext = null;
+			
 			if (addToWorld) return add(e);
 				return e;
 		}
@@ -333,6 +347,7 @@
 			{
 				n = e._recycleNext;
 				e._recycleNext = null;
+				e._recyclePrev = null;
 				e = n;
 			}
 			delete _recycled[classType];
@@ -1100,6 +1115,7 @@
 						continue;
 					
 					e._recycleNext = _recycled[e._class];
+					_recycled[e._class]._recyclePrev = e;
 					_recycled[e._class] = e;
 				}
 				_recycle.length = 0;
@@ -1155,7 +1171,7 @@
 			while (thisCurrentEntity)
 			{
 				//add unrecycled
-				w.add(new getQualifiedClassName(thisCurrentEntity));
+				w.add(new thisCurrentEntity._class);
 				
 				//increment
 				thisCurrentEntity = thisCurrentEntity._next;
