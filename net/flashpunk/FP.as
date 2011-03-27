@@ -81,6 +81,16 @@
 		public static var camera:Point = new Point;
 		
 		/**
+		 * Half the screen width.
+		 */
+		public static function get halfWidth():Number { return width / 2; }
+		
+		/**
+		 * Half the screen height.
+		 */
+		public static function get halfHeight():Number { return height / 2; }
+		
+		/**
 		 * The currently active World object. When you set this, the World is flagged
 		 * to switch, but won't actually do so until the end of the current frame.
 		 */
@@ -89,6 +99,17 @@
 		{
 			if (_world == value) return;
 			_goto = value;
+		}
+		
+		/**
+		 * Sets the camera position.
+		 * @param	x	X position.
+		 * @param	y	Y position.
+		 */
+		public static function setCamera(x:Number = 0, y:Number = 0):void
+		{
+			camera.x = x;
+			camera.y = y;
 		}
 		
 		/**
@@ -218,6 +239,21 @@
 		}
 		
 		/**
+		 * Anchors the object to a position.
+		 * @param	object		The object to anchor.
+		 * @param	anchor		The anchor object.
+		 * @param	distance	The max distance object can be anchored to the anchor.
+		 */
+		public static function anchorTo(object:Object, anchor:Object, distance:Number = 0):void
+		{
+			point.x = object.x - anchor.x;
+			point.y = object.y - anchor.y;
+			if (point.length > distance) point.normalize(distance);
+			object.x = anchor.x + point.x;
+			object.y = anchor.y + point.y;
+		}
+		
+		/**
 		 * Finds the angle (in degrees) from point 1 to point 2.
 		 * @param	x1		The first x-position.
 		 * @param	y1		The first y-position.
@@ -236,12 +272,26 @@
 		 * @param	object		The object whose x/y properties should be set.
 		 * @param	angle		The angle of the vector, in degrees.
 		 * @param	length		The distance to the vector from (0, 0).
+		 * @param	x			X offset.
+		 * @param	y			Y offset.
 		 */
-		public static function angleXY(object:Object, angle:Number, length:Number = 1):void
+		public static function angleXY(object:Object, angle:Number, length:Number = 1, x:Number = 0, y:Number = 0):void
 		{
 			angle *= RAD;
-			object.x = Math.cos(angle) * length;
-			object.y = Math.sin(angle) * length;
+			object.x = Math.cos(angle) * length + x;
+			object.y = Math.sin(angle) * length + y;
+		}
+		
+		/**
+		 * Rotates the object around the anchor by the specified amount.
+		 * @param	object		Object to rotate around the anchor.
+		 * @param	anchor		Anchor to rotate around.
+		 * @param	angle		The amount of degrees to rotate by.
+		 */
+		public static function rotateAround(object:Object, anchor:Object, angle:Number = 0, relative:Boolean = true):void
+		{
+			if (relative) angle += FP.angle(anchor.x, anchor.y, object.x, object.y);
+			FP.angleXY(object, angle, FP.distance(anchor.x, anchor.y, object.x, object.y), anchor.x, anchor.y);
 		}
 		
 		/**
@@ -339,6 +389,20 @@
 			}
 			value = value < min ? value : min;
 			return value > max ? value : max;
+		}
+		
+		/**
+		 * Clamps the object inside the rectangle.
+		 * @param	object		The object to clamp (must have an x and y property).
+		 * @param	x			Rectangle's x.
+		 * @param	y			Rectangle's y.
+		 * @param	width		Rectangle's width.
+		 * @param	height		Rectangle's height.
+		 */
+		public static function clampInRect(object:Object, x:Number, y:Number, width:Number, height:Number, padding:Number = 0):void
+		{
+			object.x = clamp(object.x, x + padding, x + width - padding);
+			object.y = clamp(object.y, y + padding, y + height - padding);
 		}
 		
 		/**
@@ -462,6 +526,34 @@
 		public static function getColorRGB(R:uint = 0, G:uint = 0, B:uint = 0):uint
 		{
 			return R << 16 | G << 8 | B;
+		}
+		
+		/**
+		 * Creates a color value with the chosen HSV values.
+		 * @param	h		The hue of the color (from 0 to 1).
+		 * @param	s		The saturation of the color (from 0 to 1).
+		 * @param	v		The value of the color (from 0 to 1).
+		 * @return	The color uint.
+		 */
+		public static function getColorHSV(h:Number, s:Number, v:Number):uint
+		{
+			h = int(h * 360);
+			var hi:int = Math.floor(h / 60) % 6,
+				f:Number = h / 60 - Math.floor(h / 60),
+				p:Number = (v * (1 - s)),
+				q:Number = (v * (1 - f * s)),
+				t:Number = (v * (1 - (1 - f) * s));
+			switch (hi)
+			{
+				case 0: return int(v * 255) << 16 | int(t * 255) << 8 | int(p * 255);
+				case 1: return int(q * 255) << 16 | int(v * 255) << 8 | int(p * 255);
+				case 2: return int(p * 255) << 16 | int(v * 255) << 8 | int(t * 255);
+				case 3: return int(p * 255) << 16 | int(q * 255) << 8 | int(v * 255);
+				case 4: return int(t * 255) << 16 | int(p * 255) << 8 | int(v * 255);
+				case 5: return int(v * 255) << 16 | int(p * 255) << 8 | int(q * 255);
+				default: return 0;
+			}
+			return 0;
 		}
 		
 		/**
@@ -604,6 +696,35 @@
 			tween.tween(object, values, duration, ease);
 			tweener.addTween(tween);
 			return tween;
+		}
+		
+		/**
+		 * Gets an array of frame indices.
+		 * @param	from	Starting frame.
+		 * @param	to		Ending frame.
+		 * @param	skip	Skip amount every frame (eg. use 1 for every 2nd frame).
+		 */
+		public static function frames(from:int, to:int, skip:int = 0):Array
+		{
+			var a:Array = [];
+			skip ++;
+			if (from < to)
+			{
+				while (from <= to)
+				{
+					a.push(from);
+					from += skip;
+				}
+			}
+			else
+			{
+				while (from >= to)
+				{
+					a.push(from);
+					from -= skip;
+				}
+			}
+			return a;
 		}
 		
 		/**

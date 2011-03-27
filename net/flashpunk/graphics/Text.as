@@ -70,7 +70,7 @@
 		}
 		
 		/** @private Updates the drawing buffer. */
-		override public function updateBuffer():void 
+		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			_field.setTextFormat(_form);
 			_field.width = _width;
@@ -103,7 +103,7 @@
 			_field.height = _height;
 			
 			_source.draw(_field);
-			super.updateBuffer();
+			super.updateBuffer(clearBefore);
 		}
 		
 		/** @private Centers the Text's originX/Y to its center. */
@@ -218,10 +218,10 @@
 		/** @private */ private var _wordWrap:Boolean;
 		
 		// Default font family.
+		// Use this option when compiling with Flex SDK 3 or lower
+		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
 		// Use this option when compiling with Flex SDK 4
-		// [Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
-		// Use this option when compiling with Flex SDK <4
-		[Embed(source = '04B_03__.TTF', fontFamily = 'default')]
+		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
 		/** @private */ private static var _FONT_DEFAULT:Class;
 	}
 }

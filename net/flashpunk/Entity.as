@@ -1,6 +1,8 @@
-﻿package net.flashpunk
+package net.flashpunk
 {
+	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getDefinitionByName;
 	import net.flashpunk.masks.*;
@@ -52,6 +54,11 @@
 		public var originY:int;
 		
 		/**
+		 * The BitmapData target to draw the Entity to. Leave as null to render to the current screen buffer (default).
+		 */
+		public var renderTarget:BitmapData;
+		
+		/**
 		 * Constructor. Can be usd to place the Entity and assign a graphic and mask.
 		 * @param	x			X position to place the Entity.
 		 * @param	y			Y position to place the Entity.
@@ -85,9 +92,7 @@
 		}
 		
 		/**
-		 * Updates the Entity's graphic. If you override this for
-		 * update logic, remember to call super.update() if you're
-		 * using a Graphic type that animates (eg. Spritemap).
+		 * Updates the Entity.
 		 */
 		override public function update():void 
 		{
@@ -110,7 +115,7 @@
 				else _point.x = _point.y = 0;
 				_camera.x = FP.camera.x;
 				_camera.y = FP.camera.y;
-				_graphic.render(_point, _camera);
+				_graphic.render(renderTarget ? renderTarget : FP.buffer, _point, _camera);
 			}
 		}
 		
@@ -123,7 +128,9 @@
 		 */
 		public function collide(type:String, x:Number, y:Number):Entity
 		{
-			var e:Entity = FP._world._typeFirst[type];
+			if (!_world) return null;
+			
+			var e:Entity = _world._typeFirst[type];
 			if (!collidable || !e) return null;
 			
 			_x = this.x; _y = this.y;
@@ -180,6 +187,7 @@
 		 */
 		public function collideTypes(types:Object, x:Number, y:Number):Entity
 		{
+			if (!_world) return null;
 			var e:Entity;
 			for each (var type:String in types)
 			{
@@ -300,7 +308,9 @@
 		 */
 		public function collideInto(type:String, x:Number, y:Number, array:Object):void
 		{
-			var e:Entity = FP._world._typeFirst[type];
+			if (!_world) return;
+			
+			var e:Entity = _world._typeFirst[type];
 			if (!collidable || !e) return;
 			
 			_x = this.x; _y = this.y;
@@ -351,6 +361,7 @@
 		 */
 		public function collideTypesInto(types:Object, x:Number, y:Number, array:Object):void
 		{
+			if (!_world) return;
 			for each (var type:String in types) collideInto(type, x, y, array);
 		}
 		
@@ -369,6 +380,46 @@
 		{
 			return _world;
 		}
+		
+		/**
+		 * Half the Entity's width.
+		 */
+		public function get halfWidth():Number { return width / 2; }
+		
+		/**
+		 * Half the Entity's height.
+		 */
+		public function get halfHeight():Number { return height / 2; }
+		
+		/**
+		 * The center x position of the Entity's hitbox.
+		 */
+		public function get centerX():Number { return x - originX + width / 2; }
+		
+		/**
+		 * The center y position of the Entity's hitbox.
+		 */
+		public function get centerY():Number { return y - originY + height / 2; }
+		
+		/**
+		 * The leftmost position of the Entity's hitbox.
+		 */
+		public function get left():Number { return x - originX; }
+		
+		/**
+		 * The rightmost position of the Entity's hitbox.
+		 */
+		public function get right():Number { return x - originX + width; }
+		
+		/**
+		 * The topmost position of the Entity's hitbox.
+		 */
+		public function get top():Number { return y - originY; }
+		
+		/**
+		 * The bottommost position of the Entity's hitbox.
+		 */
+		public function get bottom():Number { return y - originY + height; }
 		
 		/**
 		 * The rendering layer of this Entity. Higher layers are rendered first.
@@ -429,6 +480,22 @@
 		}
 		
 		/**
+		 * Adds the graphic to the Entity via a Graphiclist.
+		 * @param	g		Graphic to add.
+		 */
+		public function addGraphic(g:Graphic):Graphic
+		{
+			if (graphic is Graphiclist) (graphic as Graphiclist).add(g);
+			else
+			{
+				var list:Graphiclist = new Graphiclist;
+				if (graphic) list.add(graphic);
+				graphic = list;
+			}
+			return g;
+		}
+		
+		/**
 		 * Sets the Entity's hitbox properties.
 		 * @param	width		Width of the hitbox.
 		 * @param	height		Height of the hitbox.
@@ -441,6 +508,35 @@
 			this.height = height;
 			this.originX = originX;
 			this.originY = originY;
+		}
+		
+		/**
+		 * Sets the Entity's hitbox to match that of the provided object.
+		 * @param	o		The object defining the hitbox (eg. an Image or Rectangle).
+		 */
+		public function setHitboxTo(o:Object):void
+		{
+			if (o is Image || o is Rectangle) setHitbox(o.width, o.height, -o.x, -o.y);
+			else
+			{
+				if (o.hasOwnProperty("width")) width = o.width;
+				if (o.hasOwnProperty("height")) height = o.height;
+				if (o.hasOwnProperty("originX") && !(o is Graphic)) originX = o.originX;
+				else if (o.hasOwnProperty("x")) originX = -o.x;
+				if (o.hasOwnProperty("originY") && !(o is Graphic)) originX = o.originY;
+				else if (o.hasOwnProperty("y")) originX = -o.y;
+			}
+		}
+		
+		/**
+		 * Sets the origin of the Entity.
+		 * @param	x		X origin.
+		 * @param	y		Y origin.
+		 */
+		public function setOrigin(x:int = 0, y:int = 0):void
+		{
+			originX = x;
+			originY = y;
 		}
 		
 		/**
@@ -500,6 +596,144 @@
 			return s.substring(7, s.length - 1);
 		}
 		
+		/**
+		 * Moves the Entity by the amount, retaining integer values for its x and y.
+		 * @param	x			Horizontal offset.
+		 * @param	y			Vertical offset.
+		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
+		 */
+		public function moveBy(x:Number, y:Number, solidType:String = null, sweep:Boolean = false):void
+		{
+			_moveX += x;
+			_moveY += y;
+			x = Math.round(_moveX);
+			y = Math.round(_moveY);
+			_moveX -= x;
+			_moveY -= y;
+			if (solidType)
+			{
+				var sign:int, e:Entity;
+				if (x != 0)
+				{
+					if (collidable && (sweep || collide(solidType, this.x + x, this.y)))
+					{
+						sign = x > 0 ? 1 : -1;
+						while (x != 0)
+						{
+							if ((e = collide(solidType, this.x + sign, this.y)))
+							{
+								moveCollideX(e);
+								break;
+							}
+							else
+							{
+								this.x += sign;
+								x -= sign;
+							}
+						}
+					}
+					else this.x += x;
+				}
+				if (y != 0)
+				{
+					if (collidable && (sweep || collide(solidType, this.x, this.y + y)))
+					{
+						sign = y > 0 ? 1 : -1;
+						while (y != 0)
+						{
+							if ((e = collide(solidType, this.x, this.y + sign)))
+							{
+								moveCollideY(e);
+								break;
+							}
+							else
+							{
+								this.y += sign;
+								y -= sign;
+							}
+						}
+					}
+					else this.y += y;
+				}
+			}
+			else
+			{
+				this.x += x;
+				this.y += y;
+			}
+		}
+		
+		/**
+		 * Moves the Entity to the position, retaining integer values for its x and y.
+		 * @param	x			X position.
+		 * @param	y			Y position.
+		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
+		 */
+		public function moveTo(x:Number, y:Number, solidType:String = null, sweep:Boolean = false):void
+		{
+			moveBy(x - this.x, y - this.y, solidType, sweep);
+		}
+		
+		/**
+		 * Moves towards the target position, retaining integer values for its x and y.
+		 * @param	x			X target.
+		 * @param	y			Y target.
+		 * @param	amount		Amount to move.
+		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
+		 */
+		public function moveTowards(x:Number, y:Number, amount:Number, solidType:String = null, sweep:Boolean = false):void
+		{
+			_point.x = x - this.x;
+			_point.y = y - this.y;
+			_point.normalize(amount);
+			moveBy(_point.x, _point.y, solidType, sweep);
+		}
+		
+		/**
+		 * When you collide with an Entity on the x-axis with moveTo() or moveBy().
+		 * @param	e		The Entity you collided with.
+		 */
+		public function moveCollideX(e:Entity):void
+		{
+			
+		}
+		
+		/**
+		 * When you collide with an Entity on the y-axis with moveTo() or moveBy().
+		 * @param	e		The Entity you collided with.
+		 */
+		public function moveCollideY(e:Entity):void
+		{
+			
+		}
+		
+		/**
+		 * Clamps the Entity's hitbox on the x-axis.
+		 * @param	left		Left bounds.
+		 * @param	right		Right bounds.
+		 * @param	padding		Optional padding on the clamp.
+		 */
+		public function clampHorizontal(left:Number, right:Number, padding:Number = 0):void
+		{
+			if (x - originX < left + padding) x = left + originX + padding;
+			if (x - originX + width > right - padding) x = right - width + originX - padding;
+		}
+		
+		/**
+		 * Clamps the Entity's hitbox on the y axis.
+		 * @param	top			Min bounds.
+		 * @param	bottom		Max bounds.
+		 * @param	padding		Optional padding on the clamp.
+		 */
+		public function clampVertical(top:Number, bottom:Number, padding:Number = 0):void
+		{
+			if (y - originY < top + padding) y = top + originY + padding;
+			if (y - originY + height > bottom - padding) y = bottom - height + originY - padding;
+		}
+		
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
@@ -519,6 +753,8 @@
 		/** @private */ private var _mask:Mask;
 		/** @private */ private var _x:Number;
 		/** @private */ private var _y:Number;
+		/** @private */ private var _moveX:Number = 0;
+		/** @private */ private var _moveY:Number = 0;
 		
 		// Rendering information.
 		/** @private */ internal var _graphic:Graphic;

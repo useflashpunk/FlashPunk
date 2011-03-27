@@ -160,11 +160,11 @@
 					i:int = v.length;
 				while (i --)
 				{
-					if ((v[i] < 0 && _release.length) || _release.indexOf(v[i]) >= 0) return true;
+					if ((v[i] < 0) ? _releaseNum : _release.indexOf(v[i]) >= 0) return true;
 				}
 				return false;
 			}
-			return (input < 0 && _release.length) || _release.indexOf(input) >= 0;
+			return (input < 0) ? _releaseNum : _release.indexOf(input) >= 0;
 		}
 		
 		/**

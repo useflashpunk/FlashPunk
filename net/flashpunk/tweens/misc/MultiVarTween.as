@@ -31,6 +31,7 @@ package net.flashpunk.tweens.misc
 			_start.length = 0;
 			_range.length = 0;
 			_target = duration;
+			_ease = ease;
 			for (var p:String in values)
 			{
 				if (!object.hasOwnProperty(p)) throw new Error("The Object does not have the property\"" + p + "\", or it is not accessible.");

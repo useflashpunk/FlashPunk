@@ -54,7 +54,7 @@
 		/**
 		 * Updates the spritemap's buffer.
 		 */
-		override public function updateBuffer():void 
+		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			// get position of the current frame
 			_rect.x = _rect.width * _frame;
@@ -63,7 +63,7 @@
 			if (_flipped) _rect.x = (_width - _rect.width) - _rect.x;
 			
 			// update the buffer
-			super.updateBuffer();
+			super.updateBuffer(clearBefore);
 		}
 		
 		/** @private Updates the animation. */
@@ -172,6 +172,19 @@
 		public function randFrame():void
 		{
 			frame = FP.rand(_frameCount);
+		}
+		
+		/**
+		 * Sets the frame to the frame index of an animation.
+		 * @param	name	Animation to draw the frame frame.
+		 * @param	index	Index of the frame of the animation to set to.
+		 */
+		public function setAnimFrame(name:String, index:int):void
+		{
+			var frames:Array = _anims[name]._frames;
+			index %= frames.length;
+			if (index < 0) index += frames.length;
+			frame = frames[index];
 		}
 		
 		/**
