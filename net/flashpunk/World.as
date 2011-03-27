@@ -640,6 +640,31 @@
 		}
 		
 		/**
+		 * Finds the Entity nearest to another, satisfying a condition.
+		 * @param	type		The Entity to check for.
+		 * @param	e			The Entity to find the nearest to.
+		 * @param	condition	A function to be invoked on each compared Entity
+		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected
+		public function nearestToEntitySatisfyingCondition(type:String, e:Entity, fn:Function):Entity {
+			var n:Entity = _typeFirst[type],
+				nearDist:Number = Number.MAX_VALUE,
+				near:Entity, dist:Number,
+				x:Number = e.x - e.originX,
+				y:Number = e.y - e.originY;
+			while (n) {
+				if (fn(n)) {
+					dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
+					if (dist < nearDist) {
+						nearDist = dist;
+						near = n;
+					}
+				}
+				n = n._typeNext;
+			}
+			return near;
+		}
+		
+		/**
 		 * Finds the Entity nearest to the position.
 		 * @param	type		The Entity type to check for.
 		 * @param	x			X position.
