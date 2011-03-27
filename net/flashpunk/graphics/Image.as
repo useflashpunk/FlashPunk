@@ -99,11 +99,6 @@
 			_point.x = point.x + x - camera.x * scrollX;
 			_point.y = point.y + y - camera.y * scrollY;
 			
-			renderToBitmapDataAtPoint(FP.buffer, point);
-		}
-		
-		/** @public Renders the scaled, rotated, translated image onto a bitmapData at the specified point. */
-		public function renderToBitmapDataAtPoint(dest:BitmapData, point:Point):void {
 			var sc:Number = scale * FP.world.scale;
 			// render without transformation
 			if (angle == 0 && scaleX * sc == 1 && scaleY * sc == 1 && !blend)
