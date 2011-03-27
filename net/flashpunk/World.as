@@ -644,7 +644,9 @@
 		 * @param	type		The Entity to check for.
 		 * @param	e			The Entity to find the nearest to.
 		 * @param	condition	A function to be invoked on each compared Entity
-		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected
+		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected.
+		 * @return	The nearest Entity to e satisfying the condition.
+		 */
 		public function nearestToEntitySatisfyingCondition(type:String, e:Entity, fn:Function):Entity {
 			var n:Entity = _typeFirst[type],
 				nearDist:Number = Number.MAX_VALUE,
