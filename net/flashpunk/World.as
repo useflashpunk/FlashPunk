@@ -1171,7 +1171,11 @@
 			while (thisCurrentEntity)
 			{
 				//add unrecycled
-				w.add(new thisCurrentEntity._class);
+				//hopefully works, needs testing
+				var e:Entity = new thisCurrentEntity._class;
+				e._world = w; //force it to be added as recycled
+				w.add(e);
+				e = null;
 				
 				//increment
 				thisCurrentEntity = thisCurrentEntity._next;
@@ -1186,11 +1190,17 @@
 		private function addToMasterList(e:Entity):void
 		{
 			// add to master list
-			if (_firstEntity)
-				e._next = _firstEntity;
-			else
+			if (_lastEntity) {
+				//not first entry into list
+				_lastEntity._next = e;
 				e._next = null;
-			_firstEntity = e;
+				_lastEntity = e;
+			}else {
+				//first entry
+				e._next = null;
+				_firstEntity = e;
+				_lastEntity = e;
+			}
 		}
 		
 		/** @private Adds Entity to the update list. */
@@ -1374,6 +1384,7 @@
 		
 		// Rollback information.
 		/** @private */ private var _firstEntity:Entity;
+		/** @private */ private var _lastEntity:Entity;
 		
 		// Update information.
 		/** @private */	private var _updateFirst:Entity;
