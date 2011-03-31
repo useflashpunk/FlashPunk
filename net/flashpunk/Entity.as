@@ -814,6 +814,15 @@ package flashpunk
 			
 		}
 		
+		/**
+		 * Prints out the primitive values that are to be rolled back
+		 * For debugging purposes
+		 * @return printout
+		 */
+		public function print():String {
+			return "";
+		}
+		
 		// Entity information.
 		/** @private */ internal var _created:Boolean; //to determine if should add to the master list
 		/** @private */ internal var _next:Entity; //master list

@@ -1,5 +1,6 @@
 ﻿package flashpunk
 {
+	import entities.Bender;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flashpunk.utils.Input;
@@ -288,9 +289,10 @@
 			var e:Entity = _recycled[classType];
 			if (e)
 			{
+				if(e._recycleNext)
+					(e._recycleNext)._recyclePrev = null;
 				_recycled[classType] = e._recycleNext;
 				e._recycleNext = null;
-				_recycled[classType].recyclePrev = null;
 			}
 			else e = new classType;
 			if (addToWorld) return add(e);
@@ -318,8 +320,10 @@
 		public function unrecycle(e:Entity, addToWorld:Boolean = true):Entity
 		{
 			//connect the surrounding elements
-			(e._recycleNext)._recyclePrev = e._recyclePrev;
-			(e._recyclePrev)._recycleNext = e._recycleNext;
+			if(e._recycleNext)
+				(e._recycleNext)._recyclePrev = e._recyclePrev;
+			if(e._recyclePrev)
+				(e._recyclePrev)._recycleNext = e._recycleNext;
 			
 			//move head
 			if (e == _recycled[e._class])
@@ -1115,7 +1119,8 @@
 						continue;
 					
 					e._recycleNext = _recycled[e._class];
-					_recycled[e._class]._recyclePrev = e;
+					if(e._recycleNext)
+						(e._recycleNext)._recyclePrev = e;
 					_recycled[e._class] = e;
 				}
 				_recycle.length = 0;
