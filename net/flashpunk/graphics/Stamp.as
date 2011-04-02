@@ -1,10 +1,10 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flashpunk.*;
+	import net.flashpunk.*;
 	
 	/**
 	 * A simple non-transformed, non-animated graphic.

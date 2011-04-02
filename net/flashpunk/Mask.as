@@ -1,10 +1,10 @@
-﻿package flashpunk
+﻿package net.flashpunk
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
-	import flashpunk.masks.Hitbox;
-	import flashpunk.masks.Masklist;
+	import net.flashpunk.masks.Hitbox;
+	import net.flashpunk.masks.Masklist;
 	
 	/**
 	 * Base class for Entity collision masks.

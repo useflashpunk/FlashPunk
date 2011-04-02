@@ -1,9 +1,9 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
-	import flashpunk.FP;
-	import flashpunk.Graphic;
+	import net.flashpunk.FP;
+	import net.flashpunk.Graphic;
 	
 	/**
 	 * A background texture that can be repeated horizontally and vertically

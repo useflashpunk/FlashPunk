@@ -1,4 +1,4 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -7,12 +7,12 @@
 	/**
 	 * Used by the Emitter class to track an existing Particle.
 	 */
-	public class Particle 
+	public class Particle
 	{
 		/**
 		 * Constructor.
 		 */
-		public function Particle() 
+		public function Particle()
 		{
 			
 		}

@@ -1,7 +1,7 @@
-﻿package flashpunk.masks 
+﻿package net.flashpunk.masks
 {
-	import flashpunk.*;
-	import flashpunk.masks.Masklist;
+	import net.flashpunk.*;
+	import net.flashpunk.masks.Masklist;
 	
 	/**
 	 * A Mask that can contain multiple Masks of one or various types.

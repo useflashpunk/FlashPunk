@@ -1,11 +1,11 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.BitmapData;
 	import flash.display.BlendMode;
 	import flash.display.SpreadMethod;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flashpunk.FP;
+	import net.flashpunk.FP;
 	
 	/**
 	 * Performance-optimized animated Image. Can have multiple animations,

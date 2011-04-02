@@ -1,7 +1,7 @@
-﻿package flashpunk.tweens.sound 
+﻿package net.flashpunk.tweens.sound
 {
-	import flashpunk.Sfx;
-	import flashpunk.Tween;
+	import net.flashpunk.Sfx;
+	import net.flashpunk.Tween;
 	
 	/**
 	 * Sound effect fader.

@@ -1,13 +1,13 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.BitmapData;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flashpunk.FP;
-	import flashpunk.Graphic;
-	import flashpunk.utils.Input;
-	import flashpunk.utils.Key;
+	import net.flashpunk.FP;
+	import net.flashpunk.Graphic;
+	import net.flashpunk.utils.Input;
+	import net.flashpunk.utils.Key;
 	
 	/**
 	 * Particle emitter used for emitting and rendering particle sprites.

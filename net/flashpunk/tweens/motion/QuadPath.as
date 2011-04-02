@@ -1,7 +1,7 @@
-﻿package flashpunk.tweens.motion 
+﻿package net.flashpunk.tweens.motion
 {
 	import flash.geom.Point;
-	import flashpunk.FP;
+	import net.flashpunk.FP;
 	
 	/**
 	 * A series of points which will determine a path from the

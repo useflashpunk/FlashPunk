@@ -1,4 +1,4 @@
-package flashpunk.tweens 
+package net.flashpunk.tweens
 {
 	public class TweenInfo
 	{

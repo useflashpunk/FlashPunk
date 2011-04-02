@@ -1,9 +1,9 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	import flashpunk.*;
+	import net.flashpunk.*;
 	
 	/**
 	 * A Graphic that can contain multiple Graphics of one or various types.

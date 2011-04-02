@@ -1,4 +1,4 @@
-package flashpunk.debug
+package net.flashpunk.debug
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -11,12 +11,12 @@ package flashpunk.debug
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.system.System;
-	import flashpunk.Entity;
-	import flashpunk.FP;
-	import flashpunk.utils.Draw;
-	import flashpunk.utils.Input;
-	import flashpunk.utils.Key;
-	import flashpunk.graphics.Text;
+	import net.flashpunk.Entity;
+	import net.flashpunk.FP;
+	import net.flashpunk.utils.Draw;
+	import net.flashpunk.utils.Input;
+	import net.flashpunk.utils.Key;
+	import net.flashpunk.graphics.Text;
 	
 	/**
 	 * FlashPunk debug console; can use to log information or pause the game and view/move Entities and step the frame.

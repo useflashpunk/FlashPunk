@@ -1,4 +1,4 @@
-package flashpunk
+package net.flashpunk
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;

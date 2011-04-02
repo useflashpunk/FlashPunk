@@ -1,9 +1,9 @@
-﻿package flashpunk
+﻿package net.flashpunk
 {
 	import entities.Bender;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	import flashpunk.utils.Input;
+	import net.flashpunk.utils.Input;
 	
 	/**
 	 * Updated by Engine, main game container that holds all currently active Entities.

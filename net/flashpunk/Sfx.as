@@ -1,4 +1,4 @@
-﻿package flashpunk 
+﻿package net.flashpunk
 {
 	import flash.events.Event;
 	import flash.media.Sound;
@@ -9,7 +9,7 @@
 	/**
 	 * Sound effect object used to play embedded sounds.
 	 */
-	public class Sfx 
+	public class Sfx
 	{
 		/**
 		 * Optional callback function for when the sound finishes playing.

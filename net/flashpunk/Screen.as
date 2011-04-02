@@ -1,4 +1,4 @@
-﻿package flashpunk
+﻿package net.flashpunk
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -7,7 +7,7 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Transform;
-	import flashpunk.graphics.Image;
+	import net.flashpunk.graphics.Image;
 	
 	/**
 	 * Container for the main screen buffer. Can be used to transform the screen.

@@ -1,4 +1,4 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -7,8 +7,8 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flashpunk.FP;
-	import flashpunk.Graphic;
+	import net.flashpunk.FP;
+	import net.flashpunk.Graphic;
 	
 	/**
 	 * A  multi-purpose drawing canvas, can be sized beyond the normal Flash BitmapData limits.

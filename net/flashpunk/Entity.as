@@ -1,4 +1,4 @@
-package flashpunk
+package net.flashpunk
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -7,8 +7,8 @@ package flashpunk
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
-	import flashpunk.graphics.*;
-	import flashpunk.masks.*;
+	import net.flashpunk.graphics.*;
+	import net.flashpunk.masks.*;
 	
 	/**
 	 * Main game Entity class updated by World.

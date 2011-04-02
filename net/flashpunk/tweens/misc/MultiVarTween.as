@@ -1,6 +1,6 @@
-package flashpunk.tweens.misc
+package net.flashpunk.tweens.misc
 {
-	import flashpunk.Tween;
+	import net.flashpunk.Tween;
 
 	/**
 	 * Tweens multiple numeric public properties of an Object simultaneously.

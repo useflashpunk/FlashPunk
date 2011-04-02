@@ -1,4 +1,4 @@
-﻿package flashpunk
+﻿package net.flashpunk
 {
 	/**
 	 * Updateable Tween container.

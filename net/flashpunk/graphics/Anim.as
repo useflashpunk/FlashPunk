@@ -1,4 +1,4 @@
-﻿package flashpunk.graphics 
+﻿package net.flashpunk.graphics 
 {
 	/**
 	 * Template used by Spritemap to define animations. Don't create

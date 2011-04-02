@@ -1,6 +1,6 @@
-﻿package flashpunk.tweens.misc 
+﻿package net.flashpunk.tweens.misc 
 {
-	import flashpunk.Tween;
+	import net.flashpunk.Tween;
 	
 	/**
 	 * Tweens a numeric value.
