@@ -1,10 +1,10 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * A simple non-transformed, non-animated graphic.
@@ -48,6 +48,16 @@
 			_source = value;
 			if (_source) _sourceRect = _source.rect;
 		}
+		
+		/**
+		 * Width of the stamp.
+		 */
+		public function get width():uint { return _source.width; }
+		
+		/**
+		 * Height of the stamp.
+		 */
+		public function get height():uint { return _source.height; }
 		
 		// Stamp information.
 		/** @private */ private var _source:BitmapData;

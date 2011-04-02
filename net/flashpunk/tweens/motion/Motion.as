@@ -1,6 +1,6 @@
-﻿package net.flashpunk.tweens.motion 
+﻿package flashpunk.tweens.motion 
 {
-	import net.flashpunk.Tween;
+	import flashpunk.Tween;
 	
 	/**
 	 * Base class for motion Tweens.

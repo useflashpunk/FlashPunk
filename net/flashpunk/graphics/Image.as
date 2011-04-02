@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -7,7 +7,7 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.*;
+	import flashpunk.*;
 	
 	/**
 	 * Performance-optimized non-animated image. Can be drawn to the screen with transformations.
@@ -90,14 +90,14 @@
 		}
 		
 		/** @private Renders the image. */
-		override public function render(target:BitmapData, point:Point, camera:Point):void 
+		override public function render(target:BitmapData, point:Point, camera:Point):void
 		{
 			// quit if no graphic is assigned
 			if (!_buffer) return;
 			
 			// determine drawing location
-			_point.x = point.x + x - camera.x * scrollX;
-			_point.y = point.y + y - camera.y * scrollY;
+			_point.x = point.x + x - originX - camera.x * scrollX;
+			_point.y = point.y + y - originY - camera.y * scrollY;
 			
 			var sc:Number = scale * FP.world.scale;
 			// render without transformation
@@ -116,6 +116,7 @@
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
 			_matrix.tx += originX + _point.x;
 			_matrix.ty += originY + _point.y;
+			_bitmap.smoothing = smooth;
 			target.draw(_bitmap, _matrix, null, blend, null, smooth);
 		}
 		
@@ -126,22 +127,29 @@
 		 * @param	color		Color of the rectangle.
 		 * @return	A new Image object.
 		 */
-		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF):Image
+		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
 		{
-			var source:BitmapData = new BitmapData(width, height, true, 0xFF000000 | color);
-			return new Image(source);
+			var source:BitmapData = new BitmapData(width, height, true, 0xFFFFFFFF);
+			
+			var image:Image = new Image(source);
+			
+			image.color = color;
+			image.alpha = alpha;
+			
+			return image;
 		}
 		
 		/**
 		 * Creates a new circle Image.
 		 * @param	radius		Radius of the circle.
 		 * @param	color		Color of the circle.
-		 * @return	A new Circle object.
+		 * @param	alpha		Alpha of the circle.
+		 * @return	A new Image object.
 		 */
-		public static function createCircle(radius:uint, color:uint = 0xFFFFFF):Image
+		public static function createCircle(radius:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
 		{
 			FP.sprite.graphics.clear();
-			FP.sprite.graphics.beginFill(color);
+			FP.sprite.graphics.beginFill(color & 0xFFFFFF, alpha);
 			FP.sprite.graphics.drawCircle(radius, radius, radius);
 			var data:BitmapData = new BitmapData(radius * 2, radius * 2, true, 0);
 			data.draw(FP.sprite);
@@ -218,27 +226,30 @@
 		public function get flipped():Boolean { return _flipped; }
 		public function set flipped(value:Boolean):void
 		{
-			if (_flipped == value || !_class) return;
+			if (_flipped == value) return;
 			_flipped = value;
 			var temp:BitmapData = _source;
-			if (!value || _flip)
+			if (_flip)
 			{
 				_source = _flip;
 				_flip = temp;
-				return updateBuffer();
+				updateBuffer();
 			}
-			if (_flips[_class])
+			if (_class && _flips[_class])
 			{
 				_source = _flips[_class];
 				_flip = temp;
-				return updateBuffer();
+				updateBuffer();
 			}
-			_source = _flips[_class] = new BitmapData(_source.width, _source.height, true, 0);
+			_source = new BitmapData(_source.width, _source.height, true, 0);
 			_flip = temp;
 			FP.matrix.identity();
 			FP.matrix.a = -1;
 			FP.matrix.tx = _source.width;
 			_source.draw(temp, FP.matrix);
+			
+			if (_class) _flips[_class] = _source;
+			
 			updateBuffer();
 		}
 		
@@ -252,26 +263,22 @@
 		}
 		
 		/**
-		 * Centers the Image's originX/Y to its center, and negates the offset by the same amount.
+		 * Centers the Image's originX/Y to its center.
 		 */
 		public function centerOO():void
 		{
-			x += originX;
-			y += originY;
 			centerOrigin();
-			x -= originX;
-			y -= originY;
 		}
 		
 		/**
 		 * Width of the image.
 		 */
-		public function get width():uint { return _bufferRect.width * scaleX * scale; }
+		public function get width():uint { return _bufferRect.width; }
 		
 		/**
 		 * Height of the image.
 		 */
-		public function get height():uint { return _bufferRect.height * scaleY * scale; }
+		public function get height():uint { return _bufferRect.height; }
 		
 		/**
 		 * Width of image rendering buffer

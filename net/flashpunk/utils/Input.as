@@ -1,10 +1,11 @@
-﻿package net.flashpunk.utils
+﻿package flashpunk.utils
 {
 	import flash.display.Stage;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	import net.flashpunk.*;
+	import flash.ui.Mouse;
+	import flashpunk.*;
 	
 	/**
 	 * Static class updated by Engine. Use for defining and checking keyboard/mouse input.
@@ -21,6 +22,11 @@
 		 * The last key pressed.
 		 */
 		public static var lastKey:int;
+		
+		/**
+		 * The mouse cursor. Set to null (the default) if you set Mouse.cursor directly in your code.
+		 */
+		public static var mouseCursor:String;
 		
 		/**
 		 * If the mouse button is down.
@@ -200,6 +206,8 @@
 			_releaseNum = 0;
 			if (mousePressed) mousePressed = false;
 			if (mouseReleased) mouseReleased = false;
+			
+			if (mouseCursor) Mouse.cursor = mouseCursor;
 		}
 		
 		/**
@@ -222,14 +230,13 @@
 			
 			// update the keystring
 			if (code == Key.BACKSPACE) keyString = keyString.substring(0, keyString.length - 1);
-			else if ((code > 47 && code < 58) || (code > 64 && code < 91) || code == 32)
+			else if (e.charCode > 31 && e.charCode != 127) // 127 is delete
 			{
 				if (keyString.length > KEYSTRING_MAX) keyString = keyString.substring(1);
-				var char:String = String.fromCharCode(code);
-				if (e.shiftKey || Keyboard.capsLock) char = char.toLocaleUpperCase();
-				else char = char.toLocaleLowerCase();
-				keyString += char;
+				keyString += String.fromCharCode(e.charCode);
 			}
+			
+			if (code < 0 || code > 255) return;
 			
 			// update the keystate
 			if (!_key[code])
@@ -245,6 +252,9 @@
 		{
 			// get the keycode and update the keystate
 			var code:int = e.keyCode;
+			
+			if (code < 0 || code > 255) return;
+			
 			if (_key[code])
 			{
 				_key[code] = false;

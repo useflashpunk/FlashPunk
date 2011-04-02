@@ -1,4 +1,4 @@
-﻿package net.flashpunk
+﻿package flashpunk
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -12,8 +12,8 @@
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	import flash.utils.Timer;
-	import net.flashpunk.utils.Draw;
-	import net.flashpunk.utils.Input;
+	import flashpunk.utils.Draw;
+	import flashpunk.utils.Input;
 	
 	/**
 	 * Main game Sprite class, added to the Flash Stage. Manages the game loop.
@@ -52,6 +52,8 @@
 			// global game properties
 			FP.width = width;
 			FP.height = height;
+			FP.halfWidth = width/2;
+			FP.halfHeight = height/2;
 			FP.assignedFrameRate = frameRate;
 			FP.fixed = fixed;
 			
@@ -83,8 +85,10 @@
 		 */
 		public function update():void
 		{
+			if (FP.tweener.active && FP.tweener._tween) FP.tweener.updateTweens();
 			if (FP._world.active)
 			{
+				Tween.update();
 				if (FP._world._tween) FP._world.updateTweens();
 				FP._world.update();
 			}
@@ -102,11 +106,9 @@
 			if (!_frameLast) _frameLast = t;
 			
 			// render loop
-			FP.screen.swap();
 			Draw.resetTarget();
 			FP.screen.refresh();
 			if (FP._world.visible) FP._world.render();
-			FP.screen.redraw();
 			
 			// more timing stuff
 			t = getTimer();
@@ -114,6 +116,22 @@
 			if (_frameList.length > 10) _frameListSum -= _frameList.shift();
 			FP.frameRate = 1000 / (_frameListSum / _frameList.length);
 			_frameLast = t;
+		}
+		
+		/**
+		 * Override this; called when game gains focus.
+		 */
+		public function focusGained():void
+		{
+			
+		}
+		
+		/**
+		 * Override this; called when game loses focus.
+		 */
+		public function focusLost():void
+		{
+			
 		}
 		
 		/**
@@ -133,6 +151,10 @@
 		{
 			// remove event listener
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
+			
+			// add focus change listeners
+			stage.addEventListener(Event.ACTIVATE, onActivate);
+			stage.addEventListener(Event.DEACTIVATE, onDeactivate);
 			
 			// set stage properties
 			FP.stage = stage;
@@ -266,6 +288,20 @@
 			FP._world.updateLists();
 			FP._world.begin();
 			FP._world.updateLists();
+		}
+		
+		private function onActivate (e:Event):void
+		{
+			FP.focused = true;
+			focusGained();
+			FP.world.focusGained();
+		}
+		
+		private function onDeactivate (e:Event):void
+		{
+			FP.focused = false;
+			focusLost();
+			FP.world.focusLost();
 		}
 		
 		// Timing information.

@@ -1,18 +1,25 @@
-package net.flashpunk
+package flashpunk
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.getQualifiedClassName;
+	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
-	import net.flashpunk.masks.*;
-	import net.flashpunk.graphics.*;
+	import flash.utils.getQualifiedClassName;
+	
+	import flashpunk.graphics.*;
+	import flashpunk.masks.*;
 	
 	/**
 	 * Main game Entity class updated by World.
 	 */
 	public class Entity extends Tweener
 	{
+		/**
+		 * If the Entity should be rolled back.
+		 */
+		public var changed:Boolean;
+		
 		/**
 		 * If the Entity should render.
 		 */
@@ -100,6 +107,30 @@ package net.flashpunk
 		}
 		
 		/**
+		 * Updates the Entity.
+		 */
+		public function updatePosition():void 
+		{
+			
+		}
+		
+		/**
+		 * Updates the Entity.
+		 */
+		public function updateCollisions():void 
+		{
+			
+		}
+		
+		/**
+		 * Updates the Entity.
+		 */
+		public function updateFinish():void 
+		{
+			
+		}
+		
+		/**
 		 * Renders the Entity. If you override this for special behaviour,
 		 * remember to call super.render() to render the Entity's graphic.
 		 */
@@ -128,9 +159,17 @@ package net.flashpunk
 		 */
 		public function collide(type:String, x:Number, y:Number):Entity
 		{
-			if (!_world) return null;
+			if (!_world && !_group) return null;
 			
-			var e:Entity = _world._typeFirst[type];
+			var e:Entity;
+			if(_world)
+			{
+				e = _world._typeFirst[type];
+			}
+			else
+			{
+				e = _group._typeFirst[type];
+			}
 			if (!collidable || !e) return null;
 			
 			_x = this.x; _y = this.y;
@@ -187,7 +226,7 @@ package net.flashpunk
 		 */
 		public function collideTypes(types:Object, x:Number, y:Number):Entity
 		{
-			if (!_world) return null;
+			if (!_world && !_group) return null;
 			var e:Entity;
 			for each (var type:String in types)
 			{
@@ -308,9 +347,17 @@ package net.flashpunk
 		 */
 		public function collideInto(type:String, x:Number, y:Number, array:Object):void
 		{
-			if (!_world) return;
+			if (!_world && !_group) return;
 			
-			var e:Entity = _world._typeFirst[type];
+			var e:Entity;
+			if(_world)
+			{
+				e = _world._typeFirst[type];
+			}
+			else
+			{
+				e = _group._typeFirst[type];
+			}
 			if (!collidable || !e) return;
 			
 			_x = this.x; _y = this.y;
@@ -361,7 +408,7 @@ package net.flashpunk
 		 */
 		public function collideTypesInto(types:Object, x:Number, y:Number, array:Object):void
 		{
-			if (!_world) return;
+			if (!_world && !_group) return;
 			for each (var type:String in types) collideInto(type, x, y, array);
 		}
 		
@@ -379,6 +426,14 @@ package net.flashpunk
 		public function get world():World
 		{
 			return _world;
+		}
+		
+		/**
+		 * The Group object this Entity has been added to.
+		 */
+		public function get group():Group
+		{
+			return _group;
 		}
 		
 		/**
@@ -428,14 +483,16 @@ package net.flashpunk
 		public function set layer(value:int):void
 		{
 			if (_layer == value) return;
-			if (!_added)
+			if (!_world && !_group)
 			{
 				_layer = value;
 				return;
 			}
-			_world.removeRender(this);
+			if(_world) _world.removeRender(this);
+			else _group.removeRender(this);
 			_layer = value;
-			_world.addRender(this);
+			if(_world) _world.addRender(this);
+			else _group.addRender(this);
 		}
 		
 		/**
@@ -445,14 +502,22 @@ package net.flashpunk
 		public function set type(value:String):void
 		{
 			if (_type == value) return;
-			if (!_added)
+			if (!_world && !_group)
 			{
 				_type = value;
 				return;
 			}
-			if (_type) _world.removeType(this);
+			if (_type)
+			{
+				if(_world) _world.removeType(this);
+				else _group.removeType(this);
+			}
 			_type = value;
-			if (value) _world.addType(this);
+			if (value)
+			{
+				if(_world) _world.addType(this);
+				else _group.addType(this);
+			}
 		}
 		
 		/**
@@ -490,6 +555,7 @@ package net.flashpunk
 			{
 				var list:Graphiclist = new Graphiclist;
 				if (graphic) list.add(graphic);
+				list.add(g);
 				graphic = list;
 			}
 			return g;
@@ -623,14 +689,11 @@ package net.flashpunk
 						{
 							if ((e = collide(solidType, this.x + sign, this.y)))
 							{
-								moveCollideX(e);
-								break;
+								if (moveCollideX(e)) break;
+								else this.x += sign;
 							}
-							else
-							{
-								this.x += sign;
-								x -= sign;
-							}
+							else this.x += sign;
+							x -= sign;
 						}
 					}
 					else this.x += x;
@@ -644,14 +707,11 @@ package net.flashpunk
 						{
 							if ((e = collide(solidType, this.x, this.y + sign)))
 							{
-								moveCollideY(e);
-								break;
+								if (moveCollideY(e)) break;
+								else this.y += sign;
 							}
-							else
-							{
-								this.y += sign;
-								y -= sign;
-							}
+							else this.y += sign;
+							y -= sign;
 						}
 					}
 					else this.y += y;
@@ -696,18 +756,18 @@ package net.flashpunk
 		 * When you collide with an Entity on the x-axis with moveTo() or moveBy().
 		 * @param	e		The Entity you collided with.
 		 */
-		public function moveCollideX(e:Entity):void
+		public function moveCollideX(e:Entity):Boolean
 		{
-			
+			return true;
 		}
 		
 		/**
 		 * When you collide with an Entity on the y-axis with moveTo() or moveBy().
 		 * @param	e		The Entity you collided with.
 		 */
-		public function moveCollideY(e:Entity):void
+		public function moveCollideY(e:Entity):Boolean
 		{
-			
+			return true;
 		}
 		
 		/**
@@ -734,11 +794,43 @@ package net.flashpunk
 			if (y - originY + height > bottom - padding) y = bottom - height + originY - padding;
 		}
 		
+		/**
+		 * The Entity's instance name. Use this to uniquely identify single
+		 * game Entities, which can then be looked-up with World.getInstance().
+		 */
+		public function get name():String { return _name; }
+		public function set name(value:String):void
+		{
+			if (_world) _world.registerName(this);
+			else _group.registerName(this);
+			_name = value;
+		}
+		
+		/**
+		 * Rolls back primitive values of current Entity to oldEntity
+		 * @param	oldEntity	entity to be rolled back to
+		 */
+		public function rollback(oldEntity:Entity):void {
+			
+		}
+		
+		/**
+		 * Prints out the primitive values that are to be rolled back
+		 * For debugging purposes
+		 * @return printout
+		 */
+		public function print():String {
+			return "";
+		}
+		
 		// Entity information.
+		/** @private */ internal var _created:Boolean; //to determine if should add to the master list
+		/** @private */ internal var _next:Entity; //master list
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
-		/** @private */ internal var _added:Boolean;
+		/** @private */ internal var _group:Group;
 		/** @private */ internal var _type:String = "";
+		/** @private */ internal var _name:String = "";
 		/** @private */ internal var _layer:int;
 		/** @private */ internal var _updatePrev:Entity;
 		/** @private */ internal var _updateNext:Entity;
@@ -746,6 +838,7 @@ package net.flashpunk
 		/** @private */ internal var _renderNext:Entity;
 		/** @private */ internal var _typePrev:Entity;
 		/** @private */ internal var _typeNext:Entity;
+		/** @private */ internal var _recyclePrev:Entity;
 		/** @private */ internal var _recycleNext:Entity;
 		
 		// Collision information.

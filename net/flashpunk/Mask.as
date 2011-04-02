@@ -1,10 +1,10 @@
-﻿package net.flashpunk
+﻿package flashpunk
 {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
-	import net.flashpunk.masks.Hitbox;
-	import net.flashpunk.masks.Masklist;
+	import flashpunk.masks.Hitbox;
+	import flashpunk.masks.Masklist;
 	
 	/**
 	 * Base class for Entity collision masks.
@@ -59,10 +59,10 @@
 		}
 		
 		/** @private Assigns the mask to the parent. */
-		internal function assignTo(parent:Entity):void
+		public function assignTo(parent:Entity):void
 		{
 			this.parent = parent;
-			if (parent) update();
+			if (!list && parent) update();
 		}
 		
 		/** @private Updates the parent's bounds for this mask. */

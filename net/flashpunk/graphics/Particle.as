@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;

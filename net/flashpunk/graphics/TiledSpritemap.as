@@ -1,8 +1,8 @@
-package net.flashpunk.graphics 
+package flashpunk.graphics 
 {
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
-	import net.flashpunk.FP;
+	import flashpunk.FP;
 	
 	/**
 	 * Special Spritemap object that can display blocks of animated sprites.

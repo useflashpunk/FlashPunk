@@ -1,4 +1,4 @@
-﻿package net.flashpunk 
+﻿package flashpunk 
 {
 	import flash.events.Event;
 	import flash.media.Sound;
@@ -19,13 +19,17 @@
 		/**
 		 * Creates a sound effect from an embedded source. Store a reference to
 		 * this object so that you can play the sound using play() or loop().
-		 * @param	source		The embedded sound class to use.
+		 * @param	source		The embedded sound class to use or a Sound object.
 		 * @param	complete	Optional callback function for when the sound finishes playing.
 		 */
-		public function Sfx(source:Class, complete:Function = null) 
+		public function Sfx(source:*, complete:Function = null) 
 		{
-			_sound = _sounds[source];
-			if (!_sound) _sound = _sounds[source] = new source;
+			if (source is Class) {
+				_sound = _sounds[source];
+				if (!_sound) _sound = _sounds[source] = new source;
+			}
+			else if (source is Sound) _sound = source;
+			else throw new Error("Sfx source needs to be of type Class or Sound");
 			this.complete = complete;
 		}
 		

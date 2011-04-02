@@ -1,6 +1,6 @@
-﻿package net.flashpunk.tweens.misc
+﻿package flashpunk.tweens.misc
 {
-	import net.flashpunk.Tween;
+	import flashpunk.Tween;
 	
 	/**
 	 * Tweens a numeric public property of an Object.
@@ -36,6 +36,7 @@
 			_start = _object[property];
 			_range = to - _start;
 			_target = duration;
+			_ease = ease;
 			start();
 		}
 		

@@ -1,4 +1,4 @@
-﻿package net.flashpunk.utils 
+﻿package flashpunk.utils 
 {
 	/**
 	 * Contains static key constants to be used by Input.
@@ -82,7 +82,7 @@
 		public static const DIGIT_7:int = 55;
 		public static const DIGIT_8:int = 56;
 		public static const DIGIT_9:int = 57;
-		
+
 		public static const NUMPAD_0:int = 96;
 		public static const NUMPAD_1:int = 97;
 		public static const NUMPAD_2:int = 98;

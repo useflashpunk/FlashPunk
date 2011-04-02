@@ -1,4 +1,4 @@
-﻿package net.flashpunk.utils 
+﻿package flashpunk.utils 
 {
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
@@ -6,9 +6,9 @@
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import net.flashpunk.Entity;
-	import net.flashpunk.FP;
-	import net.flashpunk.Graphic;
+	import flashpunk.Entity;
+	import flashpunk.FP;
+	import flashpunk.Graphic;
 	
 	/**
 	 * Static class with access to miscellanious drawing functions.
@@ -55,9 +55,9 @@
 		 * @param	y2		Ending y position.
 		 * @param	color	Color of the line.
 		 */
-		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF):void
+		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF, alpha:Number = 1.0):void
 		{
-			if (color < 0xFF000000) color = 0xFF000000 | color;
+			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
 			
 			var sc:Number = FP.world.scale;
 			x1 *= sc;
@@ -161,7 +161,7 @@
 		 * @param	alpha	Alpha of the line.
 		 * @param	thick	The thickness of the line.
 		 */
-		public static function linePlus(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
+		public static function linePlus(x1:Number, y1:Number, x2:Number, y2:Number, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
 			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NONE);
@@ -179,7 +179,7 @@
 		 * @param	color		Color of the rectangle.
 		 * @param	alpha		Alpha of the rectangle.
 		 */
-		public static function rect(x:int, y:int, width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1):void
+		public static function rect(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1):void
 		{
 			var sc:Number = FP.world.scale;
 			
@@ -255,7 +255,7 @@
 		 * @param	fill		If the circle should be filled with the color (true) or just an outline (false).
 		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 */
-		public static function circlePlus(x:int, y:int, radius:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:int = 1):void
+		public static function circlePlus(x:Number, y:Number, radius:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):void
 		{
 			_graphics.clear();
 			if (fill)
@@ -330,10 +330,10 @@
 		 * @param	color	Color of the curve
 		 * @param	alpha	Alpha transparency.
 		 */
-		public static function curve(x1:int, y1:int, x2:int, y2:int, x3:int, y3:int, thick:Number = 1, color:uint = 0, alpha:Number = 1):void
+		public static function curve(x1:Number, y1:Number, x2:Number, y2:Number, x3:Number, y3:Number, color:uint = 0, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
-			_graphics.lineStyle(thick, color, alpha);
+			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
 			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
 			_graphics.curveTo(x2 - _camera.x, y2 - _camera.y, x3 - _camera.x, y3 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);

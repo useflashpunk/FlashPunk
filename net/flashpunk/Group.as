@@ -1,129 +1,82 @@
-﻿package flashpunk
+package flashpunk
 {
-	import entities.Bender;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	import flashpunk.utils.Input;
-	
+
 	/**
-	 * Updated by Engine, main game container that holds all currently active Entities.
-	 * Useful for organization, eg. "Menu", "Level1", etc.
-	 */
-	public class World extends Tweener
+	 * Group is an special type of entity able to have other entities (included other groups) as children.
+	 * They're unable to collide with anything.
+	 * If they have a graphic, the graphic is rendered before the children, acting as a background.
+	 * 
+	 * @author Rolpege
+	 */	
+	public class Group extends Entity
 	{
 		/**
-		 * If the render() loop is performed.
-		 */
-		public var visible:Boolean = true;
-		
-		/**
-		 * Point used to determine drawing offset in the render loop.
-		 */
-		public var camera:Point = new Point;
-		
-		/**
-		 * Multiplier used to globally-scale bitmap drawing operations
-		 */
-		public var scale:Number = 1;
-		
-		/**
-		 * Constructor.
-		 */
-		public function World() 
+		 * Constructor. 
+		 * 
+		 * @param x				X position to place the Group
+		 * @param y				Y position to place the Group
+		 * @param children		Entities objects to add to the group
+		 */		
+		public function Group(x:Number=0, y:Number=0, ...children)
 		{
+			super(x, y);
 			
-		}
-		
-		/**
-		 * Override this; called when World is switch to, and set to the currently active world.
-		 */
-		public function begin():void
-		{
+			for each(var c:Entity in children) add(c);
 			
+			collidable = false;
 		}
 		
 		/**
-		 * Override this; called when World is changed, and the active world is no longer this.
-		 */
-		public function end():void
+		 *  Updates the group and its children, and then updates lists.
+		 * 
+		 * @see #updateChildren()
+		 */		
+		override public function update():void
 		{
-			removeAll();
+			updateLists();
+			updateChildren();
 		}
-		
+	
 		/**
-		 * Performed by the game loop, updates all contained Entities.
-		 * If you override this to give your World update code, remember
-		 * to call super.update() or your Entities will not be updated.
-		 */
-		override public function update():void 
+		 * Updates the children of the group. 
+		 */		
+		public function updateChildren():void
 		{
-			// update the entities
 			var e:Entity = _updateFirst;
-			while (e)
+			while(e)
 			{
-				if (e.active)
+				if(e.active)
 				{
-					if (e._tween) e.updateTweens();
+					if(e._tween) e.updateTweens();
 					e.update();
 				}
-				if (e._graphic && e._graphic.active) e._graphic.update();
+				
+				if(e._graphic && e._graphic.active) e._graphic.update();
 				e = e._updateNext;
 			}
 		}
 		
 		/**
-		 * Performed by the game loop, updates all contained Entities.
-		 * If you override this to give your World update code, remember
-		 * to call super.updateByPart() or your Entities will not be updated.
-		 */
-		public function updateByPart():void 
+		 * Renders the group graphic and then its children.
+		 * 
+		 * @see #renderChildren()
+		 */		
+		override public function render():void
 		{
-			// update the position, tween, and graphics of entities
-			var e:Entity = _updateFirst;
-			while (e)
-			{
-				if (e.active)
-				{
-					if (e._tween) e.updateTweens();
-					e.updatePosition();
-				}
-				if (e._graphic && e._graphic.active) e._graphic.update();
-				e = e._updateNext;
-			}
+			super.render();
 			
-			//update the collisions of entities
-			e = _updateFirst;
-			while (e)
-			{
-				if (e.active)
-				{
-					e.updateCollisions();
-				}
-				e = e._updateNext;
-			}
-			
-			//finish the update of entities
-			e = _updateFirst;
-			while (e)
-			{
-				if (e.active)
-				{
-					e.updateFinish();
-				}
-				e = e._updateNext;
-			}
+			renderChildren();
 		}
 		
 		/**
-		 * Performed by the game loop, renders all contained Entities.
-		 * If you override this to give your World render code, remember
-		 * to call super.render() or your Entities will not be rendered.
+		 * Renders the children of the group. 
 		 */
-		public function render():void 
+		public function renderChildren():void
 		{
-			// render the entities in order of depth
 			var e:Entity,
-				i:int = _layerList.length;
+			i:int = _layerList.length;
 			while (i --)
 			{
 				e = _renderLast[_layerList[i]];
@@ -136,39 +89,7 @@
 		}
 		
 		/**
-		 * Override this; called when game gains focus.
-		 */
-		public function focusGained():void
-		{
-			
-		}
-		
-		/**
-		 * Override this; called when game loses focus.
-		 */
-		public function focusLost():void
-		{
-			
-		}
-		
-		/**
-		 * X position of the mouse in the World.
-		 */
-		public function get mouseX():int
-		{
-			return FP.screen.mouseX + FP.camera.x;
-		}
-		
-		/**
-		 * Y position of the mouse in the world.
-		 */
-		public function get mouseY():int
-		{
-			return FP.screen.mouseY + FP.camera.y;
-		}
-		
-		/**
-		 * Adds the Entity to the World at the end of the frame.
+		 * Adds the Entity to the Group at the end of the frame.
 		 * @param	e		Entity object you want to add.
 		 * @return	The added Entity object.
 		 */
@@ -179,7 +100,7 @@
 		}
 		
 		/**
-		 * Removes the Entity from the World at the end of the frame.
+		 * Removes the Entity from the Group at the end of the frame.
 		 * @param	e		Entity object you want to remove.
 		 * @return	The removed Entity object.
 		 */
@@ -190,7 +111,7 @@
 		}
 		
 		/**
-		 * Removes all Entities from the World at the end of the frame.
+		 * Removes all Entities from the Group at the end of the frame.
 		 */
 		public function removeAll():void
 		{
@@ -200,29 +121,10 @@
 				_remove[_remove.length] = e;
 				e = e._updateNext;
 			}
-			destroyMasterList();
 		}
 		
 		/**
-		 * Meant to be called on ending the world. Destroys the entire Master list.
-		 * Does not use updateLists because there's no need to -> done at the end of World
-		 */
-		public function destroyMasterList():void
-		{
-			var e:Entity = _firstEntity,
-				n:Entity = null;
-			while (e)
-			{
-				n = e._next;
-				e._next = null;
-				e._world = null;
-				e.removed();
-				e = n;
-			}
-		}
-		
-		/**
-		 * Adds multiple Entities to the world.
+		 * Adds multiple Entities to the group.
 		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function addList(...list):void
@@ -237,7 +139,7 @@
 		}
 		
 		/**
-		 * Removes multiple Entities from the world.
+		 * Removes multiple Entities from the group.
 		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function removeList(...list):void
@@ -252,14 +154,14 @@
 		}
 		
 		/**
-		 * Adds an Entity to the World with the Graphic object.
+		 * Adds an Entity to the Group with the Graphic object.
 		 * @param	graphic		Graphic to assign the Entity.
 		 * @param	x			X position of the Entity.
 		 * @param	y			Y position of the Entity.
 		 * @param	layer		Layer of the Entity.
 		 * @return	The Entity that was added.
 		 */
-		public function addGraphic(graphic:Graphic, layer:int = 0, x:int = 0, y:int = 0):Entity
+		public function addEntityGraphic(graphic:Graphic, layer:int = 0, x:int = 0, y:int = 0):Entity
 		{
 			var e:Entity = new Entity(x, y, graphic);
 			if (layer != 0) e.layer = layer;
@@ -268,7 +170,7 @@
 		}
 		
 		/**
-		 * Adds an Entity to the World with the Mask object.
+		 * Adds an Entity to the Group with the Mask object.
 		 * @param	mask	Mask to assign the Entity.
 		 * @param	type	Collision type of the Entity.
 		 * @param	x		X position of the Entity.
@@ -284,100 +186,13 @@
 		}
 		
 		/**
-		 * Returns a new Entity, or a stored recycled Entity if one exists.
-		 * @param	classType		The Class of the Entity you want to add.
-		 * @param	addToWorld		Add it to the World immediately.
-		 * @return	The new Entity object.
-		 */
-		public function create(classType:Class, addToWorld:Boolean = true):Entity
-		{
-			var e:Entity = _recycled[classType];
-			if (e)
-			{
-				if(e._recycleNext)
-					(e._recycleNext)._recyclePrev = null;
-				_recycled[classType] = e._recycleNext;
-				e._recycleNext = null;
-			}
-			else e = new classType;
-			if (addToWorld) return add(e);
-			return e;
-		}
-		
-		/**
-		 * Removes the Entity from the World at the end of the frame and recycles it.
-		 * The recycled Entity can then be fetched again by calling the create() function.
-		 * @param	e		The Entity to recycle.
-		 * @return	The recycled Entity.
-		 */
-		public function recycle(e:Entity):Entity
-		{
-			_recycle[_recycle.length] = e;
-			return remove(e);
-		}
-		
-		/**
-		 * Returns the unrecycled Entity.
-		 * @param	e				The Entity to unrecycle.
-		 * @param	addToWorld		Add it to the World immediately.
-		 * @return	The Entity object.
-		 */
-		public function unrecycle(e:Entity, addToWorld:Boolean = true):Entity
-		{
-			//connect the surrounding elements
-			if(e._recycleNext)
-				(e._recycleNext)._recyclePrev = e._recyclePrev;
-			if(e._recyclePrev)
-				(e._recyclePrev)._recycleNext = e._recycleNext;
-			
-			//move head
-			if (e == _recycled[e._class])
-			{
-				_recycled[e._class] = e._recycleNext;
-			}
-			
-			//make connects null
-			e._recyclePrev = null;
-			e._recycleNext = null;
-			
-			if (addToWorld) return add(e);
-				return e;
-		}
-		
-		/**
-		 * Clears stored reycled Entities of the Class type.
-		 * @param	classType		The Class type to clear.
-		 */
-		public static function clearRecycled(classType:Class):void
-		{
-			var e:Entity = _recycled[classType],
-				n:Entity;
-			while (e)
-			{
-				n = e._recycleNext;
-				e._recycleNext = null;
-				e._recyclePrev = null;
-				e = n;
-			}
-			delete _recycled[classType];
-		}
-		
-		/**
-		 * Clears stored recycled Entities of all Class types.
-		 */
-		public static function clearRecycledAll():void
-		{
-			for (var classType:Object in _recycled) clearRecycled(classType as Class);
-		}
-		
-		/**
 		 * Brings the Entity to the front of its contained layer.
 		 * @param	e		The Entity to shift.
 		 * @return	If the Entity changed position.
 		 */
 		public function bringToFront(e:Entity):Boolean
 		{
-			if (e._world !== this || !e._renderPrev) return false;
+			if (e._group !== this || !e._renderPrev) return false;
 			// pull from list
 			e._renderPrev._renderNext = e._renderNext;
 			if (e._renderNext) e._renderNext._renderPrev = e._renderPrev;
@@ -397,7 +212,7 @@
 		 */
 		public function sendToBack(e:Entity):Boolean
 		{
-			if (e._world !== this || !e._renderNext) return false;
+			if (e._group !== this || !e._renderNext) return false;
 			// pull from list
 			e._renderNext._renderPrev = e._renderPrev;
 			if (e._renderPrev) e._renderPrev._renderNext = e._renderNext;
@@ -417,7 +232,7 @@
 		 */
 		public function bringForward(e:Entity):Boolean
 		{
-			if (e._world !== this || !e._renderPrev) return false;
+			if (e._group !== this || !e._renderPrev) return false;
 			// pull from list
 			e._renderPrev._renderNext = e._renderNext;
 			if (e._renderNext) e._renderNext._renderPrev = e._renderPrev;
@@ -438,7 +253,7 @@
 		 */
 		public function sendBackward(e:Entity):Boolean
 		{
-			if (e._world !== this || !e._renderNext) return false;
+			if (e._group !== this || !e._renderNext) return false;
 			// pull from list
 			e._renderNext._renderPrev = e._renderPrev;
 			if (e._renderPrev) e._renderPrev._renderNext = e._renderNext;
@@ -481,7 +296,7 @@
 		 * @param	rHeight		Height of the rectangle.
 		 * @return	The first Entity to collide, or null if none collide.
 		 */
-		public function collideRect(type:String, rX:Number, rY:Number, rWidth:Number, rHeight:Number):Entity
+		public function groupCollideRect(type:String, rX:Number, rY:Number, rWidth:Number, rHeight:Number):Entity
 		{
 			var e:Entity = _typeFirst[type];
 			while (e)
@@ -491,7 +306,7 @@
 			}
 			return null;
 		}
-
+		
 		/**
 		 * Returns the first Entity found that collides with the position.
 		 * @param	type		The Entity type to check for.
@@ -499,7 +314,7 @@
 		 * @param	pY			Y position.
 		 * @return	The collided Entity, or null if none collide.
 		 */
-		public function collidePoint(type:String, pX:Number, pY:Number):Entity
+		public function groupCollidePoint(type:String, pX:Number, pY:Number):Entity
 		{
 			var e:Entity = _typeFirst[type];
 			while (e)
@@ -507,32 +322,6 @@
 				if (e.collidePoint(e.x, e.y, pX, pY)) return e;
 				e = e._typeNext;
 			}
-			return null;
-		}
-		
-		/**
-		 * Returns the Entity at front which collides with the point.
-		 * @param	x		X position
-		 * @param	y		Y position
-		 * @return The Entity at front which collides with the point, or null if not found.
-		 */
-		public function frontCollidePoint(x:Number, y:Number):Entity
-		{
-			var e:Entity,
-			i:int = 0,
-			l:int = _layerList.length;
-			do
-			{
-				e = _renderFirst[_layerList[i]];
-				while (e)
-				{
-					if(e.collidePoint(e.x, e.y, x, y)) return e;
-					e = e._renderNext
-				}
-				if(i > l) break;
-			}
-			while(++i);
-			
 			return null;
 		}
 		
@@ -558,11 +347,11 @@
 					if (fromX == toX && fromY == toY)
 					{
 						p.x = toX; p.y = toY;
-						return collidePoint(type, toX, toY);
+						return groupCollidePoint(type, toX, toY);
 					}
 					return collideLine(type, fromX, fromY, toX, toY, 1, p);
 				}
-				else return collidePoint(type, fromX, toY);
+				else return groupCollidePoint(type, fromX, toY);
 			}
 			
 			// Get information about the line we're about to raycast.
@@ -580,7 +369,7 @@
 				{
 					while (x < toX)
 					{
-						if ((e = collidePoint(type, x, y)))
+						if ((e = groupCollidePoint(type, x, y)))
 						{
 							if (!p) return e;
 							if (precision < 2)
@@ -597,7 +386,7 @@
 				{
 					while (x > toX)
 					{
-						if ((e = collidePoint(type, x, y)))
+						if ((e = groupCollidePoint(type, x, y)))
 						{
 							if (!p) return e;
 							if (precision < 2)
@@ -618,7 +407,7 @@
 				{
 					while (y < toY)
 					{
-						if ((e = collidePoint(type, x, y)))
+						if ((e = groupCollidePoint(type, x, y)))
 						{
 							if (!p) return e;
 							if (precision < 2)
@@ -635,7 +424,7 @@
 				{
 					while (y > toY)
 					{
-						if ((e = collidePoint(type, x, y)))
+						if ((e = groupCollidePoint(type, x, y)))
 						{
 							if (!p) return e;
 							if (precision < 2)
@@ -653,8 +442,8 @@
 			// Check the last position.
 			if (precision > 1)
 			{
-				if (!p) return collidePoint(type, toX, toY);
-				if (collidePoint(type, toX, toY)) return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
+				if (!p) return groupCollidePoint(type, toX, toY);
+				if (groupCollidePoint(type, toX, toY)) return collideLine(type, x - xSign, y - ySign, toX, toY, 1, p);
 			}
 			
 			// No collision, return the end point.
@@ -769,33 +558,6 @@
 		}
 		
 		/**
-		 * Finds the Entity nearest to another, satisfying a condition.
-		 * @param	type		The Entity to check for.
-		 * @param	e			The Entity to find the nearest to.
-		 * @param	condition	A function to be invoked on each compared Entity
-		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected.
-		 * @return	The nearest Entity to e satisfying the condition.
-		 */
-		public function nearestToEntitySatisfyingCondition(type:String, e:Entity, fn:Function):Entity {
-			var n:Entity = _typeFirst[type],
-				nearDist:Number = Number.MAX_VALUE,
-				near:Entity, dist:Number,
-				x:Number = e.x - e.originX,
-				y:Number = e.y - e.originY;
-			while (n) {
-				if (fn(n)) {
-					dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
-					if (dist < nearDist) {
-						nearDist = dist;
-						near = n;
-					}
-				}
-				n = n._typeNext;
-			}
-			return near;
-		}
-		
-		/**
 		 * Finds the Entity nearest to the position.
 		 * @param	type		The Entity type to check for.
 		 * @param	x			X position.
@@ -836,14 +598,14 @@
 		}
 		
 		/**
-		 * How many Entities are in the World.
+		 * How many Entities are in the group.
 		 */
 		public function get count():uint { return _count; }
 		
 		/**
-		 * Returns the amount of Entities of the type are in the World.
+		 * Returns the amount of Entities of the type are in the group.
 		 * @param	type		The type (or Class type) to count.
-		 * @return	How many Entities of type exist in the World.
+		 * @return	How many Entities of type exist in the group.
 		 */
 		public function typeCount(type:String):uint
 		{
@@ -851,9 +613,9 @@
 		}
 		
 		/**
-		 * Returns the amount of Entities of the Class are in the World.
+		 * Returns the amount of Entities of the Class are in the group.
 		 * @param	c		The Class type to count.
-		 * @return	How many Entities of Class exist in the World.
+		 * @return	How many Entities of Class exist in the group.
 		 */
 		public function classCount(c:Class):uint
 		{
@@ -861,7 +623,7 @@
 		}
 		
 		/**
-		 * Returns the amount of Entities are on the layer in the World.
+		 * Returns the amount of Entities are on the layer in the group.
 		 * @param	layer		The layer to count Entities on.
 		 * @return	How many Entities are on the layer.
 		 */
@@ -871,12 +633,12 @@
 		}
 		
 		/**
-		 * The first Entity in the World.
+		 * The first Entity in the group.
 		 */
 		public function get first():Entity { return _updateFirst; }
 		
 		/**
-		 * How many Entity layers the World has.
+		 * How many Entity layers the group has.
 		 */
 		public function get layers():uint { return _layerList.length; }
 		
@@ -931,7 +693,7 @@
 		}
 		
 		/**
-		 * The Entity that will be rendered first by the World.
+		 * The Entity that will be rendered first by the group.
 		 */
 		public function get farthest():Entity
 		{
@@ -940,7 +702,7 @@
 		}
 		
 		/**
-		 * The Entity that will be rendered last by the world.
+		 * The Entity that will be rendered last by the group.
 		 */
 		public function get nearest():Entity
 		{
@@ -949,7 +711,7 @@
 		}
 		
 		/**
-		 * The layer that will be rendered first by the World.
+		 * The layer that will be rendered first by the group.
 		 */
 		public function get layerFarthest():int
 		{
@@ -958,7 +720,7 @@
 		}
 		
 		/**
-		 * The layer that will be rendered last by the World.
+		 * The layer that will be rendered last by the group.
 		 */
 		public function get layerNearest():int
 		{
@@ -967,7 +729,7 @@
 		}
 		
 		/**
-		 * How many different types have been added to the World.
+		 * How many different types have been added to the group.
 		 */
 		public function get uniqueTypes():uint
 		{
@@ -977,7 +739,7 @@
 		}
 		
 		/**
-		 * Pushes all Entities in the World of the type into the Array or Vector.
+		 * Pushes all Entities in the group of the type into the Array or Vector.
 		 * @param	type		The type to check.
 		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
@@ -997,7 +759,7 @@
 		}
 		
 		/**
-		 * Pushes all Entities in the World of the Class into the Array or Vector.
+		 * Pushes all Entities in the group of the Class into the Array or Vector.
 		 * @param	c			The Class type to check.
 		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
@@ -1017,7 +779,7 @@
 		}
 		
 		/**
-		 * Pushes all Entities in the World on the layer into the Array or Vector.
+		 * Pushes all Entities in the group on the layer into the Array or Vector.
 		 * @param	layer		The layer to check.
 		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
@@ -1037,7 +799,7 @@
 		}
 		
 		/**
-		 * Pushes all Entities in the World into the array.
+		 * Pushes all Entities in the group into the array.
 		 * @param	into		The Array or Vector to populate.
 		 * @return	The same array, populated.
 		 */
@@ -1058,7 +820,7 @@
 		/**
 		 * Returns the Entity with the instance name, or null if none exists.
 		 * @param	name	Instance name of the Entity.
-		 * @return	An Entity in this world.
+		 * @return	An Entity in this group.
 		 */
 		public function getInstance(name:String):*
 		{
@@ -1068,7 +830,7 @@
 				{
 					if (_entityNames[i] == name)
 					{
-						if (i._world == this) return i;
+						if (i._group == this) return i;
 						else delete _entityNames[i];
 					}
 				}
@@ -1088,18 +850,18 @@
 			{
 				for each (e in _remove)
 				{
-					if (!e._world)
+					if (!e._group)
 					{
 						if(_add.indexOf(e) >= 0)
 							_add.splice(_add.indexOf(e), 1);
 						
 						continue;
 					}
-					if (e._world !== this)
+					if (e._group !== this)
 						continue;
 					
 					e.removed();
-					e._world = null;
+					e._group = null;
 					
 					removeUpdate(e);
 					removeRender(e);
@@ -1115,47 +877,18 @@
 			{
 				for each (e in _add)
 				{
-					//add to master list
-					if (!e._created)
-					{
-						e._created = true;
-						addToMasterList(e);
-					}
-					
-					//add brand new Entity to recycled list
-					if (e._world)
-					{
-						e._world = null;
-						_recycle[_recycle.length] = e;
+					if (e._group)
 						continue;
-					}
 					
-					//add to update and render
 					addUpdate(e);
 					addRender(e);
 					if (e._type) addType(e);
 					if (e._name) registerName(e);
 					
-					e._world = this;
+					e._group = this;
 					e.added();
 				}
 				_add.length = 0;
-			}
-			
-			// recycle entities
-			if (_recycle.length)
-			{
-				for each (e in _recycle)
-				{
-					if (e._world || e._recycleNext)
-						continue;
-					
-					e._recycleNext = _recycled[e._class];
-					if(e._recycleNext)
-						(e._recycleNext)._recyclePrev = e;
-					_recycled[e._class] = e;
-				}
-				_recycle.length = 0;
 			}
 			
 			// sort the depth list
@@ -1166,79 +899,6 @@
 			}
 		}
 		
-		/**
-		 * Rolls back primitive values of current World's Entities to the old World's Entities
-		 * @param	w	World to be rolled back to
-		 */
-		public function rollback(w:World):void
-		{
-			//declare vars
-			var thisCurrentEntity:Entity = _firstEntity;
-			var oldCurrentEntity:Entity = w._firstEntity;
-			
-			//loop through all entities to be rolled back to
-			while (oldCurrentEntity)
-			{
-				//rollback
-				if (thisCurrentEntity.changed)
-				{
-					thisCurrentEntity.changed = false;
-					if (oldCurrentEntity._world && !thisCurrentEntity._world)
-					{
-						//unrecycle entity and rollback
-						unrecycle(thisCurrentEntity);
-						thisCurrentEntity.rollback(oldCurrentEntity);
-					}else if (!oldCurrentEntity._world && thisCurrentEntity._world)
-					{
-						//recycle entity
-						recycle(thisCurrentEntity);
-					}else
-					{
-						//just rollback
-						thisCurrentEntity.rollback(oldCurrentEntity);
-					}
-				}
-				
-				//increment
-				thisCurrentEntity = thisCurrentEntity._next;
-				oldCurrentEntity = oldCurrentEntity._next;
-			}
-			
-			//add new recycled entities to old world
-			while (thisCurrentEntity)
-			{
-				//add unrecycled
-				//hopefully works, needs testing
-				var e:Entity = new thisCurrentEntity._class;
-				e._world = w; //force it to be added as recycled
-				w.add(e);
-				e = null;
-				
-				//increment
-				thisCurrentEntity = thisCurrentEntity._next;
-			}
-			
-			//update lists
-			updateLists();
-			w.updateLists();
-		}
-		
-		/** @private Adds Entity to the master list. */
-		private function addToMasterList(e:Entity):void
-		{
-			// add to master list
-			if (_lastEntity) {
-				//not first entry into list
-				_lastEntity._next = e;
-				e._next = null;
-				_lastEntity = e;
-			}else {
-				//first entry
-				e._next = null;
-				_firstEntity = e;
-				_lastEntity = e;
-			}
-		}
 		
 		/** @private Adds Entity to the update list. */
 		private function addUpdate(e:Entity):void
@@ -1417,11 +1077,6 @@
 		// Adding and removal.
 		/** @private */	private var _add:Vector.<Entity> = new Vector.<Entity>;
 		/** @private */	private var _remove:Vector.<Entity> = new Vector.<Entity>;
-		/** @private */	private var _recycle:Vector.<Entity> = new Vector.<Entity>;
-		
-		// Rollback information.
-		/** @private */ private var _firstEntity:Entity;
-		/** @private */ private var _lastEntity:Entity;
 		
 		// Update information.
 		/** @private */	private var _updateFirst:Entity;

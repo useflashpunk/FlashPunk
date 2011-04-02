@@ -1,4 +1,4 @@
-package net.flashpunk.debug
+package flashpunk.debug
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -10,11 +10,13 @@ package net.flashpunk.debug
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import net.flashpunk.Entity;
-	import net.flashpunk.FP;
-	import net.flashpunk.utils.Draw;
-	import net.flashpunk.utils.Input;
-	import net.flashpunk.utils.Key;
+	import flash.system.System;
+	import flashpunk.Entity;
+	import flashpunk.FP;
+	import flashpunk.utils.Draw;
+	import flashpunk.utils.Input;
+	import flashpunk.utils.Key;
+	import flashpunk.graphics.Text;
 	
 	/**
 	 * FlashPunk debug console; can use to log information or pause the game and view/move Entities and step the frame.
@@ -137,7 +139,7 @@ package net.flashpunk.debug
 			// The FPS and frame timing panel.
 			_fpsRead.graphics.clear();
 			_fpsRead.graphics.beginFill(0, .75);
-			_fpsRead.graphics.drawRoundRectComplex(0, 0, big ? 200 : 100, 20, 0, 0, 0, 20);
+			_fpsRead.graphics.drawRoundRectComplex(0, 0, big ? 320 : 160, 20, 0, 0, 0, 20);
 			
 			// The frame timing text.
 			if (big) _sprite.addChild(_fpsInfo);
@@ -151,6 +153,15 @@ package net.flashpunk.debug
 			_fpsInfoText0.height = _fpsInfoText1.height = 20;
 			_fpsInfo.x = 75;
 			_fpsInfoText1.x = 60;
+			
+			// The memory usage
+			_fpsRead.addChild(_memReadText);
+			_memReadText.defaultTextFormat = format(16);
+			_memReadText.embedFonts = true;
+			_memReadText.width = 110;
+			_memReadText.height = 20;
+			_memReadText.x = _fpsInfo.x + _fpsInfo.width + 5;
+			_memReadText.y = 1;
 			
 			// The output log text.
 			_sprite.addChild(_logRead);
@@ -206,6 +217,9 @@ package net.flashpunk.debug
 			_butRead.graphics.clear();
 			_butRead.graphics.beginFill(0, .75);
 			_butRead.graphics.drawRoundRectComplex(-20, 0, 100, 20, 0, 0, 20, 20);
+			
+			// Default the display to debug view
+			debug = true;
 			
 			// Set the state to unpaused.
 			paused = false;
@@ -659,6 +673,7 @@ package net.flashpunk.debug
 				_fpsReadText.selectable = true;
 				_fpsInfoText0.selectable = true;
 				_fpsInfoText1.selectable = true;
+				_memReadText.selectable = true;
 				_entReadText.selectable = true;
 				_debReadText1.selectable = true;
 			}
@@ -682,6 +697,7 @@ package net.flashpunk.debug
 				_fpsReadText.selectable = false;
 				_fpsInfoText0.selectable = false;
 				_fpsInfoText1.selectable = false;
+				_memReadText.selectable = false;
 				_entReadText.selectable = false;
 				_debReadText0.selectable = false;
 				_debReadText1.selectable = false;
@@ -698,6 +714,7 @@ package net.flashpunk.debug
 			_fpsInfoText1.text =
 				"Game: " + String(FP._gameTime) + "ms\n" + 
 				"Flash: " + String(FP._flashTime) + "ms";
+			_memReadText.text = "MEM: " + Number(System.totalMemory/1024/1024).toFixed(2) + "MB";
 		}
 		
 		/** @private Update the debug panel text. */
@@ -812,7 +829,7 @@ package net.flashpunk.debug
 		
 		// Console display objects.
 		/** @private */ private var _sprite:Sprite = new Sprite;
-		/** @private */ private var _format:TextFormat = new TextFormat("console");
+		/** @private */ private var _format:TextFormat = new TextFormat("default");
 		/** @private */ private var _back:Bitmap = new Bitmap;
 		
 		// FPS panel information.
@@ -821,6 +838,7 @@ package net.flashpunk.debug
 		/** @private */ private var _fpsInfo:Sprite = new Sprite;
 		/** @private */ private var _fpsInfoText0:TextField = new TextField;
 		/** @private */ private var _fpsInfoText1:TextField = new TextField;
+		/** @private */ private var _memReadText:TextField = new TextField;
 		
 		// Output panel information.
 		/** @private */ private var _logRead:Sprite = new Sprite;
@@ -867,12 +885,14 @@ package net.flashpunk.debug
 		/** @private */ private const WATCH_LIST:Vector.<String> = Vector.<String>(["x", "y"]);
 		
 		// Embedded assets.
-		[Embed(source = '../graphics/04B_03__.TTF', embedAsCFF="false", fontFamily = 'console')] private const FONT_SMALL:Class;
 		[Embed(source = 'console_logo.png')] private const CONSOLE_LOGO:Class;
 		[Embed(source = 'console_debug.png')] private const CONSOLE_DEBUG:Class;
 		[Embed(source = 'console_output.png')] private const CONSOLE_OUTPUT:Class;
 		[Embed(source = 'console_play.png')] private const CONSOLE_PLAY:Class;
 		[Embed(source = 'console_pause.png')] private const CONSOLE_PAUSE:Class;
 		[Embed(source = 'console_step.png')] private const CONSOLE_STEP:Class;
+		
+		// Reference the Text class so we can access its embedded font
+		private static var textRef:Text;
 	}
 }

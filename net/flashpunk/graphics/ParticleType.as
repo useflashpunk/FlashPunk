@@ -1,8 +1,8 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
-	import net.flashpunk.FP;
+	import flashpunk.FP;
 	
 	/**
 	 * Template used to define a particle type used by the Emitter class. Instead

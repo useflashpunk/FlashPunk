@@ -1,7 +1,7 @@
-﻿package net.flashpunk.tweens.misc 
+﻿package flashpunk.tweens.misc 
 {
-	import net.flashpunk.FP;
-	import net.flashpunk.Tween;
+	import flashpunk.FP;
+	import flashpunk.Tween;
 	
 	/**
 	 * Tweens from one angle to another.

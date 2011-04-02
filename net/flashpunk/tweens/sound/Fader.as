@@ -1,7 +1,7 @@
-﻿package net.flashpunk.tweens.sound 
+﻿package flashpunk.tweens.sound 
 {
-	import net.flashpunk.FP;
-	import net.flashpunk.Tween;
+	import flashpunk.FP;
+	import flashpunk.Tween;
 	
 	/**
 	 * Global volume fader.

@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+﻿package flashpunk.graphics 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -6,8 +6,8 @@
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-	import net.flashpunk.FP;
-	import net.flashpunk.Graphic;
+	import flashpunk.FP;
+	import flashpunk.Graphic;
 	
 	/**
 	 * Creates a pre-rotated Image strip to increase runtime performance for rotating graphics.

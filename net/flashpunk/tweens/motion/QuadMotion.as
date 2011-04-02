@@ -1,8 +1,8 @@
-﻿package net.flashpunk.tweens.motion 
+﻿package flashpunk.tweens.motion 
 {
 	import flash.geom.Point;
-	import net.flashpunk.FP;
-	import net.flashpunk.utils.Ease;
+	import flashpunk.FP;
+	import flashpunk.utils.Ease;
 	
 	/**
 	 * Determines motion along a quadratic curve.

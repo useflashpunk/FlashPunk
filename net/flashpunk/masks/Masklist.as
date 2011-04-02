@@ -1,7 +1,7 @@
-﻿package net.flashpunk.masks 
+﻿package flashpunk.masks 
 {
-	import net.flashpunk.*;
-	import net.flashpunk.masks.Masklist;
+	import flashpunk.*;
+	import flashpunk.masks.Masklist;
 	
 	/**
 	 * A Mask that can contain multiple Masks of one or various types.
@@ -49,6 +49,7 @@
 		{
 			_masks[_count ++] = mask;
 			mask.list = this;
+			mask.parent = parent;
 			update();
 			return mask;
 		}
@@ -67,6 +68,7 @@
 				if (m == mask)
 				{
 					mask.list = null;
+					mask.parent = null;
 					_count --;
 					update();
 				}
@@ -144,6 +146,16 @@
 			_width = r - l;
 			_height = b - t;
 			super.update();
+		}
+		
+		override public function assignTo(parent:Entity):void
+		{
+			for each(var m:Mask in _masks)
+			{
+				m.parent = parent;
+			}
+			
+			super.assignTo(parent);
 		}
 		
 		/**

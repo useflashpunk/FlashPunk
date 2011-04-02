@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.motion 
+﻿package flashpunk.tweens.motion 
 {
 	import flash.geom.Point;
 	
