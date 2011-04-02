@@ -8,10 +8,13 @@ MODIFICATIONS
 This branch includes modifications by myself as well as a number of other developers.
   - Tons of bug-fixes, performance improvents and new features from Draknek
       https://github.com/Draknek/FlashPunk
+
   - TiledSpriteMap bug-fix from lukaszbruun
       https://github.com/lukaszbruun/FlashPunk
+
   - Global recycle list from SelfPossessed
       https://github.com/SelfPossessed/FlashPunk
+
   - Per-world graphics scaling by duncanbeevers
 
 FEATURES
