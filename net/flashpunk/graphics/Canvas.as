@@ -258,7 +258,7 @@
 		public function get color():uint { return _color; }
 		public function set color(value:uint):void
 		{
-			value %= 0xFFFFFF;
+			value &= 0xFFFFFF;
 			if (_color == value) return;
 			_color = value;
 			if (_alpha == 1 && _color == 0xFFFFFF)

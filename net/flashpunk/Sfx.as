@@ -44,7 +44,7 @@
 			_vol = _transform.volume = vol < 0 ? 0 : vol;
 			_pan = _transform.pan = pan < -1 ? -1 : (pan > 1 ? 1 : pan);
 			_channel = _sound.play(0, 0, _transform);
-			_channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
+			if (_channel) _channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
 			_looping = false;
 			_position = 0;
 		}
@@ -80,7 +80,7 @@
 		public function resume():void
 		{
 			_channel = _sound.play(_position, 0, _transform);
-			_channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
+			if (_channel) _channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
 			_position = 0;
 		}
 		

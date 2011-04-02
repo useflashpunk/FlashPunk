@@ -24,7 +24,7 @@
 		public static var lastKey:int;
 		
 		/**
-		 * The mouse cursor. Set to null (the default) if you set Mouse.cursor directly in your code.
+		 * The mouse cursor. Set to "hide" to hide the cursor.
 		 */
 		public static var mouseCursor:String;
 		
@@ -207,7 +207,15 @@
 			if (mousePressed) mousePressed = false;
 			if (mouseReleased) mouseReleased = false;
 			
-			if (mouseCursor) Mouse.cursor = mouseCursor;
+			if (mouseCursor) {
+				if (mouseCursor == "hide") {
+					Mouse.hide();
+					Mouse.cursor = "auto";
+				} else {
+					Mouse.show();
+					Mouse.cursor = mouseCursor;
+				}
+			}
 		}
 		
 		/**
