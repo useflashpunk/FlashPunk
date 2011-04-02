@@ -3,6 +3,17 @@
 
 FlashPunk is a free ActionScript 3 library designed for developing 2D Flash games. It provides you with a fast, clean framework to prototype and develop your games in. This means that most of the dirty work (timestep, animation, input, and collision to name a few) is already coded for you and ready to go, giving you more time and energy to concentrate on the design and testing of your game.
 
+MODIFICATIONS
+=============
+This branch includes modifications by myself as well as a number of other developers.
+  - Tons of bug-fixes, performance improvents and new features from Draknek
+      https://github.com/Draknek/FlashPunk
+  - TiledSpriteMap bug-fix from lukaszbruun
+      https://github.com/lukaszbruun/FlashPunk
+  - Global recycle list from SelfPossessed
+      https://github.com/SelfPossessed/FlashPunk
+  - Per-world graphics scaling by duncanbeevers
+
 FEATURES
 ========
 
