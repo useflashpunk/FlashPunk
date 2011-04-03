@@ -99,7 +99,8 @@
 			_point.x = point.x + x - originX - camera.x * scrollX;
 			_point.y = point.y + y - originY - camera.y * scrollY;
 			
-			var sc:Number = scale * FP.world.scale;
+			var ws:Number = FP.world.scale, sc:Number = scale * ws;
+			
 			// render without transformation
 			if (angle == 0 && scaleX * sc == 1 && scaleY * sc == 1 && !blend)
 			{
@@ -114,8 +115,8 @@
 			_matrix.tx = -originX * _matrix.a;
 			_matrix.ty = -originY * _matrix.d;
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
-			_matrix.tx += originX + _point.x;
-			_matrix.ty += originY + _point.y;
+			_matrix.tx += (originX + _point.x) * ws;
+			_matrix.ty += (originY + _point.y) * ws;
 			_bitmap.smoothing = smooth;
 			target.draw(_bitmap, _matrix, null, blend, null, smooth);
 		}
