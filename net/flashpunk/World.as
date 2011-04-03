@@ -1,6 +1,5 @@
 ﻿package net.flashpunk
 {
-	import entities.Bender;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import net.flashpunk.utils.Input;
