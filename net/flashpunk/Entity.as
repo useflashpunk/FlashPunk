@@ -16,11 +16,6 @@ package net.flashpunk
 	public class Entity extends Tweener
 	{
 		/**
-		 * If the Entity should be rolled back.
-		 */
-		public var changed:Boolean;
-		
-		/**
 		 * If the Entity should render.
 		 */
 		public var visible:Boolean = true;
@@ -102,30 +97,6 @@ package net.flashpunk
 		 * Updates the Entity.
 		 */
 		override public function update():void 
-		{
-			
-		}
-		
-		/**
-		 * Updates the Entity.
-		 */
-		public function updatePosition():void 
-		{
-			
-		}
-		
-		/**
-		 * Updates the Entity.
-		 */
-		public function updateCollisions():void 
-		{
-			
-		}
-		
-		/**
-		 * Updates the Entity.
-		 */
-		public function updateFinish():void 
 		{
 			
 		}
@@ -806,26 +777,7 @@ package net.flashpunk
 			_name = value;
 		}
 		
-		/**
-		 * Rolls back primitive values of current Entity to oldEntity
-		 * @param	oldEntity	entity to be rolled back to
-		 */
-		public function rollback(oldEntity:Entity):void {
-			
-		}
-		
-		/**
-		 * Prints out the primitive values that are to be rolled back
-		 * For debugging purposes
-		 * @return printout
-		 */
-		public function print():String {
-			return "";
-		}
-		
 		// Entity information.
-		/** @private */ internal var _created:Boolean; //to determine if should add to the master list
-		/** @private */ internal var _next:Entity; //master list
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
 		/** @private */ internal var _group:Group;
@@ -838,7 +790,6 @@ package net.flashpunk
 		/** @private */ internal var _renderNext:Entity;
 		/** @private */ internal var _typePrev:Entity;
 		/** @private */ internal var _typeNext:Entity;
-		/** @private */ internal var _recyclePrev:Entity;
 		/** @private */ internal var _recycleNext:Entity;
 		
 		// Collision information.

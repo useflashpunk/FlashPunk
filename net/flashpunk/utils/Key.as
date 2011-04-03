@@ -1,4 +1,4 @@
-﻿package net.flashpunk.utils
+package net.flashpunk.utils
 {
 	/**
 	 * Contains static key constants to be used by Input.

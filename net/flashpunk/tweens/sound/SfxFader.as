@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.sound
+package net.flashpunk.tweens.sound
 {
 	import net.flashpunk.Sfx;
 	import net.flashpunk.Tween;

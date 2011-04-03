@@ -1,4 +1,4 @@
-﻿package net.flashpunk
+package net.flashpunk
 {
 	import net.flashpunk.tweens.TweenInfo;
 	

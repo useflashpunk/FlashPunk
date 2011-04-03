@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.misc
+package net.flashpunk.tweens.misc
 {
 	import net.flashpunk.Tween;
 	

@@ -1,4 +1,4 @@
-﻿package net.flashpunk.masks
+package net.flashpunk.masks
 {
 	import net.flashpunk.*;
 	

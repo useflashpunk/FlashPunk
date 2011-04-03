@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.motion
+package net.flashpunk.tweens.motion
 {
 	import flash.geom.Point;
 	import net.flashpunk.FP;

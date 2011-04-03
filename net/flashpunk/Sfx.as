@@ -1,4 +1,4 @@
-﻿package net.flashpunk
+package net.flashpunk
 {
 	import flash.events.Event;
 	import flash.media.Sound;

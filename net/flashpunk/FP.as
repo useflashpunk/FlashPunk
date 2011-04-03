@@ -1,4 +1,4 @@
-﻿package net.flashpunk
+package net.flashpunk
 {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
