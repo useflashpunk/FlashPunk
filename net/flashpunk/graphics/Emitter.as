@@ -88,15 +88,16 @@ package net.flashpunk.graphics
 			// quit if there are no particles
 			if (!_particle) return;
 			
-			// get rendering position
-			_point.x = point.x + x - camera.x * scrollX;
-			_point.y = point.y + y - camera.y * scrollY;
-			
 			// particle info
 			var t:Number, td:Number,
 				p:Particle = _particle,
 				type:ParticleType,
-				rect:Rectangle;
+				rect:Rectangle,
+				sc:Number = FP.world.scale;
+			
+			// get rendering position
+			_point.x = (point.x + x - camera.x * scrollX) * sc;
+			_point.y = (point.y + y - camera.y * scrollY) * sc;
 			
 			// loop through the particles
 			while (p)
@@ -110,8 +111,8 @@ package net.flashpunk.graphics
 				
 				// get position
 				td = (type._ease == null) ? t : type._ease(t);
-				_p.x = _point.x + p._x + p._moveX * td;
-				_p.y = _point.y + p._y + p._moveY * td;
+				_p.x = _point.x + (p._x + p._moveX * td) * sc;
+				_p.y = _point.y + (p._y + p._moveY * td) * sc;
 				
 				// get frame
 				rect.x = rect.width * type._frames[uint(td * type._frameCount)];
