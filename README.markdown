@@ -9,7 +9,9 @@ This branch includes modifications by myself as well as a number of other develo
 
 - Tons of bug-fixes, performance improvents and new features from [Draknek](https://github.com/Draknek/FlashPunk)
 - TiledSpriteMap bug-fix from [lukaszbruun](https://github.com/lukaszbruun/FlashPunk)
-- Per-world graphics scaling by duncanbeevers
+- Group Entity type for creating heirarchies of Entities from [Rolpege](https://github.com/Rolpege/FlashPunk)
+- Per-World Graphics scaling
+- Ping-Pong Tweens
 
 FEATURES
 ========
