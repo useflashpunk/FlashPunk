@@ -84,13 +84,14 @@ package net.flashpunk.tweens.motion
 		override public function update():void 
 		{
 			super.update();
+			var td:Number, tt:Number, sc:Number = scale;
 			if (_index < _points.length - 1)
 			{
-				while (_t > _pointT[_index + 1]) _index ++;
+				while (sc > _pointT[_index + 1]) _index ++;
 			}
-			var td:Number = _pointT[_index],
-				tt:Number = _pointT[_index + 1] - td;
-			td = (_t - td) / tt;
+			td = _pointT[_index],
+			tt = _pointT[_index + 1] - td;
+			td = (sc - td) / tt;
 			_prev = _points[_index];
 			_next = _points[_index + 1];
 			x = _prev.x + (_next.x - _prev.x) * td;

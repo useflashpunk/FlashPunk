@@ -180,8 +180,8 @@ package net.flashpunk
 		
 		// Tween information.
 		/** @private */ private var _type:uint;
+		/** @private */ private var _t:Number = 0;
 		/** @private */ protected var _ease:Function;
-		/** @private */ protected var _t:Number = 0;
 		
 		// Timing information.
 		/** @private */ protected var _time:Number;

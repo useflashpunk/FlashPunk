@@ -42,7 +42,7 @@
 		override public function update():void 
 		{
 			super.update();
-			value = _start + _range * _t;
+			value = _start + _range * scale;
 		}
 		
 		// Tween information.

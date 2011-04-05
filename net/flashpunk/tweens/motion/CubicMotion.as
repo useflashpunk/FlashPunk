@@ -50,8 +50,9 @@ package net.flashpunk.tweens.motion
 		override public function update():void 
 		{
 			super.update();
-			x = _t * _t * _t * (_toX + 3 * (_aX - _bX) - _fromX) + 3 * _t * _t * (_fromX - 2 * _aX + _bX) + 3 * _t * (_aX - _fromX) + _fromX;
-			y = _t * _t * _t * (_toY + 3 * (_aY - _bY) - _fromY) + 3 * _t * _t * (_fromY - 2 * _aY + _bY) + 3 * _t * (_aY - _fromY) + _fromY;
+			var sc:Number = scale, sc2:Number = sc * sc;
+			x = sc * sc2 * (_toX + 3 * (_aX - _bX) - _fromX) + 3 * sc2 * (_fromX - 2 * _aX + _bX) + 3 * sc * (_aX - _fromX) + _fromX;
+			y = sc * sc2 * (_toY + 3 * (_aY - _bY) - _fromY) + 3 * sc2 * (_fromY - 2 * _aY + _bY) + 3 * sc * (_aY - _fromY) + _fromY;
 		}
 		
 		// Curve information.

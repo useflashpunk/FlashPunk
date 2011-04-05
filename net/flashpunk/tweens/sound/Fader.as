@@ -38,7 +38,7 @@ package net.flashpunk.tweens.sound
 		override public function update():void 
 		{
 			super.update();
-			FP.volume = _start + _range * _t;
+			FP.volume = _start + _range * scale;
 		}
 		
 		// Fader information.
