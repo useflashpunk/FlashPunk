@@ -714,7 +714,7 @@ package net.flashpunk
 		 * Schedules a callback for the future. Shorthand for creating an Alarm tween, starting it and adding it to a Tweener.
 		 * @param	delay		The duration to wait before calling the callback.
 		 * @param	callback	The function to be called.
-		 * @param	type		The tween type (PERSIST, LOOPING or ONESHOT). Defaults to ONESHOT.
+		 * @param	type		The tween type (PERSIST, LOOPING PING_PONG, or ONESHOT). Defaults to ONESHOT.
 		 * @param	tweener		The Tweener object to add this Alarm to. Defaults to FP.tweener.
 		 * @return	The added Alarm object.
 		 * 

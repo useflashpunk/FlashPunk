@@ -23,6 +23,11 @@ package net.flashpunk
 		public static const ONESHOT:uint = 2;
 		
 		/**
+		 * Ping-Pong Tween type, will restart in the reverse direction immediately when it finishes.
+		 */
+		public static const PING_PONG:uint = 3;
+		
+		/**
 		 * If the tween should update.
 		 */
 		public var active:Boolean;
@@ -35,7 +40,7 @@ package net.flashpunk
 		/**
 		 * Constructor. Specify basic information about the Tween.
 		 * @param	duration		Duration of the tween (in seconds or frames).
-		 * @param	type			Tween type, one of Tween.PERSIST (default), Tween.LOOPING, or Tween.ONESHOT.
+		 * @param	type			Tween type, one of Tween.PERSIST (default), Tween.LOOPING, Tween.PING_PONG, or Tween.ONESHOT.
 		 * @param	complete		Optional callback for when the Tween completes.
 		 * @param	ease			Optional easer function to apply to the Tweened value.
 		 */
@@ -105,6 +110,13 @@ package net.flashpunk
 					active = false;
 					_parent.removeTween(this);
 					break;
+				case PING_PONG:
+					_reverse = !_reverse;
+					_time %= _target;
+					_t = _time / _target;
+					if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
+					start();
+					break;
 			}
 			_finish = false;
 			if (complete != null) complete();
@@ -119,7 +131,7 @@ package net.flashpunk
 		/**
 		 * The current time scale of the Tween (after easer has been applied).
 		 */
-		public function get scale():Number { return _t; }
+		public function get scale():Number { return _reverse ? 1 - _t : _t; }
 		
 		/**
 		 * Tweens the properties of an object.
@@ -181,6 +193,7 @@ package net.flashpunk
 		// Tween information.
 		/** @private */ private var _type:uint;
 		/** @private */ private var _t:Number = 0;
+		/** @private */ private var _reverse:Boolean = false;
 		/** @private */ protected var _ease:Function;
 		
 		// Timing information.
