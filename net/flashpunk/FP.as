@@ -564,9 +564,12 @@
 		 */
 		public static function getColorHSV(h:Number, s:Number, v:Number):uint
 		{
+			h = h < 0 ? 0 : (h > 1 ? 1 : h);
+			s = s < 0 ? 0 : (s > 1 ? 1 : s);
+			v = v < 0 ? 0 : (v > 1 ? 1 : v);
 			h = int(h * 360);
-			var hi:int = Math.floor(h / 60) % 6,
-				f:Number = h / 60 - Math.floor(h / 60),
+			var hi:int = int(h / 60) % 6,
+				f:Number = h / 60 - int(h / 60),
 				p:Number = (v * (1 - s)),
 				q:Number = (v * (1 - f * s)),
 				t:Number = (v * (1 - (1 - f) * s));
