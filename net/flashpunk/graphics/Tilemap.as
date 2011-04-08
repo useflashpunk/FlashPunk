@@ -453,6 +453,28 @@
 		}
 		
 		/**
+		* Create a Grid object from this tilemap.
+		* @param	solidTiles		Array of tile indexes that should be solid.
+		* @return Grid
+		*/
+		public function createGrid(solidTiles:Array, cls:Class=null):Grid
+		{
+			if (cls === null) cls = Grid;
+			var grid:Grid = new cls(width, height, _tile.width, _tile.height, 0) as Grid;
+			for (var row:uint = 0; row < _rows; ++row)
+			{
+				for (var col:uint = 0; col < _columns; ++col)
+				{
+					if (solidTiles.indexOf(getTile(col, row)) !== -1)
+					{
+						grid.setTile(col, row, true);
+					}
+				}
+			}
+			return grid;
+		}
+		
+		/**
 		 * The tile width.
 		 */
 		public function get tileWidth():uint { return _tile.width; }
