@@ -133,7 +133,7 @@
 			var image:Image = new Image(source);
 			
 			image.color = color;
-			image.alpha = 1;
+			image.alpha = alpha;
 			
 			return image;
 		}
@@ -148,11 +148,17 @@
 		public static function createCircle(radius:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
 		{
 			FP.sprite.graphics.clear();
-			FP.sprite.graphics.beginFill(color & 0xFFFFFF, alpha);
+			FP.sprite.graphics.beginFill(0xFFFFFF);
 			FP.sprite.graphics.drawCircle(radius, radius, radius);
 			var data:BitmapData = new BitmapData(radius * 2, radius * 2, true, 0);
 			data.draw(FP.sprite);
-			return new Image(data);
+			
+			var image:Image = new Image(data);
+			
+			image.color = color;
+			image.alpha = alpha;
+			
+			return image;
 		}
 		
 		/**
