@@ -42,7 +42,7 @@
 					width = _MAX_WIDTH - (_MAX_WIDTH % _frame.width);
 					height = Math.ceil(frameCount / (width / _frame.width)) * _frame.height;
 				}
-				r = new BitmapData(width, height, true, 0);
+				_rotated[source] = r = new BitmapData(width, height, true, 0);
 				var m:Matrix = FP.matrix,
 					a:Number = 0,
 					aa:Number = (Math.PI * 2) / -frameCount,
