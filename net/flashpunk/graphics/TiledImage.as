@@ -35,6 +35,7 @@ package net.flashpunk.graphics
 			if (!_height) _height = _sourceRect.height;
 			_buffer = new BitmapData(_width, _height, true, 0);
 			_bufferRect = _buffer.rect;
+			_bitmap.bitmapData = _buffer;
 		}
 		
 		/** @private Updates the buffer. */
