@@ -4,6 +4,7 @@
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
 	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
 	import net.flashpunk.utils.Input;
@@ -112,6 +113,7 @@
 				td = (type._ease == null) ? t : type._ease(t);
 				_p.x = _point.x + p._x + p._moveX * td;
 				_p.y = _point.y + p._y + p._moveY * td;
+				p._moveY += p._gravity;
 				
 				// get frame
 				rect.x = rect.width * type._frames[uint(td * type._frameCount)];
@@ -173,6 +175,18 @@
 		}
 		
 		/**
+		 * Sets the gravity range for a particle type.
+		 * @param	name			The particle type.
+		 * @param	gravity			Gravity amount to affect to the particle y velocity.
+		 * @param	gravityRange	Random amount to add to the particle's gravity.
+		 * @return	This ParticleType object.
+		 */
+		public function setGravity(name:String, gravity:Number = 0, gravityRange:Number = 0):ParticleType
+		{
+			return (_types[name] as ParticleType).setGravity(gravity, gravityRange);
+		}
+		
+		/**
 		 * Sets the alpha range of the particle type.
 		 * @param	name		The particle type.
 		 * @param	start		The starting alpha.
@@ -229,6 +243,7 @@
 			p._moveY = Math.sin(a) * d;
 			p._x = x;
 			p._y = y;
+			p._gravity = type._gravity + type._gravityRange * FP.random;
 			_particleCount ++;
 			return (_particle = p);
 		}
