@@ -28,6 +28,9 @@
 		/** @private */ internal var _moveX:Number;
 		/** @private */ internal var _moveY:Number;
 		
+		// Gravity information.
+		/** @private */ internal var _gravity:Number;
+		
 		// List information.
 		/** @private */ internal var _prev:Particle;
 		/** @private */ internal var _next:Particle;
