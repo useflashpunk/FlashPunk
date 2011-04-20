@@ -741,6 +741,43 @@
 			return near;
 		}
 		
+		
+		/**
+		 * Finds the Entity nearest to the position.
+		 * @param	type		The Entity type to check for.
+		 * @param	x			X position.
+		 * @param	y			Y position.
+		 * @param	condition	A function to be invoked on each compared Entity
+		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected.
+		 * @param	useHitboxes	If the Entities' hitboxes should be used to determine the distance. If false, their x/y coordinates are used.
+		 * @return	The nearest Entity to the position.
+		 */
+		public function nearestToPointSatisfyingCondition(type:String, x:Number, y:Number, fn:Function, useHitboxes:Boolean = false):Entity {
+			var n:Entity = _typeFirst[type],
+				nearDist:Number = Number.MAX_VALUE,
+				near:Entity, dist:Number;
+			if (useHitboxes) {
+				while (n) {
+					dist = squarePointRect(x, y, n.x - n.originX, n.y - n.originY, n.width, n.height);
+					if (dist < nearDist && fn(n)) {
+						nearDist = dist;
+						near = n;
+					}
+					n = n._typeNext;
+				}
+				return near;
+			}
+			while (n) {
+				dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
+				if (dist < nearDist && fn(n)) {
+					nearDist = dist;
+					near = n;
+				}
+				n = n._typeNext;
+			}
+			return near;
+		}
+		
 		/**
 		 * How many Entities are in the World.
 		 */
