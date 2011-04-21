@@ -999,6 +999,19 @@
 		}
 		
 		/**
+		 * Invokes the provided function with each Entity in the world
+		 * @param	c			The Class type to check.
+		 * @param	fn		The function to invoke.
+		 */
+		public function doClass(c:Class, fn:Function):void {
+			var e:Entity = _updateFirst;
+			while (e) {
+				if (e is c) fn(e);
+				e = e._updateNext;
+			}
+		}
+		
+		/**
 		 * Returns the Entity with the instance name, or null if none exists.
 		 * @param	name	Instance name of the Entity.
 		 * @return	An Entity in this world.
