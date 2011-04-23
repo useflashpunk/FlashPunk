@@ -189,6 +189,30 @@
 			return (1 - (--t) * (t) * (-2.70158 * t - 1.70158)) / 2 + .5;
 		}
 		
+		/** Elastic out. */
+		public static function elasticOut(t:Number):Number 
+		{
+			var ts:Number = t * t;
+			var tc:Number = t * ts;
+			return (33*tc*ts + -106*ts*ts + 126*tc + -67*ts + 15*t);
+		}	
+		
+		/** Elastic in. */
+		public static function elasticIn(t:Number):Number 
+		{
+			var ts:Number = t * t;
+			var tc:Number = t * ts;
+			return (33*tc*ts + -59*ts*ts + 32*tc + -5*ts);
+		}	
+		
+		/** Elastic in and out. */
+		public static function elasticInOut(t:Number):Number 
+		{
+			var ts:Number = t * t;
+			var tc:Number = t * ts;
+			return (71.25*tc*ts + -176.5*ts*ts + 145.5*tc + -43*ts + 3.75*t);
+		}
+		
 		// Easing constants.
 		/** @private */ private static const PI:Number = Math.PI;
 		/** @private */ private static const PI2:Number = Math.PI / 2;
