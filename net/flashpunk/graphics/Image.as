@@ -84,6 +84,10 @@
 		/** @private Creates the buffer. */
 		protected function createBuffer():void
 		{
+			if (_buffer) {
+				_buffer.dispose();
+				_buffer = null;
+			}
 			_buffer = new BitmapData(_sourceRect.width, _sourceRect.height, true, 0);
 			_bufferRect = _buffer.rect;
 			_bitmap.bitmapData = _buffer;
@@ -148,11 +152,17 @@
 		public static function createCircle(radius:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
 		{
 			FP.sprite.graphics.clear();
-			FP.sprite.graphics.beginFill(color & 0xFFFFFF, alpha);
+			FP.sprite.graphics.beginFill(0xFFFFFF);
 			FP.sprite.graphics.drawCircle(radius, radius, radius);
 			var data:BitmapData = new BitmapData(radius * 2, radius * 2, true, 0);
 			data.draw(FP.sprite);
-			return new Image(data);
+			
+			var image:Image = new Image(data);
+			
+			image.color = color;
+			image.alpha = alpha;
+			
+			return image;
 		}
 		
 		/**
@@ -160,6 +170,12 @@
 		 */
 		public function updateBuffer(clearBefore:Boolean = false):void
 		{
+			if (locked)
+			{
+				_needsUpdate = true;
+				if (clearBefore) _needsClear = true;
+				return;
+			}
 			if (!_source) return;
 			if (clearBefore) _buffer.fillRect(_bufferRect, 0);
 			_buffer.copyPixels(_source, _sourceRect, FP.zero);
@@ -296,6 +312,35 @@
 		
 		/** @protected Source BitmapData image. */
 		protected function get source():BitmapData { return _source; }
+		
+		/**
+		 * Lock the image, preventing updateBuffer() from being run until
+		 * unlock() is called, for performance.
+		 */
+		public function lock():void
+		{
+			_locked = true;
+		}
+		
+		/**
+		 * Unlock the image. Any pending updates will be applied immediately.
+		 */
+		public function unlock():void
+		{
+			_locked = false;
+			if (_needsUpdate) updateBuffer(_needsClear);
+			_needsUpdate = _needsClear = false;
+		}
+		
+		/**
+		 * True if the image is locked.
+		 */
+		public function get locked():Boolean { return _locked; }
+		
+		// Locking
+		/** @private */ protected var _locked:Boolean = false;
+		/** @private */ protected var _needsClear:Boolean = false;
+		/** @private */ protected var _needsUpdate:Boolean = false;
 		
 		// Source and buffer information.
 		/** @private */ protected var _source:BitmapData;

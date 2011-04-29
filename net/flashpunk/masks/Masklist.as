@@ -124,6 +124,12 @@
 			return _masks[index % _masks.length];
 		}
 		
+		override public function assignTo(parent:Entity):void
+		{
+			for each (var m:Mask in _masks) m.parent = parent;
+			super.assignTo(parent);
+		}
+		
 		/** @private Updates the parent's bounds for this mask. */
 		override protected function update():void 
 		{

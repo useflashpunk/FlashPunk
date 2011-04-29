@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+package net.flashpunk.graphics 
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -173,17 +173,30 @@
 		/**
 		 * Draws a line of tiles
 		 *  
-		 * @param	x		The x coordinate to start
-		 * @param	y		The y coordinate to start
+		 * @param	x1		The x coordinate to start
+		 * @param	y1		The y coordinate to start
 		 * @param	x2		The x coordinate to end
 		 * @param	y2		The y coordinate to end
 		 * @param	id		The tiles id to draw
 		 * 
 		 */		
-		public function line(x:int, y:int, x2:int, y2:int, id:int):void
+		public function line(x1:int, y1:int, x2:int, y2:int, id:int):void
 		{
+			if(usePositions)
+			{
+				x1 /= _tile.width;
+				y1 /= _tile.height;
+				x2 /= _tile.width;
+				y2 /= _tile.height;
+			}
+			
+			x1 %= _columns;
+			y1 %= _rows;
+			x2 %= _columns;
+			y2 %= _rows;
+			
 			Draw.setTarget(_map);
-			Draw.line(x, y, x2, y2, id, 0);
+			Draw.line(x1, y1, x2, y2, id, 0);
 			updateAll();
 		}
 		
@@ -197,8 +210,21 @@
 		 * @param	id		The tiles id to draw
 		 * 
 		 */		
-		public function outlinedRectangle(x:int, y:int, width:int, height:int, id:int):void
+		public function setRectOutline(x:int, y:int, width:int, height:int, id:int):void
 		{
+			if(usePositions)
+			{
+				x /= _tile.width;
+				y /= _tile.height;
+				
+				// TODO: might want to use difference between converted start/end coordinates instead?
+				width /= _tile.width;
+				height /= _tile.height;
+			}
+			
+			x %= _columns;
+			y %= _rows;
+			
 			Draw.setTarget(_map);
 			Draw.line(x, y, x + width, y, id, 0);
 			Draw.line(x, y + height, x + width, y + height, id, 0);

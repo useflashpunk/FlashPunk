@@ -175,20 +175,43 @@
 		 */
 		public static function rect(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1):void
 		{
-			if (alpha >= 1 && !blend)
-			{
-				if (color < 0xFF000000) color = 0xFF000000 | color;
-				_rect.x = x - _camera.x;
-				_rect.y = y - _camera.y;
-				_rect.width = width;
-				_rect.height = height;
-				_target.fillRect(_rect, color);
-				return;
-			}
+			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
+			_rect.x = x - _camera.x;
+			_rect.y = y - _camera.y;
+			_rect.width = width;
+			_rect.height = height;
+			_target.fillRect(_rect, color);
+		}
+		
+		/**
+		 * Draws a rectangle.
+		 * @param	x			X position of the rectangle.
+		 * @param	y			Y position of the rectangle.
+		 * @param	width		Width of the rectangle.
+		 * @param	height		Height of the rectangle.
+		 * @param	color		Color of the rectangle.
+		 * @param	alpha		Alpha of the rectangle.
+		 * @param	fill		If the rectangle should be filled with the color (true) or just an outline (false).
+		 * @param	thick		How thick the outline should be (only applicable when fill = false).
+		 * @param	radius		Round rectangle corners by this amount.
+		 */
+		public static function rectPlus(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1, radius:Number = 0):void
+		{
 			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
 			_graphics.clear();
-			_graphics.beginFill(color, alpha);
-			_graphics.drawRect(x - _camera.x, y - _camera.y, width, height);
+			
+			if (fill) {
+				_graphics.beginFill(color, alpha);
+			} else {
+				_graphics.lineStyle(thick, color, alpha);
+			}
+			
+			if (radius <= 0) {
+				_graphics.drawRect(x - _camera.x, y - _camera.y, width, height);
+			} else {
+				_graphics.drawRoundRect(x - _camera.x, y - _camera.y, width, height, radius);
+			}
+			
 			_target.draw(FP.sprite, null, null, blend);
 		}
 		

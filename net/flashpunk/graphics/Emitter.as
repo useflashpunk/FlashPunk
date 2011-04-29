@@ -153,6 +153,7 @@
 		 */
 		public function newType(name:String, frames:Array = null):ParticleType
 		{
+			if (! frames) frames = [0];
 			if (_types[name]) throw new Error("Cannot add multiple particle types of the same name");
 			return (_types[name] = new ParticleType(name, frames, _source, _frameWidth, _frameHeight));
 		}

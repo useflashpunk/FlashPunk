@@ -27,10 +27,15 @@ package net.flashpunk.graphics
 		/** @private Creates the buffer. */
 		override protected function createBuffer():void 
 		{
+			if (_buffer) {
+				_buffer.dispose();
+				_buffer = null;
+			}
 			if (!_width) _width = _sourceRect.width;
 			if (!_height) _height = _sourceRect.height;
 			_buffer = new BitmapData(_width, _height, true, 0);
 			_bufferRect = _buffer.rect;
+			_bitmap.bitmapData = _buffer;
 		}
 		
 		/** @private Updates the buffer. */
