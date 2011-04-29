@@ -37,12 +37,12 @@
 		/**
 		 * X origin of the image, determines transformation point.
 		 */
-		public var originX:int;
+		public var originX:Number = 0;
 		
 		/**
 		 * Y origin of the image, determines transformation point.
 		 */
-		public var originY:int;
+		public var originY:Number = 0;
 		
 		/**
 		 * Optional blend mode to use when drawing this image.
