@@ -119,9 +119,10 @@
 		 * Plays an animation.
 		 * @param	name		Name of the animation to play.
 		 * @param	reset		If the animation should force-restart if it is already playing.
+		 * @param	frame		Frame of the animation to start from, if restarted.
 		 * @return	Anim object representing the played animation.
 		 */
-		public function play(name:String = "", reset:Boolean = false):Anim
+		public function play(name:String = "", reset:Boolean = false, frame:int = 0):Anim
 		{
 			if (!reset && _anim && _anim._name == name) return _anim;
 			_anim = _anims[name];
@@ -134,7 +135,7 @@
 			}
 			_index = 0;
 			_timer = 0;
-			_frame = uint(_anim._frames[0]);
+			_frame = uint(_anim._frames[frame % _anim._frameCount]);
 			complete = false;
 			updateBuffer();
 			return _anim;
