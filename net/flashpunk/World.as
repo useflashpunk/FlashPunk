@@ -2,8 +2,7 @@
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	
-	import net.flashpunk.utils.Input;
+	import flash.utils.getQualifiedClassName;
 	
 	/**
 	 * Updated by Engine, main game container that holds all currently active Entities.
@@ -20,6 +19,11 @@
 		 * Point used to determine drawing offset in the render loop.
 		 */
 		public var camera:Point = new Point;
+		
+		/**
+		 * Multiplier used to globally-scale bitmap drawing operations
+		 */
+		public var scale:Number = 1;
 		
 		/**
 		 * Constructor.
@@ -671,6 +675,33 @@
 		}
 		
 		/**
+		 * Finds the Entity nearest to another, satisfying a condition.
+		 * @param	type		The Entity to check for.
+		 * @param	e			The Entity to find the nearest to.
+		 * @param	condition	A function to be invoked on each compared Entity
+		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected.
+		 * @return	The nearest Entity to e satisfying the condition.
+		 */
+		public function nearestToEntitySatisfyingCondition(type:String, e:Entity, fn:Function):Entity {
+			var n:Entity = _typeFirst[type],
+				nearDist:Number = Number.MAX_VALUE,
+				near:Entity, dist:Number,
+				x:Number = e.x - e.originX,
+				y:Number = e.y - e.originY;
+			while (n) {
+				if (fn(n)) {
+					dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
+					if (dist < nearDist) {
+						nearDist = dist;
+						near = n;
+					}
+				}
+				n = n._typeNext;
+			}
+			return near;
+		}
+		
+		/**
 		 * Finds the Entity nearest to the position.
 		 * @param	type		The Entity type to check for.
 		 * @param	x			X position.
@@ -702,6 +733,43 @@
 				dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
 				if (dist < nearDist)
 				{
+					nearDist = dist;
+					near = n;
+				}
+				n = n._typeNext;
+			}
+			return near;
+		}
+		
+		
+		/**
+		 * Finds the Entity nearest to the position.
+		 * @param	type		The Entity type to check for.
+		 * @param	x			X position.
+		 * @param	y			Y position.
+		 * @param	condition	A function to be invoked on each compared Entity
+		 *   If the function evaluates to a truthy value, the Entity is eligible to be collected.
+		 * @param	useHitboxes	If the Entities' hitboxes should be used to determine the distance. If false, their x/y coordinates are used.
+		 * @return	The nearest Entity to the position.
+		 */
+		public function nearestToPointSatisfyingCondition(type:String, x:Number, y:Number, fn:Function, useHitboxes:Boolean = false):Entity {
+			var n:Entity = _typeFirst[type],
+				nearDist:Number = Number.MAX_VALUE,
+				near:Entity, dist:Number;
+			if (useHitboxes) {
+				while (n) {
+					dist = squarePointRect(x, y, n.x - n.originX, n.y - n.originY, n.width, n.height);
+					if (dist < nearDist && fn(n)) {
+						nearDist = dist;
+						near = n;
+					}
+					n = n._typeNext;
+				}
+				return near;
+			}
+			while (n) {
+				dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
+				if (dist < nearDist && fn(n)) {
 					nearDist = dist;
 					near = n;
 				}
@@ -927,6 +995,19 @@
 					into[n ++] = e;
 					e = e._updateNext;
 				}
+			}
+		}
+		
+		/**
+		 * Invokes the provided function with each Entity in the world
+		 * @param	c			The Class type to check.
+		 * @param	fn		The function to invoke.
+		 */
+		public function doClass(c:Class, fn:Function):void {
+			var e:Entity = _updateFirst;
+			while (e) {
+				if (e is c) fn(e);
+				e = e._updateNext;
 			}
 		}
 		

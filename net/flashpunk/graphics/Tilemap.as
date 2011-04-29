@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package net.flashpunk.graphics 
+=======
+package net.flashpunk.graphics
+>>>>>>> duncanbeevers/master
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;

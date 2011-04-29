@@ -1,9 +1,9 @@
-﻿package net.flashpunk.utils 
+package net.flashpunk.utils
 {
 	/**
 	 * Static class with useful easer functions that can be used by Tweens.
 	 */
-	public class Ease 
+	public class Ease
 	{
 		/** Quadratic in. */
 		public static function quadIn(t:Number):Number

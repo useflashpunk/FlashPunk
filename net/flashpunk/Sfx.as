@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package net.flashpunk 
+=======
+package net.flashpunk
+>>>>>>> duncanbeevers/master
 {
 	import flash.events.Event;
 	import flash.media.Sound;
@@ -9,7 +13,7 @@ package net.flashpunk
 	/**
 	 * Sound effect object used to play embedded sounds.
 	 */
-	public class Sfx 
+	public class Sfx
 	{
 		/**
 		 * Optional callback function for when the sound finishes playing.

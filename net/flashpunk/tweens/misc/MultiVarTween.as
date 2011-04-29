@@ -49,7 +49,7 @@ package net.flashpunk.tweens.misc
 		{
 			super.update();
 			var i:int = _vars.length;
-			while (i --) _object[_vars[i]] = _start[i] + _range[i] * _t;
+			while (i --) _object[_vars[i]] = _start[i] + _range[i] * scale;
 		}
 
 		// Tween information.

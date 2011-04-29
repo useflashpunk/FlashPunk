@@ -553,7 +553,8 @@ package net.flashpunk
 		 */
 		public function setHitboxTo(o:Object):void
 		{
-			if (o is Image || o is Rectangle) setHitbox(o.width, o.height, -o.x, -o.y);
+			if (o is Rectangle) setHitbox(o.width, o.height, -o.x, -o.y);
+			else if (o is Image) setHitbox(o.width, o.height, -o.x + o.originX, -o.y + o.originY);
 			else
 			{
 				if (o.hasOwnProperty("width")) width = o.width;

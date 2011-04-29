@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.sound 
+package net.flashpunk.tweens.sound
 {
 	import net.flashpunk.Sfx;
 	import net.flashpunk.Tween;
@@ -62,8 +62,9 @@
 		override public function update():void 
 		{
 			super.update();
-			if (_sfx) _sfx.volume = _start + _range * _t;
-			if (_crossSfx) _crossSfx.volume = _crossRange * _t;
+			var sc:Number = scale;
+			if (_sfx) _sfx.volume = _start + _range * sc;
+			if (_crossSfx) _crossSfx.volume = _crossRange * sc;
 		}
 		
 		/** @private When the tween completes. */

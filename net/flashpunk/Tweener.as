@@ -8,17 +8,22 @@
 		/**
 		 * Persistent Tween type, will stop when it finishes.
 		 */
-		public const PERSIST:uint = 0;
+		public static const PERSIST:uint = 0;
 		
 		/**
 		 * Looping Tween type, will restart immediately when it finishes.
 		 */
-		public const LOOPING:uint = 1;
+		public static const LOOPING:uint = 1;
 		
 		/**
 		 * Oneshot Tween type, will stop and remove itself from its core container when it finishes.
 		 */
-		public const ONESHOT:uint = 2;
+		public static const ONESHOT:uint = 2;
+		
+		/**
+		 * Ping-Pong Tween type, will restart in the reverse direction immediately when it finishes.
+		 */
+		public static const PING_PONG:uint = 3;
 		
 		/**
 		 * If the Tweener should update.

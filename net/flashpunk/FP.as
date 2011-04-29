@@ -1,4 +1,4 @@
-﻿package net.flashpunk 
+package net.flashpunk
 {
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
@@ -306,21 +306,6 @@
 			FP.angleXY(object, angle, FP.distance(anchor.x, anchor.y, object.x, object.y), anchor.x, anchor.y);
 		}
 		
-		/**
-		 * Gets the difference of two angles, wrapped around to the range -180 to 180.
-		 * @param	a	First angle in degrees.
-		 * @param	b	Second angle in degrees.
-		 * @return	Difference in angles, wrapped around to the range -180 to 180.
-		 */
-		public static function angleDiff(a:Number, b:Number):Number
-		{
-			var diff:Number = b - a;
-
-			while (diff > 180) { diff -= 360; }
-			while (diff <= -180) { diff += 360; }
-
-			return diff;
-		}
 		/**
 		 * Find the distance between two points.
 		 * @param	x1		The first x-position.
@@ -732,7 +717,7 @@
 		 * Schedules a callback for the future. Shorthand for creating an Alarm tween, starting it and adding it to a Tweener.
 		 * @param	delay		The duration to wait before calling the callback.
 		 * @param	callback	The function to be called.
-		 * @param	type		The tween type (PERSIST, LOOPING or ONESHOT). Defaults to ONESHOT.
+		 * @param	type		The tween type (PERSIST, LOOPING PING_PONG, or ONESHOT). Defaults to ONESHOT.
 		 * @param	tweener		The Tweener object to add this Alarm to. Defaults to FP.tweener.
 		 * @return	The added Alarm object.
 		 * 
@@ -798,27 +783,18 @@
 		
 		/**
 		 * Sorts the elements in the array.
-		 * @param	object		The Object to sort (an Array or Vector).
+		 * @param	a			The array to sort.
 		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
+		 * @return	The provided array with elements sorted.
 		 */
-		public static function sort(object:Object, ascending:Boolean = true):void
+		public static function sort(a:Array, ascending:Boolean = true):Array
 		{
-			if (object is Array || object is Vector.<*>) quicksort(object, 0, object.length - 1, ascending);
+			quicksort(a, 0, a.length - 1, ascending);
+			return a;
 		}
 		
-		/**
-		 * Sorts the elements in the array by a property of the element.
-		 * @param	object		The Object to sort (an Array or Vector).
-		 * @param	property	The numeric property of object's elements to sort by.
-		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
-		 */
-		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
-		{
-			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
-		}
-		
-		/** @private Quicksorts the array. */ 
-		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
+		/** @private Quicksorts the array ascending. */ 
+		private static function quicksort(a:Array, left:int, right:int, ascending:Boolean):void
 		{
 			var i:int = left, j:int = right, t:Number,
 				p:* = a[Math.round((left + right) * .5)];
@@ -852,6 +828,17 @@
 			}
 			if (left < j) quicksort(a, left, j, ascending);
 			if (i < right) quicksort(a, i, right, ascending);
+		}
+		
+		/**
+		 * Sorts the elements in the array by a property of the element.
+		 * @param	object		The Object to sort (an Array or Vector).
+		 * @param	property	The numeric property of object's elements to sort by.
+		 * @param	ascending	If it should be sorted ascending (true) or descending (false).
+		 */
+		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
+		{
+			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
 		}
 		
 		/** @private Quicksorts the array by the property. */ 

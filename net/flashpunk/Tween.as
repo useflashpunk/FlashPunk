@@ -1,11 +1,11 @@
-﻿package net.flashpunk 
+package net.flashpunk
 {
 	import net.flashpunk.tweens.TweenInfo;
 	
 	/**
 	 * Base class for all Tween objects, can be added to any Core-extended classes.
 	 */
-	public class Tween 
+	public class Tween
 	{
 		/**
 		 * Persistent Tween type, will stop when it finishes.
@@ -23,6 +23,11 @@
 		public static const ONESHOT:uint = 2;
 		
 		/**
+		 * Ping-Pong Tween type, will restart in the reverse direction immediately when it finishes.
+		 */
+		public static const PING_PONG:uint = 3;
+		
+		/**
 		 * If the tween should update.
 		 */
 		public var active:Boolean;
@@ -35,7 +40,7 @@
 		/**
 		 * Constructor. Specify basic information about the Tween.
 		 * @param	duration		Duration of the tween (in seconds or frames).
-		 * @param	type			Tween type, one of Tween.PERSIST (default), Tween.LOOPING, or Tween.ONESHOT.
+		 * @param	type			Tween type, one of Tween.PERSIST (default), Tween.LOOPING, Tween.PING_PONG, or Tween.ONESHOT.
 		 * @param	complete		Optional callback for when the Tween completes.
 		 * @param	ease			Optional easer function to apply to the Tweened value.
 		 */
@@ -90,20 +95,27 @@
 		{
 			switch (_type)
 			{
-				case 0:
+				case PERSIST:
 					_time = _target;
 					active = false;
 					break;
-				case 1:
+				case LOOPING:
 					_time %= _target;
 					_t = _time / _target;
 					if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
 					start();
 					break;
-				case 2:
+				case ONESHOT:
 					_time = _target;
 					active = false;
 					_parent.removeTween(this);
+					break;
+				case PING_PONG:
+					_reverse = !_reverse;
+					_time %= _target;
+					_t = _time / _target;
+					if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
+					start();
 					break;
 			}
 			_finish = false;
@@ -119,7 +131,7 @@
 		/**
 		 * The current time scale of the Tween (after easer has been applied).
 		 */
-		public function get scale():Number { return _t; }
+		public function get scale():Number { return _reverse ? 1 - _t : _t; }
 		
 		/**
 		 * Tweens the properties of an object.
@@ -180,8 +192,9 @@
 		
 		// Tween information.
 		/** @private */ private var _type:uint;
+		/** @private */ private var _t:Number = 0;
+		/** @private */ private var _reverse:Boolean = false;
 		/** @private */ protected var _ease:Function;
-		/** @private */ protected var _t:Number = 0;
 		
 		// Timing information.
 		/** @private */ protected var _time:Number;

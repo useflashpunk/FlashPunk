@@ -1,4 +1,4 @@
-﻿package net.flashpunk.utils 
+package net.flashpunk.utils
 {
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
@@ -15,7 +15,7 @@
 	 * These functions are not meant to replace Graphic components
 	 * for Entities, but rather to help with testing and debugging.
 	 */
-	public class Draw 
+	public class Draw
 	{
 		/**
 		 * The blending mode used by Draw functions. This will not
@@ -59,11 +59,17 @@
 		{
 			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
 			
+			var sc:Number = FP.world.scale;
+			x1 *= sc;
+			y1 *= sc;
+			x2 *= sc;
+			y2 *= sc;
+			
 			// get the drawing positions
-			x1 -= _camera.x;
-			y1 -= _camera.y;
-			x2 -= _camera.x;
-			y2 -= _camera.y;
+			x1 -= _camera.x * sc;
+			y1 -= _camera.y * sc;
+			x2 -= _camera.x * sc;
+			y2 -= _camera.y * sc;
 			
 			// get the drawing difference
 			var screen:BitmapData = _target,
@@ -175,11 +181,13 @@
 		 */
 		public static function rect(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1):void
 		{
+			var sc:Number = FP.world.scale;
+			
 			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
-			_rect.x = x - _camera.x;
-			_rect.y = y - _camera.y;
-			_rect.width = width;
-			_rect.height = height;
+			_rect.x = x - _camera.x * sc;
+			_rect.y = y - _camera.y * sc;
+			_rect.width = width * sc;
+			_rect.height = height * sc;
 			_target.fillRect(_rect, color);
 		}
 		
@@ -224,18 +232,20 @@
 		 */
 		public static function circle(x:int, y:int, radius:int, color:uint = 0xFFFFFF):void
 		{
+			var sc:Number = FP.world.scale, r:Number = radius * sc;
+			
 			if (color < 0xFF000000) color = 0xFF000000 | color;
-			x -= _camera.x;
-			y -= _camera.y;
-			var f:int = 1 - radius,
+			x -= _camera.x * sc;
+			y -= _camera.y * sc;
+			var f:int = 1 - r,
 				fx:int = 1,
-				fy:int = -2 * radius,
+				fy:int = -2 * r,
 				xx:int = 0,
-				yy:int = radius;
-			_target.setPixel32(x, y + radius, color);
-			_target.setPixel32(x, y - radius, color);
-			_target.setPixel32(x + radius, y, color);
-			_target.setPixel32(x - radius, y, color);
+				yy:int = r;
+			_target.setPixel32(x, y + r, color);
+			_target.setPixel32(x, y - r, color);
+			_target.setPixel32(x + r, y, color);
+			_target.setPixel32(x - r, y, color);
 			while (xx < yy)
 			{
 				if (f >= 0) 
@@ -294,40 +304,41 @@
 		 */
 		public static function hitbox(e:Entity, outline:Boolean = true, color:uint = 0xFFFFFF, alpha:Number = 1):void
 		{
+			var sc:Number = FP.world.scale;
 			if (outline)
 			{
 				if (color < 0xFF000000) color = 0xFF000000 | color;
 				var x:int = e.x - e.originX - _camera.x,
 					y:int = e.y - e.originY - _camera.y;
-				_rect.x = x;
-				_rect.y = y;
-				_rect.width = e.width;
+				_rect.x = Math.floor(x * sc);
+				_rect.y = Math.floor(y * sc);
+				_rect.width = e.width * sc;
 				_rect.height = 1;
 				_target.fillRect(_rect, color);
-				_rect.y += e.height - 1;
+				_rect.y += Math.floor(e.height * sc) - 1;
 				_target.fillRect(_rect, color);
-				_rect.y = y;
+				_rect.y = Math.floor(y * sc);
 				_rect.width = 1;
-				_rect.height = e.height;
+				_rect.height = Math.floor(e.height) * sc;
 				_target.fillRect(_rect, color);
-				_rect.x += e.width - 1;
+				_rect.x += Math.floor(e.width * sc) - 1;
 				_target.fillRect(_rect, color);
 				return;
 			}
 			if (alpha >= 1 && !blend)
 			{
 				if (color < 0xFF000000) color = 0xFF000000 | color;
-				_rect.x = e.x - e.originX - _camera.x;
-				_rect.y = e.y - e.originY - _camera.y;
-				_rect.width = e.width;
-				_rect.height = e.height;
+				_rect.x = (e.x - e.originX - _camera.x) * sc;
+				_rect.y = (e.y - e.originY - _camera.y) * sc;
+				_rect.width = e.width * sc;
+				_rect.height = e.height * sc;
 				_target.fillRect(_rect, color);
 				return;
 			}
 			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
 			_graphics.clear();
 			_graphics.beginFill(color, alpha);
-			_graphics.drawRect(e.x - e.originX - _camera.x, e.y - e.originY - _camera.y, e.width, e.height);
+			_graphics.drawRect((e.x - e.originX - _camera.x) * sc, (e.y - e.originY - _camera.y) * sc, e.width * sc, e.height * sc);
 			_target.draw(FP.sprite, null, null, blend);
 		}
 		

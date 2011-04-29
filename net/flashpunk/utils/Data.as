@@ -5,7 +5,7 @@
 	/**
 	 * Static helper class used for saving and loading data from stored cookies.
 	 */
-	public class Data 
+	public class Data
 	{
 		/**
 		 * If you want to share data between different SWFs on the same host, use this id.

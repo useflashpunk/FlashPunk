@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.motion 
+package net.flashpunk.tweens.motion
 {
 	import flash.geom.Point;
 	import net.flashpunk.FP;
@@ -67,7 +67,7 @@
 		override public function update():void 
 		{
 			super.update();
-			_angle = _angleStart + _angleFinish * _t;
+			_angle = _angleStart + _angleFinish * scale;
 			x = _centerX + Math.cos(_angle) * _radius;
 			y = _centerY + Math.sin(_angle) * _radius;
 		}

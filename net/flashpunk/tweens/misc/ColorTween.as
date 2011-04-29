@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.misc 
+package net.flashpunk.tweens.misc
 {
 	import net.flashpunk.Tween;
 	
@@ -61,11 +61,12 @@
 		/** @private Updates the Tween. */
 		override public function update():void 
 		{
+			var sc:Number = scale;
 			super.update();
-			alpha = _startA + _rangeA * _t;
-			_r = uint((_startR + _rangeR * _t) * 255);
-			_g = uint((_startG + _rangeG * _t) * 255);
-			_b = uint((_startB + _rangeB * _t) * 255);
+			alpha = _startA + _rangeA * sc;
+			_r = uint((_startR + _rangeR * sc) * 255);
+			_g = uint((_startG + _rangeG * sc) * 255);
+			_b = uint((_startB + _rangeB * sc) * 255);
 			color = _r << 16 | _g << 8 | _b;
 		}
 		

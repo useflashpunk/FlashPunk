@@ -1,4 +1,4 @@
-﻿package net.flashpunk.tweens.motion 
+package net.flashpunk.tweens.motion
 {
 	import flash.geom.Point;
 	
@@ -63,8 +63,9 @@
 		override public function update():void 
 		{
 			super.update();
-			x = _fromX + _moveX * _t;
-			y = _fromY + _moveY * _t;
+			var sc:Number = scale;
+			x = _fromX + _moveX * sc;
+			y = _fromY + _moveY * sc;
 		}
 		
 		/**

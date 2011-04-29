@@ -1,9 +1,9 @@
-﻿package net.flashpunk.utils 
+package net.flashpunk.utils
 {
 	/**
 	 * Contains static key constants to be used by Input.
 	 */
-	public class Key 
+	public class Key
 	{
 		public static const ANY:int = -1;
 		

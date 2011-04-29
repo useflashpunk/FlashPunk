@@ -44,7 +44,7 @@
 		override public function update():void 
 		{
 			super.update();
-			_object[_property] = _start + _range * _t;
+			_object[_property] = _start + _range * scale;
 		}
 		
 		// Tween information.

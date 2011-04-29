@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+package net.flashpunk.graphics
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -103,8 +103,10 @@
 			_point.x = point.x + x - originX - camera.x * scrollX;
 			_point.y = point.y + y - originY - camera.y * scrollY;
 			
+			var ws:Number = FP.world.scale, sc:Number = scale * ws;
+			
 			// render without transformation
-			if (angle == 0 && scaleX * scale == 1 && scaleY * scale == 1 && !blend)
+			if (angle == 0 && scaleX * sc == 1 && scaleY * sc == 1 && !blend)
 			{
 				target.copyPixels(_buffer, _bufferRect, _point, null, null, true);
 				return;
@@ -112,13 +114,13 @@
 			
 			// render with transformation
 			_matrix.b = _matrix.c = 0;
-			_matrix.a = scaleX * scale;
-			_matrix.d = scaleY * scale;
+			_matrix.a = scaleX * sc;
+			_matrix.d = scaleY * sc;
 			_matrix.tx = -originX * _matrix.a;
 			_matrix.ty = -originY * _matrix.d;
 			if (angle != 0) _matrix.rotate(angle * FP.RAD);
-			_matrix.tx += originX + _point.x;
-			_matrix.ty += originY + _point.y;
+			_matrix.tx += (originX + _point.x) * ws;
+			_matrix.ty += (originY + _point.y) * ws;
 			_bitmap.smoothing = smooth;
 			target.draw(_bitmap, _matrix, null, blend, null, smooth);
 		}
@@ -294,6 +296,16 @@
 		 * Height of the image.
 		 */
 		public function get height():uint { return _bufferRect.height; }
+		
+		/**
+		 * Width of image rendering buffer
+		 */
+		public function get bufferWidth():uint { return _bufferRect.width; }
+		
+		/**
+		 * Height of image rendering buffer
+		 */
+		public function get bufferHeight():uint { return _bufferRect.height; }
 		
 		/**
 		 * The scaled width of the image.
