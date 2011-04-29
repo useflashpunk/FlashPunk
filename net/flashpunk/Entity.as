@@ -141,11 +141,11 @@ package net.flashpunk
 			{
 				while (e)
 				{
-					if (x - originX + width > e.x - e.originX
+					if (e.collidable && e !== this
+					&& x - originX + width > e.x - e.originX
 					&& y - originY + height > e.y - e.originY
 					&& x - originX < e.x - e.originX + e.width
-					&& y - originY < e.y - e.originY + e.height
-					&& e.collidable && e !== this)
+					&& y - originY < e.y - e.originY + e.height)
 					{
 						if (!e._mask || e._mask.collide(HITBOX))
 						{
@@ -161,11 +161,11 @@ package net.flashpunk
 			
 			while (e)
 			{
-				if (x - originX + width > e.x - e.originX
+				if (e.collidable && e !== this
+				&& x - originX + width > e.x - e.originX
 				&& y - originY + height > e.y - e.originY
 				&& x - originX < e.x - e.originX + e.width
-				&& y - originY < e.y - e.originY + e.height
-				&& e.collidable && e !== this)
+				&& y - originY < e.y - e.originY + e.height)
 				{
 					if (_mask.collide(e._mask ? e._mask : e.HITBOX))
 					{
@@ -216,11 +216,11 @@ package net.flashpunk
 			_x = this.x; _y = this.y;
 			this.x = x; this.y = y;
 			
-			if (x - originX + width > e.x - e.originX
+			if (e.collidable
+			&& x - originX + width > e.x - e.originX
 			&& y - originY + height > e.y - e.originY
 			&& x - originX < e.x - e.originX + e.width
-			&& y - originY < e.y - e.originY + e.height
-			&& e.collidable)
+			&& y - originY < e.y - e.originY + e.height)
 			{
 				if (!_mask)
 				{
@@ -329,11 +329,11 @@ package net.flashpunk
 			{
 				while (e)
 				{
-					if (x - originX + width > e.x - e.originX
+					if (e.collidable && e !== this
+					&& x - originX + width > e.x - e.originX
 					&& y - originY + height > e.y - e.originY
 					&& x - originX < e.x - e.originX + e.width
-					&& y - originY < e.y - e.originY + e.height
-					&& e.collidable && e !== this)
+					&& y - originY < e.y - e.originY + e.height)
 					{
 						if (!e._mask || e._mask.collide(HITBOX)) array[n ++] = e;
 					}
@@ -345,11 +345,11 @@ package net.flashpunk
 			
 			while (e)
 			{
-				if (x - originX + width > e.x - e.originX
+				if (e.collidable && e !== this
+				&& x - originX + width > e.x - e.originX
 				&& y - originY + height > e.y - e.originY
 				&& x - originX < e.x - e.originX + e.width
-				&& y - originY < e.y - e.originY + e.height
-				&& e.collidable && e !== this)
+				&& y - originY < e.y - e.originY + e.height)
 				{
 					if (_mask.collide(e._mask ? e._mask : e.HITBOX)) array[n ++] = e;
 				}
