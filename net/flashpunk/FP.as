@@ -717,6 +717,7 @@
 			if (object is Tweener) tweener = object as Tweener;
 			if (options)
 			{
+				if (options is Function) complete = options as Function;
 				if (options.hasOwnProperty("type")) type = options.type;
 				if (options.hasOwnProperty("complete")) complete = options.complete;
 				if (options.hasOwnProperty("ease")) ease = options.ease;
