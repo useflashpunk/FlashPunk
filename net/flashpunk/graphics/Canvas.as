@@ -252,6 +252,26 @@
 			}
 		}
 		
+		public function getPixel (x:int, y:int):uint
+		{
+			var buffer:BitmapData = _buffers[_ref.getPixel(x / _maxWidth, y / _maxHeight)];
+			
+			x %= _maxWidth;
+			y %= _maxHeight;
+			
+			return buffer.getPixel32(x, y);
+		}
+		
+		public function setPixel (x:int, y:int, color:uint):void
+		{
+			var buffer:BitmapData = _buffers[_ref.getPixel(x / _maxWidth, y / _maxHeight)];
+			
+			x %= _maxWidth;
+			y %= _maxHeight;
+			
+			buffer.setPixel32(x, y, color);
+		}
+		
 		/**
 		 * The tinted color of the Canvas. Use 0xFFFFFF to draw the it normally.
 		 */
