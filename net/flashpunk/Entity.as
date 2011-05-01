@@ -132,7 +132,7 @@ package net.flashpunk
 			if (!_world) return null;
 			
 			var e:Entity = _world._typeFirst[type];
-			if (!collidable || !e) return null;
+			if (!e) return null;
 			
 			_x = this.x; _y = this.y;
 			this.x = x; this.y = y;
@@ -213,7 +213,7 @@ package net.flashpunk
 			&& y - originY + height > e.y - e.originY
 			&& x - originX < e.x - e.originX + e.width
 			&& y - originY < e.y - e.originY + e.height
-			&& collidable && e.collidable)
+			&& e.collidable)
 			{
 				if (!_mask)
 				{
@@ -312,7 +312,7 @@ package net.flashpunk
 			if (!_world) return;
 			
 			var e:Entity = _world._typeFirst[type];
-			if (!collidable || !e) return;
+			if (!e) return;
 			
 			_x = this.x; _y = this.y;
 			this.x = x; this.y = y;
@@ -618,7 +618,7 @@ package net.flashpunk
 				var sign:int, e:Entity;
 				if (x != 0)
 				{
-					if (collidable && (sweep || collide(solidType, this.x + x, this.y)))
+					if (sweep || collide(solidType, this.x + x, this.y))
 					{
 						sign = x > 0 ? 1 : -1;
 						while (x != 0)
@@ -636,7 +636,7 @@ package net.flashpunk
 				}
 				if (y != 0)
 				{
-					if (collidable && (sweep || collide(solidType, this.x, this.y + y)))
+					if (sweep || collide(solidType, this.x, this.y + y))
 					{
 						sign = y > 0 ? 1 : -1;
 						while (y != 0)
