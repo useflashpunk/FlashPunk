@@ -710,6 +710,13 @@
 		 */
 		public static function tween(object:Object, values:Object, duration:Number, options:Object = null):MultiVarTween
 		{
+			if (options && options.hasOwnProperty("delay")) {
+				var delay:Number = options.delay;
+				delete options.delay;
+				FP.alarm(delay, function ():void { FP.tween(object, values, duration, options); });
+				return null;
+			}
+			
 			var type:uint = Tween.ONESHOT,
 				complete:Function = null,
 				ease:Function = null,
