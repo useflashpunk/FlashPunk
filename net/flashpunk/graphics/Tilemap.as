@@ -234,9 +234,9 @@
 		}
 		
 		/**
-		 * Updates the whole tilemap. Used by floodFill, line and outlineRectangle. 
+		 * Updates the graphical cache for the whole tilemap.
 		 */		
-		protected function updateAll():void
+		public function updateAll():void
 		{
 			_rect.x = 0;
 			_rect.y = 0;
@@ -408,8 +408,8 @@
 			return newMap;
 		}
 		
-		/** @private Used by shiftTiles to update a rectangle of tiles from the tilemap. */
-		private function updateRect(rect:Rectangle, clear:Boolean):void
+		/** Updates the graphical cache of a region of the tilemap. */
+		public function updateRect(rect:Rectangle, clear:Boolean):void
 		{
 			var x:int = rect.x,
 				y:int = rect.y,
