@@ -334,6 +334,11 @@
 		 */
 		public function getIndex(tilesColumn:uint, tilesRow:uint):uint
 		{
+			if (usePositions) {
+				tilesColumn /= _tile.width;
+				tilesRow /= _tile.height;
+			}
+			
 			return (tilesRow % _setRows) * _setColumns + (tilesColumn % _setColumns);
 		}
 		
@@ -387,11 +392,16 @@
 		}
 		
 		/**
-		 * NB. ignores the usePositions property: all arguments are tile indices not screen-space coordinates.
+		 * Get a subregion of the tilemap and return it as a new Tilemap.
 		 */
 		public function getSubMap (x:int, y:int, w:int, h:int):Tilemap
 		{
-			var u:Boolean = usePositions;
+			if (usePositions) {
+				x /= _tile.width;
+				y /= _tile.height;
+				w /= _tile.width;
+				h /= _tile.height;
+			}
 			
 			var newMap:Tilemap = new Tilemap(_set, w*_tile.width, h*_tile.height, _tile.width, _tile.height);
 			
@@ -402,8 +412,6 @@
 			
 			newMap._map.copyPixels(_map, _rect, FP.zero);
 			newMap.drawGraphic(-x * _tile.width, -y * _tile.height, this);
-			
-			usePositions = u;
 			
 			return newMap;
 		}
