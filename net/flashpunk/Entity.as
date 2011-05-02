@@ -189,11 +189,18 @@ package net.flashpunk
 		public function collideTypes(types:Object, x:Number, y:Number):Entity
 		{
 			if (!_world) return null;
+			
 			var e:Entity;
-			for each (var type:String in types)
-			{
-				if ((e = collide(type, x, y))) return e;
+			
+			if (types is String) {
+				return collide(String(types), x, y);
+			} else if (types is Array || types is Vector.<Entity>) {
+				for each (var type:String in types)
+				{
+					if ((e = collide(type, x, y))) return e;
+				}
 			}
+			
 			return null;
 		}
 		
@@ -602,10 +609,10 @@ package net.flashpunk
 		 * Moves the Entity by the amount, retaining integer values for its x and y.
 		 * @param	x			Horizontal offset.
 		 * @param	y			Vertical offset.
-		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	solidType	An optional collision type (or array of types) to stop flush against upon collision.
 		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
 		 */
-		public function moveBy(x:Number, y:Number, solidType:String = null, sweep:Boolean = false):void
+		public function moveBy(x:Number, y:Number, solidType:Object = null, sweep:Boolean = false):void
 		{
 			_moveX += x;
 			_moveY += y;
@@ -618,12 +625,12 @@ package net.flashpunk
 				var sign:int, e:Entity;
 				if (x != 0)
 				{
-					if (sweep || collide(solidType, this.x + x, this.y))
+					if (sweep || collideTypes(solidType, this.x + x, this.y))
 					{
 						sign = x > 0 ? 1 : -1;
 						while (x != 0)
 						{
-							if ((e = collide(solidType, this.x + sign, this.y)))
+							if ((e = collideTypes(solidType, this.x + sign, this.y)))
 							{
 								if (moveCollideX(e)) break;
 								else this.x += sign;
@@ -636,12 +643,12 @@ package net.flashpunk
 				}
 				if (y != 0)
 				{
-					if (sweep || collide(solidType, this.x, this.y + y))
+					if (sweep || collideTypes(solidType, this.x, this.y + y))
 					{
 						sign = y > 0 ? 1 : -1;
 						while (y != 0)
 						{
-							if ((e = collide(solidType, this.x, this.y + sign)))
+							if ((e = collideTypes(solidType, this.x, this.y + sign)))
 							{
 								if (moveCollideY(e)) break;
 								else this.y += sign;
@@ -664,10 +671,10 @@ package net.flashpunk
 		 * Moves the Entity to the position, retaining integer values for its x and y.
 		 * @param	x			X position.
 		 * @param	y			Y position.
-		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	solidType	An optional collision type (or array of types) to stop flush against upon collision.
 		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
 		 */
-		public function moveTo(x:Number, y:Number, solidType:String = null, sweep:Boolean = false):void
+		public function moveTo(x:Number, y:Number, solidType:Object = null, sweep:Boolean = false):void
 		{
 			moveBy(x - this.x, y - this.y, solidType, sweep);
 		}
@@ -677,10 +684,10 @@ package net.flashpunk
 		 * @param	x			X target.
 		 * @param	y			Y target.
 		 * @param	amount		Amount to move.
-		 * @param	solidType	An optional collision type to stop flush against upon collision.
+		 * @param	solidType	An optional collision type (or array of types) to stop flush against upon collision.
 		 * @param	sweep		If sweeping should be used (prevents fast-moving objects from going through solidType).
 		 */
-		public function moveTowards(x:Number, y:Number, amount:Number, solidType:String = null, sweep:Boolean = false):void
+		public function moveTowards(x:Number, y:Number, amount:Number, solidType:Object = null, sweep:Boolean = false):void
 		{
 			_point.x = x - this.x;
 			_point.y = y - this.y;
