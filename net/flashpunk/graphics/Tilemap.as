@@ -386,6 +386,28 @@
 			}
 		}
 		
+		/**
+		 * NB. ignores the usePositions property: all arguments are tile indices not screen-space coordinates.
+		 */
+		public function getSubMap (x:int, y:int, w:int, h:int):Tilemap
+		{
+			var u:Boolean = usePositions;
+			
+			var newMap:Tilemap = new Tilemap(_set, w*_tile.width, h*_tile.height, _tile.width, _tile.height);
+			
+			_rect.x = x;
+			_rect.y = y;
+			_rect.width = w;
+			_rect.height = h;
+			
+			newMap._map.copyPixels(_map, _rect, FP.zero);
+			newMap.drawGraphic(-x * _tile.width, -y * _tile.height, this);
+			
+			usePositions = u;
+			
+			return newMap;
+		}
+		
 		/** @private Used by shiftTiles to update a rectangle of tiles from the tilemap. */
 		private function updateRect(rect:Rectangle, clear:Boolean):void
 		{
