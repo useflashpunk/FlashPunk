@@ -748,6 +748,8 @@ package net.flashpunk
 			if (_world) _world.registerName(this);
 		}
 		
+		public function getClass ():Class { return _class; }
+		
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
