@@ -163,6 +163,7 @@
 			var frame:uint = (row % _rows) * _columns + (column % _columns);
 			if (_frame == frame) return;
 			_frame = frame;
+			_timer = 0;
 			updateBuffer();
 		}
 		
@@ -199,6 +200,7 @@
 			if (value < 0) value = _frameCount + value;
 			if (_frame == value) return;
 			_frame = value;
+			_timer = 0;
 			updateBuffer();
 		}
 		
@@ -213,6 +215,7 @@
 			if (_index == value) return;
 			_index = value;
 			_frame = uint(_anim._frames[_index]);
+			_timer = 0;
 			updateBuffer();
 		}
 		
