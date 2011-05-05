@@ -289,6 +289,8 @@
 		*/
 		public function loadFromString(str:String, columnSep:String = ",", rowSep:String = "\n"):void
 		{
+			var u:Boolean = usePositions;
+			usePositions = false;
 			var row:Array = str.split(rowSep),
 				rows:int = row.length,
 				col:Array, cols:int, x:int, y:int;
@@ -303,6 +305,8 @@
 					setTile(x, y, uint(col[x]));
 				}
 			}
+			
+			usePositions = u;
 		}
 		
 		/**
@@ -318,7 +322,7 @@
 			{
 				for (x = 0; x < _columns; x ++)
 				{
-					s += String(getTile(x, y));
+					s += String(_map.getPixel(x, y));
 					if (x != _columns - 1) s += columnSep;
 				}
 				if (y != _rows - 1) s += rowSep;
@@ -465,7 +469,7 @@
 			{
 				for (var col:uint = 0; col < _columns; ++col)
 				{
-					if (solidTiles.indexOf(getTile(col, row)) !== -1)
+					if (solidTiles.indexOf(_map.getPixel(col, row)) !== -1)
 					{
 						grid.setTile(col, row, true);
 					}
