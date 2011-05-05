@@ -367,8 +367,8 @@
 					FP.point.y = y;
 				}
 				else FP.point.x = FP.point.y = 0;
-				FP.point2.x = FP.camera.x;
-				FP.point2.y = FP.camera.y;
+				FP.point2.x = _camera.x;
+				FP.point2.y = _camera.y;
 				g.render(_target, FP.point, FP.point2);
 			}
 		}
