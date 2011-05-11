@@ -1,4 +1,4 @@
-﻿package net.flashpunk.graphics 
+package net.flashpunk.graphics 
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -55,6 +55,12 @@
 		 * This will affect drawing performance, but look less pixelly.
 		 */
 		public var smooth:Boolean;
+		
+		/**
+		 * Special (and default) value for _tintFactor
+		 * which enforces the multiply mode
+		 */
+		public static const TINTING_MULTIPLY:Number = -1;
 		
 		/**
 		 * Constructor.
@@ -199,21 +205,11 @@
 			value = value < 0 ? 0 : (value > 1 ? 1 : value);
 			if (_alpha == value) return;
 			_alpha = value;
-			if (_alpha == 1 && _color == 0xFFFFFF)
-			{
-				_tint = null;
-				return updateBuffer();
-			}
-			_tint = _colorTransform;
-			_tint.redMultiplier = (_color >> 16 & 0xFF) / 255;
-			_tint.greenMultiplier = (_color >> 8 & 0xFF) / 255;
-			_tint.blueMultiplier = (_color & 0xFF) / 255;
-			_tint.alphaMultiplier = _alpha;
-			updateBuffer();
+			updateColorTransform();
 		}
 		
 		/**
-		 * The tinted color of the Image. Use 0xFFFFFF to draw the Image normally.
+		 * The tinted color of the Image. Use 0xFFFFFF to draw the Image normally with the default blending mode.
 		 */
 		public function get color():uint { return _color; }
 		public function set color(value:uint):void
@@ -221,15 +217,52 @@
 			value &= 0xFFFFFF;
 			if (_color == value) return;
 			_color = value;
-			if (_alpha == 1 && _color == 0xFFFFFF)
-			{
-				_tint = null;
-				return updateBuffer();
+			updateColorTransform();
+		}
+		
+		/**
+		 * The amount the image will be tinted, from 0 to 1. 0 Means no change, 1 is full colour tint.
+		 * Accepts the special value TINTING_MULTIPLY to turn off normal tinting and use the multiply mode.
+		 */
+		public function get tinting():Number { return _tintFactor; }
+		public function set tinting(value:Number):void
+		{
+			if (_tintFactor == value) return;
+			_tintFactor = value;
+			updateColorTransform();
+		}
+		
+		/**
+		 * Updates the colour transform
+		 */
+		protected function updateColorTransform():void {
+			if (_alpha == 1) {
+				if ((_tintFactor == TINTING_MULTIPLY) && (_color == 0xFFFFFF)) {
+					//_tint = null;
+					//return updateBuffer();
+				}
+				if (_tintFactor == 0) {
+					_tint = null;
+					return updateBuffer();
+				}
 			}
 			_tint = _colorTransform;
-			_tint.redMultiplier = (_color >> 16 & 0xFF) / 255;
-			_tint.greenMultiplier = (_color >> 8 & 0xFF) / 255;
-			_tint.blueMultiplier = (_color & 0xFF) / 255;
+			if (_tintFactor == TINTING_MULTIPLY) {
+				_tint.redMultiplier   = (_color >> 16 & 0xFF) / 255;
+				_tint.greenMultiplier = (_color >> 8 & 0xFF) / 255;
+				_tint.blueMultiplier  = (_color & 0xFF) / 255;
+				_tint.redOffset       = 0;
+				_tint.greenOffset     = 0;
+				_tint.blueOffset      = 0;
+			}
+			else {
+				_tint.redMultiplier   = 1.0 - _tintFactor;
+				_tint.greenMultiplier = 1.0 - _tintFactor;
+				_tint.blueMultiplier  = 1.0 - _tintFactor;
+				_tint.redOffset       = (_color >> 16 & 0xFF) * _tintFactor;
+				_tint.greenOffset     = (_color >> 8 & 0xFF) * _tintFactor;
+				_tint.blueOffset      = (_color & 0xFF) * _tintFactor;
+			}
 			_tint.alphaMultiplier = _alpha;
 			updateBuffer();
 		}
@@ -352,6 +385,7 @@
 		// Color and alpha information.
 		/** @private */ private var _alpha:Number = 1;
 		/** @private */ private var _color:uint = 0x00FFFFFF;
+		/** @private */ private var _tintFactor:Number = TINTING_MULTIPLY;
 		/** @protected */ protected var _tint:ColorTransform;
 		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
 		/** @private */ private var _matrix:Matrix = FP.matrix;
