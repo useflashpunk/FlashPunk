@@ -57,10 +57,10 @@ package net.flashpunk.graphics
 		public var smooth:Boolean;
 		
 		/**
-		 * Special (and default) value for _tintFactor
-		 * which enforces the multiply mode
+		 * Colour tint modes
 		 */
-		public static const TINTING_MULTIPLY:Number = -1;
+		public static const TINTING_MULTIPLY:Number = 0.0;
+		public static const TINTING_COLOURISE:Number = 1.0;
 		
 		/**
 		 * Constructor.
@@ -221,8 +221,7 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The amount the image will be tinted, from 0 to 1. 0 Means no change, 1 is full colour tint.
-		 * Accepts the special value TINTING_MULTIPLY to turn off normal tinting and use the multiply mode.
+		 * The amount the image will be tinted, suggested values from 0 to 1. 0 Means no change, 1 is full colour tint.
 		 */
 		public function get tinting():Number { return _tintFactor; }
 		public function set tinting(value:Number):void
@@ -233,24 +232,36 @@ package net.flashpunk.graphics
 		}
 		
 		/**
+		 * The tint mode - multiply or colourise
+		 */
+		public function get tintMode():Number { return _tintMode; }
+		public function set tintMode(value:Number):void
+		{
+			if (_tintMode == value) return;
+			_tintMode = value;
+			updateColorTransform();
+		}
+		
+		/**
 		 * Updates the colour transform
 		 */
 		protected function updateColorTransform():void {
 			if (_alpha == 1) {
-				if ((_tintFactor == TINTING_MULTIPLY) && (_color == 0xFFFFFF)) {
-					//_tint = null;
-					//return updateBuffer();
-				}
 				if (_tintFactor == 0) {
+					_tint = null;
+					return updateBuffer();
+				}
+				if ((_tintMode == TINTING_MULTIPLY) && (_color == 0xFFFFFF)) {
 					_tint = null;
 					return updateBuffer();
 				}
 			}
 			_tint = _colorTransform;
-			if (_tintFactor == TINTING_MULTIPLY) {
-				_tint.redMultiplier   = (_color >> 16 & 0xFF) / 255;
-				_tint.greenMultiplier = (_color >> 8 & 0xFF) / 255;
-				_tint.blueMultiplier  = (_color & 0xFF) / 255;
+			/*
+			if (_tintMode == TINTING_MULTIPLY) {
+				_tint.redMultiplier   = _tintFactor * (Number(_color >> 16 & 0xFF) / 255 - 1) + 1;
+				_tint.greenMultiplier = _tintFactor * (Number(_color >> 8 & 0xFF) / 255 - 1) + 1;
+				_tint.blueMultiplier  = _tintFactor * (Number(_color & 0xFF) / 255 - 1) + 1;
 				_tint.redOffset       = 0;
 				_tint.greenOffset     = 0;
 				_tint.blueOffset      = 0;
@@ -263,6 +274,15 @@ package net.flashpunk.graphics
 				_tint.greenOffset     = (_color >> 8 & 0xFF) * _tintFactor;
 				_tint.blueOffset      = (_color & 0xFF) * _tintFactor;
 			}
+			*/
+			
+			_tint.redMultiplier   = _tintMode * (1.0 - _tintFactor) + (1-_tintMode) * (_tintFactor * (Number(_color >> 16 & 0xFF) / 255 - 1) + 1);
+			_tint.greenMultiplier = _tintMode * (1.0 - _tintFactor) + (1-_tintMode) * (_tintFactor * (Number(_color >> 8 & 0xFF) / 255 - 1) + 1);
+			_tint.blueMultiplier  = _tintMode * (1.0 - _tintFactor) + (1-_tintMode) * (_tintFactor * (Number(_color & 0xFF) / 255 - 1) + 1);
+			_tint.redOffset       = (_color >> 16 & 0xFF) * _tintFactor * _tintMode;
+			_tint.greenOffset     = (_color >> 8 & 0xFF) * _tintFactor * _tintMode;
+			_tint.blueOffset      = (_color & 0xFF) * _tintFactor * _tintMode;
+			
 			_tint.alphaMultiplier = _alpha;
 			updateBuffer();
 		}
@@ -385,7 +405,8 @@ package net.flashpunk.graphics
 		// Color and alpha information.
 		/** @private */ private var _alpha:Number = 1;
 		/** @private */ private var _color:uint = 0x00FFFFFF;
-		/** @private */ private var _tintFactor:Number = TINTING_MULTIPLY;
+		/** @private */ private var _tintFactor:Number = 1.0;
+		/** @private */ private var _tintMode:Number = TINTING_MULTIPLY;
 		/** @protected */ protected var _tint:ColorTransform;
 		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
 		/** @private */ private var _matrix:Matrix = FP.matrix;
