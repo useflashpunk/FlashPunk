@@ -57,10 +57,10 @@ package net.flashpunk.graphics
 		public var smooth:Boolean;
 		
 		/**
-		 * Colour tint modes
+		 * Color tint modes
 		 */
 		public static const TINTING_MULTIPLY:Number = 0.0;
-		public static const TINTING_COLOURISE:Number = 1.0;
+		public static const TINTING_COLORIZE:Number = 1.0;
 		
 		/**
 		 * Constructor.
@@ -221,7 +221,7 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The amount the image will be tinted, suggested values from 0 to 1. 0 Means no change, 1 is full colour tint.
+		 * The amount the image will be tinted, suggested values from 0 to 1. 0 Means no change, 1 is full color tint.
 		 */
 		public function get tinting():Number { return _tintFactor; }
 		public function set tinting(value:Number):void
@@ -232,7 +232,7 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The tint mode - multiply or colourise
+		 * The tint mode - multiply or colorize
 		 */
 		public function get tintMode():Number { return _tintMode; }
 		public function set tintMode(value:Number):void
@@ -243,7 +243,7 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * Updates the colour transform
+		 * Updates the color transform
 		 */
 		protected function updateColorTransform():void {
 			if (_alpha == 1) {
