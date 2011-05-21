@@ -194,7 +194,7 @@ package net.flashpunk
 			
 			if (types is String) {
 				return collide(String(types), x, y);
-			} else if (types is Array || types is Vector.<Entity>) {
+			} else if (types is Array || types is Vector.<String>) {
 				for each (var type:String in types)
 				{
 					if ((e = collide(type, x, y))) return e;
