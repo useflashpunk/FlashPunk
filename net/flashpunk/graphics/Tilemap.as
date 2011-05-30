@@ -331,7 +331,7 @@
 		}
 		
 		/**
-		 * Gets the index of a tile, based on its column and row in the tileset.
+		 * Gets the 1D index of a tile from a 2D index (its column and row in the tileset image).
 		 * @param	tilesColumn		Tileset column.
 		 * @param	tilesRow		Tileset row.
 		 * @return	Index of the tile.
