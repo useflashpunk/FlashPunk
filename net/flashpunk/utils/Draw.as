@@ -172,9 +172,18 @@
 		 * @param	height		Height of the rectangle.
 		 * @param	color		Color of the rectangle.
 		 * @param	alpha		Alpha of the rectangle.
+		 * @param	overwrite	If the color/alpha provided should replace the existing data rather than blend.
 		 */
-		public static function rect(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1):void
+		public static function rect(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1, overwrite:Boolean = false):void
 		{
+			if (! overwrite && (alpha < 1 || blend)) {
+				_graphics.clear();
+				_graphics.beginFill(color & 0xFFFFFF, alpha);
+				_graphics.drawRect(x - _camera.x, y - _camera.y, width, height);
+				_target.draw(FP.sprite, null, null, blend);
+				return;
+			}
+			
 			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
 			_rect.x = x - _camera.x;
 			_rect.y = y - _camera.y;
