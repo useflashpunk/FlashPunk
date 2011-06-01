@@ -34,6 +34,11 @@
 		public static var align:String = "left";
 		
 		/**
+		 * The leading to assign to new Text objects.
+		 */
+		public static var defaultLeading:Number = 0;
+		
+		/**
 		 * The wordWrap property to assign to new Text objects.
 		 */
 		public static var wordWrap:Boolean = false;
@@ -77,6 +82,7 @@
 			_font = Text.font;
 			_size = Text.size;
 			_align = Text.align;
+			_leading = Text.defaultLeading;
 			_wordWrap = Text.wordWrap;
 			resizable = Text.resizable;
 			var width:uint = 0;
@@ -105,6 +111,7 @@
 			_field.wordWrap = _wordWrap;
 			_form = new TextFormat(_font, _size, 0xFFFFFF);
 			_form.align = _align;
+			_form.leading = _leading;
 			_field.defaultTextFormat = _form;
 			_field.text = _text = text;
 			_width = width || _field.textWidth + 4;
@@ -232,13 +239,23 @@
 		
 		/**
 		 * Alignment ("left", "center" or "right").
-		 * Only relevant if text spans multiple lines.
 		 */
 		public function get align():String { return _align; }
 		public function set align(value:String):void
 		{
 			if (_align == value) return;
 			_form.align = _align = value;
+			updateTextBuffer();
+		}
+		
+		/**
+		 * Leading (amount of vertical space between lines).
+		 */
+		public function get leading():Number { return _leading; }
+		public function set leading(value:Number):void
+		{
+			if (_leading == value) return;
+			_form.leading = _leading = value;
 			updateTextBuffer();
 		}
 		
@@ -306,6 +323,7 @@
 		/** @private */ private var _font:String;
 		/** @private */ private var _size:uint;
 		/** @private */ private var _align:String;
+		/** @private */ private var _leading:Number;
 		/** @private */ private var _wordWrap:Boolean;
 		
 		// Default font family.
