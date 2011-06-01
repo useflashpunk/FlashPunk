@@ -257,24 +257,6 @@ package net.flashpunk.graphics
 				}
 			}
 			_tint = _colorTransform;
-			/*
-			if (_tintMode == TINTING_MULTIPLY) {
-				_tint.redMultiplier   = _tintFactor * (Number(_color >> 16 & 0xFF) / 255 - 1) + 1;
-				_tint.greenMultiplier = _tintFactor * (Number(_color >> 8 & 0xFF) / 255 - 1) + 1;
-				_tint.blueMultiplier  = _tintFactor * (Number(_color & 0xFF) / 255 - 1) + 1;
-				_tint.redOffset       = 0;
-				_tint.greenOffset     = 0;
-				_tint.blueOffset      = 0;
-			}
-			else {
-				_tint.redMultiplier   = 1.0 - _tintFactor;
-				_tint.greenMultiplier = 1.0 - _tintFactor;
-				_tint.blueMultiplier  = 1.0 - _tintFactor;
-				_tint.redOffset       = (_color >> 16 & 0xFF) * _tintFactor;
-				_tint.greenOffset     = (_color >> 8 & 0xFF) * _tintFactor;
-				_tint.blueOffset      = (_color & 0xFF) * _tintFactor;
-			}
-			*/
 			
 			_tint.redMultiplier   = _tintMode * (1.0 - _tintFactor) + (1-_tintMode) * (_tintFactor * (Number(_color >> 16 & 0xFF) / 255 - 1) + 1);
 			_tint.greenMultiplier = _tintMode * (1.0 - _tintFactor) + (1-_tintMode) * (_tintFactor * (Number(_color >> 8 & 0xFF) / 255 - 1) + 1);
