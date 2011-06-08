@@ -70,7 +70,7 @@
 						_matrix.tx = _point.x;
 						_matrix.ty = _point.y;
 						_bitmap.bitmapData = buffer;
-						target.draw(buffer, _matrix, _tint, blend);
+						target.draw(_bitmap, _matrix, _tint, blend);
 					}
 					else target.copyPixels(buffer, buffer.rect, _point, null, null, true);
 					_point.x += _maxWidth;
