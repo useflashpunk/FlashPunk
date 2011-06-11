@@ -117,6 +117,7 @@
 		{
 			if (input is String)
 			{
+				if (! _control[input]) return false;
 				var v:Vector.<int> = _control[input],
 					i:int = v.length;
 				while (i --)
@@ -142,6 +143,7 @@
 		{
 			if (input is String)
 			{
+				if (! _control[input]) return false;
 				var v:Vector.<int> = _control[input],
 					i:int = v.length;
 				while (i --)
@@ -162,6 +164,7 @@
 		{
 			if (input is String)
 			{
+				if (! _control[input]) return false;
 				var v:Vector.<int> = _control[input],
 					i:int = v.length;
 				while (i --)
