@@ -20,7 +20,7 @@ package net.flashpunk.graphics
 		public var angle:Number = 0;
 		
 		/**
-		 * Scale of the image, effects both x and y scale.
+		 * Scale of the image, affects both x and y scale.
 		 */
 		public var scale:Number = 1;
 		
