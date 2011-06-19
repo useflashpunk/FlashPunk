@@ -107,7 +107,7 @@
 		 */
 		public function get mouseX():int
 		{
-			return FP.screen.mouseX + FP.camera.x;
+			return FP.screen.mouseX + camera.x;
 		}
 		
 		/**
@@ -115,7 +115,7 @@
 		 */
 		public function get mouseY():int
 		{
-			return FP.screen.mouseY + FP.camera.y;
+			return FP.screen.mouseY + camera.y;
 		}
 		
 		/**
