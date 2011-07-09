@@ -176,7 +176,7 @@
 			if (FP.fixed)
 			{
 				// fixed framerate
-				_skip = _rate * maxFrameSkip;
+				_skip = _rate * (maxFrameSkip + 1);
 				_last = _prev = getTimer();
 				_timer = new Timer(tickRate);
 				_timer.addEventListener(TimerEvent.TIMER, onTimer);
@@ -244,7 +244,7 @@
 			
 			// update loop
 			if (_delta > _skip) _delta = _skip;
-			while (_delta > _rate)
+			while (_delta >= _rate)
 			{
 				// update timer
 				_updateTime = _time;
