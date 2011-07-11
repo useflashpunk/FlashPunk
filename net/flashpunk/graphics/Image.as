@@ -184,7 +184,7 @@ package net.flashpunk.graphics
 			}
 			if (!_source) return;
 			if (clearBefore) _buffer.fillRect(_bufferRect, 0);
-			_buffer.copyPixels(_source, _sourceRect, FP.zero);
+			_buffer.copyPixels(_source, _sourceRect, FP.zero, _drawMask, FP.zero);
 			if (_tint) _buffer.colorTransform(_bufferRect, _tint);
 		}
 		
@@ -304,6 +304,17 @@ package net.flashpunk.graphics
 		}
 		
 		/**
+		 * Set the transparency mask of the Image.
+		 */
+		public function get drawMask():BitmapData { return _drawMask; }
+		public function set drawMask(value:BitmapData):void
+		{
+			// no early exit because the BitmapData contents might have changed
+			_drawMask = value;
+			updateBuffer(true);
+		}
+		
+		/**
 		 * Centers the Image's originX/Y to its center.
 		 */
 		public function centerOrigin():void
@@ -392,6 +403,7 @@ package net.flashpunk.graphics
 		/** @protected */ protected var _tint:ColorTransform;
 		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
 		/** @private */ private var _matrix:Matrix = FP.matrix;
+		/** @private */ private var _drawMask:BitmapData;
 		
 		// Flipped image information.
 		/** @protected */ protected var _class:String;
