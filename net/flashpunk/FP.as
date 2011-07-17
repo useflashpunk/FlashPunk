@@ -158,6 +158,23 @@
 		}
 		
 		/**
+		 * Remove an element from an array
+		 * @return	True if element existed and has been removed, false if element was not in array.
+		 */
+		public static function remove(array:*, toRemove:*):Boolean
+		{
+			var i:int = array.indexOf(toRemove);
+			
+			if (i >= 0) {
+				array.splice(i, 1);
+			
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		/**
 		 * Randomly chooses and returns one of the provided values.
 		 * @param	...objs		The Objects you want to randomly choose from. Can be ints, Numbers, Points, etc.
 		 * @return	A randomly chosen one of the provided parameters.
