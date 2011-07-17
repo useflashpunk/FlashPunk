@@ -24,7 +24,7 @@
 		public static var lastKey:int;
 		
 		/**
-		 * The mouse cursor. Set to "hide" to hide the cursor.
+		 * The mouse cursor. Set to "hide" to hide the cursor. See the flash.ui.MouseCursor class for a list of all other possible values. Common values: "auto" or "button".
 		 */
 		public static var mouseCursor:String;
 		
