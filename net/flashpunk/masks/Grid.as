@@ -1,7 +1,6 @@
 ﻿package net.flashpunk.masks
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
+	import flash.display.*;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import net.flashpunk.*;
@@ -254,6 +253,27 @@
 				_tile.y += _tile.height;
 			}
 			return false;
+		}
+		
+		public override function renderDebug(g:Graphics):void
+		{
+			var sx:Number = FP.screen.scaleX * FP.screen.scale;
+			var sy:Number = FP.screen.scaleY * FP.screen.scale;
+			
+			var x:int, y:int;
+			
+			g.lineStyle(1, 0xFFFFFF, 0.25);
+			
+			for (y = 0; y < _rows; y ++)
+			{
+				for (x = 0; x < _columns; x ++)
+				{
+					if (_data.getPixel32(x, y))
+					{
+						g.drawRect((parent.x - parent.originX - FP.camera.x + x * _tile.width) * sx, (parent.y - parent.originY - FP.camera.y + y * _tile.height) * sy, _tile.width * sx, _tile.height * sy);
+					}
+				}
+			}
 		}
 		
 		// Grid information.
