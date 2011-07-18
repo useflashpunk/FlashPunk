@@ -2,6 +2,7 @@
 {
 	import net.flashpunk.*;
 	import net.flashpunk.masks.Masklist;
+	import flash.display.Graphics;
 	
 	/**
 	 * A Mask that can contain multiple Masks of one or various types.
@@ -152,6 +153,12 @@
 			_width = r - l;
 			_height = b - t;
 			super.update();
+		}
+		
+		/** Used to render debug information in console. */
+		public override function renderDebug(g:Graphics):void
+		{
+			for each (var m:Mask in _masks) m.renderDebug(g);
 		}
 		
 		/**
