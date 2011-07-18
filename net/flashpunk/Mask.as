@@ -1,5 +1,6 @@
 ﻿package net.flashpunk
 {
+	import flash.display.Graphics;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
@@ -67,6 +68,12 @@
 		
 		/** @private Updates the parent's bounds for this mask. */
 		protected function update():void
+		{
+			
+		}
+		
+		/** Used to render debug information in console. */
+		public function renderDebug(g:Graphics):void
 		{
 			
 		}

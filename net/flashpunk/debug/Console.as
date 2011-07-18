@@ -607,6 +607,7 @@ package net.flashpunk.debug
 						{
 							g.lineStyle(1, 0xFF0000);
 							g.drawRect((e.x - e.originX - FP.camera.x) * sx, (e.y - e.originY - FP.camera.y) * sy, e.width * sx, e.height * sy);
+							if (e.mask) e.mask.renderDebug(g);
 						}
 						g.lineStyle(1, 0x00FF00);
 						g.drawRect((e.x - FP.camera.x) * sx - 3, (e.y - FP.camera.y) * sy - 3, 6, 6);
@@ -618,6 +619,7 @@ package net.flashpunk.debug
 						{
 							g.lineStyle(1, 0xFFFFFF);
 							g.drawRect((e.x - e.originX - FP.camera.x) * sx, (e.y - e.originY - FP.camera.y) * sy, e.width * sx, e.height * sy);
+							if (e.mask) e.mask.renderDebug(g);
 						}
 						g.lineStyle(1, 0xFFFFFF);
 						g.drawRect((e.x - FP.camera.x) * sx - 3, (e.y - FP.camera.y) * sy - 3, 6, 6);
