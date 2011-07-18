@@ -1,8 +1,7 @@
 ﻿package net.flashpunk.masks
 {
-	import flash.display.BitmapData;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
+	import flash.display.*;
+	import flash.geom.*;
 	import net.flashpunk.*;
 	
 	/**
@@ -86,8 +85,38 @@
 			update();
 		}
 		
+		public override function renderDebug(g:Graphics):void
+		{
+			if (! _debug) {
+				_debug = new BitmapData(_data.width, _data.height, true, 0x0);
+			}
+			
+			FP.rect.x = 0;
+			FP.rect.y = 0;
+			FP.rect.width = _data.width;
+			FP.rect.height = _data.height;
+			
+			_debug.fillRect(FP.rect, 0x0);
+			_debug.threshold(_data, FP.rect, FP.zero, ">=", threshold << 24, 0x40FFFFFF, 0xFF000000);
+			
+			var sx:Number = FP.screen.scaleX * FP.screen.scale;
+			var sy:Number = FP.screen.scaleY * FP.screen.scale;
+			
+			FP.matrix.a = sx;
+			FP.matrix.d = sy;
+			FP.matrix.b = FP.matrix.c = 0;
+			FP.matrix.tx = (parent.x - parent.originX - FP.camera.x)*sx;
+			FP.matrix.ty = (parent.y - parent.originY - FP.camera.y)*sy;
+			
+			g.lineStyle();
+			g.beginBitmapFill(_debug, FP.matrix);
+			g.drawRect(FP.matrix.tx, FP.matrix.ty, _data.width*sx, _data.height*sy);
+			g.endFill();
+		}
+		
 		// Pixelmask information.
 		/** @private */ internal var _data:BitmapData;
+		/** @private */ internal var _debug:BitmapData;
 		
 		// Global objects.
 		/** @private */ private var _rect:Rectangle = FP.rect;
