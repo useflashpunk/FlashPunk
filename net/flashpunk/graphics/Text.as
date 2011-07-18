@@ -134,10 +134,125 @@
 			}
 		}
 		
+		public function setStyle(tagName:String, params:*):void
+		{
+			var format:TextFormat;
+			
+			if (params is TextFormat || ! params) {
+				format = params;
+			} else {
+				format = new TextFormat;
+				
+				for (var key:String in params) {
+					if (format.hasOwnProperty(key)) {
+						format[key] = params[key];
+					} else {
+						throw new Error('"' + key + '" is not a TextFormat property');
+					}
+				}
+			}
+			
+			_styles[tagName] = format;
+			
+			updateTextBuffer();
+		}
+		
+		protected var _styles:Object = new Object;
+		private var _styleToDo:Vector.<Function> = new Vector.<Function>;
+		private var _styleIndices:Vector.<int> = new Vector.<int>;
+		private var _styleMatched:Array = new Array;
+		
+		private function _getApplyStyleFunction (format:TextFormat, start:int, end:int):Function
+		{
+			return function ():void
+			{
+				trace(start +" to " +end);
+				start = _styleIndices[start];
+				end = _styleIndices[end];
+				trace("is " + start +" to " +end);
+				
+				if (start != end) _field.setTextFormat(format, start, end);
+			}
+		}
+		
+		private function matchStyles():void
+		{
+			trace("update");
+			
+			var i:int, j:int;
+			
+			var fragments:Array = _text.split("<");
+			
+			_styleToDo.length = 0;
+			_styleIndices.length = 0;
+			_styleMatched.length = 0;
+			
+			trace(fragments);
+			
+			for (i = 1; i < fragments.length; i++) {
+				if (_styleMatched[i]) continue;
+				
+				var substring:String = fragments[i];
+			
+				var tagLength:int = substring.indexOf(">");
+				
+				if (tagLength > 0) {
+					var tagName:String = substring.substr(0, tagLength);
+					trace("testing "+tagName + " at " + i);
+					if (_styles[tagName]) {
+						fragments[i] = substring.slice(tagLength + 1);
+				
+						var endTagString:String = "/" + tagName + ">";
+				
+						for (j = i + 1; j < fragments.length; j++) {
+							if (fragments[j].substr(0, tagLength + 2) == endTagString) {
+								fragments[j] = fragments[j].slice(tagLength + 2);
+								_styleMatched[j] = true;
+							
+								break;
+							}
+						}
+						
+						trace(tagName + " found from " + i + " to " + j);
+						
+						_styleToDo.push(_getApplyStyleFunction(_styles[tagName], i, j));
+						
+						continue;
+					}
+				}
+				
+				fragments[i-1] = fragments[i-1].concat("<");
+			}
+			
+			_styleIndices[0] = 0;
+			j = 0;
+			
+			for (i = 0; i < fragments.length; i++) {
+				j += fragments[i].length;
+				_styleIndices[i+1] = j;
+			}
+			
+			trace(_styleIndices);
+			
+			_field.text = fragments.join("");
+			
+			_field.setTextFormat(_form);
+			
+			for (i = 0; i < _styleToDo.length; i++) {
+				trace("Calling "+ i);
+				_styleToDo[i]();
+			}
+		}
+		
 		/** Updates the text buffer, which is the source for the image buffer. */
 		public function updateTextBuffer():void
 		{
-			_field.setTextFormat(_form);
+			if (false) {
+				matchStyles();
+			} else {
+				_field.setTextFormat(_form);
+			}
+			
 			_field.width = _width;
 			_textWidth = _field.textWidth + 4;
 			_textHeight = _field.textHeight + 4;
@@ -168,7 +283,9 @@
 			
 			var offsetRequired: Boolean = false;
 			
-			for (var i: int = 0; i < _field.numLines; i++) {
+			var i:int;
+			
+			for (i = 0; i < _field.numLines; i++) {
 				var tlm: TextLineMetrics = _field.getLineMetrics(i);
 				var remainder: Number = tlm.x % 1;
 				if (remainder > 0.1 && remainder < 0.9) {
