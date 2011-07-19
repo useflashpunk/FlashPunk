@@ -158,20 +158,11 @@
 		}
 		
 		protected var _styles:Object = new Object;
-		private var _styleToDo:Vector.<Function> = new Vector.<Function>;
-		private var _styleIndices:Vector.<int> = new Vector.<int>;
-		private var _styleMatched:Array = new Array;
-		
-		private function _getApplyStyleFunction (format:TextFormat, start:int, end:int):Function
-		{
-			return function ():void
-			{
-				start = _styleIndices[start];
-				end = _styleIndices[end];
-				
-				if (start != end) _field.setTextFormat(format, start, end);
-			}
-		}
+		private static var _styleIndices:Vector.<int> = new Vector.<int>;
+		private static var _styleMatched:Array = new Array;
+		private static var _styleFormats:Vector.<TextFormat> = new Vector.<TextFormat>;
+		private static var _styleFrom:Vector.<int> = new Vector.<int>;
+		private static var _styleTo:Vector.<int> = new Vector.<int>;
 		
 		private function matchStyles():void
 		{
@@ -179,9 +170,11 @@
 			
 			var fragments:Array = _richText.split("<");
 			
-			_styleToDo.length = 0;
 			_styleIndices.length = 0;
 			_styleMatched.length = 0;
+			_styleFormats.length = 0;
+			_styleFrom.length = 0;
+			_styleTo.length = 0;
 			
 			for (i = 1; i < fragments.length; i++) {
 				if (_styleMatched[i]) continue;
@@ -206,7 +199,9 @@
 							}
 						}
 						
-						_styleToDo.push(_getApplyStyleFunction(_styles[tagName], i, j));
+						_styleFormats.push(_styles[tagName]);
+						_styleFrom.push(i);
+						_styleTo.push(j);
 						
 						continue;
 					}
@@ -227,8 +222,11 @@
 			
 			_field.setTextFormat(_form);
 			
-			for (i = 0; i < _styleToDo.length; i++) {
-				_styleToDo[i]();
+			for (i = 0; i < _styleFormats.length; i++) {
+				var start:int = _styleIndices[_styleFrom[i]];
+				var end:int = _styleIndices[_styleTo[i]];
+				
+				if (start != end) _field.setTextFormat(_styleFormats[i], start, end);
 			}
 		}
 		
