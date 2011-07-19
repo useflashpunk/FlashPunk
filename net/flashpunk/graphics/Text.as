@@ -230,12 +230,41 @@
 			}
 		}
 		
+		override protected function updateColorTransform():void {
+			if (_richText) {
+				if (_alpha == 1) {
+					_tint = null;
+				} else {
+					_tint = _colorTransform;
+					_tint.redMultiplier   = 1;
+					_tint.greenMultiplier = 1;
+					_tint.blueMultiplier  = 1;
+					_tint.redOffset       = 0;
+					_tint.greenOffset     = 0;
+					_tint.blueOffset      = 0;
+					_tint.alphaMultiplier = _alpha;
+				}
+				
+				if (_form.color != _color) {
+					updateTextBuffer();
+				} else {
+					updateBuffer();
+				}
+				
+				return;
+			}
+			
+			super.updateColorTransform();
+		}
+		
 		/** Updates the text buffer, which is the source for the image buffer. */
 		public function updateTextBuffer():void
 		{
 			if (_richText) {
+				_form.color = _color;
 				matchStyles();
 			} else {
+				_form.color = 0xFFFFFF;
 				_field.setTextFormat(_form);
 			}
 			
@@ -428,19 +457,19 @@
 		public function get textHeight():uint { return _textHeight; }
 		
 		// Text information.
-		/** @private */ private var _field:TextField = new TextField;
-		/** @private */ private var _width:uint;
-		/** @private */ private var _height:uint;
-		/** @private */ private var _textWidth:uint;
-		/** @private */ private var _textHeight:uint;
-		/** @private */ private var _form:TextFormat;
-		/** @private */ private var _text:String;
-		/** @private */ private var _richText:String;
-		/** @private */ private var _font:String;
-		/** @private */ private var _size:uint;
-		/** @private */ private var _align:String;
-		/** @private */ private var _leading:Number;
-		/** @private */ private var _wordWrap:Boolean;
+		/** @protected */ protected var _field:TextField = new TextField;
+		/** @protected */ protected var _width:uint;
+		/** @protected */ protected var _height:uint;
+		/** @protected */ protected var _textWidth:uint;
+		/** @protected */ protected var _textHeight:uint;
+		/** @protected */ protected var _form:TextFormat;
+		/** @protected */ protected var _text:String;
+		/** @protected */ protected var _richText:String;
+		/** @protected */ protected var _font:String;
+		/** @protected */ protected var _size:uint;
+		/** @protected */ protected var _align:String;
+		/** @protected */ protected var _leading:Number;
+		/** @protected */ protected var _wordWrap:Boolean;
 		
 		// Default font family.
 		// Use this option when compiling with Flex SDK 3 or lower

@@ -396,14 +396,14 @@ package net.flashpunk.graphics
 		/** @private */ protected var _bitmap:Bitmap = new Bitmap;
 		
 		// Color and alpha information.
-		/** @private */ private var _alpha:Number = 1;
-		/** @private */ private var _color:uint = 0x00FFFFFF;
-		/** @private */ private var _tintFactor:Number = 1.0;
-		/** @private */ private var _tintMode:Number = TINTING_MULTIPLY;
+		/** @protected */ protected var _alpha:Number = 1;
+		/** @protected */ protected var _color:uint = 0x00FFFFFF;
+		/** @protected */ protected var _tintFactor:Number = 1.0;
+		/** @protected */ protected var _tintMode:Number = TINTING_MULTIPLY;
 		/** @protected */ protected var _tint:ColorTransform;
-		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
-		/** @private */ private var _matrix:Matrix = FP.matrix;
-		/** @private */ private var _drawMask:BitmapData;
+		/** @protected */ protected var _colorTransform:ColorTransform = new ColorTransform;
+		/** @protected */ protected var _matrix:Matrix = FP.matrix;
+		/** @protected */ protected var _drawMask:BitmapData;
 		
 		// Flipped image information.
 		/** @protected */ protected var _class:String;
