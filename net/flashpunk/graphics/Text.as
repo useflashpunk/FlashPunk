@@ -342,15 +342,16 @@
 		public function get text():String { return _text; }
 		public function set text(value:String):void
 		{
-			if (_text == value) return;
+			if (_text == value && !_richText) return;
 			_field.text = _text = value;
+			_richText = null;
 			updateTextBuffer();
 		}
 		
 		/**
 		 * Rich-text string with markup.
 		 */
-		public function get richText():String { return _richText || ""; }
+		public function get richText():String { return _richText || _text; }
 		public function set richText(value:String):void
 		{
 			if (_richText == value) return;
