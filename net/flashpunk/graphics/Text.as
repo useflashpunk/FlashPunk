@@ -166,10 +166,8 @@
 		{
 			return function ():void
 			{
-				trace(start +" to " +end);
 				start = _styleIndices[start];
 				end = _styleIndices[end];
-				trace("is " + start +" to " +end);
 				
 				if (start != end) _field.setTextFormat(format, start, end);
 			}
@@ -177,17 +175,13 @@
 		
 		private function matchStyles():void
 		{
-			trace("update");
-			
 			var i:int, j:int;
 			
-			var fragments:Array = _text.split("<");
+			var fragments:Array = _richText.split("<");
 			
 			_styleToDo.length = 0;
 			_styleIndices.length = 0;
 			_styleMatched.length = 0;
-			
-			trace(fragments);
 			
 			for (i = 1; i < fragments.length; i++) {
 				if (_styleMatched[i]) continue;
@@ -198,7 +192,6 @@
 				
 				if (tagLength > 0) {
 					var tagName:String = substring.substr(0, tagLength);
-					trace("testing "+tagName + " at " + i);
 					if (_styles[tagName]) {
 						fragments[i] = substring.slice(tagLength + 1);
 				
@@ -212,8 +205,6 @@
 								break;
 							}
 						}
-						
-						trace(tagName + " found from " + i + " to " + j);
 						
 						_styleToDo.push(_getApplyStyleFunction(_styles[tagName], i, j));
 						
@@ -232,14 +223,11 @@
 				_styleIndices[i+1] = j;
 			}
 			
-			trace(_styleIndices);
-			
-			_field.text = fragments.join("");
+			_field.text = _text = fragments.join("");
 			
 			_field.setTextFormat(_form);
 			
 			for (i = 0; i < _styleToDo.length; i++) {
-				trace("Calling "+ i);
 				_styleToDo[i]();
 			}
 		}
@@ -247,7 +235,7 @@
 		/** Updates the text buffer, which is the source for the image buffer. */
 		public function updateTextBuffer():void
 		{
-			if (false) {
+			if (_richText) {
 				matchStyles();
 			} else {
 				_field.setTextFormat(_form);
@@ -329,6 +317,18 @@
 		{
 			if (_text == value) return;
 			_field.text = _text = value;
+			updateTextBuffer();
+		}
+		
+		/**
+		 * Rich-text string with markup.
+		 */
+		public function get richText():String { return _richText || ""; }
+		public function set richText(value:String):void
+		{
+			if (_richText == value) return;
+			_richText = value;
+			if (_richText == "") _field.text = _text = "";
 			updateTextBuffer();
 		}
 		
@@ -437,6 +437,7 @@
 		/** @private */ private var _textHeight:uint;
 		/** @private */ private var _form:TextFormat;
 		/** @private */ private var _text:String;
+		/** @private */ private var _richText:String;
 		/** @private */ private var _font:String;
 		/** @private */ private var _size:uint;
 		/** @private */ private var _align:String;
