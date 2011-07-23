@@ -154,7 +154,7 @@
 			
 			_styles[tagName] = format;
 			
-			updateTextBuffer();
+			if (_richText) updateTextBuffer();
 		}
 		
 		protected var _styles:Object = new Object;
@@ -344,7 +344,10 @@
 		{
 			if (_text == value && !_richText) return;
 			_field.text = _text = value;
-			_richText = null;
+			if (_richText) {
+				_richText = null;
+				super.updateColorTransform();
+			}
 			updateTextBuffer();
 		}
 		
@@ -355,9 +358,22 @@
 		public function set richText(value:String):void
 		{
 			if (_richText == value) return;
+			var fromPlain:Boolean = (! _richText);
 			_richText = value;
 			if (_richText == "") _field.text = _text = "";
-			updateTextBuffer();
+			if (fromPlain && _richText) {
+				/*
+				 * N.B. if _form.color != _color we call
+				 * updateTextBuffer() from updateColorTransform().
+				 * 
+				 * _color always has most significant byte 0 so
+				 * setting _form.color = 0xFFFFFFFF will always trigger this.
+				 */
+				_form.color = 0xFFFFFFFF;
+				updateColorTransform();
+			} else {
+				updateTextBuffer();
+			}
 		}
 		
 		/**
