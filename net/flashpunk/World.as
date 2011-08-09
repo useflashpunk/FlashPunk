@@ -595,20 +595,23 @@
 		 * @param	y			Y position of the rectangle.
 		 * @param	width		Width of the rectangle.
 		 * @param	height		Height of the rectangle.
+		 * @param	ignore		Ignore this entity.
 		 * @return	The nearest Entity to the rectangle.
 		 */
-		public function nearestToRect(type:String, x:Number, y:Number, width:Number, height:Number):Entity
+		public function nearestToRect(type:String, x:Number, y:Number, width:Number, height:Number, ignore:Entity = null):Entity
 		{
 			var n:Entity = _typeFirst[type],
 				nearDist:Number = Number.MAX_VALUE,
 				near:Entity, dist:Number;
 			while (n)
 			{
-				dist = squareRects(x, y, width, height, n.x - n.originX, n.y - n.originY, n.width, n.height);
-				if (dist < nearDist)
-				{
-					nearDist = dist;
-					near = n;
+				if (n != ignore) {
+					dist = squareRects(x, y, width, height, n.x - n.originX, n.y - n.originY, n.width, n.height);
+					if (dist < nearDist)
+					{
+						nearDist = dist;
+						near = n;
+					}
 				}
 				n = n._typeNext;
 			}
@@ -632,11 +635,14 @@
 				y:Number = e.y - e.originY;
 			while (n)
 			{
-				dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
-				if (dist < nearDist)
+				if (n != e)
 				{
-					nearDist = dist;
-					near = n;
+					dist = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
+					if (dist < nearDist)
+					{
+						nearDist = dist;
+						near = n;
+					}
 				}
 				n = n._typeNext;
 			}
