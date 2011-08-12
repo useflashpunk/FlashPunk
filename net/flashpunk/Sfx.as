@@ -27,7 +27,8 @@
 			_type = type;
 			if (source is Class)
 			{
-				_sound = (_sounds[source] ||= new source);
+				_sound = _sounds[source];
+				if (!_sound) _sound = _sounds[source] = new source;
 			}
 			else if (source is Sound) _sound = source;
 			else throw new Error("Sfx source needs to be of type Class or Sound");
@@ -110,7 +111,7 @@
 		/** @private Add the sound to the global list. */
 		private function addPlaying():void
 		{
-			_typePlaying[_type] ||= new Dictionary();
+			if (!_typePlaying[_type]) _typePlaying[_type] = new Dictionary()
 			_typePlaying[_type][this] = this;
 		}
 		
