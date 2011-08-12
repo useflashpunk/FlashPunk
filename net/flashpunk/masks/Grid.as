@@ -44,6 +44,7 @@
 			_check[Mask] = collideMask;
 			_check[Hitbox] = collideHitbox;
 			_check[Pixelmask] = collidePixelmask;
+			_check[Grid] = collideGrid;
 		}
 		
 		/**
@@ -252,6 +253,51 @@
 				_tile.x = x1 * _tile.width;
 				_tile.y += _tile.height;
 			}
+			return false;
+		}
+		
+		/** @private Collides against a Grid. */
+		private function collideGrid(other:Grid):Boolean
+		{
+			// Find the X edges
+			var ax1:Number = parent.x + _x;
+			var ax2:Number = ax1 + _width;
+			var bx1:Number = other.parent.x + other._x;
+			var bx2:Number = bx1 + other._width;
+			if (ax2 < bx1 || ax1 > bx2) return false;
+			
+			// Find the Y edges
+			var ay1:Number = parent.y + _y;
+			var ay2:Number = ay1 + _height;
+			var by1:Number = other.parent.y + other._y;
+			var by2:Number = by1 + other._height;
+			if (ay2 < by1 || ay1 > by2) return false;
+			
+			// Find the overlapping area
+			var ox1:Number = ax1 > bx1 ? ax1 : bx1;
+			var oy1:Number = ay1 > by1 ? ay1 : by1;
+			var ox2:Number = ax2 < bx2 ? ax2 : bx2;
+			var oy2:Number = ay2 < by2 ? ay2 : by2;
+			
+			// Step using the smallest tile sizes
+			var tw:Number = _tile.width < other._tile.width ? _tile.width : other._tile.width;
+			var th:Number = _tile.height < other._tile.height ? _tile.height : other._tile.height;
+			for (var y:Number = oy1; y < oy2; y += th)
+			{
+				var arow:int = (y - parent.y - _y) / _tile.height;
+				var brow:int = (y - other.parent.y - _y) / other._tile.height;
+				for (var x:Number = ox1; x < ox2; x += tw)
+				{
+					var acol:int = (x - parent.x - _x) / _tile.width;
+					var bcol:int = (x - other.parent.x - _x) / other._tile.width;
+					if (_data.getPixel32(acol, arow) > 0
+					&& other._data.getPixel32(bcol, brow) > 0)
+					{
+						return true;
+					}
+				}
+			}
+			
 			return false;
 		}
 		
