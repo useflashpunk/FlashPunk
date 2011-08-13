@@ -1,7 +1,5 @@
 ﻿package net.flashpunk 
 {
-	import net.flashpunk.tweens.TweenInfo;
-	
 	/**
 	 * Base class for all Tween objects, can be added to any Core-extended classes.
 	 */
@@ -121,63 +119,6 @@
 		 */
 		public function get scale():Number { return _t; }
 		
-		/**
-		 * Tweens the properties of an object.
-		 * @param	object		Object to tween.
-		 * @param	duration	Duration of the tween.
-		 * @param	values		Properties to tween and their target values (eg. {x:100, y:200} ).
-		 * @param	complete	Optional completion callback function.
-		 * @param	ease		Optional easer function.
-		 */
-		public static function to(object:Object, duration:Number, values:Object, complete:Function = null, ease:Function = null):void
-		{
-			var t:TweenInfo = TweenInfo.create(object, duration, values, complete, ease),
-				i:int = _tweens.length;
-			while (i --)
-			{
-				if (!_tweens[i])
-				{
-					_tweens[i] = t;
-					return;
-				}
-			}
-			_tweens.push(t);
-		}
-		
-		/**
-		 * Clears any active static tweens called by Tween.to().
-		 */
-		public static function clear():void
-		{
-			for each (var tween:TweenInfo in _tweens) tween.destroy();
-			_tweens.length = 0;
-		}
-		
-		/** @private Updates the static tweens. */ 
-		internal static function update():void
-		{
-			var e:Number, t:Number, i:String, tween:TweenInfo, j:int = _tweens.length, f:Function;
-			while (j --)
-			{
-				tween = _tweens[j];
-				if (tween)
-				{
-					tween.elapsed += FP.elapsed;
-					e = tween.elapsed / tween.duration;
-					if (e >= 1) e = 1;
-					t = tween.ease == null ? e : tween.ease(e);
-					for (i in tween.start) tween.object[i] = tween.start[i] + tween.range[i] * t;
-					if (e == 1)
-					{
-						f = tween.complete;
-						tween.destroy();
-						_tweens[j] = null;
-						if (f != null) f();
-					}
-				}
-			}
-		}
-		
 		// Tween information.
 		/** @private */ private var _type:uint;
 		/** @private */ protected var _ease:Function;
@@ -192,8 +133,5 @@
 		/** @private */ internal var _parent:Tweener;
 		/** @private */ internal var _prev:Tween;
 		/** @private */ internal var _next:Tween;
-		
-		// Static tweening information.
-		/** @private */ private static var _tweens:Vector.<TweenInfo> = new Vector.<TweenInfo>;
 	}
 }
