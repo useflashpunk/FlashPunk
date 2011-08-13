@@ -52,7 +52,7 @@
 		 */
 		public function update():void
 		{
-			_time += FP.fixed ? 1 : FP.elapsed;
+			_time += FP.timeInFrames ? 1 : FP.elapsed;
 			_t = _time / _target;
 			if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
 			if (_time >= _target)

@@ -71,7 +71,7 @@
 		{
 			if (_anim && !complete)
 			{
-				_timer += (FP.fixed ? _anim._frameRate : _anim._frameRate * FP.elapsed) * rate;
+				_timer += (FP.timeInFrames ? _anim._frameRate : _anim._frameRate * FP.elapsed) * rate;
 				if (_timer >= 1)
 				{
 					while (_timer >= 1)

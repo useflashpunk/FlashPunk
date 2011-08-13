@@ -52,7 +52,7 @@
 			if (!_particle) return;
 			
 			// particle info
-			var e:Number = FP.fixed ? 1 : FP.elapsed,
+			var e:Number = FP.timeInFrames ? 1 : FP.elapsed,
 				p:Particle = _particle,
 				n:Particle, t:Number;
 			

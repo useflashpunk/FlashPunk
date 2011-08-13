@@ -53,6 +53,12 @@
 		public static var fixed:Boolean;
 		
 		/**
+		 * If times should be given in frames (as opposed to seconds).
+		 * Default is true in fixed timestep mode and false in variable timestep mode.
+		 */
+		public static var timeInFrames:Boolean;
+		
+		/**
 		 * The framerate assigned to the stage.
 		 */
 		public static var frameRate:Number;
@@ -63,12 +69,12 @@
 		public static var assignedFrameRate:Number;
 		
 		/**
-		 * Time elapsed since the last frame (non-fixed framerate only).
+		 * Time elapsed since the last frame (in seconds).
 		 */
 		public static var elapsed:Number;
 		
 		/**
-		 * Timescale applied to FP.elapsed (non-fixed framerate only).
+		 * Timescale applied to FP.elapsed.
 		 */
 		public static var rate:Number = 1;
 		

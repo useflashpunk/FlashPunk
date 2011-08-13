@@ -56,6 +56,7 @@
 			FP.halfHeight = height/2;
 			FP.assignedFrameRate = frameRate;
 			FP.fixed = fixed;
+			FP.timeInFrames = fixed;
 			
 			// global game objects
 			FP.engine = this;
@@ -247,12 +248,11 @@
 			if (_delta > _skip) _delta = _skip;
 			while (_delta >= _rate)
 			{
+				FP.elapsed = _rate * FP.rate;
+				
 				// update timer
 				_updateTime = _time;
 				_delta -= _rate;
-				FP.elapsed = (_time - _prev) / 1000;
-				if (FP.elapsed > maxElapsed) FP.elapsed = maxElapsed;
-				FP.elapsed *= FP.rate;
 				_prev = _time;
 				
 				// update loop
