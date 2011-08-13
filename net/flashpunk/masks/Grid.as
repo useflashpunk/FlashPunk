@@ -293,9 +293,9 @@
 			else
 			{
 				tw = other._tile.width;
-				ox1 -= other.parent.x + _x;
+				ox1 -= other.parent.x + other._x;
 				ox1 = int(ox1 / tw) * tw;
-				ox1 += other.parent.x + _x;
+				ox1 += other.parent.x + other._x;
 			}
 			if (_tile.height < other._tile.height)
 			{
@@ -307,9 +307,9 @@
 			else
 			{
 				th = other._tile.height;
-				oy1 -= other.parent.y + _y;
+				oy1 -= other.parent.y + other._y;
 				oy1 = int(oy1 / th) * th;
-				oy1 += other.parent.y + _y;
+				oy1 += other.parent.y + other._y;
 			}
 			
 			// Step through the overlapping rectangle
