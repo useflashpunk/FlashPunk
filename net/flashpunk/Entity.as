@@ -753,8 +753,8 @@ package net.flashpunk
 		// Entity information.
 		/** @private */ internal var _class:Class;
 		/** @private */ internal var _world:World;
-		/** @private */ internal var _type:String = "";
-		/** @private */ internal var _name:String = "";
+		/** @private */ internal var _type:String;
+		/** @private */ internal var _name:String;
 		/** @private */ internal var _layer:int;
 		/** @private */ internal var _updatePrev:Entity;
 		/** @private */ internal var _updateNext:Entity;
