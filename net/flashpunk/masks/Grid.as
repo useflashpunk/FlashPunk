@@ -279,19 +279,50 @@
 			var ox2:Number = ax2 < bx2 ? ax2 : bx2;
 			var oy2:Number = ay2 < by2 ? ay2 : by2;
 			
-			// Step using the smallest tile sizes
-			var tw:Number = _tile.width < other._tile.width ? _tile.width : other._tile.width;
-			var th:Number = _tile.height < other._tile.height ? _tile.height : other._tile.height;
+			// Find the smallest tile size, and snap the top and left overlapping
+			// edges to that tile size. This ensures that corner checking works
+			// properly.
+			var tw:Number, th:Number;
+			if (_tile.width < other._tile.width)
+			{
+				tw = _tile.width;
+				ox1 -= parent.x + _x;
+				ox1 = int(ox1 / tw) * tw;
+				ox1 += parent.x + _x;
+			}
+			else
+			{
+				tw = other._tile.width;
+				ox1 -= other.parent.x + _x;
+				ox1 = int(ox1 / tw) * tw;
+				ox1 += other.parent.x + _x;
+			}
+			if (_tile.height < other._tile.height)
+			{
+				th = _tile.height;
+				oy1 -= parent.y + _y;
+				oy1 = int(oy1 / th) * th;
+				oy1 += parent.y + _y;
+			}
+			else
+			{
+				th = other._tile.height;
+				oy1 -= other.parent.y + _y;
+				oy1 = int(oy1 / th) * th;
+				oy1 += other.parent.y + _y;
+			}
+			
+			// Step through the overlapping rectangle
 			for (var y:Number = oy1; y < oy2; y += th)
 			{
-				// Get the row indices for the top and bottom edges
+				// Get the row indices for the top and bottom edges of the tile
 				var ar1:int = (y - parent.y - _y) / _tile.height;
 				var br1:int = (y - other.parent.y - other._y) / other._tile.height;
 				var ar2:int = ((y - parent.y - _y) + (th - 1)) / _tile.height;
 				var br2:int = ((y - other.parent.y - other._y) + (th - 1)) / other._tile.height;
 				for (var x:Number = ox1; x < ox2; x += tw)
 				{
-					// Get the column indices for the left and right edges
+					// Get the column indices for the left and right edges of the tile
 					var ac1:int = (x - parent.x - _x) / _tile.width;
 					var bc1:int = (x - other.parent.x - other._x) / other._tile.width;
 					var ac2:int = ((x - parent.x - _x) + (tw - 1)) / _tile.width;
