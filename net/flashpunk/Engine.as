@@ -64,7 +64,7 @@
 			FP._world = new World;
 			Draw.resetTarget();
 			
-			// miscellanious startup stuff
+			// miscellaneous startup stuff
 			if (FP.randomSeed == 0) FP.randomizeSeed();
 			FP.entity = new Entity;
 			FP._time = getTimer();
