@@ -916,18 +916,7 @@
 		 */
 		public function getInstance(name:String):*
 		{
-			if (name)
-			{
-				for (var i:Object in _entityNames)
-				{
-					if (_entityNames[i] == name)
-					{
-						if (i._world == this) return i;
-						else delete _entityNames[i];
-					}
-				}
-			}
-			return null;
+			return _entityNames[name];
 		}
 		
 		/**
@@ -1117,14 +1106,13 @@
 		/** @private Register's the Entity's instance name. */
 		internal function registerName(e:Entity):void
 		{
-			if (e._name) _entityNames[e] = e._name;
-			else unregisterName(e);
+			_entityNames[e._name] = e;
 		}
 		
 		/** @private Unregister's the Entity's instance name. */
 		internal function unregisterName(e:Entity):void
 		{
-			if (_entityNames[e]) delete _entityNames[e];
+			if (_entityNames[e._name] == e) delete _entityNames[e._name];
 		}
 		
 		/** @private Calculates the squared distance between two rectangles. */
