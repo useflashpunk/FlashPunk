@@ -885,7 +885,7 @@
 				while (e)
 				{
 					into[n ++] = e;
-					e = e._updatePrev;
+					e = e._renderPrev;
 				}
 			}
 		}
