@@ -284,14 +284,24 @@
 			var th:Number = _tile.height < other._tile.height ? _tile.height : other._tile.height;
 			for (var y:Number = oy1; y < oy2; y += th)
 			{
-				var arow:int = (y - parent.y - _y) / _tile.height;
-				var brow:int = (y - other.parent.y - _y) / other._tile.height;
+				// Get the row indices for the top and bottom edges
+				var ar1:int = (y - parent.y - _y) / _tile.height;
+				var br1:int = (y - other.parent.y - other._y) / other._tile.height;
+				var ar2:int = ((y - parent.y - _y) + (th - 1)) / _tile.height;
+				var br2:int = ((y - other.parent.y - other._y) + (th - 1)) / other._tile.height;
 				for (var x:Number = ox1; x < ox2; x += tw)
 				{
-					var acol:int = (x - parent.x - _x) / _tile.width;
-					var bcol:int = (x - other.parent.x - _x) / other._tile.width;
-					if (_data.getPixel32(acol, arow) > 0
-					&& other._data.getPixel32(bcol, brow) > 0)
+					// Get the column indices for the left and right edges
+					var ac1:int = (x - parent.x - _x) / _tile.width;
+					var bc1:int = (x - other.parent.x - other._x) / other._tile.width;
+					var ac2:int = ((x - parent.x - _x) + (tw - 1)) / _tile.width;
+					var bc2:int = ((x - other.parent.x - other._x) + (tw - 1)) / other._tile.width;
+					
+					// Check all the corners for collisions
+					if ((_data.getPixel32(ac1, ar1) > 0 && other._data.getPixel32(bc1, br1) > 0)
+					 || (_data.getPixel32(ac2, ar1) > 0 && other._data.getPixel32(bc2, br1) > 0)
+					 || (_data.getPixel32(ac1, ar2) > 0 && other._data.getPixel32(bc1, br2) > 0)
+					 || (_data.getPixel32(ac2, ar2) > 0 && other._data.getPixel32(bc2, br2) > 0))
 					{
 						return true;
 					}
