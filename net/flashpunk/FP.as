@@ -23,9 +23,9 @@
 	public class FP 
 	{
 		/**
-		 * The FlashPunk major version. Added an M at the end to indicate this is not the official codebase.
+		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.5 M";
+		public static const VERSION:String = "1.6";
 		
 		/**
 		 * Width of the game.
