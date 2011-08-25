@@ -1,8 +1,6 @@
 ﻿package net.flashpunk.utils 
 {
-	import flash.display.BitmapData;
-	import flash.display.Graphics;
-	import flash.display.LineScaleMode;
+	import flash.display.*;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -212,7 +210,7 @@
 			if (fill) {
 				_graphics.beginFill(color, alpha);
 			} else {
-				_graphics.lineStyle(thick, color, alpha);
+				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
 			}
 			
 			if (radius <= 0) {
