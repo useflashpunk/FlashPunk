@@ -247,7 +247,7 @@
 			if (_delta > _skip) _delta = _skip;
 			while (_delta >= _rate)
 			{
-				FP.elapsed = _rate * FP.rate;
+				FP.elapsed = _rate * FP.rate * 0.001;
 				
 				// update timer
 				_updateTime = _time;
