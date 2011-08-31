@@ -210,7 +210,7 @@
 			if (fill) {
 				_graphics.beginFill(color, alpha);
 			} else {
-				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
+				_graphics.lineStyle(thick, color, alpha, false, "normal", null, JointStyle.MITER);
 			}
 			
 			if (radius <= 0) {
