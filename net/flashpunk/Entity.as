@@ -532,8 +532,8 @@ package net.flashpunk
 				if (o.hasOwnProperty("height")) height = o.height;
 				if (o.hasOwnProperty("originX") && !(o is Graphic)) originX = o.originX;
 				else if (o.hasOwnProperty("x")) originX = -o.x;
-				if (o.hasOwnProperty("originY") && !(o is Graphic)) originX = o.originY;
-				else if (o.hasOwnProperty("y")) originX = -o.y;
+				if (o.hasOwnProperty("originY") && !(o is Graphic)) originY = o.originY;
+				else if (o.hasOwnProperty("y")) originY = -o.y;
 			}
 		}
 		
