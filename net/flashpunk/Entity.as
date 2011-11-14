@@ -691,7 +691,11 @@ package net.flashpunk
 		{
 			_point.x = x - this.x;
 			_point.y = y - this.y;
-			_point.normalize(amount);
+			
+			if (_point.x*_point.x + _point.y*_point.y > amount*amount) {
+				_point.normalize(amount);
+			}
+			
 			moveBy(_point.x, _point.y, solidType, sweep);
 		}
 		
