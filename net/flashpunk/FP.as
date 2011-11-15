@@ -180,7 +180,7 @@
 		
 		/**
 		 * Randomly chooses and returns one of the provided values.
-		 * @param	...objs		The Objects you want to randomly choose from. Can be ints, Numbers, Points, etc.
+		 * @param	objs		The Objects you want to randomly choose from. Can be ints, Numbers, Points, etc.
 		 * @return	A randomly chosen one of the provided parameters.
 		 */
 		public static function choose(...objs):*
@@ -679,7 +679,7 @@
 		
 		/**
 		 * Logs data to the console.
-		 * @param	...data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
+		 * @param	data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
 		 */
 		public static function log(...data):void
 		{
@@ -701,7 +701,7 @@
 		
 		/**
 		 * Adds properties to watch in the console's debug panel.
-		 * @param	...properties		The properties (strings) to watch.
+		 * @param	properties		The properties (strings) to watch.
 		 */
 		public static function watch(...properties):void
 		{
