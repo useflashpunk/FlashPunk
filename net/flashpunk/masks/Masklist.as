@@ -11,7 +11,7 @@
 	{
 		/**
 		 * Constructor.
-		 * @param	...mask		Masks to add to the list.
+		 * @param	mask		Masks to add to the list.
 		 */
 		public function Masklist(...mask) 
 		{

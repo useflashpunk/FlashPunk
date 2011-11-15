@@ -13,7 +13,7 @@
 	{
 		/**
 		 * Constructor.
-		 * @param	...graphic		Graphic objects to add to the list.
+		 * @param	graphic		Graphic objects to add to the list.
 		 */
 		public function Graphiclist(...graphic) 
 		{

@@ -154,7 +154,7 @@
 		
 		/**
 		 * Adds multiple Entities to the world.
-		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
+		 * @param	list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function addList(...list):void
 		{
@@ -169,7 +169,7 @@
 		
 		/**
 		 * Removes multiple Entities from the world.
-		 * @param	...list		Several Entities (as arguments) or an Array/Vector of Entities.
+		 * @param	list		Several Entities (as arguments) or an Array/Vector of Entities.
 		 */
 		public function removeList(...list):void
 		{

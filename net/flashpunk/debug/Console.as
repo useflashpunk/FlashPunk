@@ -37,7 +37,7 @@ package net.flashpunk.debug
 		
 		/**
 		 * Logs data to the console.
-		 * @param	...data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
+		 * @param	data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
 		 */
 		public function log(...data):void
 		{
@@ -64,7 +64,7 @@ package net.flashpunk.debug
 		
 		/**
 		 * Adds properties to watch in the console's debug panel.
-		 * @param	...properties		The properties (strings) to watch.
+		 * @param	properties		The properties (strings) to watch.
 		 */
 		public function watch(...properties):void
 		{

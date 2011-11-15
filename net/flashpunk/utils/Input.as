@@ -100,7 +100,7 @@
 		/**
 		 * Defines a new input.
 		 * @param	name		String to map the input to.
-		 * @param	...keys		The keys to use for the Input.
+		 * @param	keys		The keys to use for the Input.
 		 */
 		public static function define(name:String, ...keys):void
 		{
