@@ -604,7 +604,6 @@
 				case 5: return int(v * 255) << 16 | int(p * 255) << 8 | int(q * 255);
 				default: return 0;
 			}
-			return 0;
 		}
 		
 		/**
