@@ -9,6 +9,7 @@
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 
 	import net.flashpunk.debug.Console;
@@ -643,8 +644,8 @@
 		 */
 		public static function getBitmap(source:Class):BitmapData
 		{
-			if (_bitmap[String(source)]) return _bitmap[String(source)];
-			return (_bitmap[String(source)] = (new source).bitmapData);
+			if (_bitmap[source]) return _bitmap[source];
+			return (_bitmap[source] = (new source).bitmapData);
 		}
 		
 		/**
@@ -652,7 +653,7 @@
 		 */
 		public static function clearBitmapCache():void
 		{
-			_bitmap = { };
+			_bitmap = new Dictionary();
 		}
 		
 		/**
@@ -942,7 +943,7 @@
 		/** @private */ public static var _flashTime:uint;
 		
 		// Bitmap storage.
-		/** @private */ private static var _bitmap:Object = { };
+		/** @private */ private static var _bitmap:Dictionary = new Dictionary();
 		
 		// Pseudo-random number generation (the seed is set in Engine's constructor).
 		/** @private */ private static var _seed:uint = 0;
