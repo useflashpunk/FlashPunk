@@ -1,7 +1,5 @@
 ﻿package net.flashpunk
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.StageAlign;
 	import flash.display.StageDisplayState;
@@ -10,11 +8,12 @@
 	import flash.events.Event;
 	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
-	import flash.utils.getTimer;
 	import flash.utils.Timer;
+	import flash.utils.getTimer;
+
 	import net.flashpunk.utils.Draw;
 	import net.flashpunk.utils.Input;
-	
+
 	/**
 	 * Main game Sprite class, added to the Flash Stage. Manages the game loop.
 	 */

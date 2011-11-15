@@ -3,12 +3,11 @@ package net.flashpunk
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.utils.Dictionary;
-	import flash.utils.getQualifiedClassName;
 	import flash.utils.getDefinitionByName;
-	import net.flashpunk.masks.*;
+	import flash.utils.getQualifiedClassName;
+
 	import net.flashpunk.graphics.*;
-	
+
 	/**
 	 * Main game Entity class updated by World.
 	 */

@@ -1,9 +1,5 @@
 ﻿package net.flashpunk.graphics 
 {
-	import flash.display.BitmapData;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	
 	/**
 	 * Used by the Emitter class to track an existing Particle.
 	 */

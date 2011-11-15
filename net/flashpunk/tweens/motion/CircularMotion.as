@@ -1,9 +1,7 @@
 ﻿package net.flashpunk.tweens.motion 
 {
-	import flash.geom.Point;
 	import net.flashpunk.FP;
-	import net.flashpunk.utils.Ease;
-	
+
 	/**
 	 * Determines a circular motion.
 	 */

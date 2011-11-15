@@ -1,9 +1,9 @@
 ﻿package net.flashpunk.masks 
 {
-	import net.flashpunk.*;
-	import net.flashpunk.masks.Masklist;
 	import flash.display.Graphics;
-	
+
+	import net.flashpunk.*;
+
 	/**
 	 * A Mask that can contain multiple Masks of one or various types.
 	 */

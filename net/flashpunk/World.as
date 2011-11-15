@@ -2,8 +2,7 @@
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	import net.flashpunk.utils.Input;
-	
+
 	/**
 	 * Updated by Engine, main game container that holds all currently active Entities.
 	 * Useful for organization, eg. "Menu", "Level1", etc.

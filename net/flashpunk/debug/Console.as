@@ -5,19 +5,18 @@ package net.flashpunk.debug
 	import flash.display.BlendMode;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
-	import flash.display.Stage;
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
+	import flash.system.System;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.system.System;
+
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
-	import net.flashpunk.utils.Draw;
+	import net.flashpunk.graphics.Text;
 	import net.flashpunk.utils.Input;
 	import net.flashpunk.utils.Key;
-	import net.flashpunk.graphics.Text;
-	
+
 	/**
 	 * FlashPunk debug console; can use to log information or pause the game and view/move Entities and step the frame.
 	 */

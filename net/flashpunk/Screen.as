@@ -5,10 +5,9 @@
 	import flash.display.PixelSnapping;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Transform;
+
 	import net.flashpunk.graphics.Image;
-	
+
 	/**
 	 * Container for the main screen buffer. Can be used to transform the screen.
 	 */

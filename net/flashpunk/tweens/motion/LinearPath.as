@@ -1,8 +1,7 @@
 ﻿package net.flashpunk.tweens.motion 
 {
 	import flash.geom.Point;
-	import net.flashpunk.FP;
-	
+
 	/**
 	 * Determines linear motion along a set of points.
 	 */

@@ -4,12 +4,10 @@
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	
+
 	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
-	import net.flashpunk.utils.Input;
-	import net.flashpunk.utils.Key;
-	
+
 	/**
 	 * Particle emitter used for emitting and rendering particle sprites.
 	 * Good rendering performance with large amounts of particles.

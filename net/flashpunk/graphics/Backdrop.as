@@ -2,9 +2,9 @@
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+
 	import net.flashpunk.FP;
-	import net.flashpunk.Graphic;
-	
+
 	/**
 	 * A background texture that can be repeated horizontally and vertically
 	 * when drawn. Really useful for parallax backgrounds, textures, etc.
