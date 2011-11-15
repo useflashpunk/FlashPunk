@@ -18,7 +18,6 @@
 		 * @param	source			Source image.
 		 * @param	frameWidth		Frame width.
 		 * @param	frameHeight		Frame height.
-		 * @param	frameCount		Frame count.
 		 */
 		public function ParticleType(name:String, frames:Array, source:BitmapData, frameWidth:uint, frameHeight:uint)
 		{
