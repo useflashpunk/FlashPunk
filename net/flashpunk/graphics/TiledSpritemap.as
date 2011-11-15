@@ -1,9 +1,9 @@
 package net.flashpunk.graphics 
 {
 	import flash.display.BitmapData;
-	import flash.display.Graphics;
+
 	import net.flashpunk.FP;
-	
+
 	/**
 	 * Special Spritemap object that can display blocks of animated sprites.
 	 */
@@ -105,7 +105,6 @@ package net.flashpunk.graphics
 			updateBuffer();
 		}
 		
-		/** @private */ private var _graphics:Graphics = FP.sprite.graphics;
 		/** @private */ private var _imageWidth:uint;
 		/** @private */ private var _imageHeight:uint;
 		/** @private */ private var _offsetX:Number = 0;

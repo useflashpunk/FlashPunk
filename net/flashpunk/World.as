@@ -1181,7 +1181,6 @@
 		/** @private */	private var _layerList:Array = [];
 		/** @private */	private var _layerCount:Array = [];
 		/** @private */	private var _layerSort:Boolean;
-		/** @private */	private var _tempArray:Array = [];
 		/** @private */	private var _classCount:Dictionary = new Dictionary;
 		/** @private */	internal var _typeFirst:Object = { };
 		/** @private */	private var _typeCount:Object = { };

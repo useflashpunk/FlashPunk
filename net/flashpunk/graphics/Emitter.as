@@ -275,6 +275,5 @@
 		// Drawing information.
 		/** @private */ private var _p:Point = new Point;
 		/** @private */ private var _tint:ColorTransform = new ColorTransform;
-		/** @private */ private static const SIN:Number = Math.PI / 2;
 	}
 }

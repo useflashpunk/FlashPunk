@@ -137,7 +137,6 @@
 		
 		// Data information.
 		/** @private */ private static var _shared:SharedObject;
-		/** @private */ private static var _dir:String;
 		/** @private */ private static var _data:Object = { };
 		/** @private */ public static var prefix:String = "FlashPunk";
 		/** @private */ private static const DEFAULT_FILE:String = "_file";

@@ -401,6 +401,5 @@
 		/** @private */ private static var _camera:Point;
 		/** @private */ private static var _graphics:Graphics = FP.sprite.graphics;
 		/** @private */ private static var _rect:Rectangle = FP.rect;
-		/** @private */ private static var _matrix:Matrix = new Matrix;
 	}
 }

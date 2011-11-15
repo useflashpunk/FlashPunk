@@ -370,6 +370,5 @@
 		/** @private */ private var _tile:Rectangle;
 		/** @private */ private var _rect:Rectangle = FP.rect;
 		/** @private */ private var _point:Point = FP.point;
-		/** @private */ private var _point2:Point = FP.point2;
 	}
 }

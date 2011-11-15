@@ -192,7 +192,6 @@
 		// Easing constants.
 		/** @private */ private static const PI:Number = Math.PI;
 		/** @private */ private static const PI2:Number = Math.PI / 2;
-		/** @private */ private static const EL:Number = 2 * PI / .45;
 		/** @private */ private static const B1:Number = 1 / 2.75;
 		/** @private */ private static const B2:Number = 2 / 2.75;
 		/** @private */ private static const B3:Number = 1.5 / 2.75;

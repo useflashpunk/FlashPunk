@@ -100,6 +100,6 @@
 		/** @private */ private static var _rotated:Dictionary = new Dictionary;
 		/** @private */ private static var _size:Dictionary = new Dictionary;
 		/** @private */ private static const _MAX_WIDTH:uint = 4000;
-		/** @private */ private static const _MAX_HEIGHT:uint = 4000;
+
 	}
 }

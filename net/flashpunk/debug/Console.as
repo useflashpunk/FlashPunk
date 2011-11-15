@@ -649,8 +649,7 @@ package net.flashpunk.debug
 				{
 					// Draw the log scrollbar handle.
 					_logRead.graphics.beginFill(0xFFFFFF, 1);
-					var h:uint = FP.clamp(_logBar.height * (_logLines / LOG.length), 12, _logBar.height - 4),
-						y:uint = _logBar.y + 2 + (_logBar.height - 16) * _logScroll;
+					var y:uint = _logBar.y + 2 + (_logBar.height - 16) * _logScroll;
 					_logRead.graphics.drawRoundRectComplex(_logBar.x + 2, y, 12, 12, 6, 6, 6, 6);
 				}
 				
@@ -858,8 +857,7 @@ package net.flashpunk.debug
 		/** @private */ private var _debRead:Sprite = new Sprite;
 		/** @private */ private var _debReadText0:TextField = new TextField;
 		/** @private */ private var _debReadText1:TextField = new TextField;
-		/** @private */ private var _debWidth:uint;
-		
+
 		// Button panel information
 		/** @private */ private var _butRead:Sprite = new Sprite;
 		/** @private */ private var _butDebug:Bitmap;
