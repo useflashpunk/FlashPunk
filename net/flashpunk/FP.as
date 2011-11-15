@@ -8,15 +8,13 @@
 	import flash.geom.Rectangle;
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
-	import flash.system.System;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
-	
-	import net.flashpunk.*;
+
 	import net.flashpunk.debug.Console;
 	import net.flashpunk.tweens.misc.Alarm;
 	import net.flashpunk.tweens.misc.MultiVarTween;
-	
+
 	/**
 	 * Static catch-all class used to access global properties and functions.
 	 */
