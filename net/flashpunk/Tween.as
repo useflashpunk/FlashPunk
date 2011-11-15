@@ -88,17 +88,17 @@
 		{
 			switch (_type)
 			{
-				case 0:
+				case PERSIST:
 					_time = _target;
 					active = false;
 					break;
-				case 1:
+				case LOOPING:
 					_time %= _target;
 					_t = _time / _target;
 					if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
 					start();
 					break;
-				case 2:
+				case ONESHOT:
 					_time = _target;
 					active = false;
 					_parent.removeTween(this);
