@@ -202,7 +202,7 @@
 			return new Image(_bitmap[_current].bitmapData.clone());
 		}
 		
-		// Screen infromation.
+		// Screen information.
 		/** @private */ private var _sprite:Sprite = new Sprite;
 		/** @private */ private var _bitmap:Vector.<Bitmap> = new Vector.<Bitmap>(2);
 		/** @private */ private var _current:int = 0;
