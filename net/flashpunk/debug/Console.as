@@ -409,7 +409,7 @@ package net.flashpunk.debug
 			if (Input.mouseReleased) _dragging = false;
 		}
 		
-		/** @private Move the selected Entitites by the amount. */
+		/** @private Move the selected Entities by the amount. */
 		private function moveSelected(xDelta:int, yDelta:int):void
 		{
 			for each (var e:Entity in SELECT_LIST)
@@ -489,7 +489,7 @@ package net.flashpunk.debug
 			}
 		}
 		
-		/** @private Selects the Entitites in the rectangle. */
+		/** @private Selects the Entities in the rectangle. */
 		private function selectEntities(rect:Rectangle):void
 		{
 			if (rect.width < 0) rect.x -= (rect.width = -rect.width);
@@ -504,7 +504,7 @@ package net.flashpunk.debug
 				
 			if (Input.check(Key.CONTROL))
 			{
-				// Append selected Entitites with new selections.
+				// Append selected Entities with new selections.
 				for each (e in SCREEN_LIST)
 				{
 					if (SELECT_LIST.indexOf(e) < 0)

@@ -9,7 +9,7 @@
 	import net.flashpunk.Graphic;
 	
 	/**
-	 * Static class with access to miscellanious drawing functions.
+	 * Static class with access to miscellaneous drawing functions.
 	 * These functions are not meant to replace Graphic components
 	 * for Entities, but rather to help with testing and debugging.
 	 */

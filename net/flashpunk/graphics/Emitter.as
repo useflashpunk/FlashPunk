@@ -258,7 +258,7 @@
 		 */
 		public function get particleCount():uint { return _particleCount; }
 		
-		// Particle infromation.
+		// Particle information.
 		/** @private */ private var _types:Object = { };
 		/** @private */ private var _particle:Particle;
 		/** @private */ private var _cache:Particle;

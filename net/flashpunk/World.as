@@ -246,7 +246,7 @@
 		}
 		
 		/**
-		 * Clears stored reycled Entities of the Class type.
+		 * Clears stored recycled Entities of the Class type.
 		 * @param	classType		The Class type to clear.
 		 */
 		public static function clearRecycled(classType:Class):void
