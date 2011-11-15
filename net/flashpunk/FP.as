@@ -947,7 +947,7 @@
 		// Bitmap storage.
 		/** @private */ private static var _bitmap:Object = { };
 		
-		// Pseudo-random number generation (the seed is set in Engine's contructor).
+		// Pseudo-random number generation (the seed is set in Engine's constructor).
 		/** @private */ private static var _seed:uint = 0;
 		/** @private */ private static var _getSeed:uint;
 		
