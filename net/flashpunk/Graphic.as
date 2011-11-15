@@ -79,7 +79,6 @@
 		
 		// Graphic information.
 		/** @private */ internal var _assign:Function;
-		/** @private */ internal var _scroll:Boolean = true;
 		/** @private */ protected var _point:Point = new Point;
 	}
 }
