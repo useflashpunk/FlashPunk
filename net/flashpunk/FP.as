@@ -657,6 +657,14 @@
 		}
 		
 		/**
+		 * Clears the cache of BitmapData objects used by the getBitmap method.
+		 */
+		public static function clearBitmapCache():void
+		{
+			_bitmap = { };
+		}
+		
+		/**
 		 * Sets a time flag.
 		 * @return	Time elapsed (in milliseconds) since the last time flag was set.
 		 */
