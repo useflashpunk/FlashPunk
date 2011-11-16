@@ -187,7 +187,6 @@
 				default:
 				return String.fromCharCode(char);
 			}
-			return String.fromCharCode(char);
 		}
 	}
 }
