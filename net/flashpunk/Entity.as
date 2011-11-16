@@ -572,7 +572,7 @@ package net.flashpunk
 		 * Calculates the distance from this Entity to the point.
 		 * @param	px				X position.
 		 * @param	py				Y position.
-		 * @param	useHitboxes		If hitboxes should be used to determine the distance. If not, the Entities' x/y positions are used.
+		 * @param	useHitbox		If hitboxes should be used to determine the distance. If not, the Entities' x/y positions are used.
 		 * @return	The distance.
 		 */
 		public function distanceToPoint(px:Number, py:Number, useHitbox:Boolean = false):Number
