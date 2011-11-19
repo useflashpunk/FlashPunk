@@ -70,7 +70,7 @@
 			_tile.y = uint(index / _setColumns) * _tile.height;
 			_point.x = column * _tile.width;
 			_point.y = row * _tile.height;
-			_map.setPixel32(column, row, index);
+			_map.setPixel(column, row, index);
 			copyPixels(_set, _tile, _point, null, null, false);
 		}
 		
@@ -106,7 +106,7 @@
 				column /= _tile.width;
 				row /= _tile.height;
 			}
-			return _map.getPixel32(column % _columns, row % _rows);
+			return _map.getPixel(column % _columns, row % _rows);
 		}
 		
 		/**
@@ -320,7 +320,7 @@
 			{
 				for (x = 0; x < _columns; x ++)
 				{
-					s += String(_map.getPixel32(x, y));
+					s += String(_map.getPixel(x, y));
 					if (x != _columns - 1) s += columnSep;
 				}
 				if (y != _rows - 1) s += rowSep;
@@ -451,7 +451,7 @@
 		/** @private Used by shiftTiles to update a tile from the tilemap. */
 		private function updateTile(column:uint, row:uint):void
 		{
-			setTile(column, row, _map.getPixel32(column % _columns, row % _rows));
+			setTile(column, row, _map.getPixel(column % _columns, row % _rows));
 		}
 		
 		/**
@@ -467,7 +467,7 @@
 			{
 				for (var col:uint = 0; col < _columns; ++col)
 				{
-					if (solidTiles.indexOf(_map.getPixel32(col, row)) !== -1)
+					if (solidTiles.indexOf(_map.getPixel(col, row)) !== -1)
 					{
 						grid.setTile(col, row, true);
 					}
