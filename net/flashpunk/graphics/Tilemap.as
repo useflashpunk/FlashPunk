@@ -455,14 +455,25 @@
 		}
 		
 		/**
-		* Create a Grid object from this tilemap.
+		* Create or initialise a Grid object from this tilemap.
 		* @param	solidTiles		Array of tile indexes that should be solid.
+		* @param	grid			Grid object to populate.
 		* @return Grid
 		*/
-		public function createGrid(solidTiles:Array, cls:Class=null):Grid
+		public function createGrid(solidTiles:Array, gridInput:* = null):Grid
 		{
-			if (cls === null) cls = Grid;
-			var grid:Grid = new cls(width, height, _tile.width, _tile.height, 0) as Grid;
+			
+			var grid:Grid;
+			var cls:Class;
+			
+			if (gridInput is Grid) grid = gridInput;
+			else if (gridInput is Class) cls = gridInput;
+			else cls = Grid;
+			
+			if (! grid) {
+				grid = new cls(width, height, _tile.width, _tile.height, 0) as Grid;
+			}
+			
 			for (var row:uint = 0; row < _rows; ++row)
 			{
 				for (var col:uint = 0; col < _columns; ++col)
