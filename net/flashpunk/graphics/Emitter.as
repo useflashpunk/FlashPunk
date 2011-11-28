@@ -52,14 +52,13 @@
 			// particle info
 			var e:Number = FP.timeInFrames ? 1 : FP.elapsed,
 				p:Particle = _particle,
-				n:Particle, t:Number;
+				n:Particle;
 			
 			// loop through the particles
 			while (p)
 			{
 				// update time scale
 				p._time += e;
-				t = p._time / p._duration;
 				
 				// remove on time-out
 				if (p._time >= p._duration)
