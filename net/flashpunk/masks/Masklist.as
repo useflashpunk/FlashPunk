@@ -38,7 +38,7 @@
 					if (a.collide(b)) return true;
 				}
 			}
-			return true;
+			return false;
 		}
 		
 		/**
