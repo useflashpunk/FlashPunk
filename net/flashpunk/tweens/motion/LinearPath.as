@@ -62,6 +62,11 @@
 				_distance += Math.sqrt((x - _last.x) * (x - _last.x) + (y - _last.y) * (y - _last.y));
 				_pointD[_points.length] = _distance;
 			}
+			else
+			{
+				this.x = x;
+				this.y = y;
+			}
 			_points[_points.length] = _last = new Point(x, y);
 		}
 		
