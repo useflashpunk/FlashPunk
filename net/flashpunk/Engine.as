@@ -62,6 +62,7 @@
 			FP.screen = new Screen;
 			FP.bounds = new Rectangle(0, 0, width, height);
 			FP._world = new World;
+			FP.camera = FP._world.camera;
 			Draw.resetTarget();
 			
 			// miscellaneous startup stuff
