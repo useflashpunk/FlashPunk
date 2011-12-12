@@ -55,8 +55,17 @@
 		{
 			if (_last)
 			{
+				// avoid zero-length path segments
+				if (x == _last.x && y == _last.y)
+					return;
+
 				_distance += Math.sqrt((x - _last.x) * (x - _last.x) + (y - _last.y) * (y - _last.y));
 				_pointD[_points.length] = _distance;
+			}
+			else
+			{
+				this.x = x;
+				this.y = y;
 			}
 			_points[_points.length] = _last = new Point(x, y);
 		}
@@ -83,6 +92,12 @@
 		override public function update():void 
 		{
 			super.update();
+			if (_points.length == 1)
+			{
+				x = _points[0].x;
+				y = _points[0].y;
+				return;
+			}
 			if (_index < _points.length - 1)
 			{
 				while (_t > _pointT[_index + 1]) _index ++;
@@ -99,7 +114,7 @@
 		/** @private Updates the path, preparing it for motion. */
 		private function updatePath():void
 		{
-			if (_points.length < 2)	throw new Error("A LinearPath must have at least 2 points to operate.");
+			if (_points.length < 1) throw new Error("A LinearPath must have at least one point.");
 			if (_pointD.length == _pointT.length) return;
 			// evaluate t for each point
 			var i:int = 0;
