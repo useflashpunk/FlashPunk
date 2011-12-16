@@ -54,9 +54,8 @@
 		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			// get position of the current frame
-			_rect.x = _rect.width * _frame;
-			_rect.y = uint(_rect.x / _width) * _rect.height;
-			_rect.x %= _width;
+			_rect.x = _rect.width * (_frame % _columns);
+			_rect.y = _rect.height * uint(_frame / _columns);
 			if (_flipped) _rect.x = (_width - _rect.width) - _rect.x;
 			
 			// update the buffer
