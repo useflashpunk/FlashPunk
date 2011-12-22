@@ -294,30 +294,34 @@
 
 		/**
 		 * Draws an ellipse to the screen.
-		 * @param	x			X position of the ellipse.
-		 * @param	y			Y position of the ellipse.
+		 * @param	x		X position of the ellipse's center.
+		 * @param	y		Y position of the ellipse's center.
 		 * @param	width		Width of the ellipse.
 		 * @param	height		Height of the ellipse.
 		 * @param	color		Color of the ellipse.
 		 * @param	alpha		Alpha of the ellipse.
 		 * @param	fill		If the ellipse should be filled with the color (true) or just an outline (false).
 		 * @param	thick		How thick the outline should be (only applicable when fill = false).
+		 * @param	angle		What angle (in degrees) the ellipse should be rotated.
 		 */
-		public static function ellipse(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):void
+		public static function ellipse(x:Number, y:Number, width:Number, height:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1, angle:Number = 0):void
 		{
 			_graphics.clear();
 			if (fill)
 			{
 				_graphics.beginFill(color & 0xFFFFFF, alpha);
-				_graphics.drawEllipse(x - _camera.x, y - _camera.y, width, height);
+				_graphics.drawEllipse(-width / 2, -height / 2, width, height);
 				_graphics.endFill();
 			}
 			else
 			{
 				_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
-				_graphics.drawEllipse(x - _camera.x, y - _camera.y, width, height);
+				_graphics.drawEllipse(-width / 2, -height / 2, width, height);
 			}
-			_target.draw(FP.sprite, null, null, blend);
+			var m:Matrix = new Matrix();
+			m.rotate(angle * FP.RAD);
+			m.translate(x - _camera.x, y - _camera.y);
+			_target.draw(FP.sprite, m, null, blend);
 		}
 		
 		/**
