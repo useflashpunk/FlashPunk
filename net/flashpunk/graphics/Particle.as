@@ -14,21 +14,21 @@
 		}
 		
 		// Particle information.
-		/** @private */ internal var _type:ParticleType;
-		/** @private */ internal var _time:Number;
-		/** @private */ internal var _duration:Number;
+		internal var _type:ParticleType;
+		internal var _time:Number;
+		internal var _duration:Number;
 		
 		// Motion information.
-		/** @private */ internal var _x:Number;
-		/** @private */ internal var _y:Number;
-		/** @private */ internal var _moveX:Number;
-		/** @private */ internal var _moveY:Number;
+		internal var _x:Number;
+		internal var _y:Number;
+		internal var _moveX:Number;
+		internal var _moveY:Number;
 		
 		// Gravity information.
-		/** @private */ internal var _gravity:Number;
+		internal var _gravity:Number;
 		
 		// List information.
-		/** @private */ internal var _prev:Particle;
-		/** @private */ internal var _next:Particle;
+		internal var _prev:Particle;
+		internal var _next:Particle;
 	}
 }

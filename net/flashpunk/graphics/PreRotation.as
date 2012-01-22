@@ -72,7 +72,7 @@
 			super(_source, _frame);
 		}
 		
-		/** @private Renders the PreRotated graphic. */
+		/** Renders the PreRotated graphic. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			frameAngle %= 360;
@@ -90,16 +90,16 @@
 		}
 		
 		// Rotation information.
-		/** @private */ private var _width:uint;
-		/** @private */ private var _frame:Rectangle;
-		/** @private */ private var _frameCount:uint;
-		/** @private */ private var _last:int = -1;
-		/** @private */ private var _current:int = -1;
+		protected var _width:uint;
+		protected var _frame:Rectangle;
+		protected var _frameCount:uint;
+		protected var _last:int = -1;
+		protected var _current:int = -1;
 		
 		// Global information.
-		/** @private */ private static var _rotated:Dictionary = new Dictionary;
-		/** @private */ private static var _size:Dictionary = new Dictionary;
-		/** @private */ private static const _MAX_WIDTH:uint = 4000;
+		protected static var _rotated:Dictionary = new Dictionary;
+		protected static var _size:Dictionary = new Dictionary;
+		protected static const _MAX_WIDTH:uint = 4000;
 
 	}
 }

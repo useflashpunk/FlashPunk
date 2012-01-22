@@ -18,7 +18,7 @@
 			for each (var m:Mask in mask) add(m);
 		}
 		
-		/** @private Collide against a mask. */
+		/** Collide against a mask. */
 		override public function collide(mask:Mask):Boolean 
 		{
 			for each (var m:Mask in _masks)
@@ -28,7 +28,7 @@
 			return false;
 		}
 		
-		/** @private Collide against a Masklist. */
+		/** Collide against a Masklist. */
 		override protected function collideMasklist(other:Masklist):Boolean 
 		{
 			for each (var a:Mask in _masks)
@@ -131,7 +131,7 @@
 			super.assignTo(parent);
 		}
 		
-		/** @private Updates the parent's bounds for this mask. */
+		/** Updates the parent's bounds for this mask. */
 		override protected function update():void 
 		{
 			// find bounds of the contained masks
@@ -167,8 +167,8 @@
 		public function get count():uint { return _count; }
 		
 		// List information.
-		/** @private */ private var _masks:Vector.<Mask> = new Vector.<Mask>;
-		/** @private */ private var _temp:Vector.<Mask> = new Vector.<Mask>;
-		/** @private */ private var _count:uint;
+		protected var _masks:Vector.<Mask> = new Vector.<Mask>;
+		protected var _temp:Vector.<Mask> = new Vector.<Mask>;
+		protected var _count:uint;
 	}
 }

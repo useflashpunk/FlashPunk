@@ -87,7 +87,7 @@ package net.flashpunk.graphics
 			updateBuffer();
 		}
 		
-		/** @private Creates the buffer. */
+		/** Creates the buffer. */
 		protected function createBuffer():void
 		{
 			if (_buffer) {
@@ -99,7 +99,7 @@ package net.flashpunk.graphics
 			_bitmap.bitmapData = _buffer;
 		}
 		
-		/** @private Renders the image. */
+		/** Renders the image. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void
 		{
 			// quit if no graphic is assigned
@@ -384,16 +384,16 @@ package net.flashpunk.graphics
 		public function get locked():Boolean { return _locked; }
 		
 		// Locking
-		/** @private */ protected var _locked:Boolean = false;
-		/** @private */ protected var _needsClear:Boolean = false;
-		/** @private */ protected var _needsUpdate:Boolean = false;
+		protected var _locked:Boolean = false;
+		protected var _needsClear:Boolean = false;
+		protected var _needsUpdate:Boolean = false;
 		
 		// Source and buffer information.
-		/** @private */ protected var _source:BitmapData;
-		/** @private */ protected var _sourceRect:Rectangle;
-		/** @private */ protected var _buffer:BitmapData;
-		/** @private */ protected var _bufferRect:Rectangle;
-		/** @private */ protected var _bitmap:Bitmap = new Bitmap;
+		protected var _source:BitmapData;
+		protected var _sourceRect:Rectangle;
+		protected var _buffer:BitmapData;
+		protected var _bufferRect:Rectangle;
+		protected var _bitmap:Bitmap = new Bitmap;
 		
 		// Color and alpha information.
 		/** @protected */ protected var _alpha:Number = 1;

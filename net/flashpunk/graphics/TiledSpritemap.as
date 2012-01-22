@@ -25,7 +25,7 @@ package net.flashpunk.graphics
 			super(source, frameWidth, frameHeight, callback);
 		}
 		
-		/** @private Creates the buffer. */
+		/** Creates the buffer. */
 		override protected function createBuffer():void 
 		{
 			if (_buffer) {
@@ -39,7 +39,7 @@ package net.flashpunk.graphics
 			_bitmap.bitmapData = _buffer;
 		}
 		
-		/** @private Updates the buffer. */
+		/** Updates the buffer. */
 		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			// get position of the current frame
@@ -105,9 +105,9 @@ package net.flashpunk.graphics
 			updateBuffer();
 		}
 		
-		/** @private */ private var _imageWidth:uint;
-		/** @private */ private var _imageHeight:uint;
-		/** @private */ private var _offsetX:Number = 0;
-		/** @private */ private var _offsetY:Number = 0;
+		protected var _imageWidth:uint;
+		protected var _imageHeight:uint;
+		protected var _offsetX:Number = 0;
+		protected var _offsetY:Number = 0;
 	}
 }

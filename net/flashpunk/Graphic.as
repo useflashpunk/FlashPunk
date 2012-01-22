@@ -73,12 +73,12 @@
 			
 		}
 		
-		/** @private Callback for when the graphic is assigned to an Entity. */
+		/** Callback for when the graphic is assigned to an Entity. */
 		protected function get assign():Function { return _assign; }
 		protected function set assign(value:Function):void { _assign = value; }
 		
 		// Graphic information.
-		/** @private */ internal var _assign:Function;
-		/** @private */ protected var _point:Point = new Point;
+		internal var _assign:Function;
+		protected var _point:Point = new Point;
 	}
 }

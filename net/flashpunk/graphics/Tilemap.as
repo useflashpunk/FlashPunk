@@ -448,8 +448,8 @@
 			usePositions = u;
 		}
 		
-		/** @private Used by shiftTiles to update a tile from the tilemap. */
-		private function updateTile(column:uint, row:uint):void
+		/** Used by shiftTiles to update a tile from the tilemap. */
+		protected function updateTile(column:uint, row:uint):void
 		{
 			setTile(column, row, _map.getPixel(column % _columns, row % _rows));
 		}
@@ -508,19 +508,19 @@
 		public function get rows():uint { return _rows; }
 		
 		// Tilemap information.
-		/** @private */ private var _map:BitmapData;
-		/** @private */ private var _temp:BitmapData;
-		/** @private */ private var _columns:uint;
-		/** @private */ private var _rows:uint;
+		protected var _map:BitmapData;
+		protected var _temp:BitmapData;
+		protected var _columns:uint;
+		protected var _rows:uint;
 		
 		// Tileset information.
-		/** @private */ private var _set:BitmapData;
-		/** @private */ private var _setColumns:uint;
-		/** @private */ private var _setRows:uint;
-		/** @private */ private var _setCount:uint;
-		/** @private */ private var _tile:Rectangle;
+		protected var _set:BitmapData;
+		protected var _setColumns:uint;
+		protected var _setRows:uint;
+		protected var _setCount:uint;
+		protected var _tile:Rectangle;
 		
 		// Global objects.
-		/** @private */ private var _rect:Rectangle = FP.rect;
+		protected var _rect:Rectangle = FP.rect;
 	}
 }

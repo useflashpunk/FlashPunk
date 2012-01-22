@@ -43,7 +43,7 @@
 			start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -52,7 +52,7 @@
 		}
 		
 		// Tween information.
-		/** @private */ private var _start:Number;
-		/** @private */ private var _range:Number;
+		protected var _start:Number;
+		protected var _range:Number;
 	}
 }

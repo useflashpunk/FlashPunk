@@ -190,14 +190,14 @@
 		}
 		
 		// Easing constants.
-		/** @private */ private static const PI:Number = Math.PI;
-		/** @private */ private static const PI2:Number = Math.PI / 2;
-		/** @private */ private static const B1:Number = 1 / 2.75;
-		/** @private */ private static const B2:Number = 2 / 2.75;
-		/** @private */ private static const B3:Number = 1.5 / 2.75;
-		/** @private */ private static const B4:Number = 2.5 / 2.75;
-		/** @private */ private static const B5:Number = 2.25 / 2.75;
-		/** @private */ private static const B6:Number = 2.625 / 2.75;
+		protected static const PI:Number = Math.PI;
+		protected static const PI2:Number = Math.PI / 2;
+		protected static const B1:Number = 1 / 2.75;
+		protected static const B2:Number = 2 / 2.75;
+		protected static const B3:Number = 1.5 / 2.75;
+		protected static const B4:Number = 2.5 / 2.75;
+		protected static const B5:Number = 2.25 / 2.75;
+		protected static const B6:Number = 2.625 / 2.75;
 		
 		/**
 		 * Operation of in/out easers:

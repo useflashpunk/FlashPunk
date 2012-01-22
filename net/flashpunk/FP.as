@@ -854,8 +854,8 @@
 			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
 		}
 		
-		/** @private Quicksorts the array. */ 
-		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
+		/** Quicksorts the array. */ 
+		protected static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
 		{
 			var i:int = left, j:int = right, t:Number,
 				p:* = a[Math.round((left + right) * .5)];
@@ -891,8 +891,8 @@
 			if (i < right) quicksort(a, i, right, ascending);
 		}
 		
-		/** @private Quicksorts the array by the property. */ 
-		private static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
+		/** Quicksorts the array by the property. */ 
+		protected static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
 		{
 			var i:int = left, j:int = right, t:Object,
 				p:* = a[Math.round((left + right) * .5)][property];
@@ -929,46 +929,46 @@
 		}
 		
 		// World information.
-		/** @private */ internal static var _world:World;
-		/** @private */ internal static var _goto:World;
+		internal static var _world:World;
+		internal static var _goto:World;
 		
 		// Console information.
-		/** @private */ internal static var _console:Console;
+		internal static var _console:Console;
 		
 		// Time information.
-		/** @private */ internal static var _time:uint;
-		/** @private */ public static var _updateTime:uint;
-		/** @private */ public static var _renderTime:uint;
-		/** @private */ public static var _gameTime:uint;
-		/** @private */ public static var _flashTime:uint;
+		internal static var _time:uint;
+		public static var _updateTime:uint;
+		public static var _renderTime:uint;
+		public static var _gameTime:uint;
+		public static var _flashTime:uint;
 		
 		// Bitmap storage.
-		/** @private */ private static var _bitmap:Dictionary = new Dictionary();
+		protected static var _bitmap:Dictionary = new Dictionary();
 		
 		// Pseudo-random number generation (the seed is set in Engine's constructor).
-		/** @private */ private static var _seed:uint = 0;
-		/** @private */ private static var _getSeed:uint;
+		protected static var _seed:uint = 0;
+		protected static var _getSeed:uint;
 		
 		// Volume control.
-		/** @private */ private static var _volume:Number = 1;
-		/** @private */ private static var _pan:Number = 0;
-		/** @private */ private static var _soundTransform:SoundTransform = new SoundTransform;
+		protected static var _volume:Number = 1;
+		protected static var _pan:Number = 0;
+		protected static var _soundTransform:SoundTransform = new SoundTransform;
 		
 		// Used for rad-to-deg and deg-to-rad conversion.
-		/** @private */ public static const DEG:Number = -180 / Math.PI;
-		/** @private */ public static const RAD:Number = Math.PI / -180;
+		public static const DEG:Number = -180 / Math.PI;
+		public static const RAD:Number = Math.PI / -180;
 		
 		// Global Flash objects.
-		/** @private */ public static var stage:Stage;
-		/** @private */ public static var engine:Engine;
+		public static var stage:Stage;
+		public static var engine:Engine;
 		
 		// Global objects used for rendering, collision, etc.
-		/** @private */ public static var point:Point = new Point;
-		/** @private */ public static var point2:Point = new Point;
-		/** @private */ public static var zero:Point = new Point;
-		/** @private */ public static var rect:Rectangle = new Rectangle;
-		/** @private */ public static var matrix:Matrix = new Matrix;
-		/** @private */ public static var sprite:Sprite = new Sprite;
-		/** @private */ public static var entity:Entity;
+		public static var point:Point = new Point;
+		public static var point2:Point = new Point;
+		public static var zero:Point = new Point;
+		public static var rect:Rectangle = new Rectangle;
+		public static var matrix:Matrix = new Matrix;
+		public static var sprite:Sprite = new Sprite;
+		public static var entity:Entity;
 	}
 }

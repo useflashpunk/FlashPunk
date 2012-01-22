@@ -99,8 +99,8 @@
 			_position = 0;
 		}
 		
-		/** @private Event handler for sound completion. */
-		private function onComplete(e:Event = null):void
+		/** Event handler for sound completion. */
+		protected function onComplete(e:Event = null):void
 		{
 			if (_looping) loop(_vol, _pan);
 			else stop();
@@ -108,15 +108,15 @@
 			if (complete != null) complete();
 		}
 		
-		/** @private Add the sound to the global list. */
-		private function addPlaying():void
+		/** Add the sound to the global list. */
+		protected function addPlaying():void
 		{
 			if (!_typePlaying[_type]) _typePlaying[_type] = new Dictionary()
 			_typePlaying[_type][this] = this;
 		}
 		
-		/** @private Remove the sound from the global list. */
-		private function removePlaying():void
+		/** Remove the sound from the global list. */
+		protected function removePlaying():void
 		{
 			if (_typePlaying[_type]) delete _typePlaying[_type][this];
 		}
@@ -239,20 +239,20 @@
 		}
 		
 		// Sound information.
-		/** @private */ private var _type:String;
-		/** @private */ private var _vol:Number = 1;
-		/** @private */ private var _pan:Number = 0;
-		/** @private */ private var _filteredVol:Number;
-		/** @private */ private var _filteredPan:Number;
-		/** @private */ private var _sound:Sound;
-		/** @private */ private var _channel:SoundChannel;
-		/** @private */ private var _transform:SoundTransform = new SoundTransform;
-		/** @private */ private var _position:Number = 0;
-		/** @private */ private var _looping:Boolean;
+		protected var _type:String;
+		protected var _vol:Number = 1;
+		protected var _pan:Number = 0;
+		protected var _filteredVol:Number;
+		protected var _filteredPan:Number;
+		protected var _sound:Sound;
+		protected var _channel:SoundChannel;
+		protected var _transform:SoundTransform = new SoundTransform;
+		protected var _position:Number = 0;
+		protected var _looping:Boolean;
 		
 		// Stored Sound objects.
-		/** @private */ private static var _sounds:Dictionary = new Dictionary;
-		/** @private */ private static var _typePlaying:Dictionary = new Dictionary;
-		/** @private */ private static var _typeTransforms:Dictionary = new Dictionary;
+		protected static var _sounds:Dictionary = new Dictionary;
+		protected static var _typePlaying:Dictionary = new Dictionary;
+		protected static var _typeTransforms:Dictionary = new Dictionary;
 	}
 }

@@ -80,7 +80,7 @@
 			}
 		}
 		
-		/** @private Renders the particles. */
+		/** Renders the particles. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			// quit if there are no particles
@@ -258,21 +258,21 @@
 		public function get particleCount():uint { return _particleCount; }
 		
 		// Particle information.
-		/** @private */ private var _types:Object = { };
-		/** @private */ private var _particle:Particle;
-		/** @private */ private var _cache:Particle;
-		/** @private */ private var _particleCount:uint;
+		protected var _types:Object = { };
+		protected var _particle:Particle;
+		protected var _cache:Particle;
+		protected var _particleCount:uint;
 		
 		// Source information.
-		/** @private */ private var _source:BitmapData;
-		/** @private */ private var _width:uint;
-		/** @private */ private var _height:uint;
-		/** @private */ private var _frameWidth:uint;
-		/** @private */ private var _frameHeight:uint;
-		/** @private */ private var _frameCount:uint;
+		protected var _source:BitmapData;
+		protected var _width:uint;
+		protected var _height:uint;
+		protected var _frameWidth:uint;
+		protected var _frameHeight:uint;
+		protected var _frameCount:uint;
 		
 		// Drawing information.
-		/** @private */ private var _p:Point = new Point;
-		/** @private */ private var _tint:ColorTransform = new ColorTransform;
+		protected var _p:Point = new Point;
+		protected var _tint:ColorTransform = new ColorTransform;
 	}
 }

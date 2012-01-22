@@ -81,14 +81,14 @@
 			return _points[index % _points.length];
 		}
 		
-		/** @private Starts the Tween. */
+		/** Starts the Tween. */
 		override public function start():void 
 		{
 			_index = 0;
 			super.start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -111,8 +111,8 @@
 			y = _prev.y + (_next.y - _prev.y) * td;
 		}
 		
-		/** @private Updates the path, preparing it for motion. */
-		private function updatePath():void
+		/** Updates the path, preparing it for motion. */
+		protected function updatePath():void
 		{
 			if (_points.length < 1) throw new Error("A LinearPath must have at least one point.");
 			if (_pointD.length == _pointT.length) return;
@@ -132,16 +132,16 @@
 		public function get pointCount():Number { return _points.length; }
 		
 		// Path information.
-		/** @private */ private var _points:Vector.<Point> = new Vector.<Point>;
-		/** @private */ private var _pointD:Vector.<Number> = new Vector.<Number>;
-		/** @private */ private var _pointT:Vector.<Number> = new Vector.<Number>;
-		/** @private */ private var _distance:Number = 0;
-		/** @private */ private var _speed:Number = 0;
-		/** @private */ private var _index:uint = 0;
+		protected var _points:Vector.<Point> = new Vector.<Point>;
+		protected var _pointD:Vector.<Number> = new Vector.<Number>;
+		protected var _pointT:Vector.<Number> = new Vector.<Number>;
+		protected var _distance:Number = 0;
+		protected var _speed:Number = 0;
+		protected var _index:uint = 0;
 		
 		// Line information.
-		/** @private */ private var _last:Point;
-		/** @private */ private var _prev:Point;
-		/** @private */ private var _next:Point;
+		protected var _last:Point;
+		protected var _prev:Point;
+		protected var _next:Point;
 	}
 }

@@ -155,13 +155,13 @@
 		}
 		
 		protected var _styles:Object = new Object;
-		private static var _styleIndices:Vector.<int> = new Vector.<int>;
-		private static var _styleMatched:Array = new Array;
-		private static var _styleFormats:Vector.<TextFormat> = new Vector.<TextFormat>;
-		private static var _styleFrom:Vector.<int> = new Vector.<int>;
-		private static var _styleTo:Vector.<int> = new Vector.<int>;
+		protected static var _styleIndices:Vector.<int> = new Vector.<int>;
+		protected static var _styleMatched:Array = new Array;
+		protected static var _styleFormats:Vector.<TextFormat> = new Vector.<TextFormat>;
+		protected static var _styleFrom:Vector.<int> = new Vector.<int>;
+		protected static var _styleTo:Vector.<int> = new Vector.<int>;
 		
-		private function matchStyles():void
+		protected function matchStyles():void
 		{
 			var i:int, j:int;
 			
@@ -326,7 +326,7 @@
 			super.updateBuffer();
 		}
 		
-		/** @private Centers the Text's originX/Y to its center. */
+		/** Centers the Text's originX/Y to its center. */
 		override public function centerOrigin():void 
 		{
 			originX = _width / 2;
@@ -490,6 +490,6 @@
 		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
 		// Use this option when compiling with Flex SDK 4
 		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
-		/** @private */ private static var _FONT_DEFAULT:Class;
+		protected static var _FONT_DEFAULT:Class;
 	}
 }

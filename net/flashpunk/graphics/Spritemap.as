@@ -62,7 +62,7 @@
 			super.updateBuffer(clearBefore);
 		}
 		
-		/** @private Updates the animation. */
+		/** Updates the animation. */
 		override public function update():void 
 		{
 			if (_anim && !complete)
@@ -237,16 +237,16 @@
 		public function get currentAnim():String { return _anim ? _anim._name : ""; }
 		
 		// Spritemap information.
-		/** @private */ protected var _rect:Rectangle;
-		/** @private */ protected var _width:uint;
-		/** @private */ protected var _height:uint;
-		/** @private */ private var _columns:uint;
-		/** @private */ private var _rows:uint;
-		/** @private */ private var _frameCount:uint;
-		/** @private */ private var _anims:Object = { };
-		/** @private */ private var _anim:Anim;
-		/** @private */ private var _index:uint;
-		/** @private */ protected var _frame:uint;
-		/** @private */ private var _timer:Number = 0;
+		protected var _rect:Rectangle;
+		protected var _width:uint;
+		protected var _height:uint;
+		protected var _columns:uint;
+		protected var _rows:uint;
+		protected var _frameCount:uint;
+		protected var _anims:Object = { };
+		protected var _anim:Anim;
+		protected var _index:uint;
+		protected var _frame:uint;
+		protected var _timer:Number = 0;
 	}
 }

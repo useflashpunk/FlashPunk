@@ -83,7 +83,7 @@
 			if (_parent) _parent.removeTween(this);
 		}
 		
-		/** @private Called when the Tween completes. */
+		/** Called when the Tween completes. */
 		internal function finish():void
 		{
 			switch (_type)
@@ -120,18 +120,18 @@
 		public function get scale():Number { return _t; }
 		
 		// Tween information.
-		/** @private */ private var _type:uint;
-		/** @private */ protected var _ease:Function;
-		/** @private */ protected var _t:Number = 0;
+		protected var _type:uint;
+		protected var _ease:Function;
+		protected var _t:Number = 0;
 		
 		// Timing information.
-		/** @private */ protected var _time:Number;
-		/** @private */ protected var _target:Number;
+		protected var _time:Number;
+		protected var _target:Number;
 		
 		// List information.
-		/** @private */ internal var _finish:Boolean;
-		/** @private */ internal var _parent:Tweener;
-		/** @private */ internal var _prev:Tween;
-		/** @private */ internal var _next:Tween;
+		internal var _finish:Boolean;
+		internal var _parent:Tweener;
+		internal var _prev:Tween;
+		internal var _next:Tween;
 	}
 }

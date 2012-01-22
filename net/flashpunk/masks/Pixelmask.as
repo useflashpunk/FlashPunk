@@ -39,8 +39,8 @@
 			_check[Hitbox] = collideHitbox;
 		}
 		
-		/** @private Collide against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		/** Collide against an Entity. */
+		protected function collideMask(other:Mask):Boolean
 		{
 			_point.x = parent.x + _x;
 			_point.y = parent.y + _y;
@@ -51,8 +51,8 @@
 			return _data.hitTest(_point, threshold, _rect);
 		}
 		
-		/** @private Collide against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		/** Collide against a Hitbox. */
+		protected function collideHitbox(other:Hitbox):Boolean
 		{
 			_point.x = parent.x + _x;
 			_point.y = parent.y + _y;
@@ -63,8 +63,8 @@
 			return _data.hitTest(_point, threshold, _rect);
 		}
 		
-		/** @private Collide against a Pixelmask. */
-		private function collidePixelmask(other:Pixelmask):Boolean
+		/** Collide against a Pixelmask. */
+		protected function collidePixelmask(other:Pixelmask):Boolean
 		{
 			_point.x = parent.x + _x;
 			_point.y = parent.y + _y;
@@ -115,12 +115,12 @@
 		}
 		
 		// Pixelmask information.
-		/** @private */ internal var _data:BitmapData;
-		/** @private */ internal var _debug:BitmapData;
+		internal var _data:BitmapData;
+		internal var _debug:BitmapData;
 		
 		// Global objects.
-		/** @private */ private var _rect:Rectangle = FP.rect;
-		/** @private */ private var _point:Point = FP.point;
-		/** @private */ private var _point2:Point = FP.point2;
+		protected var _rect:Rectangle = FP.rect;
+		protected var _point:Point = FP.point;
+		protected var _point2:Point = FP.point2;
 	}
 }

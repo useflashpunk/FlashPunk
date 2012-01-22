@@ -61,7 +61,7 @@
 			start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -81,12 +81,12 @@
 		public function get circumference():Number { return _radius * _CIRC; }
 		
 		// Circle information.
-		/** @private */ private var _centerX:Number = 0;
-		/** @private */ private var _centerY:Number = 0;
-		/** @private */ private var _radius:Number = 0;
-		/** @private */ private var _angle:Number = 0;
-		/** @private */ private var _angleStart:Number = 0;
-		/** @private */ private var _angleFinish:Number = 0;
-		/** @private */ private static const _CIRC:Number = Math.PI * 2;
+		protected var _centerX:Number = 0;
+		protected var _centerY:Number = 0;
+		protected var _radius:Number = 0;
+		protected var _angle:Number = 0;
+		protected var _angleStart:Number = 0;
+		protected var _angleFinish:Number = 0;
+		protected static const _CIRC:Number = Math.PI * 2;
 	}
 }

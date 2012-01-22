@@ -56,11 +56,11 @@
 		 */
 		public function get loop():Boolean { return _loop; }
 		
-		/** @private */ internal var _parent:Spritemap;
-		/** @private */ internal var _name:String;
-		/** @private */ internal var _frames:Array;
-		/** @private */ internal var _frameRate:Number;
-		/** @private */ internal var _frameCount:uint;
-		/** @private */ internal var _loop:Boolean;
+		internal var _parent:Spritemap;
+		internal var _name:String;
+		internal var _frames:Array;
+		internal var _frameRate:Number;
+		internal var _frameCount:uint;
+		internal var _loop:Boolean;
 	}
 }
