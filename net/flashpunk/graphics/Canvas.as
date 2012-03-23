@@ -228,7 +228,9 @@
 			for each (var buffer:BitmapData in _buffers)
 			{
 				_graphics.clear();
-				_graphics.beginBitmapFill(texture);
+				_matrix.identity();
+				_matrix.translate(rect.x - xx, rect.y - yy);
+				_graphics.beginBitmapFill(texture, _matrix);
 				_graphics.drawRect(rect.x - xx, rect.y - yy, rect.width, rect.height);
 				buffer.draw(FP.sprite);
 				xx += _maxWidth;
