@@ -67,6 +67,7 @@
 					buffer = _buffers[_ref.getPixel(xx, yy)];
 					if (_tint || blend)
 					{
+						_matrix.identity();
 						_matrix.tx = _point.x;
 						_matrix.ty = _point.y;
 						_bitmap.bitmapData = buffer;
