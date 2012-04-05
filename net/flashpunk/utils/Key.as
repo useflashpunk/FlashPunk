@@ -13,6 +13,7 @@
 		public static const DOWN:int = 40;
 		
 		public static const ENTER:int = 13;
+		public static const COMMAND:int = 15;
 		public static const CONTROL:int = 17;
 		public static const SPACE:int = 32;
 		public static const SHIFT:int = 16;
