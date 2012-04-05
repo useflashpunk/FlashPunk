@@ -284,12 +284,14 @@ package net.flashpunk.graphics
 				_source = _flip;
 				_flip = temp;
 				updateBuffer();
+				return;
 			}
 			if (_class && _flips[_class])
 			{
 				_source = _flips[_class];
 				_flip = temp;
 				updateBuffer();
+				return;
 			}
 			_source = new BitmapData(_source.width, _source.height, true, 0);
 			_flip = temp;
