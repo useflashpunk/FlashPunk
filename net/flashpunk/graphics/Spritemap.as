@@ -106,7 +106,6 @@
 		 */
 		public function add(name:String, frames:Array, frameRate:Number = 0, loop:Boolean = true):Anim
 		{
-			if (_anims[name]) throw new Error("Cannot have multiple animations with the same name");
 			(_anims[name] = new Anim(name, frames, frameRate, loop))._parent = this;
 			return _anims[name];
 		}
