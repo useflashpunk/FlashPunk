@@ -52,12 +52,12 @@
 		{
 			_time += FP.timeInFrames ? 1 : FP.elapsed;
 			_t = _time / _target;
-			if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
 			if (_time >= _target)
 			{
 				_t = 1;
 				_finish = true;
 			}
+			if (_ease != null) _t = _ease(_t);
 		}
 		
 		/**
@@ -95,7 +95,7 @@
 				case LOOPING:
 					_time %= _target;
 					_t = _time / _target;
-					if (_ease != null && _t > 0 && _t < 1) _t = _ease(_t);
+					if (_ease != null) _t = _ease(_t);
 					start();
 					break;
 				case ONESHOT:
