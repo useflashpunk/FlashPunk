@@ -186,12 +186,12 @@
 		/**
 		 * X position of the mouse on the screen.
 		 */
-		public function get mouseX():int { return (FP.stage.mouseX - _x) / (_scaleX * _scale); }
+		public function get mouseX():int { return _sprite.mouseX; }
 		
 		/**
 		 * Y position of the mouse on the screen.
 		 */
-		public function get mouseY():int { return (FP.stage.mouseY - _y) / (_scaleY * _scale); }
+		public function get mouseY():int { return _sprite.mouseY; }
 		
 		/**
 		 * Captures the current screen as an Image object.
