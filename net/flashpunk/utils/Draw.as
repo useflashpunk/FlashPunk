@@ -7,6 +7,7 @@
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
+	import net.flashpunk.graphics.Text;
 	
 	/**
 	 * Static class with access to miscellaneous drawing functions.
@@ -426,6 +427,20 @@
 				if (addEntityPosition) graphic(e.graphic, x + e.x, y + e.y);
 				else graphic(e.graphic, x, y);
 			}
+		}
+
+		/**
+		 * Draws text.
+		 * @param	text		The text to render.
+		 * @param	x		X position.
+		 * @param	y		Y position.
+		 * @param	options		Options (see Text constructor).
+		 */
+		public static function text (text:String, x:Number = 0, y:Number = 0, options:Object = null):void
+		{
+			var textGfx:Text = new Text(text, x, y, options);
+
+			textGfx.render(_target, FP.zero, _camera);
 		}
 		
 		// Drawing information.
