@@ -3,6 +3,7 @@
 	import flash.display.*;
 	import flash.geom.*;
 	import net.flashpunk.*;
+	import net.flashpunk.graphics.*;
 	
 	/**
 	 * A bitmap mask used for pixel-perfect collision. 
@@ -20,16 +21,13 @@
 		 * @param	x			X offset of the mask.
 		 * @param	y			Y offset of the mask.
 		 */
-		public function Pixelmask(source:*, x:int = 0, y:int = 0)
+		public function Pixelmask(source:*=null, x:int = 0, y:int = 0)
 		{
 			// fetch mask data
-			if (source is BitmapData) _data = source;
-			if (source is Class) _data = FP.getBitmap(source);
-			if (!_data) throw new Error("Invalid Pixelmask source image.");
+			if (source is BitmapData) data = source;
+			if (source is Class) data = FP.getBitmap(source);
 			
 			// set mask properties
-			_width = data.width;
-			_height = data.height;
 			_x = x;
 			_y = y;
 			
@@ -73,6 +71,60 @@
 			return _data.hitTest(_point, threshold, other._data, _point2, other.threshold);
 		}
 		
+		public function syncWith(image:Image):void
+		{
+			var tl:Point = new Point(-image.x, -image.y);
+			var tr:Point = new Point(-image.x+image.width, -image.y);
+			var bl:Point = new Point(-image.x, -image.y+image.height);
+			var br:Point = new Point(-image.x+image.width, -image.y+image.height);
+			
+			FP.matrix.b = FP.matrix.c = 0;
+			FP.matrix.a = image.scaleX * image.scale;
+			FP.matrix.d = image.scaleY * image.scale;
+			FP.matrix.tx = -image.originX * FP.matrix.a;
+			FP.matrix.ty = -image.originY * FP.matrix.d;
+			if (image.angle != 0) FP.matrix.rotate(image.angle * FP.RAD);
+			FP.matrix.tx += image.originX;
+			FP.matrix.ty += image.originY;
+			
+			var ttl:Point = FP.matrix.transformPoint(tl);
+			var ttr:Point = FP.matrix.transformPoint(tr);
+			var tbl:Point = FP.matrix.transformPoint(bl);
+			var tbr:Point = FP.matrix.transformPoint(br);
+			
+			var left:Number = Math.min(ttl.x, Math.min(ttr.x, Math.min(tbl.x, tbr.x)))-image.originX;
+			var right:Number = Math.max(ttl.x, Math.max(ttr.x, Math.max(tbl.x, tbr.x)))-image.originX;
+			var top:Number = Math.min(ttl.y, Math.min(ttr.y, Math.min(tbl.y, tbr.y)))-image.originY;
+			var bottom:Number = Math.max(ttl.y, Math.max(ttr.y, Math.max(tbl.y, tbr.y)))-image.originY;
+			
+			var newWidth:Number = right-left;
+			var newHeight:Number = bottom-top;
+			
+			if (!_data || _data.width != newWidth || _data.height != newHeight)
+			{
+				if (_data) _data.dispose();
+				data = new BitmapData(newWidth, newHeight, true, 0);
+			}
+			
+			FP.rect.x = 0;
+			FP.rect.y = 0;
+			FP.rect.width = _data.width;
+			FP.rect.height = _data.height;
+			
+			_data.fillRect(FP.rect, 0x0);
+			
+			image.render(_data, new Point(tl.x-left, tl.y-top), FP.zero);
+			
+			x = left;
+			y = top;
+			
+			if (_debug)
+			{
+				_debug.dispose();
+				_debug = null;
+			}
+		}
+		
 		/**
 		 * Current BitmapData mask.
 		 */
@@ -83,6 +135,28 @@
 			_width = value.width;
 			_height = value.height;
 			update();
+		}
+		
+		/** @private Updates the parent's bounds for this mask. */
+		override protected function update():void 
+		{
+			if (!data)
+			{
+				if (parent)
+				{
+					var image:Image = parent.graphic as Image;
+					if (image) syncWith(image);
+					else
+					{
+						data = new BitmapData(Math.max(parent.width, 1), Math.max(parent.height, 1), true, 0);
+					}
+				}
+				else
+				{
+					data = new BitmapData(1, 1, true, 0);
+				}
+			}
+			super.update();
 		}
 		
 		public override function renderDebug(g:Graphics):void
