@@ -82,8 +82,8 @@
 		 * Synchronises the mask with an image matching it's dimensions and using
 		 * it's content as the mask.
 		 * @param	image		The image sync the mask with.
- 		 * @param	x			X offset of the mask.
- 		 * @param	y			Y offset of the mask.
+		 * @param	x			X offset of the mask.
+		 * @param	y			Y offset of the mask.
 		 */
 		public function syncWith(image:Image, x:int=0, y:int=0):void
 		{
