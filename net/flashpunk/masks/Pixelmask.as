@@ -73,29 +73,33 @@
 		
 		public function syncWith(image:Image):void
 		{
-			var tl:Point = new Point(-image.x, -image.y);
-			var tr:Point = new Point(-image.x+image.width, -image.y);
-			var bl:Point = new Point(-image.x, -image.y+image.height);
-			var br:Point = new Point(-image.x+image.width, -image.y+image.height);
+			_point.x = -image.x;
+			_point.y = -image.y;
+			_point2.x = -image.x+image.width;
+			_point2.y = -image.y;
+			_point3.x = -image.x;
+			_point3.y = -image.y+image.height;
+			_point4.x = -image.x+image.width;
+			_point4.y = -image.y+image.height;
 			
-			FP.matrix.b = FP.matrix.c = 0;
-			FP.matrix.a = image.scaleX * image.scale;
-			FP.matrix.d = image.scaleY * image.scale;
-			FP.matrix.tx = -image.originX * FP.matrix.a;
-			FP.matrix.ty = -image.originY * FP.matrix.d;
-			if (image.angle != 0) FP.matrix.rotate(image.angle * FP.RAD);
-			FP.matrix.tx += image.originX;
-			FP.matrix.ty += image.originY;
+			_matrix.b = _matrix.c = 0;
+			_matrix.a = image.scaleX * image.scale;
+			_matrix.d = image.scaleY * image.scale;
+			_matrix.tx = -image.originX * _matrix.a;
+			_matrix.ty = -image.originY * _matrix.d;
+			if (image.angle != 0) _matrix.rotate(image.angle * FP.RAD);
+			_matrix.tx += image.originX;
+			_matrix.ty += image.originY;
 			
-			var ttl:Point = FP.matrix.transformPoint(tl);
-			var ttr:Point = FP.matrix.transformPoint(tr);
-			var tbl:Point = FP.matrix.transformPoint(bl);
-			var tbr:Point = FP.matrix.transformPoint(br);
+			_point = _matrix.transformPoint(_point);
+			_point2 = _matrix.transformPoint(_point2);
+			_point3 = _matrix.transformPoint(_point3);
+			_point4 = _matrix.transformPoint(_point4);
 			
-			var left:Number = Math.min(ttl.x, Math.min(ttr.x, Math.min(tbl.x, tbr.x)))-image.originX;
-			var right:Number = Math.max(ttl.x, Math.max(ttr.x, Math.max(tbl.x, tbr.x)))-image.originX;
-			var top:Number = Math.min(ttl.y, Math.min(ttr.y, Math.min(tbl.y, tbr.y)))-image.originY;
-			var bottom:Number = Math.max(ttl.y, Math.max(ttr.y, Math.max(tbl.y, tbr.y)))-image.originY;
+			var left:Number = Math.min(_point.x, Math.min(_point2.x, Math.min(_point3.x, _point4.x)))-image.originX;
+			var right:Number = Math.max(_point.x, Math.max(_point2.x, Math.max(_point3.x, _point4.x)))-image.originX;
+			var top:Number = Math.min(_point.y, Math.min(_point2.y, Math.min(_point3.y, _point4.y)))-image.originY;
+			var bottom:Number = Math.max(_point.y, Math.max(_point2.y, Math.max(_point3.y, _point4.y)))-image.originY;
 			
 			var newWidth:Number = right-left;
 			var newHeight:Number = bottom-top;
@@ -106,14 +110,17 @@
 				data = new BitmapData(newWidth, newHeight, true, 0);
 			}
 			
-			FP.rect.x = 0;
-			FP.rect.y = 0;
-			FP.rect.width = _data.width;
-			FP.rect.height = _data.height;
+			_rect.x = 0;
+			_rect.y = 0;
+			_rect.width = _data.width;
+			_rect.height = _data.height;
 			
-			_data.fillRect(FP.rect, 0x0);
+			_data.fillRect(_rect, 0);
 			
-			image.render(_data, new Point(tl.x-left, tl.y-top), FP.zero);
+			_point.x = -image.x-left;
+			_point.y = -image.y-top;
+			
+			image.render(_data, _point, FP.zero);
 			
 			x = left;
 			y = top;
@@ -194,7 +201,10 @@
 		
 		// Global objects.
 		/** @private */ private var _rect:Rectangle = FP.rect;
+		/** @private */ private var _matrix:Matrix = FP.matrix;
 		/** @private */ private var _point:Point = FP.point;
 		/** @private */ private var _point2:Point = FP.point2;
+		/** @private */ private var _point3:Point = new Point;
+		/** @private */ private var _point4:Point = new Point;
 	}
 }
