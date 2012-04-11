@@ -21,15 +21,17 @@
 		 * @param	x			X offset of the mask.
 		 * @param	y			Y offset of the mask.
 		 */
-		public function Pixelmask(source:*=null, x:int = 0, y:int = 0)
+		public function Pixelmask(source:*, x:int = 0, y:int = 0)
 		{
 			// fetch mask data
 			if (source is BitmapData) data = source;
-			if (source is Class) data = FP.getBitmap(source);
+			else if (source is Class) data = FP.getBitmap(source);
+			else if (source is Image) syncWith(source);
+			if (!_data) throw new Error("Invalid Pixelmask source image.");
 			
 			// set mask properties
-			_x = x;
-			_y = y;
+			_x += x;
+			_y += y;
 			
 			// set callback functions
 			_check[Mask] = collideMask;
@@ -71,8 +73,16 @@
 			return _data.hitTest(_point, threshold, other._data, _point2, other.threshold);
 		}
 		
-		public function syncWith(image:Image):void
+		/**
+		 * Synchronises the mask with an image matching it's dimensions and using
+		 * it's content as the mask.
+		 * @param	image		The image sync the mask with.
+ 		 * @param	x			X offset of the mask.
+ 		 * @param	y			Y offset of the mask.
+		 */
+		public function syncWith(image:Image, x:int=0, y:int=0):void
 		{
+		  // find the 4 corners of the image
 			_point.x = -image.x;
 			_point.y = -image.y;
 			_point2.x = -image.x+image.width;
@@ -82,6 +92,7 @@
 			_point4.x = -image.x+image.width;
 			_point4.y = -image.y+image.height;
 			
+			// create a transformation matrix based on the image
 			_matrix.b = _matrix.c = 0;
 			_matrix.a = image.scaleX * image.scale;
 			_matrix.d = image.scaleY * image.scale;
@@ -91,40 +102,51 @@
 			_matrix.tx += image.originX;
 			_matrix.ty += image.originY;
 			
+			// transform each of the corners
 			_point = _matrix.transformPoint(_point);
 			_point2 = _matrix.transformPoint(_point2);
 			_point3 = _matrix.transformPoint(_point3);
 			_point4 = _matrix.transformPoint(_point4);
 			
+			// find the new bounds
 			var left:Number = Math.min(_point.x, Math.min(_point2.x, Math.min(_point3.x, _point4.x)))-image.originX;
 			var right:Number = Math.max(_point.x, Math.max(_point2.x, Math.max(_point3.x, _point4.x)))-image.originX;
 			var top:Number = Math.min(_point.y, Math.min(_point2.y, Math.min(_point3.y, _point4.y)))-image.originY;
 			var bottom:Number = Math.max(_point.y, Math.max(_point2.y, Math.max(_point3.y, _point4.y)))-image.originY;
 			
+			// find the new dimensions
 			var newWidth:Number = right-left;
 			var newHeight:Number = bottom-top;
 			
+			// if the data doesn't exist or is the wrong size, recreate it
 			if (!_data || _data.width != newWidth || _data.height != newHeight)
 			{
 				if (_data) _data.dispose();
 				data = new BitmapData(newWidth, newHeight, true, 0);
 			}
+			// if the data already exists and is the right size, fill it with blank pixels
+			else
+			{
+				_rect.x = 0;
+				_rect.y = 0;
+				_rect.width = newWidth;
+				_rect.height = newHeight;
+				
+				_data.fillRect(_rect, 0);
+			}
 			
-			_rect.x = 0;
-			_rect.y = 0;
-			_rect.width = _data.width;
-			_rect.height = _data.height;
-			
-			_data.fillRect(_rect, 0);
-			
+			// find the point to render the image from
 			_point.x = -image.x-left;
 			_point.y = -image.y-top;
 			
+			// render the imag to the data
 			image.render(_data, _point, FP.zero);
 			
-			x = left;
-			y = top;
+			// set the mask's position
+			_x = left+x;
+			_y = top+y;
 			
+			// if there's a debug bitmapdata object, dispose of it
 			if (_debug)
 			{
 				_debug.dispose();
