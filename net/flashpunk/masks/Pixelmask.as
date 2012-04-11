@@ -24,14 +24,19 @@
 		public function Pixelmask(source:*, x:int = 0, y:int = 0)
 		{
 			// fetch mask data
-			if (source is BitmapData) data = source;
-			else if (source is Class) data = FP.getBitmap(source);
-			else if (source is Image) syncWith(source);
-			if (!_data) throw new Error("Invalid Pixelmask source image.");
-			
-			// set mask properties
-			_x += x;
-			_y += y;
+			if (source is BitmapData) _data = source;
+			if (source is Class) _data = FP.getBitmap(source);
+			if (source is Image) syncWith(source, x, y);
+			else
+			{
+				if (!_data) throw new Error("Invalid Pixelmask source image.");
+				
+				// set mask properties
+				_width = data.width;
+				_height = data.height;
+				_x = x;
+				_y = y;
+			}
 			
 			// set callback functions
 			_check[Mask] = collideMask;
@@ -115,22 +120,22 @@
 			var bottom:Number = Math.max(_point.y, Math.max(_point2.y, Math.max(_point3.y, _point4.y)))-image.originY;
 			
 			// find the new dimensions
-			var newWidth:Number = right-left;
-			var newHeight:Number = bottom-top;
+			_width = right-left;
+			_height = bottom-top;
 			
 			// if the data doesn't exist or is the wrong size, recreate it
-			if (!_data || _data.width != newWidth || _data.height != newHeight)
+			if (!_data || _data.width != _width || _data.height != _height)
 			{
 				if (_data) _data.dispose();
-				data = new BitmapData(newWidth, newHeight, true, 0);
+				_data = new BitmapData(_width, _height, true, 0);
 			}
 			// if the data already exists and is the right size, fill it with blank pixels
 			else
 			{
 				_rect.x = 0;
 				_rect.y = 0;
-				_rect.width = newWidth;
-				_rect.height = newHeight;
+				_rect.width = _width;
+				_rect.height = _height;
 				
 				_data.fillRect(_rect, 0);
 			}
@@ -145,6 +150,8 @@
 			// set the mask's position
 			_x = left+x;
 			_y = top+y;
+			
+			update();
 			
 			// if there's a debug bitmapdata object, dispose of it
 			if (_debug)
@@ -164,28 +171,6 @@
 			_width = value.width;
 			_height = value.height;
 			update();
-		}
-		
-		/** @private Updates the parent's bounds for this mask. */
-		override protected function update():void 
-		{
-			if (!data)
-			{
-				if (parent)
-				{
-					var image:Image = parent.graphic as Image;
-					if (image) syncWith(image);
-					else
-					{
-						data = new BitmapData(Math.max(parent.width, 1), Math.max(parent.height, 1), true, 0);
-					}
-				}
-				else
-				{
-					data = new BitmapData(1, 1, true, 0);
-				}
-			}
-			super.update();
 		}
 		
 		public override function renderDebug(g:Graphics):void
