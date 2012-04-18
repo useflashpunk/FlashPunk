@@ -108,6 +108,22 @@
 		public static var focused:Boolean = true;
 		
 		/**
+		 * Resize the screen.
+		 * @param width		New width.
+		 * @param height	New height.
+		 */
+		public static function resize(width:int, height:int):void
+		{
+			FP.width = width;
+			FP.height = height;
+			FP.halfWidth = width/2;
+			FP.halfHeight = height/2;
+			FP.bounds.width = width;
+			FP.bounds.height = height;
+			FP.screen.resize();
+		}
+		
+		/**
 		 * The currently active World object. When you set this, the World is flagged
 		 * to switch, but won't actually do so until the end of the current frame.
 		 */

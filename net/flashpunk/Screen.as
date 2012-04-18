@@ -18,16 +18,33 @@
 		 */
 		public function Screen() 
 		{
+			FP.engine.addChild(_sprite);
+			resize();
+			update();
+		}
+		
+		/**
+		 * Initialise buffers to current screen size.
+		 */
+		public function resize():void
+		{
+			if (_bitmap[0]) {
+				_sprite.removeChild(_bitmap[0]);
+				_sprite.removeChild(_bitmap[1]);
+				
+				_bitmap[0].bitmapData.dispose();
+				_bitmap[1].bitmapData.dispose();
+			}
+			
 			// create screen buffers
 			_bitmap[0] = new Bitmap(new BitmapData(FP.width, FP.height, false, _color), PixelSnapping.NEVER);
 			_bitmap[1] = new Bitmap(new BitmapData(FP.width, FP.height, false, _color), PixelSnapping.NEVER);
-			FP.engine.addChild(_sprite);
 			_sprite.addChild(_bitmap[0]).visible = true;
 			_sprite.addChild(_bitmap[1]).visible = false;
 			FP.buffer = _bitmap[0].bitmapData;
 			_width = FP.width;
 			_height = FP.height;
-			update();
+			_current = 0;
 		}
 		
 		/**
