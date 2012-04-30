@@ -444,9 +444,9 @@
 		}
 		
 		// Drawing information.
-		/** @private */ private static var _target:BitmapData;
-		/** @private */ private static var _camera:Point;
-		/** @private */ private static var _graphics:Graphics = FP.sprite.graphics;
-		/** @private */ private static var _rect:Rectangle = FP.rect;
+		protected static var _target:BitmapData;
+		protected static var _camera:Point;
+		protected static var _graphics:Graphics = FP.sprite.graphics;
+		protected static var _rect:Rectangle = FP.rect;
 	}
 }

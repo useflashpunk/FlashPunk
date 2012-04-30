@@ -993,8 +993,8 @@
 			}
 		}
 		
-		/** @private Adds Entity to the update list. */
-		private function addUpdate(e:Entity):void
+		/** Adds Entity to the update list. */
+		protected function addUpdate(e:Entity):void
 		{
 			// add to update list
 			if (_updateFirst)
@@ -1010,8 +1010,8 @@
 			_classCount[e._class] ++;
 		}
 		
-		/** @private Removes Entity from the update list. */
-		private function removeUpdate(e:Entity):void
+		/** Removes Entity from the update list. */
+		protected function removeUpdate(e:Entity):void
 		{
 			// remove from the update list
 			if (_updateFirst == e) _updateFirst = e._updateNext;
@@ -1023,7 +1023,7 @@
 			_classCount[e._class] --;
 		}
 		
-		/** @private Adds Entity to the render list. */
+		/** Adds Entity to the render list. */
 		internal function addRender(e:Entity):void
 		{
 			var f:Entity = _renderFirst[e._layer];
@@ -1047,7 +1047,7 @@
 			e._renderPrev = null;
 		}
 		
-		/** @private Removes Entity from the render list. */
+		/** Removes Entity from the render list. */
 		internal function removeRender(e:Entity):void
 		{
 			if (e._renderNext) e._renderNext._renderPrev = e._renderPrev;
@@ -1072,7 +1072,7 @@
 			e._renderNext = e._renderPrev = null;
 		}
 		
-		/** @private Adds Entity to the type list. */
+		/** Adds Entity to the type list. */
 		internal function addType(e:Entity):void
 		{
 			// add to type list
@@ -1091,7 +1091,7 @@
 			_typeFirst[e._type] = e;
 		}
 		
-		/** @private Removes Entity from the type list. */
+		/** Removes Entity from the type list. */
 		internal function removeType(e:Entity):void
 		{
 			// remove from the type list
@@ -1102,20 +1102,20 @@
 			_typeCount[e._type] --;
 		}
 		
-		/** @private Register's the Entity's instance name. */
+		/** Register's the Entity's instance name. */
 		internal function registerName(e:Entity):void
 		{
 			_entityNames[e._name] = e;
 		}
 		
-		/** @private Unregister's the Entity's instance name. */
+		/** Unregister's the Entity's instance name. */
 		internal function unregisterName(e:Entity):void
 		{
 			if (_entityNames[e._name] == e) delete _entityNames[e._name];
 		}
 		
-		/** @private Calculates the squared distance between two rectangles. */
-		private static function squareRects(x1:Number, y1:Number, w1:Number, h1:Number, x2:Number, y2:Number, w2:Number, h2:Number):Number
+		/** Calculates the squared distance between two rectangles. */
+		protected static function squareRects(x1:Number, y1:Number, w1:Number, h1:Number, x2:Number, y2:Number, w2:Number, h2:Number):Number
 		{
 			if (x1 < x2 + w2 && x2 < x1 + w1)
 			{
@@ -1137,14 +1137,14 @@
 			return squarePoints(x1 + w1, y1 + h1, x2, y2);
 		}
 		
-		/** @private Calculates the squared distance between two points. */
-		private static function squarePoints(x1:Number, y1:Number, x2:Number, y2:Number):Number
+		/** Calculates the squared distance between two points. */
+		protected static function squarePoints(x1:Number, y1:Number, x2:Number, y2:Number):Number
 		{
 			return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
 		}
 		
-		/** @private Calculates the squared distance between a rectangle and a point. */
-		private static function squarePointRect(px:Number, py:Number, rx:Number, ry:Number, rw:Number, rh:Number):Number
+		/** Calculates the squared distance between a rectangle and a point. */
+		protected static function squarePointRect(px:Number, py:Number, rx:Number, ry:Number, rw:Number, rh:Number):Number
 		{
 			if (px >= rx && px <= rx + rw)
 			{
@@ -1167,24 +1167,24 @@
 		}
 		
 		// Adding and removal.
-		/** @private */	private var _add:Vector.<Entity> = new Vector.<Entity>;
-		/** @private */	private var _remove:Vector.<Entity> = new Vector.<Entity>;
-		/** @private */	private var _recycle:Vector.<Entity> = new Vector.<Entity>;
+		/** */	protected var _add:Vector.<Entity> = new Vector.<Entity>;
+		/** */	protected var _remove:Vector.<Entity> = new Vector.<Entity>;
+		/** */	protected var _recycle:Vector.<Entity> = new Vector.<Entity>;
 		
 		// Update information.
-		/** @private */	private var _updateFirst:Entity;
-		/** @private */	private var _count:uint;
+		/** */	protected var _updateFirst:Entity;
+		/** */	protected var _count:uint;
 		
 		// Render information.
-		/** @private */	private var _renderFirst:Array = [];
-		/** @private */	private var _renderLast:Array = [];
-		/** @private */	private var _layerList:Array = [];
-		/** @private */	private var _layerCount:Array = [];
-		/** @private */	private var _layerSort:Boolean;
-		/** @private */	private var _classCount:Dictionary = new Dictionary;
-		/** @private */	internal var _typeFirst:Object = { };
-		/** @private */	private var _typeCount:Object = { };
-		/** @private */	private static var _recycled:Dictionary = new Dictionary;
-		/** @private */	internal var _entityNames:Dictionary = new Dictionary;
+		/** */	protected var _renderFirst:Array = [];
+		/** */	protected var _renderLast:Array = [];
+		/** */	protected var _layerList:Array = [];
+		/** */	protected var _layerCount:Array = [];
+		/** */	protected var _layerSort:Boolean;
+		/** */	protected var _classCount:Dictionary = new Dictionary;
+		/** */	internal var _typeFirst:Object = { };
+		/** */	protected var _typeCount:Object = { };
+		/** */	protected static var _recycled:Dictionary = new Dictionary;
+		/** */	internal var _entityNames:Dictionary = new Dictionary;
 	}
 }

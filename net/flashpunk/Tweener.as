@@ -116,6 +116,6 @@
 		}
 		
 		// List information.
-		/** @private */ internal var _tween:Tween;
+		internal var _tween:Tween;
 	}
 }

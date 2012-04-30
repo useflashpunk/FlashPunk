@@ -69,7 +69,7 @@
 			start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -101,12 +101,12 @@
 		}
 		
 		// Curve information.
-		/** @private */ private var _distance:Number = -1;
-		/** @private */ private var _fromX:Number = 0;
-		/** @private */ private var _fromY:Number = 0;
-		/** @private */ private var _toX:Number = 0;
-		/** @private */ private var _toY:Number = 0;
-		/** @private */ private var _controlX:Number = 0;
-		/** @private */ private var _controlY:Number = 0;
+		protected var _distance:Number = -1;
+		protected var _fromX:Number = 0;
+		protected var _fromY:Number = 0;
+		protected var _toX:Number = 0;
+		protected var _toY:Number = 0;
+		protected var _controlX:Number = 0;
+		protected var _controlY:Number = 0;
 	}
 }

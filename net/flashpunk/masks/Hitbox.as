@@ -26,8 +26,8 @@
 			_check[Hitbox] = collideHitbox;
 		}
 		
-		/** @private Collides against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		/** Collides against an Entity. */
+		protected override function collideMask(other:Mask):Boolean
 		{
 			return parent.x + _x + _width > other.parent.x - other.parent.originX
 				&& parent.y + _y + _height > other.parent.y - other.parent.originY
@@ -35,8 +35,8 @@
 				&& parent.y + _y < other.parent.y - other.parent.originY + other.parent.height;
 		}
 		
-		/** @private Collides against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		/** Collides against a Hitbox. */
+		protected function collideHitbox(other:Hitbox):Boolean
 		{
 			return parent.x + _x + _width > other.parent.x + other._x
 				&& parent.y + _y + _height > other.parent.y + other._y
@@ -92,7 +92,7 @@
 			else if (parent) update();
 		}
 		
-		/** @private Updates the parent's bounds for this mask. */
+		/** Updates the parent's bounds for this mask. */
 		override protected function update():void 
 		{
 			if (list)
@@ -111,9 +111,9 @@
 		}
 		
 		// Hitbox information.
-		/** @private */ internal var _width:uint;
-		/** @private */ internal var _height:uint;
-		/** @private */ internal var _x:int;
-		/** @private */ internal var _y:int;
+		internal var _width:uint;
+		internal var _height:uint;
+		internal var _x:int;
+		internal var _y:int;
 	}
 }

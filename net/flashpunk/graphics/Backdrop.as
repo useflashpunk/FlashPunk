@@ -33,7 +33,7 @@
 			fillTexture(FP.rect, _texture);
 		}
 		
-		/** @private Renders the Backdrop. */
+		/** Renders the Backdrop. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			_point.x = point.x + x - camera.x * scrollX;
@@ -58,12 +58,12 @@
 		}
 		
 		// Backdrop information.
-		/** @private */ private var _texture:BitmapData;
-		/** @private */ private var _textWidth:uint;
-		/** @private */ private var _textHeight:uint;
-		/** @private */ private var _repeatX:Boolean;
-		/** @private */ private var _repeatY:Boolean;
-		/** @private */ private var _x:Number;
-		/** @private */ private var _y:Number;
+		protected var _texture:BitmapData;
+		protected var _textWidth:uint;
+		protected var _textHeight:uint;
+		protected var _repeatX:Boolean;
+		protected var _repeatY:Boolean;
+		protected var _x:Number;
+		protected var _y:Number;
 	}
 }

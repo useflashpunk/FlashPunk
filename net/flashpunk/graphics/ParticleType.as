@@ -124,8 +124,8 @@
 			return this;
 		}
 		
-		/** @private Creates the buffer if it doesn't exist. */
-		private function createBuffer():void
+		/** Creates the buffer if it doesn't exist. */
+		protected function createBuffer():void
 		{
 			if (_buffer) return;
 			_buffer = new BitmapData(_frame.width, _frame.height, true, 0);
@@ -133,42 +133,42 @@
 		}
 		
 		// Particle information.
-		/** @private */ internal var _name:String;
-		/** @private */ internal var _source:BitmapData;
-		/** @private */ internal var _width:uint;
-		/** @private */ internal var _frame:Rectangle;
-		/** @private */ internal var _frames:Array;
-		/** @private */ internal var _frameCount:uint;
+		internal var _name:String;
+		internal var _source:BitmapData;
+		internal var _width:uint;
+		internal var _frame:Rectangle;
+		internal var _frames:Array;
+		internal var _frameCount:uint;
 		
 		// Motion information.
-		/** @private */ internal var _angle:Number;
-		/** @private */ internal var _angleRange:Number;
-		/** @private */ internal var _distance:Number;
-		/** @private */ internal var _distanceRange:Number;
-		/** @private */ internal var _duration:Number;
-		/** @private */ internal var _durationRange:Number;
-		/** @private */ internal var _ease:Function;
+		internal var _angle:Number;
+		internal var _angleRange:Number;
+		internal var _distance:Number;
+		internal var _distanceRange:Number;
+		internal var _duration:Number;
+		internal var _durationRange:Number;
+		internal var _ease:Function;
 		
 		// Gravity information.
-		/** @private */ internal var _gravity:Number = 0;
-		/** @private */ internal var _gravityRange:Number = 0;
+		internal var _gravity:Number = 0;
+		internal var _gravityRange:Number = 0;
 		
 		// Alpha information.
-		/** @private */ internal var _alpha:Number = 1;
-		/** @private */ internal var _alphaRange:Number = 0;
-		/** @private */ internal var _alphaEase:Function;
+		internal var _alpha:Number = 1;
+		internal var _alphaRange:Number = 0;
+		internal var _alphaEase:Function;
 		
 		// Color information.
-		/** @private */ internal var _red:Number = 1;
-		/** @private */ internal var _redRange:Number = 0;
-		/** @private */ internal var _green:Number = 1;
-		/** @private */ internal var _greenRange:Number = 0;
-		/** @private */ internal var _blue:Number = 1;
-		/** @private */ internal var _blueRange:Number = 0;
-		/** @private */ internal var _colorEase:Function;
+		internal var _red:Number = 1;
+		internal var _redRange:Number = 0;
+		internal var _green:Number = 1;
+		internal var _greenRange:Number = 0;
+		internal var _blue:Number = 1;
+		internal var _blueRange:Number = 0;
+		internal var _colorEase:Function;
 		
 		// Buffer information.
-		/** @private */ internal var _buffer:BitmapData;
-		/** @private */ internal var _bufferRect:Rectangle;
+		internal var _buffer:BitmapData;
+		internal var _bufferRect:Rectangle;
 	}
 }

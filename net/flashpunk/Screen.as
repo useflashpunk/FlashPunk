@@ -75,7 +75,7 @@
 			_bitmap[1 - _current].visible = false;
 		}
 		
-		/** @private Re-applies transformation matrix. */
+		/** Re-applies transformation matrix. */
 		public function update():void
 		{
 			_matrix.b = _matrix.c = 0;
@@ -220,20 +220,20 @@
 		}
 		
 		// Screen information.
-		/** @private */ private var _sprite:Sprite = new Sprite;
-		/** @private */ private var _bitmap:Vector.<Bitmap> = new Vector.<Bitmap>(2);
-		/** @private */ private var _current:int = 0;
-		/** @private */ private var _matrix:Matrix = new Matrix;
-		/** @private */ private var _x:int;
-		/** @private */ private var _y:int;
-		/** @private */ private var _width:uint;
-		/** @private */ private var _height:uint;
-		/** @private */ private var _originX:int;
-		/** @private */ private var _originY:int;
-		/** @private */ private var _scaleX:Number = 1;
-		/** @private */ private var _scaleY:Number = 1;
-		/** @private */ private var _scale:Number = 1;
-		/** @private */ private var _angle:Number = 0;
-		/** @private */ private var _color:uint = 0xFF202020;
+		protected var _sprite:Sprite = new Sprite;
+		protected var _bitmap:Vector.<Bitmap> = new Vector.<Bitmap>(2);
+		protected var _current:int = 0;
+		protected var _matrix:Matrix = new Matrix;
+		protected var _x:int;
+		protected var _y:int;
+		protected var _width:uint;
+		protected var _height:uint;
+		protected var _originX:int;
+		protected var _originY:int;
+		protected var _scaleX:Number = 1;
+		protected var _scaleY:Number = 1;
+		protected var _scale:Number = 1;
+		protected var _angle:Number = 0;
+		protected var _color:uint = 0xFF202020;
 	}
 }

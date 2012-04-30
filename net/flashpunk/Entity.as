@@ -756,30 +756,30 @@ package net.flashpunk
 		public function getClass ():Class { return _class; }
 		
 		// Entity information.
-		/** @private */ internal var _class:Class;
-		/** @private */ internal var _world:World;
-		/** @private */ internal var _type:String;
-		/** @private */ internal var _name:String;
-		/** @private */ internal var _layer:int;
-		/** @private */ internal var _updatePrev:Entity;
-		/** @private */ internal var _updateNext:Entity;
-		/** @private */ internal var _renderPrev:Entity;
-		/** @private */ internal var _renderNext:Entity;
-		/** @private */ internal var _typePrev:Entity;
-		/** @private */ internal var _typeNext:Entity;
-		/** @private */ internal var _recycleNext:Entity;
+		internal var _class:Class;
+		internal var _world:World;
+		internal var _type:String;
+		internal var _name:String;
+		internal var _layer:int;
+		internal var _updatePrev:Entity;
+		internal var _updateNext:Entity;
+		internal var _renderPrev:Entity;
+		internal var _renderNext:Entity;
+		internal var _typePrev:Entity;
+		internal var _typeNext:Entity;
+		internal var _recycleNext:Entity;
 		
 		// Collision information.
-		/** @private */ private const HITBOX:Mask = new Mask;
-		/** @private */ private var _mask:Mask;
-		/** @private */ private var _x:Number;
-		/** @private */ private var _y:Number;
-		/** @private */ private var _moveX:Number = 0;
-		/** @private */ private var _moveY:Number = 0;
+		protected const HITBOX:Mask = new Mask;
+		protected var _mask:Mask;
+		protected var _x:Number;
+		protected var _y:Number;
+		protected var _moveX:Number = 0;
+		protected var _moveY:Number = 0;
 		
 		// Rendering information.
-		/** @private */ internal var _graphic:Graphic;
-		/** @private */ private var _point:Point = FP.point;
-		/** @private */ private var _camera:Point = FP.point2;
+		internal var _graphic:Graphic;
+		protected var _point:Point = FP.point;
+		protected var _camera:Point = FP.point2;
 	}
 }

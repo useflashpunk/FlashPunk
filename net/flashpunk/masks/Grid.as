@@ -195,8 +195,8 @@
 		 */
 		public function get data():BitmapData { return _data; }
 		
-		/** @private Collides against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		/** Collides against an Entity. */
+		protected function collideMask(other:Mask):Boolean
 		{
 			_rect.x = other.parent.x - other.parent.originX - parent.x + parent.originX;
 			_rect.y = other.parent.y - other.parent.originY - parent.y + parent.originY;
@@ -209,8 +209,8 @@
 			return _data.hitTest(FP.zero, 1, _rect);
 		}
 		
-		/** @private Collides against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		/** Collides against a Hitbox. */
+		protected function collideHitbox(other:Hitbox):Boolean
 		{
 			_rect.x = other.parent.x + other._x - parent.x - _x;
 			_rect.y = other.parent.y + other._y - parent.y - _y;
@@ -223,8 +223,8 @@
 			return _data.hitTest(FP.zero, 1, _rect);
 		}
 		
-		/** @private Collides against a Pixelmask. */
-		private function collidePixelmask(other:Pixelmask):Boolean
+		/** Collides against a Pixelmask. */
+		protected function collidePixelmask(other:Pixelmask):Boolean
 		{
 			var x1:int = other.parent.x + other._x - parent.x - _x,
 				y1:int = other.parent.y + other._y - parent.y - _y,
@@ -256,8 +256,8 @@
 			return false;
 		}
 		
-		/** @private Collides against a Grid. */
-		private function collideGrid(other:Grid):Boolean
+		/** Collides against a Grid. */
+		protected function collideGrid(other:Grid):Boolean
 		{
 			// Find the X edges
 			var ax1:Number = parent.x + _x;
@@ -364,11 +364,11 @@
 		}
 		
 		// Grid information.
-		/** @private */ private var _data:BitmapData;
-		/** @private */ private var _columns:uint;
-		/** @private */ private var _rows:uint;
-		/** @private */ private var _tile:Rectangle;
-		/** @private */ private var _rect:Rectangle = FP.rect;
-		/** @private */ private var _point:Point = FP.point;
+		protected var _data:BitmapData;
+		protected var _columns:uint;
+		protected var _rows:uint;
+		protected var _tile:Rectangle;
+		protected var _rect:Rectangle = FP.rect;
+		protected var _point:Point = FP.point;
 	}
 }

@@ -20,7 +20,7 @@
 			for each (var g:Graphic in graphic) add(g);
 		}
 		
-		/** @private Updates the graphics in the list. */
+		/** Updates the graphics in the list. */
 		override public function update():void 
 		{
 			for each (var g:Graphic in _graphics)
@@ -29,7 +29,7 @@
 			}
 		}
 		
-		/** @private Renders the Graphics in the list. */
+		/** Renders the Graphics in the list. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			point.x += x;
@@ -120,7 +120,7 @@
 		/**
 		 * Check if the Graphiclist should update.
 		 */
-		private function updateCheck():void
+		protected function updateCheck():void
 		{
 			active = false;
 			for each (var g:Graphic in _graphics)
@@ -134,9 +134,9 @@
 		}
 		
 		// List information.
-		/** @private */ private var _graphics:Vector.<Graphic> = new Vector.<Graphic>;
-		/** @private */ private var _temp:Vector.<Graphic> = new Vector.<Graphic>;
-		/** @private */ private var _count:uint;
-		/** @private */ private var _camera:Point = new Point;
+		protected var _graphics:Vector.<Graphic> = new Vector.<Graphic>;
+		protected var _temp:Vector.<Graphic> = new Vector.<Graphic>;
+		protected var _count:uint;
+		protected var _camera:Point = new Point;
 	}
 }

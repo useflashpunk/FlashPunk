@@ -119,15 +119,15 @@
 			_data[name] = value;
 		}
 		
-		/** @private Reads a property from the data object. */
-		private static function read(name:String, defaultValue:*):*
+		/** Reads a property from the data object. */
+		protected static function read(name:String, defaultValue:*):*
 		{
 			if (_data.hasOwnProperty(name)) return _data[name];
 			return defaultValue;
 		}
 		
-		/** @private Loads the data file, or return it if you're loading the same one. */
-		private static function loadData(file:String):Object
+		/** Loads the data file, or return it if you're loading the same one. */
+		protected static function loadData(file:String):Object
 		{
 			if (!file) file = DEFAULT_FILE;
 			if (id) _shared = SharedObject.getLocal(prefix + "/" + id + "/" + file, "/");
@@ -136,10 +136,10 @@
 		}
 		
 		// Data information.
-		/** @private */ private static var _shared:SharedObject;
-		/** @private */ private static var _data:Object = { };
-		/** @private */ public static var prefix:String = "FlashPunk";
-		/** @private */ private static const DEFAULT_FILE:String = "_file";
-		/** @private */ private static const SIZE:uint = 10000;
+		protected static var _shared:SharedObject;
+		protected static var _data:Object = { };
+		public static var prefix:String = "FlashPunk";
+		protected static const DEFAULT_FILE:String = "_file";
+		protected static const SIZE:uint = 10000;
 	}
 }

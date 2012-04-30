@@ -185,7 +185,7 @@
 			return _control[name] as Vector.<int>;
 		}
 		
-		/** @private Called by Engine to enable keyboard input on the stage. */
+		/** Called by Engine to enable keyboard input on the stage. */
 		public static function enable():void
 		{
 			if (!_enabled && FP.stage)
@@ -200,7 +200,7 @@
 			}
 		}
 		
-		/** @private Called by Engine to update the input. */
+		/** Called by Engine to update the input. */
 		public static function update():void
 		{
 			while (_pressNum --) _press[_pressNum] = -1;
@@ -234,8 +234,8 @@
 			_keyNum = 0;
 		}
 		
-		/** @private Event handler for key press. */
-		private static function onKeyDown(e:KeyboardEvent = null):void
+		/** Event handler for key press. */
+		protected static function onKeyDown(e:KeyboardEvent = null):void
 		{
 			// get the keycode
 			var code:int = lastKey = e.keyCode;
@@ -259,8 +259,8 @@
 			}
 		}
 		
-		/** @private Event handler for key release. */
-		private static function onKeyUp(e:KeyboardEvent):void
+		/** Event handler for key release. */
+		protected static function onKeyUp(e:KeyboardEvent):void
 		{
 			// get the keycode and update the keystate
 			var code:int = e.keyCode;
@@ -275,8 +275,8 @@
 			}
 		}
 		
-		/** @private Event handler for mouse press. */
-		private static function onMouseDown(e:MouseEvent):void
+		/** Event handler for mouse press. */
+		protected static function onMouseDown(e:MouseEvent):void
 		{
 			if (!mouseDown)
 			{
@@ -286,23 +286,23 @@
 			}
 		}
 		
-		/** @private Event handler for mouse release. */
-		private static function onMouseUp(e:MouseEvent):void
+		/** Event handler for mouse release. */
+		protected static function onMouseUp(e:MouseEvent):void
 		{
 			mouseDown = false;
 			mouseUp = true;
 			mouseReleased = true;
 		}
 		
-		/** @private Event handler for mouse wheel events */
-		private static function onMouseWheel(e:MouseEvent):void
+		/** Event handler for mouse wheel events */
+		protected static function onMouseWheel(e:MouseEvent):void
 		{
 		    mouseWheel = true;
 		    _mouseWheelDelta = e.delta;
 		}
 		
-		/** @private Event handler for mouse move events: only here for a bug workaround. */
-		private static function onMouseMove(e:MouseEvent):void
+		/** Event handler for mouse move events: only here for a bug workaround. */
+		protected static function onMouseMove(e:MouseEvent):void
 		{
 			if (mouseCursor == "hide") {
 				Mouse.show();
@@ -313,18 +313,18 @@
 		}
 		
 		// Max amount of characters stored by the keystring.
-		/** @private */ private static const KEYSTRING_MAX:uint = 100;
+		protected static const KEYSTRING_MAX:uint = 100;
 		
 		// Input information.
-		/** @private */ private static var _enabled:Boolean = false;
-		/** @private */ private static var _key:Vector.<Boolean> = new Vector.<Boolean>(256);
-		/** @private */ private static var _keyNum:int = 0;
-		/** @private */ private static var _press:Vector.<int> = new Vector.<int>(256);
-		/** @private */ private static var _release:Vector.<int> = new Vector.<int>(256);
-		/** @private */ private static var _pressNum:int = 0;
-		/** @private */ private static var _releaseNum:int = 0;
-		/** @private */ private static var _control:Object = {};
-		/** @private */ private static var _mouseWheelDelta:int = 0;
-		/** @private */ private static var _mouseVisible:Boolean = true;
+		protected static var _enabled:Boolean = false;
+		protected static var _key:Vector.<Boolean> = new Vector.<Boolean>(256);
+		protected static var _keyNum:int = 0;
+		protected static var _press:Vector.<int> = new Vector.<int>(256);
+		protected static var _release:Vector.<int> = new Vector.<int>(256);
+		protected static var _pressNum:int = 0;
+		protected static var _releaseNum:int = 0;
+		protected static var _control:Object = {};
+		protected static var _mouseWheelDelta:int = 0;
+		protected static var _mouseVisible:Boolean = true;
 	}
 }

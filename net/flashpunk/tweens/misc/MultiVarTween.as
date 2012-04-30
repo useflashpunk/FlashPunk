@@ -44,7 +44,7 @@ package net.flashpunk.tweens.misc
 			start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void
 		{
 			super.update();
@@ -53,9 +53,9 @@ package net.flashpunk.tweens.misc
 		}
 
 		// Tween information.
-		/** @private */ private var _object:Object;
-		/** @private */ private var _vars:Vector.<String> = new Vector.<String>;
-		/** @private */ private var _start:Vector.<Number> = new Vector.<Number>;
-		/** @private */ private var _range:Vector.<Number> = new Vector.<Number>;
+		protected var _object:Object;
+		protected var _vars:Vector.<String> = new Vector.<String>;
+		protected var _start:Vector.<Number> = new Vector.<Number>;
+		protected var _range:Vector.<Number> = new Vector.<Number>;
 	}
 }

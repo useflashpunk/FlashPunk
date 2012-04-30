@@ -24,7 +24,7 @@ package net.flashpunk.graphics
 			super(texture, clipRect);
 		}
 		
-		/** @private Creates the buffer. */
+		/** Creates the buffer. */
 		override protected function createBuffer():void 
 		{
 			if (_buffer) {
@@ -38,7 +38,7 @@ package net.flashpunk.graphics
 			_bitmap.bitmapData = _buffer;
 		}
 		
-		/** @private Updates the buffer. */
+		/** Updates the buffer. */
 		override public function updateBuffer(clearBefore:Boolean = false):void
 		{
 			if (!_source) return;
@@ -97,11 +97,11 @@ package net.flashpunk.graphics
 		}
 		
 		// Drawing information.
-		/** @private */ private var _graphics:Graphics = FP.sprite.graphics;
-		/** @private */ private var _texture:BitmapData;
-		/** @private */ private var _width:uint;
-		/** @private */ private var _height:uint;
-		/** @private */ private var _offsetX:Number = 0;
-		/** @private */ private var _offsetY:Number = 0;
+		protected var _graphics:Graphics = FP.sprite.graphics;
+		protected var _texture:BitmapData;
+		protected var _width:uint;
+		protected var _height:uint;
+		protected var _offsetX:Number = 0;
+		protected var _offsetY:Number = 0;
 	}
 }

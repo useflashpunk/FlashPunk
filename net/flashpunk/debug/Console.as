@@ -382,8 +382,8 @@ package net.flashpunk.debug
 			renderEntities();
 		}
 		
-		/** @private Steps the frame ahead. */
-		private function stepFrame():void
+		/** Steps the frame ahead. */
+		protected function stepFrame():void
 		{
 			FP.engine.update();
 			FP.engine.render();
@@ -392,16 +392,16 @@ package net.flashpunk.debug
 			renderEntities();
 		}
 		
-		/** @private Starts Entity dragging. */
-		private function startDragging():void
+		/** Starts Entity dragging. */
+		protected function startDragging():void
 		{
 			_dragging = true;
 			_entRect.x = Input.mouseX;
 			_entRect.y = Input.mouseY;
 		}
 		
-		/** @private Updates Entity dragging. */
-		private function updateDragging():void
+		/** Updates Entity dragging. */
+		protected function updateDragging():void
 		{
 			moveSelected(Input.mouseX - _entRect.x, Input.mouseY - _entRect.y);
 			_entRect.x = Input.mouseX;
@@ -409,8 +409,8 @@ package net.flashpunk.debug
 			if (Input.mouseReleased) _dragging = false;
 		}
 		
-		/** @private Move the selected Entities by the amount. */
-		private function moveSelected(xDelta:int, yDelta:int):void
+		/** Move the selected Entities by the amount. */
+		protected function moveSelected(xDelta:int, yDelta:int):void
 		{
 			for each (var e:Entity in SELECT_LIST)
 			{
@@ -422,16 +422,16 @@ package net.flashpunk.debug
 			updateEntityLists(true);
 		}
 		
-		/** @private Starts camera panning. */
-		private function startPanning():void
+		/** Starts camera panning. */
+		protected function startPanning():void
 		{
 			_panning = true;
 			_entRect.x = Input.mouseX;
 			_entRect.y = Input.mouseY;
 		}
 		
-		/** @private Updates camera panning. */
-		private function updatePanning():void
+		/** Updates camera panning. */
+		protected function updatePanning():void
 		{
 			if (Input.mouseReleased) _panning = false;
 			panCamera(_entRect.x - Input.mouseX, _entRect.y - Input.mouseY);
@@ -439,8 +439,8 @@ package net.flashpunk.debug
 			_entRect.y = Input.mouseY;
 		}
 		
-		/** @private Pans the camera. */
-		private function panCamera(xDelta:int, yDelta:int):void
+		/** Pans the camera. */
+		protected function panCamera(xDelta:int, yDelta:int):void
 		{
 			FP.camera.x += xDelta;
 			FP.camera.y += yDelta;
@@ -449,8 +449,8 @@ package net.flashpunk.debug
 			renderEntities();
 		}
 		
-		/** @private Sets the camera position. */
-		private function setCamera(x:int, y:int):void
+		/** Sets the camera position. */
+		protected function setCamera(x:int, y:int):void
 		{
 			FP.camera.x = x;
 			FP.camera.y = y;
@@ -459,8 +459,8 @@ package net.flashpunk.debug
 			renderEntities();
 		}
 		
-		/** @private Starts Entity selection. */
-		private function startSelection():void
+		/** Starts Entity selection. */
+		protected function startSelection():void
 		{
 			_selecting = true;
 			_entRect.x = Input.mouseFlashX;
@@ -469,8 +469,8 @@ package net.flashpunk.debug
 			_entRect.height = 0;
 		}
 		
-		/** @private Updates Entity selection. */
-		private function updateSelection():void
+		/** Updates Entity selection. */
+		protected function updateSelection():void
 		{
 			_entRect.width = Input.mouseFlashX - _entRect.x;
 			_entRect.height = Input.mouseFlashY - _entRect.y;
@@ -489,8 +489,8 @@ package net.flashpunk.debug
 			}
 		}
 		
-		/** @private Selects the Entities in the rectangle. */
-		private function selectEntities(rect:Rectangle):void
+		/** Selects the Entities in the rectangle. */
+		protected function selectEntities(rect:Rectangle):void
 		{
 			if (rect.width < 0) rect.x -= (rect.width = -rect.width);
 			else if (!rect.width) rect.width = 1;
@@ -528,46 +528,46 @@ package net.flashpunk.debug
 			}
 		}
 		
-		/** @private Selects all entities on screen. */
-		private function selectAll():void
+		/** Selects all entities on screen. */
+		protected function selectAll():void
 		{
 			SELECT_LIST.length = 0;
 			for each (var e:Entity in SCREEN_LIST) SELECT_LIST.push(e);
 			renderEntities();
 		}
 		
-		/** @private Starts log text scrolling. */
-		private function startScrolling():void
+		/** Starts log text scrolling. */
+		protected function startScrolling():void
 		{
 			if (LOG.length > _logLines) _scrolling = _logBarGlobal.contains(Input.mouseFlashX, Input.mouseFlashY);
 		}
 		
-		/** @private Updates log text scrolling. */
-		private function updateScrolling():void
+		/** Updates log text scrolling. */
+		protected function updateScrolling():void
 		{
 			_scrolling = Input.mouseDown;
 			_logScroll = FP.scaleClamp(Input.mouseFlashY, _logBarGlobal.y, _logBarGlobal.bottom, 0, 1);
 			updateLog();
 		}
 		
-		/** @private Moves Entities with the arrow keys. */
-		private function updateKeyMoving():void
+		/** Moves Entities with the arrow keys. */
+		protected function updateKeyMoving():void
 		{
 			FP.point.x = (Input.pressed(Key.RIGHT) ? 1 : 0) - (Input.pressed(Key.LEFT) ? 1 : 0);
 			FP.point.y = (Input.pressed(Key.DOWN) ? 1 : 0) - (Input.pressed(Key.UP) ? 1 : 0);
 			if (FP.point.x != 0 || FP.point.y != 0) moveSelected(FP.point.x, FP.point.y);
 		}
 		
-		/** @private Pans the camera with the arrow keys. */
-		private function updateKeyPanning():void
+		/** Pans the camera with the arrow keys. */
+		protected function updateKeyPanning():void
 		{
 			FP.point.x = (Input.check(Key.RIGHT) ? 1 : 0) - (Input.check(Key.LEFT) ? 1 : 0);
 			FP.point.y = (Input.check(Key.DOWN) ? 1 : 0) - (Input.check(Key.UP) ? 1 : 0);
 			if (FP.point.x != 0 || FP.point.y != 0) panCamera(FP.point.x, FP.point.y);
 		}
 		
-		/** @private Update the Entity list information. */
-		private function updateEntityLists(fetchList:Boolean = true):void
+		/** Update the Entity list information. */
+		protected function updateEntityLists(fetchList:Boolean = true):void
 		{
 			// If the list should be re-populated.
 			if (fetchList)
@@ -585,8 +585,8 @@ package net.flashpunk.debug
 			}
 		}
 		
-		/** @private Renders the Entities positions and hitboxes. */
-		private function renderEntities():void
+		/** Renders the Entities positions and hitboxes. */
+		protected function renderEntities():void
 		{
 			// If debug mode is on.
 			_entScreen.visible = _debug;
@@ -627,8 +627,8 @@ package net.flashpunk.debug
 			}
 		}
 		
-		/** @private Updates the log window. */
-		private function updateLog():void
+		/** Updates the log window. */
+		protected function updateLog():void
 		{
 			// If the console is paused.
 			if (_paused)
@@ -704,8 +704,8 @@ package net.flashpunk.debug
 			}
 		}
 		
-		/** @private Update the FPS/frame timing panel text. */
-		private function updateFPSRead():void
+		/** Update the FPS/frame timing panel text. */
+		protected function updateFPSRead():void
 		{
 			_fpsReadText.text = "FPS: " + FP.frameRate.toFixed();
 			_fpsInfoText0.text =
@@ -717,8 +717,8 @@ package net.flashpunk.debug
 			_memReadText.text = "MEM: " + Number(System.totalMemory/1024/1024).toFixed(2) + "MB";
 		}
 		
-		/** @private Update the debug panel text. */
-		private function updateDebugRead():void
+		/** Update the debug panel text. */
+		protected function updateDebugRead():void
 		{
 			// Find out the screen size and set the text.
 			var big:Boolean = width >= 480;
@@ -758,14 +758,14 @@ package net.flashpunk.debug
 			_debRead.graphics.drawRoundRectComplex(0, 20, _debReadText1.width + 20, height - _debRead.y - 20, 0, 20, 0, 0);
 		}
 		
-		/** @private Updates the Entity count text. */
-		private function updateEntityCount():void
+		/** Updates the Entity count text. */
+		protected function updateEntityCount():void
 		{
 			_entReadText.text = String(FP.world.count) + " Entities";
 		}
 		
-		/** @private Updates the Button panel. */
-		private function updateButtons():void
+		/** Updates the Button panel. */
+		protected function updateButtons():void
 		{
 			// Button visibility.
 			_butRead.x = _fpsInfo.x + _fpsInfo.width + int((_entRead.x - (_fpsInfo.x + _fpsInfo.width)) / 2) - 30;
@@ -803,8 +803,8 @@ package net.flashpunk.debug
 			else _butStep.alpha = .5;
 		}
 		
-		/** @private Gets a TextFormat object with the formatting. */
-		private function format(size:uint = 16, color:uint = 0xFFFFFF, align:String = "left"):TextFormat
+		/** Gets a TextFormat object with the formatting. */
+		protected function format(size:uint = 16, color:uint = 0xFFFFFF, align:String = "left"):TextFormat
 		{
 			_format.size = size;
 			_format.color = color;
@@ -815,83 +815,83 @@ package net.flashpunk.debug
 		/**
 		 * Get the unscaled screen size for the Console.
 		 */
-		private function get width():uint { return FP.width * FP.screen.scaleX * FP.screen.scale; }
-		private function get height():uint { return FP.height * FP.screen.scaleY * FP.screen.scale; }
+		protected function get width():uint { return FP.width * FP.screen.scaleX * FP.screen.scale; }
+		protected function get height():uint { return FP.height * FP.screen.scaleY * FP.screen.scale; }
 		
 		// Console state information.
-		/** @private */ private var _enabled:Boolean;
-		/** @private */ private var _paused:Boolean;
-		/** @private */ private var _debug:Boolean;
-		/** @private */ private var _scrolling:Boolean;
-		/** @private */ private var _selecting:Boolean;
-		/** @private */ private var _dragging:Boolean;
-		/** @private */ private var _panning:Boolean;
+		protected var _enabled:Boolean;
+		protected var _paused:Boolean;
+		protected var _debug:Boolean;
+		protected var _scrolling:Boolean;
+		protected var _selecting:Boolean;
+		protected var _dragging:Boolean;
+		protected var _panning:Boolean;
 		
 		// Console display objects.
-		/** @private */ private var _sprite:Sprite = new Sprite;
-		/** @private */ private var _format:TextFormat = new TextFormat("default");
-		/** @private */ private var _back:Bitmap = new Bitmap;
+		protected var _sprite:Sprite = new Sprite;
+		protected var _format:TextFormat = new TextFormat("default");
+		protected var _back:Bitmap = new Bitmap;
 		
 		// FPS panel information.
-		/** @private */ private var _fpsRead:Sprite = new Sprite;
-		/** @private */ private var _fpsReadText:TextField = new TextField;
-		/** @private */ private var _fpsInfo:Sprite = new Sprite;
-		/** @private */ private var _fpsInfoText0:TextField = new TextField;
-		/** @private */ private var _fpsInfoText1:TextField = new TextField;
-		/** @private */ private var _memReadText:TextField = new TextField;
+		protected var _fpsRead:Sprite = new Sprite;
+		protected var _fpsReadText:TextField = new TextField;
+		protected var _fpsInfo:Sprite = new Sprite;
+		protected var _fpsInfoText0:TextField = new TextField;
+		protected var _fpsInfoText1:TextField = new TextField;
+		protected var _memReadText:TextField = new TextField;
 		
 		// Output panel information.
-		/** @private */ private var _logRead:Sprite = new Sprite;
-		/** @private */ private var _logReadText0:TextField = new TextField;
-		/** @private */ private var _logReadText1:TextField = new TextField;
-		/** @private */ private var _logHeight:uint;
-		/** @private */ private var _logBar:Rectangle;
-		/** @private */ private var _logBarGlobal:Rectangle;
-		/** @private */ private var _logScroll:Number = 0;
+		protected var _logRead:Sprite = new Sprite;
+		protected var _logReadText0:TextField = new TextField;
+		protected var _logReadText1:TextField = new TextField;
+		protected var _logHeight:uint;
+		protected var _logBar:Rectangle;
+		protected var _logBarGlobal:Rectangle;
+		protected var _logScroll:Number = 0;
 		
 		// Entity count panel information.
-		/** @private */ private var _entRead:Sprite = new Sprite;
-		/** @private */ private var _entReadText:TextField = new TextField;
+		protected var _entRead:Sprite = new Sprite;
+		protected var _entReadText:TextField = new TextField;
 		
 		// Debug panel information.
-		/** @private */ private var _debRead:Sprite = new Sprite;
-		/** @private */ private var _debReadText0:TextField = new TextField;
-		/** @private */ private var _debReadText1:TextField = new TextField;
+		protected var _debRead:Sprite = new Sprite;
+		protected var _debReadText0:TextField = new TextField;
+		protected var _debReadText1:TextField = new TextField;
 
 		// Button panel information
-		/** @private */ private var _butRead:Sprite = new Sprite;
-		/** @private */ private var _butDebug:Bitmap;
-		/** @private */ private var _butOutput:Bitmap;
-		/** @private */ private var _butPlay:Bitmap;
-		/** @private */ private var _butPause:Bitmap;
-		/** @private */ private var _butStep:Bitmap;
+		protected var _butRead:Sprite = new Sprite;
+		protected var _butDebug:Bitmap;
+		protected var _butOutput:Bitmap;
+		protected var _butPlay:Bitmap;
+		protected var _butPause:Bitmap;
+		protected var _butStep:Bitmap;
 		
 		// Entity selection information.
-		/** @private */ private var _entScreen:Sprite = new Sprite;
-		/** @private */ private var _entSelect:Sprite = new Sprite;
-		/** @private */ private var _entRect:Rectangle = new Rectangle;
+		protected var _entScreen:Sprite = new Sprite;
+		protected var _entSelect:Sprite = new Sprite;
+		protected var _entRect:Rectangle = new Rectangle;
 		
 		// Log information.
-		/** @private */ private var _logLines:uint = 33;
-		/** @private */ private const LOG:Vector.<String> = new Vector.<String>;
+		protected var _logLines:uint = 33;
+		protected const LOG:Vector.<String> = new Vector.<String>;
 		
 		// Entity lists.
-		/** @private */ private const ENTITY_LIST:Vector.<Entity> = new Vector.<Entity>;
-		/** @private */ private const SCREEN_LIST:Vector.<Entity> = new Vector.<Entity>;
-		/** @private */ private const SELECT_LIST:Vector.<Entity> = new Vector.<Entity>;
+		protected const ENTITY_LIST:Vector.<Entity> = new Vector.<Entity>;
+		protected const SCREEN_LIST:Vector.<Entity> = new Vector.<Entity>;
+		protected const SELECT_LIST:Vector.<Entity> = new Vector.<Entity>;
 		
 		// Watch information.
-		/** @private */ private const WATCH_LIST:Vector.<String> = Vector.<String>(["x", "y"]);
+		protected const WATCH_LIST:Vector.<String> = Vector.<String>(["x", "y"]);
 		
 		// Embedded assets.
-		[Embed(source = 'console_logo.png')] private const CONSOLE_LOGO:Class;
-		[Embed(source = 'console_debug.png')] private const CONSOLE_DEBUG:Class;
-		[Embed(source = 'console_output.png')] private const CONSOLE_OUTPUT:Class;
-		[Embed(source = 'console_play.png')] private const CONSOLE_PLAY:Class;
-		[Embed(source = 'console_pause.png')] private const CONSOLE_PAUSE:Class;
-		[Embed(source = 'console_step.png')] private const CONSOLE_STEP:Class;
+		[Embed(source = 'console_logo.png')] protected const CONSOLE_LOGO:Class;
+		[Embed(source = 'console_debug.png')] protected const CONSOLE_DEBUG:Class;
+		[Embed(source = 'console_output.png')] protected const CONSOLE_OUTPUT:Class;
+		[Embed(source = 'console_play.png')] protected const CONSOLE_PLAY:Class;
+		[Embed(source = 'console_pause.png')] protected const CONSOLE_PAUSE:Class;
+		[Embed(source = 'console_step.png')] protected const CONSOLE_STEP:Class;
 		
 		// Reference the Text class so we can access its embedded font
-		private static var textRef:Text;
+		protected static var textRef:Text;
 	}
 }

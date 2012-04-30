@@ -44,8 +44,8 @@
 			return false;
 		}
 		
-		/** @private Collide against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		/** Collide against an Entity. */
+		protected function collideMask(other:Mask):Boolean
 		{
 			return parent.x - parent.originX + parent.width > other.parent.x - other.parent.originX
 				&& parent.y - parent.originY + parent.height > other.parent.y - other.parent.originY
@@ -53,20 +53,20 @@
 				&& parent.y - parent.originY < other.parent.y - other.parent.originY + other.parent.height;
 		}
 		
-		/** @private Collide against a Masklist. */
+		/** Collide against a Masklist. */
 		protected function collideMasklist(other:Masklist):Boolean
 		{
 			return other.collide(this);
 		}
 		
-		/** @private Assigns the mask to the parent. */
+		/** Assigns the mask to the parent. */
 		public function assignTo(parent:Entity):void
 		{
 			this.parent = parent;
 			if (!list && parent) update();
 		}
 		
-		/** @private Updates the parent's bounds for this mask. */
+		/** Updates the parent's bounds for this mask. */
 		protected function update():void
 		{
 			
@@ -79,7 +79,7 @@
 		}
 		
 		// Mask information.
-		/** @private */ private var _class:Class;
-		/** @private */ protected var _check:Dictionary = new Dictionary;
+		protected var _class:Class;
+		protected var _check:Dictionary = new Dictionary;
 	}
 }

@@ -58,7 +58,7 @@
 			start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -85,16 +85,16 @@
 		public function get blue():uint { return _b; }
 		
 		// Color information.
-		/** @private */ private var _r:uint;
-		/** @private */ private var _g:uint;
-		/** @private */ private var _b:uint;
-		/** @private */ private var _startA:Number;
-		/** @private */ private var _startR:Number;
-		/** @private */ private var _startG:Number;
-		/** @private */ private var _startB:Number;
-		/** @private */ private var _rangeA:Number;
-		/** @private */ private var _rangeR:Number;
-		/** @private */ private var _rangeG:Number;
-		/** @private */ private var _rangeB:Number;
+		protected var _r:uint;
+		protected var _g:uint;
+		protected var _b:uint;
+		protected var _startA:Number;
+		protected var _startR:Number;
+		protected var _startG:Number;
+		protected var _startB:Number;
+		protected var _rangeA:Number;
+		protected var _rangeR:Number;
+		protected var _rangeG:Number;
+		protected var _rangeB:Number;
 	}
 }

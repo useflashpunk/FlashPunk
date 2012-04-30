@@ -149,8 +149,8 @@
 			stage.displayState = StageDisplayState.NORMAL;
 		}
 		
-		/** @private Event handler for stage entry. */
-		private function onStage(e:Event = null):void
+		/** Event handler for stage entry. */
+		protected function onStage(e:Event = null):void
 		{
 			// remove event listener
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
@@ -191,8 +191,8 @@
 			}
 		}
 		
-		/** @private Framerate independent game loop. */
-		private function onEnterFrame(e:Event):void
+		/** Framerate independent game loop. */
+		protected function onEnterFrame(e:Event):void
 		{
 			// update timer
 			_time = _gameTime = getTimer();
@@ -225,8 +225,8 @@
 			FP._gameTime = _time - _gameTime;
 		}
 		
-		/** @private Fixed framerate game loop. */
-		private function onTimer(e:TimerEvent):void
+		/** Fixed framerate game loop. */
+		protected function onTimer(e:TimerEvent):void
 		{
 			// update timer
 			_time = getTimer();
@@ -277,8 +277,8 @@
 			FP._gameTime =  _time - _gameTime;
 		}
 		
-		/** @private Switch Worlds if they've changed. */
-		private function checkWorld():void
+		/** Switch Worlds if they've changed. */
+		protected function checkWorld():void
 		{
 			if (!FP._goto) return;
 			FP._world.end();
@@ -292,14 +292,14 @@
 			FP._world.updateLists();
 		}
 		
-		private function onActivate (e:Event):void
+		protected function onActivate (e:Event):void
 		{
 			FP.focused = true;
 			focusGained();
 			FP.world.focusGained();
 		}
 		
-		private function onDeactivate (e:Event):void
+		protected function onDeactivate (e:Event):void
 		{
 			FP.focused = false;
 			focusLost();
@@ -307,23 +307,23 @@
 		}
 		
 		// Timing information.
-		/** @private */ private var _delta:Number = 0;
-		/** @private */ private var _time:Number;
-		/** @private */ private var _last:Number;
-		/** @private */ private var _timer:Timer;
-		/** @private */ private var	_rate:Number;
-		/** @private */ private var	_skip:Number;
-		/** @private */ private var _prev:Number;
+		protected var _delta:Number = 0;
+		protected var _time:Number;
+		protected var _last:Number;
+		protected var _timer:Timer;
+		protected var	_rate:Number;
+		protected var	_skip:Number;
+		protected var _prev:Number;
 		
 		// Debug timing information.
-		/** @private */ private var _updateTime:uint;
-		/** @private */ private var _renderTime:uint;
-		/** @private */ private var _gameTime:uint;
-		/** @private */ private var _flashTime:uint;
+		protected var _updateTime:uint;
+		protected var _renderTime:uint;
+		protected var _gameTime:uint;
+		protected var _flashTime:uint;
 		
 		// FrameRate tracking.
-		/** @private */ private var _frameLast:uint = 0;
-		/** @private */ private var _frameListSum:uint = 0;
-		/** @private */ private var _frameList:Vector.<uint> = new Vector.<uint>;
+		protected var _frameLast:uint = 0;
+		protected var _frameListSum:uint = 0;
+		protected var _frameList:Vector.<uint> = new Vector.<uint>;
 	}
 }

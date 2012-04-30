@@ -57,7 +57,7 @@
 			start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -75,10 +75,10 @@
 		}
 		
 		// Line information.
-		/** @private */ private var _fromX:Number = 0;
-		/** @private */ private var _fromY:Number = 0;
-		/** @private */ private var _moveX:Number = 0;
-		/** @private */ private var _moveY:Number = 0;
-		/** @private */ private var _distance:Number = - 1;
+		protected var _fromX:Number = 0;
+		protected var _fromY:Number = 0;
+		protected var _moveX:Number = 0;
+		protected var _moveY:Number = 0;
+		protected var _distance:Number = - 1;
 	}
 }

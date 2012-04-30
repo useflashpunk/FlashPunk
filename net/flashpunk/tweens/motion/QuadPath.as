@@ -71,14 +71,14 @@
 			return _points[index % _points.length];
 		}
 		
-		/** @private Starts the Tween. */
+		/** Starts the Tween. */
 		override public function start():void 
 		{
 			_index = 0;
 			super.start();
 		}
 		
-		/** @private Updates the Tween. */
+		/** Updates the Tween. */
 		override public function update():void 
 		{
 			super.update();
@@ -96,8 +96,8 @@
 			y = _a.y * (1 - td) * (1 - td) + _b.y * 2 * (1 - td) * td + _c.y * td * td;
 		}
 		
-		/** @private Updates the path, preparing the curve. */
-		private function updatePath():void
+		/** Updates the path, preparing the curve. */
+		protected function updatePath():void
 		{
 			if (_points.length < 3)	throw new Error("A QuadPath must have at least 3 points to operate.");
 			if (!_updateCurve) return;
@@ -152,8 +152,8 @@
 		 */
 		public function get pointCount():Number { return _points.length; }
 		
-		/** @private Calculates the length of the curve. */
-		private function curveLength(start:Point, control:Point, finish:Point):Number
+		/** Calculates the length of the curve. */
+		protected function curveLength(start:Point, control:Point, finish:Point):Number
 		{
 			var a:Point = FP.point,
 				b:Point = FP.point2;
@@ -173,20 +173,20 @@
 		}
 		
 		// Path information.
-		/** @private */ private var _points:Vector.<Point> = new Vector.<Point>;
-		/** @private */ private var _distance:Number = 0;
-		/** @private */ private var _speed:Number = 0;
-		/** @private */ private var _index:uint = 0;
+		protected var _points:Vector.<Point> = new Vector.<Point>;
+		protected var _distance:Number = 0;
+		protected var _speed:Number = 0;
+		protected var _index:uint = 0;
 		
 		// Curve information.
-		/** @private */ private var _updateCurve:Boolean = true;
-		/** @private */ private var _curve:Vector.<Point> = new Vector.<Point>;
-		/** @private */ private var _curveT:Vector.<Number> = new Vector.<Number>;
-		/** @private */ private var _curveD:Vector.<Number> = new Vector.<Number>;
+		protected var _updateCurve:Boolean = true;
+		protected var _curve:Vector.<Point> = new Vector.<Point>;
+		protected var _curveT:Vector.<Number> = new Vector.<Number>;
+		protected var _curveD:Vector.<Number> = new Vector.<Number>;
 		
 		// Curve points.
-		/** @private */ private var _a:Point;
-		/** @private */ private var _b:Point;
-		/** @private */ private var _c:Point;
+		protected var _a:Point;
+		protected var _b:Point;
+		protected var _c:Point;
 	}
 }

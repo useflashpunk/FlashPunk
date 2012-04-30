@@ -30,7 +30,7 @@
 			if (_source) _sourceRect = _source.rect;
 		}
 		
-		/** @private Renders the Graphic. */
+		/** Renders the Graphic. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			if (!_source) return;
@@ -60,7 +60,7 @@
 		public function get height():uint { return _source.height; }
 		
 		// Stamp information.
-		/** @private */ private var _source:BitmapData;
-		/** @private */ private var _sourceRect:Rectangle;
+		protected var _source:BitmapData;
+		protected var _sourceRect:Rectangle;
 	}
 }

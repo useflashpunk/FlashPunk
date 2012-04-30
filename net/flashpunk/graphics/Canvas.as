@@ -51,7 +51,7 @@
 			}
 		}
 		
-		/** @private Renders the canvas. */
+		/** Renders the canvas. */
 		override public function render(target:BitmapData, point:Point, camera:Point):void 
 		{
 			// determine drawing location
@@ -351,27 +351,27 @@
 		public function get height():uint { return _height; }
 		
 		// Buffer information.
-		/** @private */ private var _buffers:Vector.<BitmapData> = new Vector.<BitmapData>;
-		/** @private */ protected var _width:uint;
-		/** @private */ protected var _height:uint;
-		/** @private */ protected var _maxWidth:uint = 2880;
-		/** @private */ protected var _maxHeight:uint = 2880;
-		/** @private */ protected var _bitmap:Bitmap = new Bitmap;
+		protected var _buffers:Vector.<BitmapData> = new Vector.<BitmapData>;
+		protected var _width:uint;
+		protected var _height:uint;
+		protected var _maxWidth:uint = 2880;
+		protected var _maxHeight:uint = 2880;
+		protected var _bitmap:Bitmap = new Bitmap;
 		
 		// Color tinting information.
-		/** @private */ private var _color:uint = 0xFFFFFF;
-		/** @private */ private var _alpha:Number = 1;
-		/** @private */ private var _tint:ColorTransform;
-		/** @private */ private var _colorTransform:ColorTransform = new ColorTransform;
-		/** @private */ private var _matrix:Matrix = new Matrix;
+		protected var _color:uint = 0xFFFFFF;
+		protected var _alpha:Number = 1;
+		protected var _tint:ColorTransform;
+		protected var _colorTransform:ColorTransform = new ColorTransform;
+		protected var _matrix:Matrix = new Matrix;
 		
 		// Canvas reference information.
-		/** @private */ private var _ref:BitmapData;
-		/** @private */ private var _refWidth:uint;
-		/** @private */ private var _refHeight:uint;
+		protected var _ref:BitmapData;
+		protected var _refWidth:uint;
+		protected var _refHeight:uint;
 		
 		// Global objects.
-		/** @private */ private var _rect:Rectangle = new Rectangle;
-		/** @private */ private var _graphics:Graphics = FP.sprite.graphics;
+		protected var _rect:Rectangle = new Rectangle;
+		protected var _graphics:Graphics = FP.sprite.graphics;
 	}
 }
