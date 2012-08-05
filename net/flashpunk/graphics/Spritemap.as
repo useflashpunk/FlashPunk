@@ -106,6 +106,10 @@
 		 */
 		public function add(name:String, frames:Array, frameRate:Number = 0, loop:Boolean = true):Anim
 		{
+			for (var i:int = 0; i < frames.length; i++) {
+				frames[i] %= _frameCount;
+				if (frames[i] < 0) frames[i] += _frameCount;
+			}
 			(_anims[name] = new Anim(name, frames, frameRate, loop))._parent = this;
 			return _anims[name];
 		}
