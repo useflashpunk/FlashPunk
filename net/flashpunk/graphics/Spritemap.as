@@ -40,8 +40,8 @@
 			if (!frameHeight) _rect.height = this.source.height;
 			_width = this.source.width;
 			_height = this.source.height;
-			_columns = _width / _rect.width;
-			_rows = _height / _rect.height;
+			_columns = Math.ceil(_width / _rect.width);
+			_rows = Math.ceil(_height / _rect.height);
 			_frameCount = _columns * _rows;
 			this.callback = callback;
 			updateBuffer();
