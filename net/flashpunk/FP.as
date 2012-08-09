@@ -225,7 +225,13 @@
 		 */
 		public static function approach(value:Number, target:Number, amount:Number):Number
 		{
-			return value < target ? (target < value + amount ? target : value + amount) : (target > value - amount ? target : value - amount);
+			if (value < target - amount) {
+				return value + amount;
+			} else if (value > target + amount) {
+				return value - amount;
+			} else {
+				return target;
+			}
 		}
 		
 		/**
@@ -449,11 +455,15 @@
 		{
 			if (max > min)
 			{
-				value = value < max ? value : max;
-				return value > min ? value : min;
+				if (value < min) return min;
+				else if (value > max) return max;
+				else return value;
+			} else {
+				// Min/max swapped
+				if (value < max) return max;
+				else if (value > min) return min;
+				else return value;
 			}
-			value = value < min ? value : min;
-			return value > max ? value : max;
 		}
 		
 		/**
