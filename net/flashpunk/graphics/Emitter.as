@@ -127,7 +127,8 @@
 				if (type._buffer)
 				{
 					// get alpha
-					_tint.alphaMultiplier = type._alpha + type._alphaRange * ((type._alphaEase == null) ? t : type._alphaEase(t));
+					var alphaT:Number = (type._alphaEase == null) ? t : type._alphaEase(t);
+					_tint.alphaMultiplier = type._alpha + type._alphaRange * alphaT;
 					
 					// get color
 					td = (type._colorEase == null) ? t : type._colorEase(t);

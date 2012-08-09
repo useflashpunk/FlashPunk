@@ -67,7 +67,9 @@
 		{
 			if (_anim && !complete)
 			{
-				_timer += (FP.timeInFrames ? _anim._frameRate : _anim._frameRate * FP.elapsed) * rate;
+				var timeAdd:Number = _anim._frameRate * rate;
+				if (! FP.timeInFrames) timeAdd *= FP.elapsed;
+				_timer += timeAdd;
 				if (_timer >= 1)
 				{
 					while (_timer >= 1)
