@@ -266,8 +266,8 @@
 			}
 			
 			_field.width = _width;
-			_textWidth = _field.textWidth + 4;
-			_textHeight = _field.textHeight + 4;
+			_field.width = _textWidth = Math.ceil(_field.textWidth + 4);
+			_field.height = _textHeight = Math.ceil(_field.textHeight + 4);
 			
 			if (resizable && (_textWidth > _width || _textHeight > _height))
 			{
