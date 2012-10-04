@@ -66,8 +66,8 @@
 			if (!list && parent) update();
 		}
 		
-		/** @private Updates the parent's bounds for this mask. */
-		protected function update():void
+		/** @public Updates the parent's bounds for this mask. */
+		public function update():void
 		{
 			
 		}
