@@ -131,8 +131,7 @@
 			super.assignTo(parent);
 		}
 		
-		/** @private Updates the parent's bounds for this mask. */
-		override protected function update():void 
+		override public function update():void 
 		{
 			// find bounds of the contained masks
 			var t:int, l:int, r:int, b:int, h:Hitbox, i:int = _count;
