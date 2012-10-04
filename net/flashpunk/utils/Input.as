@@ -151,7 +151,7 @@
 				}
 				return false;
 			}
-			return (input < 0) ? _pressNum : _press.indexOf(input) >= 0;
+			return (input < 0) ? Boolean(_pressNum): _press.indexOf(input) >= 0;
 		}
 		
 		/**
@@ -172,7 +172,7 @@
 				}
 				return false;
 			}
-			return (input < 0) ? _releaseNum : _release.indexOf(input) >= 0;
+			return (input < 0) ? Boolean(_releaseNum) : _release.indexOf(input) >= 0;
 		}
 		
 		/**
