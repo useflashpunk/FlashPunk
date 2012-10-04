@@ -92,8 +92,8 @@
 			else if (parent) update();
 		}
 		
-		/** @private Updates the parent's bounds for this mask. */
-		override protected function update():void 
+		/** @public Updates the parent's bounds for this mask. */
+		override public function update():void 
 		{
 			if (list)
 			{
