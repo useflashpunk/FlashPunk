@@ -21,7 +21,7 @@
 		public const ONESHOT:uint = 2;
 		
 		/**
-		 * If the Tweener should update.
+		 * If this object should update.
 		 */
 		public var active:Boolean = true;
 		
