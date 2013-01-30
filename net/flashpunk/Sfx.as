@@ -129,10 +129,10 @@
 		{
 			if (!_channel) return;
 			if (value < 0) value = 0;
+			_vol = value;
 			var filteredVol:Number = value * getVolume(_type);
 			if (filteredVol < 0) filteredVol = 0;
 			if (_filteredVol === filteredVol) return;
-			_vol = value;
 			_filteredVol = _transform.volume = filteredVol;
 			_channel.soundTransform = _transform;
 		}
