@@ -95,6 +95,7 @@
 				if (FP._world._tween) FP._world.updateTweens();
 				FP._world.update();
 			}
+			FP._world.updateLists(false);
 		}
 		
 		/**

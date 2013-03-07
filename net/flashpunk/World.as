@@ -920,8 +920,10 @@
 		
 		/**
 		 * Updates the add/remove lists at the end of the frame.
+		 * @param    shouldAdd    If false, entities will not be added
+		                          to the world, only removed.
 		 */
-		public function updateLists():void
+		public function updateLists(shouldAdd:Boolean = true):void
 		{
 			var e:Entity;
 			
@@ -953,7 +955,7 @@
 			}
 			
 			// add entities
-			if (_add.length)
+			if (shouldAdd && _add.length)
 			{
 				for each (e in _add)
 				{
