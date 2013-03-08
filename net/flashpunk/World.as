@@ -71,6 +71,13 @@
 		 */
 		public function render():void 
 		{
+			// sort the depth list
+			if (_layerSort)
+			{
+				if (_layerList.length > 1) FP.sort(_layerList, true);
+				_layerSort = false;
+			}
+			
 			// render the entities in order of depth
 			var e:Entity,
 				i:int = _layerList.length;
@@ -985,13 +992,6 @@
 					_recycled[e._class] = e;
 				}
 				_recycle.length = 0;
-			}
-			
-			// sort the depth list
-			if (_layerSort)
-			{
-				if (_layerList.length > 1) FP.sort(_layerList, true);
-				_layerSort = false;
 			}
 		}
 		
