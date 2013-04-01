@@ -58,6 +58,10 @@
 			_point.x = point.x + x - camera.x * scrollX;
 			_point.y = point.y + y - camera.y * scrollY;
 			
+			_rect.x = _rect.y = 0;
+			_rect.width = _maxWidth;
+			_rect.height = _maxHeight;
+			
 			// render the buffers
 			var xx:int, yy:int, buffer:BitmapData, px:Number = _point.x;
 			while (yy < _refHeight)
@@ -73,7 +77,7 @@
 						_bitmap.bitmapData = buffer;
 						target.draw(_bitmap, _matrix, _tint, blend);
 					}
-					else target.copyPixels(buffer, buffer.rect, _point, null, null, true);
+					else target.copyPixels(buffer, _rect, _point, null, null, true);
 					_point.x += _maxWidth;
 					xx ++;
 				}
