@@ -633,6 +633,55 @@
 			}
 		}
 		
+		public static function getColorHue(color:uint):Number
+		{
+			var r:uint = (color >> 16) & 0xFF;
+			var g:uint = (color >> 8) & 0xFF;
+			var b:uint = color & 0xFF;
+			
+			var max:uint = Math.max(r, g, b);
+			var min:uint = Math.min(r, g, b);
+			
+			var hue:uint = 0;
+			 
+			if (max == min) {
+				hue = 0;
+			} else if (max == r) {
+				hue = (60 * (g-b) / (max-min) + 360) % 360;
+			} else if (max == g) {
+				hue = (60 * (b-r) / (max-min) + 120);
+			} else if (max == b) {
+				hue = (60 * (r-g) / (max-min) + 240);
+			}
+			
+			return hue / 360;
+		}
+		
+		public static function getColorSaturation(color:uint):Number
+		{
+			var r:uint = (color >> 16) & 0xFF;
+			var g:uint = (color >> 8) & 0xFF;
+			var b:uint = color & 0xFF;
+			
+			var max:uint = Math.max(r, g, b);
+			var min:uint = Math.min(r, g, b);
+			
+			if (max == 0) {
+				return 0;
+			} else {
+				return (max - min) / max;
+			}
+		}
+		
+		public static function getColorValue(color:uint):Number
+		{
+			var r:uint = (color >> 16) & 0xFF;
+			var g:uint = (color >> 8) & 0xFF;
+			var b:uint = color & 0xFF;
+			
+			return Math.max(r, g, b) / 255;
+		}
+		
 		/**
 		 * Finds the red factor of a color.
 		 * @param	color		The color to evaluate.
