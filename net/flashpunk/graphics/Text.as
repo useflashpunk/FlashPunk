@@ -297,9 +297,12 @@
 			
 			var i:int;
 			
+			var tlm: TextLineMetrics;
+			var remainder: Number;
+			var tlm_y:Number = 2;
 			for (i = 0; i < _field.numLines; i++) {
-				var tlm: TextLineMetrics = _field.getLineMetrics(i);
-				var remainder: Number = tlm.x % 1;
+				tlm = _field.getLineMetrics(i);
+				remainder = tlm.x % 1;
 				if (remainder > 0.1 && remainder < 0.9) {
 					offsetRequired = true;
 					break;
@@ -313,11 +316,13 @@
 					_field.x = -remainder;
 					
 					FP.rect.x = 0;
-					FP.rect.y = 2 + tlm.height * i;
+					FP.rect.y = tlm_y;
 					FP.rect.width = _width;
 					FP.rect.height = tlm.height;
 					
 					_source.draw(_field, _field.transform.matrix, null, null, FP.rect);
+					
+					tlm_y += tlm.height;
 				}
 			} else {
 				_source.draw(_field);
