@@ -424,8 +424,8 @@
 		 * @param	fromY		Start y of the line.
 		 * @param	toX			End x of the line.
 		 * @param	toY			End y of the line.
-		 * @param	precision		
-		 * @param	p
+		 * @param	precision	Distance between consecutive tests. Higher values are faster but increase the chance of missing collisions.
+		 * @param	p			If non-null, will have its x and y values set to the point of collision.
 		 * @return
 		 */
 		public function collideLine(type:String, fromX:int, fromY:int, toX:int, toY:int, precision:uint = 1, p:Point = null):Entity
