@@ -92,6 +92,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			if (_points.length == 1)
 			{
 				x = _points[0].x;

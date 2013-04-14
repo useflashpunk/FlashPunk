@@ -62,6 +62,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			alpha = _startA + _rangeA * _t;
 			_r = uint((_startR + _rangeR * _t) * 255);
 			_g = uint((_startG + _rangeG * _t) * 255);

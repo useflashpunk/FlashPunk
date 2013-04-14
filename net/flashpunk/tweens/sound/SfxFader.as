@@ -62,6 +62,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			if (_sfx) _sfx.volume = _start + _range * _t;
 			if (_crossSfx) _crossSfx.volume = _crossRange * _t;
 		}

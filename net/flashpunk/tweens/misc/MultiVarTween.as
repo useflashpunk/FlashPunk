@@ -24,13 +24,14 @@ package net.flashpunk.tweens.misc
 		 * @param	duration	Duration of the tween.
 		 * @param	ease		Optional easer function.
 		 */
-		public function tween(object:Object, values:Object, duration:Number, ease:Function = null):void
+		public function tween(object:Object, values:Object, duration:Number, ease:Function = null, delay:Number = 0):void
 		{
 			_object = object;
 			_vars.length = 0;
 			_start.length = 0;
 			_range.length = 0;
 			_target = duration;
+			this.delay = delay;
 			_ease = ease;
 			for (var p:String in values)
 			{
@@ -48,6 +49,7 @@ package net.flashpunk.tweens.misc
 		override public function update():void
 		{
 			super.update();
+			if (delay > 0) return;
 			var i:int = _vars.length;
 			while (i --) _object[_vars[i]] = _start[i] + _range[i] * _t;
 		}

@@ -47,6 +47,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			angle = (_start + _range * _t) % 360;
 			if (angle < 0) angle += 360;
 		}

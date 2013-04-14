@@ -82,6 +82,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			if (_index < _curve.length - 1)
 			{
 				while (_t > _curveT[_index + 1]) _index ++;

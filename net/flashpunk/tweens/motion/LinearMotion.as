@@ -61,6 +61,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			x = _fromX + _moveX * _t;
 			y = _fromY + _moveY * _t;
 		}

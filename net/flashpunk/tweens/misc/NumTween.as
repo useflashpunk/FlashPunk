@@ -42,6 +42,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			value = _start + _range * _t;
 		}
 		

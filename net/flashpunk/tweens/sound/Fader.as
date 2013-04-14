@@ -38,6 +38,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			FP.volume = _start + _range * _t;
 		}
 		

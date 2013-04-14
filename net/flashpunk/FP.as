@@ -808,23 +808,18 @@
 		 * 						complete	Optional completion callback function.
 		 * 						ease		Optional easer function.
 		 * 						tweener		The Tweener to add this Tween to.
+		 * 						delay		A length of time to wait before starting this tween.
 		 * @return	The added MultiVarTween object.
 		 * 
 		 * Example: FP.tween(object, { x: 500, y: 350 }, 2.0, { ease: easeFunction, complete: onComplete } );
 		 */
 		public static function tween(object:Object, values:Object, duration:Number, options:Object = null):MultiVarTween
 		{
-			if (options && options.hasOwnProperty("delay")) {
-				var delay:Number = options.delay;
-				delete options.delay;
-				FP.alarm(delay, function ():void { FP.tween(object, values, duration, options); });
-				return null;
-			}
-			
 			var type:uint = Tween.ONESHOT,
 				complete:Function = null,
 				ease:Function = null,
-				tweener:Tweener = FP.tweener;
+				tweener:Tweener = FP.tweener,
+				delay:Number = 0;
 			if (object is Tweener) tweener = object as Tweener;
 			if (options)
 			{
@@ -833,9 +828,10 @@
 				if (options.hasOwnProperty("complete")) complete = options.complete;
 				if (options.hasOwnProperty("ease")) ease = options.ease;
 				if (options.hasOwnProperty("tweener")) tweener = options.tweener;
+				if (options.hasOwnProperty("delay")) delay = options.delay;
 			}
 			var tween:MultiVarTween = new MultiVarTween(complete, type);
-			tween.tween(object, values, duration, ease);
+			tween.tween(object, values, duration, ease, delay);
 			tweener.addTween(tween);
 			return tween;
 		}

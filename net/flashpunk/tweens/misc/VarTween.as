@@ -44,6 +44,7 @@
 		override public function update():void 
 		{
 			super.update();
+			if (delay > 0) return;
 			_object[_property] = _start + _range * _t;
 		}
 		
