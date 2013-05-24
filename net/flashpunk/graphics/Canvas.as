@@ -182,7 +182,7 @@
 		 * Draws over a rectangular area of the canvas.
 		 * @param	rect		Drawing rectangle.
 		 * @param	color		Draw color.
-		 * @param	alpha		Draw alpha. If < 1, this rectangle will blend with existing contents of the canvas.
+		 * @param	alpha		Draw alpha. If &lt; 1, this rectangle will blend with existing contents of the canvas.
 		 */
 		public function drawRect(rect:Rectangle, color:uint = 0, alpha:Number = 1):void
 		{
