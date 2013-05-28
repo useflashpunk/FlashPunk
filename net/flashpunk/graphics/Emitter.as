@@ -109,14 +109,7 @@
 				// get position
 				td = (type._ease == null) ? t : type._ease(t);
 				_p.x = _point.x + p._x + p._moveX * td;
-				_p.y = _point.y + p._y + p._moveY * td;
-				
-				// stops particles from moving when gravity is enabled
-				// and if emitter.active = false (for game pausing for example)
-				if (active)
-				{
-					p._moveY += p._gravity * td;
-				}
+				_p.y = _point.y + p._y + p._moveY * td + p._gravity * td * td;
 				
 				// get frame
 				rect.x = rect.width * type._frames[uint(td * type._frameCount)];
