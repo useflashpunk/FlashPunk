@@ -475,6 +475,37 @@
 		 */
 		public function get textHeight():uint { return _textHeight; }
 		
+		/** 
+		 * Set TextField or TextFormat property
+		 * returns true on success and false if property not found on either
+		 */
+		public function setTextProperty(name:String, value:*):Boolean {
+			if (_field.hasOwnProperty(name)) {
+				_field[name] = value;
+			} else if(_form.hasOwnProperty(name)) {
+				_form[name] = value;
+				_field.setTextFormat(_form);
+			} else {
+				return false;
+			}
+			updateTextBuffer();
+			return true;
+		}
+		
+		/** 
+		 * Get TextField or TextForm property
+		 */ 
+		public function getTextProperty(name:String):* {
+			if (_field.hasOwnProperty(name)) {
+				return _field[name];
+			} else if(_form.hasOwnProperty(name)) {
+				return _form[name];
+			} else {
+				// TODO need a better "cannot get" value here
+				return null;
+			}
+		}
+
 		// Text information.
 		/** @protected */ protected var _field:TextField = new TextField;
 		/** @protected */ protected var _width:uint;
