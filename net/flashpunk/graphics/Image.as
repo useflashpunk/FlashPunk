@@ -32,11 +32,13 @@ package net.flashpunk.graphics
 		
 		/**
 		 * X origin of the image, determines transformation point.
+		 * Defaults to top-left corner.
 		 */
 		public var originX:Number = 0;
 		
 		/**
 		 * Y origin of the image, determines transformation point.
+		 * Defaults to top-left corner.
 		 */
 		public var originY:Number = 0;
 		
@@ -49,13 +51,18 @@ package net.flashpunk.graphics
 		/**
 		 * If the image should be drawn transformed with pixel smoothing.
 		 * This will affect drawing performance, but look less pixelly.
+		 * Defaults to not smoothed.
 		 */
 		public var smooth:Boolean;
 		
 		/**
-		 * Color tint modes
+		 * tintMode value to tint in multiply mode.
 		 */
 		public static const TINTING_MULTIPLY:Number = 0.0;
+		
+		/**
+		 * tintMode value to tint in colorize mode.
+		 */
 		public static const TINTING_COLORIZE:Number = 1.0;
 		
 		/**
@@ -254,7 +261,9 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The tinted color of the Image. Use 0xFFFFFF to draw the Image normally with the default blending mode.
+		 * The tinted color of the Image. Use 0xFFFFFF to draw the
+		 * Image normally with the default blending mode.
+		 * Default: 0xFFFFFF.
 		 */
 		public function get color():uint { return _color; }
 		public function set color(value:uint):void
@@ -266,7 +275,9 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The amount the image will be tinted, suggested values from 0 to 1. 0 Means no change, 1 is full color tint.
+		 * The amount the image will be tinted, suggested values from
+		 * 0 to 1. 0 Means no change, 1 is full color tint.
+		 * Default: 1.
 		 */
 		public function get tinting():Number { return _tintFactor; }
 		public function set tinting(value:Number):void
@@ -277,7 +288,9 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The tint mode - multiply or colorize
+		 * The tint mode - multiply or colorize.
+		 * Default: multiply.
+		 * See Image.TINTING_MULTIPLY and Image.TINTING_COLORIZE.
 		 */
 		public function get tintMode():Number { return _tintMode; }
 		public function set tintMode(value:Number):void
