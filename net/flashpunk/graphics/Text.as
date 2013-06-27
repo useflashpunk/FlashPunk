@@ -456,14 +456,24 @@
 		}
 		
 		/**
-		 * The scaled width of the text image.
+		 * The scaled width of the text.
 		 */
 		override public function get scaledWidth():Number { return _width * scaleX * scale; }
 		
 		/**
-		 * The scaled height of the text image.
+		 * Set the scaled width of the text.
+		 */
+		override public function set scaledWidth(w:Number):void { scaleX = w / scale / _width; }
+		
+		/**
+		 * The scaled height of the text.
 		 */
 		override public function get scaledHeight():Number { return _height * scaleY * scale; }
+		
+		/**
+		 * Set the scaled height of the text.
+		 */
+		override public function set scaledHeight(h:Number):void { scaleY = h / scale / _height; }
 		
 		/**
 		 * Width of the text within the image.

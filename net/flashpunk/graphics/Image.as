@@ -394,9 +394,19 @@ package net.flashpunk.graphics
 		public function get scaledWidth():Number { return _bufferRect.width * scaleX * scale; }
 		
 		/**
+		 * Set the scaled width of the image.
+		 */
+		public function set scaledWidth(w:Number):void { scaleX = w / scale / _bufferRect.width; }
+		
+		/**
 		 * The scaled height of the image.
 		 */
 		public function get scaledHeight():Number { return _bufferRect.height * scaleY * scale; }
+		
+		/**
+		 * Set the scaled height of the image.
+		 */
+		public function set scaledHeight(h:Number):void { scaleY = h / scale / _bufferRect.height; }
 		
 		/**
 		 * Clipping rectangle for the image.
