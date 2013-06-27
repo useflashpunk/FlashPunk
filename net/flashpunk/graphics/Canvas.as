@@ -3,6 +3,7 @@
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
+	import flash.filters.BitmapFilter;
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -289,6 +290,14 @@
 			y %= _maxHeight;
 			
 			buffer.setPixel32(x, y, color);
+		}
+		
+		public function applyFilter(filter:BitmapFilter):void
+		{
+			for each(var buffer:BitmapData in _buffers)
+			{
+				buffer.applyFilter(buffer, buffer.rect, FP.zero, filter);
+			}
 		}
 		
 		/**
