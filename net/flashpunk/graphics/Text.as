@@ -131,6 +131,14 @@
 			}
 		}
 		
+		/**
+		 * Set the style for a subset of the text, for use with
+		 * the richText property.
+		 * Usage:
+		   text.setStyle("red", {color: 0xFF0000});
+		   text.setStyle("big", {size: text.size*2});
+		   text.richText = "<big>Hello</big> <red>world</red>";
+		 */
 		public function setStyle(tagName:String, params:*):void
 		{
 			var format:TextFormat;
@@ -355,6 +363,7 @@
 		
 		/**
 		 * Rich-text string with markup.
+		 * Use setStyle() to control the appearance of marked-up text.
 		 */
 		public function get richText():String { return _richText || _text; }
 		public function set richText(value:String):void
