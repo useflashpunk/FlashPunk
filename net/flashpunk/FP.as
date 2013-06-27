@@ -130,7 +130,11 @@
 		public static function get world():World { return _world; }
 		public static function set world(value:World):void
 		{
-			if (_world == value) return;
+			if (_goto) {
+				if (_goto == value) return;
+			} else {
+				if (_world == value) return;
+			}
 			_goto = value;
 		}
 		
