@@ -458,12 +458,12 @@
 		/**
 		 * The scaled width of the text image.
 		 */
-		override public function get scaledWidth():uint { return _width * scaleX * scale; }
+		override public function get scaledWidth():Number { return _width * scaleX * scale; }
 		
 		/**
 		 * The scaled height of the text image.
 		 */
-		override public function get scaledHeight():uint { return _height * scaleY * scale; }
+		override public function get scaledHeight():Number { return _height * scaleY * scale; }
 		
 		/**
 		 * Width of the text within the image.
