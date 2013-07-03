@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SWCProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FlexBinPath>.\bin\flashpunk.swc</FlexBinPath>
+  <FlashBinPath>.\bin\flashpunk.flash.swc</FlashBinPath>
+  <FlexIncludeASI>false</FlexIncludeASI>
+  <MakeCS3>false</MakeCS3>
+  <MakeMXI>false</MakeMXI>
+  <IntegrateAsDoc>true</IntegrateAsDoc>
+  <LaunchAEM>false</LaunchAEM>
+  <MXIVersion />
+  <MXPIncludeASI>false</MXPIncludeASI>
+  <MXIAuthor />
+  <MXIDescription />
+  <MXIUIAccessText />
+  <Flex_IgnoreClasses />
+  <CS3_IgnoreClasses />
+  <CS3_ComponentClass />
+  <CS3_ComponentName />
+  <CS3_ComponentGroup />
+  <CS3_ComponentToolTip />
+  <CS3_ComponentIconFile />
+  <CS3_PreviewType>None</CS3_PreviewType>
+  <CS3_PreviewResource />
+</SWCProject>
