@@ -24,7 +24,7 @@
 		/**
 		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.6";
+		public static const VERSION:String = "1.7.0";
 		
 		/**
 		 * Width of the game.
