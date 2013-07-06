@@ -393,7 +393,7 @@
 			var e:Entity = _typeFirst[type];
 			while (e)
 			{
-				if (e.collideRect(e.x, e.y, rX, rY, rWidth, rHeight)) return e;
+				if (e.collidable && e.collideRect(e.x, e.y, rX, rY, rWidth, rHeight)) return e;
 				e = e._typeNext;
 			}
 			return null;
@@ -565,7 +565,7 @@
 					n:uint = into.length;
 				while (e)
 				{
-					if (e.collideRect(e.x, e.y, rX, rY, rWidth, rHeight)) into[n ++] = e;
+					if (e.collidable && e.collideRect(e.x, e.y, rX, rY, rWidth, rHeight)) into[n ++] = e;
 					e = e._typeNext;
 				}
 			}
@@ -588,7 +588,7 @@
 					n:uint = into.length;
 				while (e)
 				{
-					if (e.collidePoint(e.x, e.y, pX, pY)) into[n ++] = e;
+					if (e.collidable && e.collidePoint(e.x, e.y, pX, pY)) into[n ++] = e;
 					e = e._typeNext;
 				}
 			}
