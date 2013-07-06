@@ -37,28 +37,31 @@ package net.flashpunk.debug
 		
 		/**
 		 * Logs data to the console.
-		 * @param	data		The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
+		 * @param	data The data parameters to log, can be variables, objects, etc. Parameters will be separated by a space (" ").
 		 */
 		public function log(...data):void
 		{
-			var s:String;
-			if (data.length > 1)
+			var s:String = "";
+			
+			// Iterate through data to build a string.
+			for (var i:uint = 0; i < data.length; i++)
 			{
-				s = "";
-				var i:int = 0;
-				while (i < data.length)
-				{
-					if (i > 0) s += " ";
-					s += data[i ++].toString();
-				}
+				if (i > 0) s += " ";
+				s += (data[i] != null) ? data[i].toString() : "null";
 			}
-			else s = data[0].toString();
+			
+			// Replace newlines with multiple log statements.
 			if (s.indexOf("\n") >= 0)
 			{
 				var a:Array = s.split("\n");
 				for each (s in a) LOG.push(s);
 			}
-			else LOG.push(s);
+			else
+			{
+				LOG.push(s);
+			}
+			
+			// If the log is running, update it.
 			if (_enabled && _sprite.visible) updateLog();
 		}
 		
