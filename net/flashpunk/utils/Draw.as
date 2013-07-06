@@ -53,6 +53,7 @@
 		 * @param	x2		Ending x position.
 		 * @param	y2		Ending y position.
 		 * @param	color	Color of the line.
+		 * @param	alpha	Alpha of the line.
 		 */
 		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF, alpha:Number = 1.0):void
 		{
