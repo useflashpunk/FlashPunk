@@ -327,6 +327,7 @@ package net.flashpunk.graphics
 		
 		/**
 		 * Centers the Image's originX/Y to its center.
+		 * @deprecated  As of FlashPunk 1.7.0, replaced by {@link #centerOrigin()}
 		 */
 		public function centerOO():void
 		{

@@ -524,8 +524,5 @@
 		/** @private */ private var _setRows:uint;
 		/** @private */ private var _setCount:uint;
 		/** @private */ private var _tile:Rectangle;
-		
-		// Global objects.
-		/** @private */ private var _rect:Rectangle = FP.rect;
 	}
 }

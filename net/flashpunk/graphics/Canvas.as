@@ -375,7 +375,7 @@
 		/** @private */ private var _refHeight:uint;
 		
 		// Global objects.
-		/** @private */ private var _rect:Rectangle = new Rectangle;
+		/** @protected */ protected var _rect:Rectangle = FP.rect;
 		/** @private */ private var _graphics:Graphics = FP.sprite.graphics;
 	}
 }
