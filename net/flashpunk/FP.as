@@ -24,7 +24,7 @@
 		/**
 		 * The FlashPunk major version.
 		 */
-		public static const VERSION:String = "1.6";
+		public static const VERSION:String = "1.7.0";
 		
 		/**
 		 * Width of the game.
@@ -130,7 +130,11 @@
 		public static function get world():World { return _world; }
 		public static function set world(value:World):void
 		{
-			if (_world == value) return;
+			if (_goto) {
+				if (_goto == value) return;
+			} else {
+				if (_world == value) return;
+			}
 			_goto = value;
 		}
 		
@@ -911,7 +915,14 @@
 		 */
 		public static function sort(object:Object, ascending:Boolean = true):void
 		{
-			if (object is Array || object is Vector.<*>) quicksort(object, 0, object.length - 1, ascending);
+			if (object is Array || object is Vector.<*>)
+			{
+				// Only need to sort the array if it has more than one item.
+				if (object.length > 1)
+				{
+					quicksort(object, 0, object.length - 1, ascending);
+				}
+			}
 		}
 		
 		/**
@@ -922,12 +933,19 @@
 		 */
 		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
 		{
-			if (object is Array || object is Vector.<*>) quicksortBy(object, 0, object.length - 1, ascending, property);
+			if (object is Array || object is Vector.<*>)
+			{
+				// Only need to sort the array if it has more than one item.
+				if (object.length > 1)
+				{
+					quicksortBy(object, 0, object.length - 1, ascending, property);
+				}
+			}
 		}
 		
 		/** @private Quicksorts the array. */ 
 		private static function quicksort(a:Object, left:int, right:int, ascending:Boolean):void
-		{
+		{		
 			var i:int = left, j:int = right, t:Number,
 				p:* = a[Math.round((left + right) * .5)];
 			if (ascending)
@@ -964,7 +982,7 @@
 		
 		/** @private Quicksorts the array by the property. */ 
 		private static function quicksortBy(a:Object, left:int, right:int, ascending:Boolean, property:String):void
-		{
+		{			
 			var i:int = left, j:int = right, t:Object,
 				p:* = a[Math.round((left + right) * .5)][property];
 			if (ascending)

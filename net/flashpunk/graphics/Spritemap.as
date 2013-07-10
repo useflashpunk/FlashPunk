@@ -102,7 +102,7 @@
 		 * Add an Animation.
 		 * @param	name		Name of the animation.
 		 * @param	frames		Array of frame indices to animate through.
-		 * @param	frameRate	Animation speed.
+		 * @param	frameRate	Animation speed (with variable framerate: in frames per second, with fixed framerate: in frames per frame).
 		 * @param	loop		If the animation should loop.
 		 * @return	A new Anim object for the animation.
 		 */

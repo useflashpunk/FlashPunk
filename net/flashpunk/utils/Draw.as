@@ -48,15 +48,16 @@
 		
 		/**
 		 * Draws a pixelated, non-antialiased line.
-		 * @param	x1		Starting x position.
-		 * @param	y1		Starting y position.
-		 * @param	x2		Ending x position.
-		 * @param	y2		Ending y position.
-		 * @param	color	Color of the line.
+		 * @param	x1				Starting x position.
+		 * @param	y1				Starting y position.
+		 * @param	x2				Ending x position.
+		 * @param	y2				Ending y position.
+		 * @param	color			Color of the line.
+		 * @param	overwriteAlpha	Alpha value written to these pixels: does NOT do blending. If you want to draw a semi-transparent line over some other content, you will have to either: A) use Draw.linePlus() or B) if non-antialiasing is important, render with Draw.line() to an intermediate buffer with transparency and then render that intermediate buffer.
 		 */
-		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF, alpha:Number = 1.0):void
+		public static function line(x1:int, y1:int, x2:int, y2:int, color:uint = 0xFFFFFF, overwriteAlpha:Number = 1.0):void
 		{
-			color = (uint(alpha * 0xFF) << 24) | (color & 0xFFFFFF);
+			color = (uint(overwriteAlpha * 0xFF) << 24) | (color & 0xFFFFFF);
 			
 			// get the drawing positions
 			x1 -= _camera.x;

@@ -548,7 +548,7 @@ package net.flashpunk
 		}
 		
 		/**
-		 * Center's the Entity's origin (half width & height).
+		 * Center's the Entity's origin (half width &amp; height).
 		 */
 		public function centerOrigin():void
 		{

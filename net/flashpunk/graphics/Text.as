@@ -131,6 +131,14 @@
 			}
 		}
 		
+		/**
+		 * Set the style for a subset of the text, for use with
+		 * the richText property.
+		 * Usage:
+		   text.setStyle("red", {color: 0xFF0000});
+		   text.setStyle("big", {size: text.size*2});
+		   text.richText = "<big>Hello</big> <red>world</red>";
+		 */
 		public function setStyle(tagName:String, params:*):void
 		{
 			var format:TextFormat;
@@ -355,6 +363,7 @@
 		
 		/**
 		 * Rich-text string with markup.
+		 * Use setStyle() to control the appearance of marked-up text.
 		 */
 		public function get richText():String { return _richText || _text; }
 		public function set richText(value:String):void
@@ -456,14 +465,24 @@
 		}
 		
 		/**
-		 * The scaled width of the text image.
+		 * The scaled width of the text.
 		 */
-		override public function get scaledWidth():uint { return _width * scaleX * scale; }
+		override public function get scaledWidth():Number { return _width * scaleX * scale; }
 		
 		/**
-		 * The scaled height of the text image.
+		 * Set the scaled width of the text.
 		 */
-		override public function get scaledHeight():uint { return _height * scaleY * scale; }
+		override public function set scaledWidth(w:Number):void { scaleX = w / scale / _width; }
+		
+		/**
+		 * The scaled height of the text.
+		 */
+		override public function get scaledHeight():Number { return _height * scaleY * scale; }
+		
+		/**
+		 * Set the scaled height of the text.
+		 */
+		override public function set scaledHeight(h:Number):void { scaleY = h / scale / _height; }
 		
 		/**
 		 * Width of the text within the image.
@@ -475,6 +494,37 @@
 		 */
 		public function get textHeight():uint { return _textHeight; }
 		
+		/** 
+		 * Set TextField or TextFormat property
+		 * returns true on success and false if property not found on either
+		 */
+		public function setTextProperty(name:String, value:*):Boolean {
+			if (_field.hasOwnProperty(name)) {
+				_field[name] = value;
+			} else if(_form.hasOwnProperty(name)) {
+				_form[name] = value;
+				_field.setTextFormat(_form);
+			} else {
+				return false;
+			}
+			updateTextBuffer();
+			return true;
+		}
+		
+		/** 
+		 * Get TextField or TextForm property
+		 */ 
+		public function getTextProperty(name:String):* {
+			if (_field.hasOwnProperty(name)) {
+				return _field[name];
+			} else if(_form.hasOwnProperty(name)) {
+				return _form[name];
+			} else {
+				// TODO need a better "cannot get" value here
+				return null;
+			}
+		}
+
 		// Text information.
 		/** @protected */ protected var _field:TextField = new TextField;
 		/** @protected */ protected var _width:uint;

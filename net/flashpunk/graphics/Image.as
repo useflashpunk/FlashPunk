@@ -1,11 +1,7 @@
 package net.flashpunk.graphics 
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.geom.ColorTransform;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
+	import flash.display.*;
+	import flash.geom.*;
 
 	import net.flashpunk.*;
 
@@ -36,11 +32,13 @@ package net.flashpunk.graphics
 		
 		/**
 		 * X origin of the image, determines transformation point.
+		 * Defaults to top-left corner.
 		 */
 		public var originX:Number = 0;
 		
 		/**
 		 * Y origin of the image, determines transformation point.
+		 * Defaults to top-left corner.
 		 */
 		public var originY:Number = 0;
 		
@@ -53,13 +51,18 @@ package net.flashpunk.graphics
 		/**
 		 * If the image should be drawn transformed with pixel smoothing.
 		 * This will affect drawing performance, but look less pixelly.
+		 * Defaults to not smoothed.
 		 */
 		public var smooth:Boolean;
 		
 		/**
-		 * Color tint modes
+		 * tintMode value to tint in multiply mode.
 		 */
 		public static const TINTING_MULTIPLY:Number = 0.0;
+		
+		/**
+		 * tintMode value to tint in colorize mode.
+		 */
 		public static const TINTING_COLORIZE:Number = 1.0;
 		
 		/**
@@ -172,6 +175,55 @@ package net.flashpunk.graphics
 		}
 		
 		/**
+		 * Creates a new gradient Image.
+		 * @param	width		Width of the image.
+		 * @param	height		Height of the image.
+		 * @param	fromX		X coordinate to start gradient at.
+		 * @param	fromY		Y coordinate to start gradient at.
+		 * @param	toX			X coordinate to end gradient at.
+		 * @param	toY			X coordinate to end gradient at.
+		 * @param	fromColor	Color at start of gradient.
+		 * @param	toColor		Color at end of gradient.
+		 * @param	fromAlpha	Alpha at start of gradient.
+		 * @param	toAlpha		Alpha at end of gradient.
+		 * @return	A new Image object.
+		 */
+		public static function createGradient (width:uint, height:uint, fromX:Number, fromY:Number, toX:Number, toY:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1):Image
+		{
+			var bitmap:BitmapData = new BitmapData(width, height, true, 0x0);
+			
+			var fillType:String = GradientType.LINEAR;
+			var spreadMethod:String = SpreadMethod.PAD;
+			var colors:Array = [fromColor & 0xFFFFFF, toColor & 0xFFFFFF];
+			var alphas:Array = [fromAlpha, toAlpha];
+			var ratios:Array = [0x00, 0xFF];
+			
+			var dirX:Number = toX - fromX;
+			var dirY:Number = toY - fromY;
+			var mRotation:Number = Math.atan2(dirY, dirX);
+			var mWidth:Number = dirX;
+			var mHeight:Number = dirY;
+			if (toX < fromX) {
+				fromX = toX;
+				mWidth *= -1;
+			}
+			if (toY < fromY) {
+				fromY = toY;
+				mHeight *= -1;
+			}
+			var matrix:Matrix = new Matrix();
+			matrix.createGradientBox(mWidth, mHeight, mRotation, fromX, fromY);
+			
+			FP.sprite.graphics.clear();
+			FP.sprite.graphics.beginGradientFill(fillType, colors, alphas, ratios, matrix, spreadMethod);
+			FP.sprite.graphics.drawRect(0, 0, width, height);
+			
+			bitmap.draw(FP.sprite);
+			
+			return new Image(bitmap);
+		}
+		
+		/**
 		 * Updates the image buffer.
 		 */
 		public function updateBuffer(clearBefore:Boolean = false):void
@@ -209,7 +261,9 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The tinted color of the Image. Use 0xFFFFFF to draw the Image normally with the default blending mode.
+		 * The tinted color of the Image. Use 0xFFFFFF to draw the
+		 * Image normally with the default blending mode.
+		 * Default: 0xFFFFFF.
 		 */
 		public function get color():uint { return _color; }
 		public function set color(value:uint):void
@@ -221,7 +275,9 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The amount the image will be tinted, suggested values from 0 to 1. 0 Means no change, 1 is full color tint.
+		 * The amount the image will be tinted, suggested values from
+		 * 0 to 1. 0 Means no change, 1 is full color tint.
+		 * Default: 1.
 		 */
 		public function get tinting():Number { return _tintFactor; }
 		public function set tinting(value:Number):void
@@ -232,7 +288,9 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * The tint mode - multiply or colorize
+		 * The tint mode - multiply or colorize.
+		 * Default: multiply.
+		 * See Image.TINTING_MULTIPLY and Image.TINTING_COLORIZE.
 		 */
 		public function get tintMode():Number { return _tintMode; }
 		public function set tintMode(value:Number):void
@@ -347,12 +405,22 @@ package net.flashpunk.graphics
 		/**
 		 * The scaled width of the image.
 		 */
-		public function get scaledWidth():uint { return _bufferRect.width * scaleX * scale; }
+		public function get scaledWidth():Number { return _bufferRect.width * scaleX * scale; }
+		
+		/**
+		 * Set the scaled width of the image.
+		 */
+		public function set scaledWidth(w:Number):void { scaleX = w / scale / _bufferRect.width; }
 		
 		/**
 		 * The scaled height of the image.
 		 */
-		public function get scaledHeight():uint { return _bufferRect.height * scaleY * scale; }
+		public function get scaledHeight():Number { return _bufferRect.height * scaleY * scale; }
+		
+		/**
+		 * Set the scaled height of the image.
+		 */
+		public function set scaledHeight(h:Number):void { scaleY = h / scale / _bufferRect.height; }
 		
 		/**
 		 * Clipping rectangle for the image.
