@@ -1,9 +1,5 @@
 *~
 
-# IntelliJ IDEA Project Files.
-.idea/
-*.iml
-
 # Build and Release Folders
 [Bb]in/
 bin-debug/
