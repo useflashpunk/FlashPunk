@@ -6,11 +6,7 @@
         <dependencies target-player="11.1" component-set="MxOnly">
           <sdk name="flex_sdk_4.6" />
         </dependencies>
-        <compiler-options>
-          <map>
-            <entry key="compiler.keep-generated-actionscript" value="false" />
-          </map>
-        </compiler-options>
+        <compiler-options />
         <packaging-air-desktop />
         <packaging-android />
         <packaging-ios />
