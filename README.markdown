@@ -40,6 +40,15 @@ FlashPunk now has a console which lets you view lots of useful information in re
 ### AND MORE...
 There are also many other various changes and improvements across the board, all which I cannot list off the top of my head. Suffice to say, version 0.87 has a total of 16 different classes, and the new version has over 40. FlashPunk is still simple to use and prototype in, but with version 1.0 onward, I aim to make it not only effectively simple and fast, but contain powerful and efficient internal systems for those who know how to use them.
 
+DOCUMENTATION
+=============
+
+FlashPunk is documented using ASDocs. Documentation can be built by using the `asdoc` tool available in the Flex distro, and will look something like this:
+
+```bash
+$ asdoc -doc-sources <source directory> -output <output directory> -window-title "FlashPunk Documentation" -main-title "FlashPunk"
+```
+
 VERSIONING
 ==========
 
