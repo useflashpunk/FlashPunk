@@ -13,6 +13,8 @@
 
 	import net.flashpunk.utils.Draw;
 	import net.flashpunk.utils.Input;
+	
+	import flash.display.DisplayObject;
 
 	/**
 	 * Main game Sprite class, added to the Flash Stage. Manages the game loop.
@@ -45,8 +47,9 @@
 		 * @param	height			The height of your game.
 		 * @param	frameRate		The game framerate, in frames per second.
 		 * @param	fixed			If a fixed-framerate should be used.
+		 * @param       tdisplayObject          A DisplayObject for use as your root
 		 */
-		public function Engine(width:uint, height:uint, frameRate:Number = 60, fixed:Boolean = false) 
+		public function Engine(width:uint, height:uint, frameRate:Number = 60, fixed:Boolean = false, tdisplayObject:DisplayObject = null) 
 		{
 			// global game properties
 			FP.width = width;
@@ -70,8 +73,21 @@
 			FP.entity = new Entity;
 			FP._time = getTimer();
 			
-			// on-stage event listener
-			addEventListener(Event.ADDED_TO_STAGE, onStage);
+			if (tdisplayObject == null) {
+		        
+		           //we have no given DisplayObject to use as 
+		           //our Stage, so we can continue on with the
+		           //original Engine startup
+			   addEventListener(Event.ADDED_TO_STAGE, onStage);
+				
+			}else {
+			   // set stage the given DisplayObject
+			   FP.stage = tdisplayObject;
+				
+			   //continue on with the Engine startup
+			   startup();
+				
+			}
 		}
 		
 		/**
@@ -153,16 +169,21 @@
 		/** @private Event handler for stage entry. */
 		private function onStage(e:Event = null):void
 		{
-			// remove event listener
+		        // remove event listener
 			removeEventListener(Event.ADDED_TO_STAGE, onStage);
-			
-			// add focus change listeners
-			stage.addEventListener(Event.ACTIVATE, onActivate);
-			stage.addEventListener(Event.DEACTIVATE, onDeactivate);
 			
 			// set stage properties
 			FP.stage = stage;
 			setStageProperties();
+			
+			startup();
+		}
+		
+		private function startup():void
+		{
+			// add focus change listeners
+			stage.addEventListener(Event.ACTIVATE, onActivate);
+			stage.addEventListener(Event.DEACTIVATE, onDeactivate);
 			
 			// enable input
 			Input.enable();
@@ -190,6 +211,7 @@
 				_last = getTimer();
 				addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			}
+			
 		}
 		
 		/** @private Framerate independent game loop. */
