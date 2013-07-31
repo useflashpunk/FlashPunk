@@ -15,6 +15,8 @@
 	import net.flashpunk.debug.Console;
 	import net.flashpunk.tweens.misc.Alarm;
 	import net.flashpunk.tweens.misc.MultiVarTween;
+	
+	import flash.display.DisplayObject;
 
 	/**
 	 * Static catch-all class used to access global properties and functions.
@@ -1048,7 +1050,7 @@
 		/** @private */ public static const RAD:Number = Math.PI / -180;
 		
 		// Global Flash objects.
-		/** @private */ public static var stage:Stage;
+		/** @private */ public static var stage:DisplayObject;
 		/** @private */ public static var engine:Engine;
 		
 		// Global objects used for rendering, collision, etc.
