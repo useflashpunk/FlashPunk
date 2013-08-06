@@ -211,6 +211,10 @@ package net.flashpunk.graphics
 				fromY = toY;
 				mHeight *= -1;
 			}
+			
+			if (mWidth == 0) mWidth = 1;
+			if (mHeight == 0) mHeight = 1;
+			
 			var matrix:Matrix = new Matrix();
 			matrix.createGradientBox(mWidth, mHeight, mRotation, fromX, fromY);
 			
