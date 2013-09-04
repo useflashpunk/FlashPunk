@@ -1,7 +1,6 @@
 package net.flashpunk
 {
 	import flash.display.BitmapData;
-	import flash.display.Graphics;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getDefinitionByName;
