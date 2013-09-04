@@ -1,6 +1,7 @@
 package net.flashpunk
 {
 	import flash.display.BitmapData;
+	import flash.display.Graphics;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getDefinitionByName;
@@ -501,6 +502,15 @@ package net.flashpunk
 				graphic = list;
 			}
 			return g;
+		}
+		
+		/**
+		 * Removes the graphic from the Entity if it has been added.
+		 * @param	g		Graphic to remove.
+		 */
+		public function removeGraphic(g:Graphic):Graphic
+		{
+			return Graphiclist(graphic).remove(g);
 		}
 		
 		/**
