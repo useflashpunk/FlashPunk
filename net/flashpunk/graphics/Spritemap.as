@@ -35,9 +35,22 @@
 		public function Spritemap(source:*, frameWidth:uint = 0, frameHeight:uint = 0, callback:Function = null) 
 		{
 			_rect = new Rectangle(0, 0, frameWidth, frameHeight);
+			_clipRect = new Rectangle(0, 0, frameWidth, frameHeight);
+			_frameWidth = frameWidth;
+			_frameHeight = frameHeight;
 			super(source, _rect);
-			if (!frameWidth) _rect.width = this.source.width;
-			if (!frameHeight) _rect.height = this.source.height;
+			if (!frameWidth)
+			{
+				_rect.width = this.source.width;
+				_clipRect.width = this.source.width;
+				_frameWidth = this.source.width;
+			}
+			if (!frameHeight)
+			{
+				_rect.height = this.source.height;
+				_clipRect.height = this.source.height;
+				_frameHeight = this.source.height;
+			}
 			_width = this.source.width;
 			_height = this.source.height;
 			_columns = Math.ceil(_width / _rect.width);
@@ -54,9 +67,16 @@
 		override public function updateBuffer(clearBefore:Boolean = false):void 
 		{
 			// get position of the current frame
-			_rect.x = _rect.width * (_frame % _columns);
-			_rect.y = _rect.height * uint(_frame / _columns);
-			if (_flipped) _rect.x = (_width - _rect.width) - _rect.x;
+			_rect.x = _frameWidth * (_frame % _columns);
+			_rect.y = _frameHeight * uint(_frame / _columns) + _clipRect.y;
+			if (_flipped) _rect.x = (_width - _frameWidth) - _rect.x + _clipRect.x;
+			else _rect.x += _clipRect.x;
+			
+			_rect.width = _clipRect.width;
+			_rect.height = _clipRect.height;
+			
+			if (_clipRect.x + _clipRect.width > _frameWidth) _rect.width -= _clipRect.x + _clipRect.width - _frameWidth;
+			if (_clipRect.y + _clipRect.height > _frameHeight) _rect.height -= _clipRect.y + _clipRect.height - _frameHeight;
 			
 			// update the buffer
 			super.updateBuffer(clearBefore);
@@ -241,10 +261,21 @@
 		 */
 		public function get currentAnim():String { return _anim ? _anim._name : ""; }
 		
+		/**
+		 * Clipping rectangle for the spritemap.
+		 */
+		override public function get clipRect():Rectangle 
+		{
+			return _clipRect;
+		}
+		
 		// Spritemap information.
 		/** @private */ protected var _rect:Rectangle;
+		/** @private */ protected var _clipRect:Rectangle;
 		/** @private */ protected var _width:uint;
 		/** @private */ protected var _height:uint;
+		/** @private */ protected var _frameWidth:uint = 0;
+		/** @private */ protected var _frameHeight:uint = 0;
 		/** @private */ private var _columns:uint;
 		/** @private */ private var _rows:uint;
 		/** @private */ private var _frameCount:uint;
