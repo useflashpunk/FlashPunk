@@ -73,6 +73,7 @@
 			{
 				_t = 1;
 				_finish = true;
+				finish();
 			}
 			if (_ease != null) _t = _ease(_t);
 		}
