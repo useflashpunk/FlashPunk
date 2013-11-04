@@ -28,7 +28,7 @@
 			if (source is Class)
 			{
 				_sound = _sounds[source];
-				if (!_sound) _sound = _sounds[source] = new source as Sound;
+				if (!_sound) _sound = _sounds[source] = new source;
 			}
 			else if (source is Sound) _sound = source;
 			else throw new Error("Sfx source needs to be of type Class or Sound");
@@ -39,6 +39,7 @@
 		 * Plays the sound once.
 		 * @param	vol		Volume factor, a value from 0 to 1.
 		 * @param	pan		Panning factor, a value from -1 to 1.
+		 * @param	loops		Amount of times to repeat the song.
 		 */
 		public function play(vol:Number = 1, pan:Number = 0, loops:int = 0):void
 		{
@@ -259,4 +260,3 @@
 		/** @private */ private static var _typeTransforms:Dictionary = new Dictionary;
 	}
 }
-
