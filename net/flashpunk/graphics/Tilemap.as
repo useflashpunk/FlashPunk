@@ -300,7 +300,7 @@
 				for (x = 0; x < cols; x ++)
 				{
 					if (col[x] == '') continue;
-					setTile(x, y, uint(col[x]));
+					if (col[x] >= 0) setTile(x, y, uint(col[x]));
 				}
 			}
 			
