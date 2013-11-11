@@ -191,12 +191,13 @@
 		 * @param	spanAngle		Total amount of degrees to rotate.
 		 * @param	startAngleRange	Random amount to add to the particle's starting angle.
 		 * @param	spanAngleRange	Random amount to add to the particle's span angle.
+		 * @param	smooth			Whether to smooth the resulting rotated particle.
 		 * @param	ease			Optional easer function.
 		 * @return	This ParticleType object.
 		 */
-		public function setRotation(name:String, startAngle:Number, spanAngle:Number, startAngleRange:Number = 0, spanAngleRange:Number = 0, ease:Function = null):ParticleType
+		public function setRotation(name:String, startAngle:Number, spanAngle:Number, startAngleRange:Number = 0, spanAngleRange:Number = 0, smooth:Boolean = false, ease:Function = null):ParticleType
 		{
-			return _types[name].setRotation(startAngle, spanAngle, startAngleRange, spanAngleRange, ease);
+			return _types[name].setRotation(startAngle, spanAngle, startAngleRange, spanAngleRange, smooth, ease);
 		}
 		
 		/**
