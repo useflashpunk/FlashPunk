@@ -12,6 +12,19 @@
 	public class ParticleType 
 	{
 		/**
+		 * X origin of the frame, determines transformation point.
+		 * Defaults to top-left corner.
+		 */
+		public var originX:Number = 0;
+
+		/**
+		 * Y origin of the frame, determines transformation point.
+		 * Defaults to top-left corner.
+		 */
+		public var originY:Number = 0;
+		
+		
+		/**
 		 * Constructor.
 		 * @param	name			Name of the particle type.
 		 * @param	frames			Array of frame indices to animate through.
@@ -71,6 +84,30 @@
 			return this;
 		}
 		
+		/**
+		 * Defines the rotation range for this particle type.
+		 * @param	name			The particle type.
+		 * @param	startAngle		Starting angle.
+		 * @param	spanAngle		Total amount of degrees to rotate.
+		 * @param	startAngleRange	Random amount to add to the particle's starting angle.
+		 * @param	spanAngleRange	Random amount to add to the particle's span angle.
+		 * @param	smooth			Whether to smooth the resulting rotated particle.
+		 * @param	ease			Optional easer function.
+		 * @return	This ParticleType object.
+		 */
+		public function setRotation(startAngle:Number, spanAngle:Number, startAngleRange:Number = 0, spanAngleRange:Number = 0, smooth:Boolean = false, ease:Function = null):ParticleType
+		{
+			_isRotating = true;
+			_startAngle = startAngle * FP.RAD;
+			_spanAngle = spanAngle * FP.RAD;
+			_startAngleRange = startAngleRange * FP.RAD;
+			_spanAngleRange = spanAngleRange * FP.RAD;
+			_smooth = smooth;
+			_rotationEase = ease;
+			createBuffer();
+			return this;
+		}
+
 		/**
 		 * Sets the gravity range of this particle type.
 		 * @param	gravity			Gravity amount to affect to the particle y velocity.
@@ -149,6 +186,15 @@
 		/** @private */ internal var _durationRange:Number;
 		/** @private */ internal var _ease:Function;
 		
+		// Rotation information.
+		/** @private */ internal var _isRotating:Boolean = false;
+		/** @private */ internal var _startAngle:Number = 0;
+		/** @private */ internal var _startAngleRange:Number = 0;
+		/** @private */ internal var _spanAngle:Number = 0;
+		/** @private */ internal var _spanAngleRange:Number = 0;
+		/** @private */ internal var _smooth:Boolean;
+		/** @private */ internal var _rotationEase:Function;
+
 		// Gravity information.
 		/** @private */ internal var _gravity:Number = 0;
 		/** @private */ internal var _gravityRange:Number = 0;

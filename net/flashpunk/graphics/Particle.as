@@ -24,6 +24,10 @@
 		/** @private */ internal var _moveX:Number;
 		/** @private */ internal var _moveY:Number;
 		
+		// Rotation information.
+		/** @private */ internal var _rotation:Number;
+		/** @private */ internal var _totalRotation:Number;
+
 		// Gravity information.
 		/** @private */ internal var _gravity:Number;
 		
