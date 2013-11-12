@@ -749,10 +749,44 @@
 			_target.draw(FP.sprite, FP.matrix, null, blend);
 		}
 
+		/**
+		 * Enqueues a call to a function, to be executed at the end of the next render step. 
+		 * Useful to debug draw directly from the update step, rather than having to override the render method.
+		 * 
+		 * Ex.:
+		 * Draw.enqueueCall(function():Void {
+		 *     Draw.line(player.x, player.y, enemy.x, enemy.y);
+		 * });
+		 * 
+		 * @param	method		The function to be enqueued.
+		 */
+		public static function enqueueCall(method:Function):void
+		{
+			if (method != null)
+				_callQueue.push(method);
+			else	
+				throw new Error("[method] must be a non-null Function.");
+		}
+		
+		/**
+		 * Executes all the functions enqueued with Draw.enqueueCall(), and clears the queue. (called from World.render()).
+		 */
+		public static function renderCallQueue():void 
+		{
+			if (_callQueue.length <= 0) return;
+			
+			var len:int = _callQueue.length;
+			for (var i:int = 0; i < len; i++) {
+				_callQueue[i]();
+			}
+			_callQueue.length = 0;
+		}
+		
 		// Drawing information.
 		/** @private */ private static var _target:BitmapData;
 		/** @private */ private static var _camera:Point;
 		/** @private */ private static var _graphics:Graphics = FP.sprite.graphics;
 		/** @private */ private static var _rect:Rectangle = FP.rect;
+		/** @private */ private static var _callQueue:Vector.<Function> = new Vector.<Function>();
 	}
 }
