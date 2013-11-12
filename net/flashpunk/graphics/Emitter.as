@@ -2,6 +2,7 @@
 {
 	import flash.display.BitmapData;
 	import flash.geom.ColorTransform;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
@@ -133,7 +134,18 @@
 					type._buffer.colorTransform(type._bufferRect, _tint);
 					
 					// draw particle
-					target.copyPixels(type._buffer, type._bufferRect, _p, null, null, true);
+					if (type._isRotating) {
+						var _rotationT:Number = (type._rotationEase == null) ? t : type._rotationEase(t);
+						_matrix.identity();
+						_matrix.tx = -type.originX;
+						_matrix.ty = -type.originY;
+						_matrix.rotate(p._rotation + _rotationT * p._totalRotation);
+						_matrix.tx += type.originX + _p.x;
+						_matrix.ty += type.originY + _p.y;
+						target.draw(type._buffer, _matrix, null, null, null, type._smooth);
+					} else {
+						target.copyPixels(type._buffer, type._bufferRect, _p, null, null, true);
+					}
 				}
 				else target.copyPixels(type._source, rect, _p, null, null, true);
 				
@@ -170,6 +182,22 @@
 		public function setMotion(name:String, angle:Number, distance:Number, duration:Number, angleRange:Number = 0, distanceRange:Number = 0, durationRange:Number = 0, ease:Function = null):ParticleType
 		{
 			return (_types[name] as ParticleType).setMotion(angle, distance, duration, angleRange, distanceRange, durationRange, ease);
+		}
+		
+		/**
+		 * Defines the rotation range for a particle type.
+		 * @param	name			The particle type.
+		 * @param	startAngle		Starting angle.
+		 * @param	spanAngle		Total amount of degrees to rotate.
+		 * @param	startAngleRange	Random amount to add to the particle's starting angle.
+		 * @param	spanAngleRange	Random amount to add to the particle's span angle.
+		 * @param	smooth			Whether to smooth the resulting rotated particle.
+		 * @param	ease			Optional easer function.
+		 * @return	This ParticleType object.
+		 */
+		public function setRotation(name:String, startAngle:Number, spanAngle:Number, startAngleRange:Number = 0, spanAngleRange:Number = 0, smooth:Boolean = false, ease:Function = null):ParticleType
+		{
+			return _types[name].setRotation(startAngle, spanAngle, startAngleRange, spanAngleRange, smooth, ease);
 		}
 		
 		/**
@@ -241,6 +269,8 @@
 			p._moveY = Math.sin(a) * d;
 			p._x = x;
 			p._y = y;
+			p._rotation = type._startAngle + type._startAngleRange * FP.random;
+			p._totalRotation = type._spanAngle + type._spanAngleRange * FP.random;
 			p._gravity = type._gravity + type._gravityRange * FP.random;
 			_particleCount ++;
 			return (_particle = p);
@@ -268,5 +298,6 @@
 		// Drawing information.
 		/** @private */ private var _p:Point = new Point;
 		/** @private */ private var _tint:ColorTransform = new ColorTransform;
+		/** @private */ private var _matrix:Matrix = new Matrix;
 	}
 }
