@@ -567,12 +567,12 @@
 		 * @param	centerY			Center y of the arc.
 		 * @param	radius			Radius of the arc.
 		 * @param	startAngle		Starting angle (in degrees) of the arc.
-		 * @param	endAngle		Ending angle (in degrees) of the arc.
+		 * @param	spanAngle		Angular span (in degrees) of the arc.
 		 * @param	color			Color of the arc.
 		 * @param	alpha			Alpha of the arc.
 		 * @param	drawArrow		Whether or not to draw an arrow head over the ending point.
 		 */
-		public static function arc(centerX:Number, centerY:Number, radius:Number, startAngle:Number, endAngle:Number, color:uint = 0xFFFFFF, alpha:Number = 1, drawArrow:Boolean = false):void 
+		public static function arc(centerX:Number, centerY:Number, radius:Number, startAngle:Number, spanAngle:Number, color:uint = 0xFFFFFF, alpha:Number = 1, drawArrow:Boolean = false):void 
 		{
 			centerX -= _camera.x;
 			centerY -= _camera.y;
@@ -582,13 +582,19 @@
 			_camera = FP.zero;
 
 			var startAngleRad:Number = startAngle * FP.RAD;
-			var endAngleRad:Number = endAngle * FP.RAD;
-			var totalArcSpan:Number = Math.abs(endAngleRad - startAngleRad);
-			if (totalArcSpan > 2 * Math.PI) startAngleRad = endAngleRad -FP.sign(startAngleRad - endAngleRad) * 2 * Math.PI;
+			var spanAngleRad:Number;
+			
+			// adjust angles if |span| > 360
+			if (Math.abs(spanAngle) > 360) {
+				startAngleRad += (spanAngle % 360) * FP.RAD;
+				spanAngleRad = -FP.sign(spanAngle) * Math.PI * 2;
+			} else {
+				spanAngleRad = spanAngle * FP.RAD;
+			}
 
-			var steps:int = Math.abs(endAngleRad - startAngleRad) * 10;
+			var steps:int = Math.abs(spanAngleRad) * 10;
 			steps = steps > 0 ? steps : 1;
-			var angleStep:Number = (endAngleRad - startAngleRad) / steps;
+			var angleStep:Number = spanAngleRad / steps;
 			
 			var x1:Number = centerX + Math.cos(startAngleRad) * radius;
 			var y1:Number = centerY + Math.sin(startAngleRad) * radius;
@@ -617,14 +623,14 @@
 		 * @param	centerY			Center y of the arc.
 		 * @param	radius			Radius of the arc.
 		 * @param	startAngle		Starting angle (in degrees) of the arc.
-		 * @param	endAngle		Ending angle (in degrees) of the arc.
+		 * @param	spanAngle		Angular span (in degrees) of the arc.
 		 * @param	color			Color of the arc.
 		 * @param	alpha			Alpha of the arc.
 		 * @param	fill			If the arc should be filled with the color (true) or just an outline (false).
 		 * @param	thick			Thickness of the outline (only applicable when fill = false).
 		 * @param	drawArrow		Whether or not to draw an arrow head over the ending point.
 		 */
-		public static function arcPlus(centerX:Number, centerY:Number, radius:Number, startAngle:Number, endAngle:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1, drawArrow:Boolean = false):void
+		public static function arcPlus(centerX:Number, centerY:Number, radius:Number, startAngle:Number, spanAngle:Number, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1, drawArrow:Boolean = false):void
 		{
 			centerX -= _camera.x;
 			centerY -= _camera.y;
@@ -637,13 +643,18 @@
 			_graphics.clear();
 			
 			var startAngleRad:Number = startAngle * FP.RAD;
-			var endAngleRad:Number = endAngle * FP.RAD;
-			var totalArcSpan:Number = Math.abs(endAngleRad - startAngleRad);
-			if (totalArcSpan > 2 * Math.PI) startAngleRad = endAngleRad -FP.sign(endAngleRad - startAngleRad) * 2 * Math.PI;
-			totalArcSpan = Math.abs(endAngleRad - startAngleRad);
+			var spanAngleRad:Number;
 			
-			var steps:int = Math.floor(totalArcSpan / (Math.PI / 4)) + 1;
-			var angleStep:Number = (endAngleRad-startAngleRad) / (2 * steps);
+			// adjust angles if |span| > 360
+			if (Math.abs(spanAngle) > 360) {
+				startAngleRad += (spanAngle % 360) * FP.RAD;
+				spanAngleRad = -FP.sign(spanAngle) * Math.PI * 2;
+			} else {
+				spanAngleRad = spanAngle * FP.RAD;
+			}
+
+			var steps:int = Math.floor(Math.abs(spanAngleRad / (Math.PI / 4))) + 1;
+			var angleStep:Number = spanAngleRad / (2 * steps);
 			var controlRadius:Number = radius / Math.cos(angleStep);
 
 			var startX:Number = centerX + Math.cos(startAngleRad) * radius;
@@ -658,6 +669,7 @@
 				_graphics.moveTo(startX, startY);
 			}
 
+			var endAngleRad:Number = 0;
 			var controlPoint:Point = FP.point;
 			var anchorPoint:Point = FP.point2;
 
