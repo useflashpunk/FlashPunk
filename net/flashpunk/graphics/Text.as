@@ -305,6 +305,9 @@
 			
 			var i:int;
 			
+			// reassign text to force a recalc of TextLineMetrics and so be sure they report correct values
+			_field.htmlText = _field.htmlText;
+			
 			var tlm: TextLineMetrics;
 			var remainder: Number;
 			var tlm_y:Number = 2;
