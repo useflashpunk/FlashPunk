@@ -1,5 +1,6 @@
 ﻿package net.flashpunk.masks 
 {
+	import flash.geom.Point;
 	import net.flashpunk.*;
 	
 	/**
@@ -108,6 +109,12 @@
 				parent.width = _width;
 				parent.height = _height;
 			}
+		}
+		
+		/** @private */
+		override public function project(axis:Point, projection:Object):void
+		{
+			super.project(axis, projection);
 		}
 		
 		// Hitbox information.

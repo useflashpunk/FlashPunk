@@ -349,6 +349,7 @@
 			
 			var x:int, y:int;
 			
+			g.beginFill(0xFFFFFF, .15);
 			g.lineStyle(1, 0xFFFFFF, 0.25);
 			
 			for (y = 0; y < _rows; y ++)
@@ -361,6 +362,7 @@
 					}
 				}
 			}
+			g.endFill();
 		}
 		
 		// Grid information.
