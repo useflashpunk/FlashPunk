@@ -1,7 +1,9 @@
 package net.flashpunk.masks
 {
+	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.Point;
+	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	import net.flashpunk.Mask;
 
@@ -21,6 +23,9 @@ package net.flashpunk.masks
 		public function Polygon(points:Vector.<Point>, origin:Point = null)
 		{
 			_points = points;
+			_fakeEntity = new Entity();
+			_fakeTileHitbox = new Hitbox();
+			_fakePixelmask = new Pixelmask(new BitmapData(1, 1));
 
 			_check[Mask] = collideMask;
 			_check[Hitbox] = collideHitbox;
@@ -91,7 +96,7 @@ package net.flashpunk.masks
 		/**
 		 * Checks for collisions with a hitbox.
 		 */
-		public function collideHitbox(hitbox:Hitbox):Boolean
+		private function collideHitbox(hitbox:Hitbox):Boolean
 		{
 			var offset:Number,
 				offsetX:Number = parent.x - hitbox.parent.x,
@@ -146,67 +151,37 @@ package net.flashpunk.masks
 		 * Checks for collisions along the edges of the polygon.
 		 * May be very slow, mainly added for completeness sake.
 		 */
-		public function collideGrid(grid:Grid):Boolean
+		private function collideGrid(grid:Grid):Boolean
 		{
-			var p1X:Number, p1Y:Number,
-				p2X:Number, p2Y:Number,
-				k:Number, m:Number,
-				x:Number, y:Number,
-				min:Number, max:Number;
-				
-			for (var ii:int = 0; ii < _points.length - 1; ii++)
-			{
-				p1X = (parent.x + _points[ii].x) / grid.tileWidth;
-				p1Y = (parent.y + _points[ii].y) / grid.tileHeight;
-				p2X = (parent.x + _points[ii + 1].x) / grid.tileWidth;
-				p2Y = (parent.y +  _points[ii + 1].y) / grid.tileHeight;
+			var tileW:uint = grid.tileWidth;
+			var tileH:uint = grid.tileHeight;
+			var solidTile:Boolean;
 
-				k = (p2Y - p1Y) / (p2X - p1X);
-				m = p1Y - k * p1X;
-
-				if (p2X > p1X) { min = p1X; max = p2X; }
-				else { max = p1X; min = p2X; }
-
-				x = min;
-				while (x < max)
-				{
-					y = int(k * x + m);
-					if (grid.getTile(int(x), y))
-						return true;
-
-					x++;
+			_fakeEntity.width = tileW;
+			_fakeEntity.height = tileH;
+			_fakeEntity.originX = grid.parent.originX;
+			_fakeEntity.originY = grid.parent.originY;
+			
+			_fakeTileHitbox._width = tileW;
+			_fakeTileHitbox._height = tileH;
+			_fakeTileHitbox.parent = _fakeEntity;
+			
+			for (var r:int = 0; r < grid.rows; r++ ) {
+				for (var c:int = 0; c < grid.columns; c++) {
+					_fakeEntity.x = grid.parent.x + grid._x + c * tileW;
+					_fakeEntity.y = grid.parent.y + grid._y + r * tileH;
+					solidTile = grid.getTile(c, r);
+					
+					if (solidTile && collideHitbox(_fakeTileHitbox)) return true;
 				}
 			}
-			
-			//Check the last point -> first point
-			p1X = (parent.x + _points[_points.length - 1].x) / grid.tileWidth;
-			p1Y = (parent.y + _points[_points.length - 1].y) / grid.tileHeight;
-			p2X = (parent.x + _points[0].x) / grid.tileWidth;
-			p2Y = (parent.y +  _points[0].y) / grid.tileHeight;
-
-			k = (p2Y - p1Y) / (p2X - p1X);
-			m = p1Y - k * p1X;
-
-			if (p2X > p1X) { min = p1X; max = p2X; }
-			else { max = p1X; min = p2X; }
-
-			x = min;
-			while (x < max)
-			{
-				y = int(k * x + m);
-				if (grid.getTile(int(x), y))
-					return true;
-
-				x++;
-			}
-
 			return false;
 		}
 
 		/**
 		 * Checks for collision with a circle.
 		 */
-		public function collideCircle(circle:Circle):Boolean
+		private function collideCircle(circle:Circle):Boolean
 		{
 			var offset:Number;
 
@@ -276,7 +251,7 @@ package net.flashpunk.masks
 		/**
 		 * Checks for collision with a polygon.
 		 */
-		public function collidePolygon(other:Polygon):Boolean
+		private function collidePolygon(other:Polygon):Boolean
 		{
 			var offsetX:Number = parent.x - other.parent.x;
 			var offsetY:Number = parent.y - other.parent.y;
@@ -346,38 +321,6 @@ package net.flashpunk.masks
 			projection.max = max;
 		}
 
-		private function rotate(angle:Number):void
-		{
-			angle *= FP.RAD;
-
-			var p:Point;
-			
-			for (var i:int = 0; i < _points.length; i++)
-			{
-				p = _points[i];
-				var dx:Number = p.x - origin.x;
-				var dy:Number = p.y - origin.y;
-
-				var pointAngle:Number = Math.atan2(dy, dx);
-				var length:Number = Math.sqrt(dx * dx + dy * dy);
-
-				p.x = Math.cos(pointAngle + angle) * length + origin.x;
-				p.y = Math.sin(pointAngle + angle) * length + origin.y;
-			}
-			var a:Point;
-			
-			for (var j:int = 0; j < _axes.length; j++)
-			{
-				a = _axes[j];
-
-				var axisAngle:Number = Math.atan2(a.y, a.x);
-
-				a.x = Math.cos(axisAngle + angle);
-				a.y = Math.sin(axisAngle + angle);
-			}
-			_angle += angle;
-		}
-
 		override public function renderDebug(graphics:Graphics):void
 		{
 			if (parent != null)
@@ -396,6 +339,8 @@ package net.flashpunk.masks
 				{
 					graphics.lineTo((_points[ii].x + offsetX) * sx, (_points[ii].y + offsetY) * sy);
 				}
+				
+				graphics.endFill();
 			}
 		}
 
@@ -497,6 +442,38 @@ package net.flashpunk.masks
 			return new Polygon(p);
 		}
 
+		private function rotate(angle:Number):void
+		{
+			angle *= FP.RAD;
+
+			var p:Point;
+			
+			for (var i:int = 0; i < _points.length; i++)
+			{
+				p = _points[i];
+				var dx:Number = p.x - origin.x;
+				var dy:Number = p.y - origin.y;
+
+				var pointAngle:Number = Math.atan2(dy, dx);
+				var length:Number = Math.sqrt(dx * dx + dy * dy);
+
+				p.x = Math.cos(pointAngle + angle) * length + origin.x;
+				p.y = Math.sin(pointAngle + angle) * length + origin.y;
+			}
+			var a:Point;
+			
+			for (var j:int = 0; j < _axes.length; j++)
+			{
+				a = _axes[j];
+
+				var axisAngle:Number = Math.atan2(a.y, a.x);
+
+				a.x = Math.cos(axisAngle + angle);
+				a.y = Math.sin(axisAngle + angle);
+			}
+			_angle += angle;
+		}
+
 		private function generateAxes():void
 		{
 			_axes = new Vector.<Point>();
@@ -561,6 +538,10 @@ package net.flashpunk.masks
 		private var _points:Vector.<Point>;
 		private var _axes:Vector.<Point>;
 		private var _projection:* = { min: 0.0, max:0.0 };
+
+		private var _fakeEntity:Entity;			// used for Grid collision
+		private var _fakeTileHitbox:Hitbox;		// used for Grid collision
+		private var _fakePixelmask:Pixelmask;	// used for Pixelmask collision
 		
 		private static var _axis:Point = new Point();
 		private static var firstProj:* = { min: 0.0, max:0.0 };
