@@ -6,6 +6,7 @@ package net.flashpunk.masks
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	import net.flashpunk.Mask;
+	import net.flashpunk.utils.Draw;
 
 
 	public class Polygon extends Hitbox
@@ -182,70 +183,85 @@ package net.flashpunk.masks
 		 * Checks for collision with a circle.
 		 */
 		private function collideCircle(circle:Circle):Boolean
-		{
-			var offset:Number;
-
-			//First find the point closest to the circle
-			var distanceSquared:Number = int.MAX_VALUE;
-			var closestPoint:Point = null;
-			var p:Point;
+		{			
+			var edgesCrossed:int = 0;
+			var p1:Point, p2:Point;
+			var i:int, j:int;
+			var nPoints:int = _points.length;
 			
-			for (var i:int = 0; i < _points.length; i++)
-			{
-				p = _points[i];
-				var dx:Number = parent.x + p.x - circle.parent.x - circle.radius;
-				var dy:Number = parent.y + p.y - circle.parent.y - circle.radius;
-				var tempDistance:Number = dx * dx + dy * dy;
-
-				if (tempDistance < distanceSquared)
-				{
-					distanceSquared = tempDistance;
-					closestPoint = p;
+			// check if circle center is inside the polygon
+			for (i = 0, j = nPoints - 1; i < _points.length; j = i, i++) {
+				p1 = _points[i];
+				p2 = _points[j];
+				
+				var distFromCenter:Number = (p2.x - p1.x) * (circle._y + circle.parent.y - p1.y - parent.y - _y) / (p2.y - p1.y) + p1.x + parent.x + _x;
+				
+				if (((p1.y + parent.y + _y > circle._y + circle.parent.y) != (p2.y + parent.y + _y > circle._y + circle.parent.y))) {
+					if ((circle._x + circle.parent.x < distFromCenter)) 
+					{
+						edgesCrossed++;
+					}
 				}
+				
+				Draw.enqueueCall(function ():void 
+				{
+					Draw.dot(FP.halfWidth - 10 * i, p1.y + parent.y + _y);
+					Draw.dot(FP.halfWidth - 10 * i, p2.y + parent.y + _y);
+					Draw.dot(FP.halfWidth - 10 * i, circle._y + circle.parent.y, 0xffff00);
+					Draw.dot(distFromCenter, FP.halfHeight - 10 * i, 0xFF0000);
+				});
 			}
-
-			var offsetX:Number = parent.x - circle.parent.x - circle.radius;
-			var offsetY:Number = parent.y - circle.parent.y - circle.radius;
-
-			//Get the vector between the closest point and the circle
-			//and get the normal of it
-			_axis.x = circle.parent.y - parent.y + closestPoint.y;
-			_axis.y = parent.x + closestPoint.x - circle.parent.x;
-			_axis.normalize(1);
-
-			project(_axis, firstProj);
-			circle.project(_axis, secondProj);
-
-			offset = offsetX * _axis.x + offsetY * _axis.y;
-			firstProj.min += offset;
-			firstProj.max += offset;
-
-			// if firstProj overlaps secondProj
-			if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
-			{
-				return false;
-			}
-
-			var a:Point;
 			
-			for (var j:int = 0; j < _axes.length; j++)
-			{
-				a = _axes[j];
-				project(a, firstProj);
-				circle.project(a, secondProj);
+			if (edgesCrossed & 1) {
+				trace("pnpoly");
+				return true;
+			}
+  
+  
+			// check if minimum distance from circle center to each polygon side is less than radius
+			var radiusSqr:Number = circle.radius * circle.radius;
+			var cx:Number = circle._x + circle.parent.x;
+			var cy:Number = circle._y + circle.parent.y;
+			var offsetX:Number = parent.x + _x;
+			var offsetY:Number = parent.y + _y;
+			var minDistanceSqr:Number = 0;
+			var closestX:Number;
+			var closestY:Number;
+			
+			for (i = 0, j = nPoints - 1; i < _points.length; j = i, i++) {
+				p1 = _points[i];
+				p2 = _points[j];
 
-				offset = offsetX * a.x + offsetY * a.y;
-				firstProj.min += offset;
-				firstProj.max += offset;
-
-				// if firstProj overlaps secondProj
-				if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
-				{
-					return false;
+				var segmentLenSqr:Number = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+				
+				// find projection of center onto line (extended segment)
+				var t:Number = ((cx - p1.x - offsetX) * (p2.x - p1.x) + (cy - p1.y - offsetY) * (p2.y - p1.y)) / segmentLenSqr;
+				
+				if (t < 0) {
+					closestX = p1.x;
+					closestY = p1.y;
+				} else if (t > 1) {
+					closestX = p2.x;
+					closestY = p2.y;
+				} else {
+					closestX = p1.x + t * (p2.x - p1.x);
+					closestY = p1.y + t * (p2.y - p1.y);
 				}
+				closestX += offsetX;
+				closestY += offsetY;
+				
+				minDistanceSqr = (cx - closestX) * (cx - closestX) + (cy - closestY) * (cy - closestY);
+				
+				Draw.enqueueCall(function ():void 
+				{
+					Draw.dot(closestX, closestY);
+					Draw.text("" + t, 10, 20+10*i);
+				});
+				
+				if (minDistanceSqr <= radiusSqr) return true;
 			}
 
-			return true;
+			return false;
 		}
 
 		/**
@@ -277,7 +293,7 @@ package net.flashpunk.masks
 
 			for (var j:int = 0; j < other._axes.length; j++)
 			{
-				a = _axes[j];
+				a = other._axes[j];
 				project(a, firstProj);
 				other.project(a, secondProj);
 
@@ -295,7 +311,7 @@ package net.flashpunk.masks
 			return true;
 		}
 
-		/** @private */
+		/** @private Projects polygon points on axis and returns min and max values in projection object. */
 		override public function project(axis:Point, projection:Object):void
 		{
 			var p:Point = _points[0];
@@ -384,7 +400,7 @@ package net.flashpunk.masks
 				parent.width = _width;
 				parent.height = _height;
 
-				//Since the collisioninfos haven't changed we can use them to calculate hitbox placement
+				//Since the collision infos haven't changed we can use them to calculate hitbox placement
 				parent.originX = int((_width - firstProj.max - firstProj.min)/2);
 				parent.originY = int((_height - secondProj.max - secondProj.min )/2);
 			}
