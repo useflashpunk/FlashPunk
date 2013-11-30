@@ -31,6 +31,7 @@ package net.flashpunk.masks
 			_check[Mask] = collideMask;
 			_check[Hitbox] = collideHitbox;
 			_check[Grid] = collideGrid;
+			_check[Pixelmask] = collidePixelmask;
 			_check[Circle] = collideCircle;
 			_check[Polygon] = collidePolygon;
 
@@ -180,6 +181,54 @@ package net.flashpunk.masks
 		}
 
 		/**
+		 * Checks for collision with a Pixelmask.
+		 * May be very slow, mainly added for completeness sake.
+		 */
+		private function collidePixelmask(pixelmask:Pixelmask):Boolean
+		{
+			var data:BitmapData = _fakePixelmask._data;
+			
+			_fakePixelmask._x = _x;
+			_fakePixelmask._y = _y;
+			_fakePixelmask.parent = parent;
+			
+			if (data == null || (data.width < _width || data.height < _height)) {
+				data = new BitmapData(_width, height, true, 0);
+			} else {
+				data.fillRect(data.rect, 0);
+			}
+			
+			var graphics:Graphics = FP.sprite.graphics;
+			graphics.clear();
+
+			graphics.beginFill(0xFFFFFF, 1);
+			graphics.lineStyle(1, 0xFFFFFF, 1);
+			
+			var offsetX:Number = _x + parent.originX * 2;
+			var offsetY:Number = _y + parent.originY * 2;
+			
+			graphics.moveTo(points[_points.length - 1].x + offsetX, _points[_points.length - 1].y + offsetY);
+			for (var ii:int = 0; ii < _points.length; ii++)
+			{
+				graphics.lineTo(_points[ii].x + offsetX, _points[ii].y + offsetY);
+			}
+			
+			graphics.endFill();
+
+			data.draw(FP.sprite);
+			
+			Draw.enqueueCall(function ():void 
+			{
+				FP.buffer.copyPixels(_fakePixelmask.data, _fakePixelmask.data.rect, new Point(50, 70));
+				Draw.rectPlus(50, 70, data.width, data.height, 0xFF0000, .5, false);
+			});
+			
+			_fakePixelmask.data = data;
+			
+			return pixelmask.collide(_fakePixelmask);
+		}
+		
+		/**
 		 * Checks for collision with a circle.
 		 */
 		private function collideCircle(circle:Circle):Boolean
@@ -188,15 +237,18 @@ package net.flashpunk.masks
 			var p1:Point, p2:Point;
 			var i:int, j:int;
 			var nPoints:int = _points.length;
+			var offsetX:Number = parent.x + (_x >= 0 ? _x : parent.originX);
+			var offsetY:Number = parent.y + (_y >= 0 ? _y : parent.originY);
 			
+
 			// check if circle center is inside the polygon
 			for (i = 0, j = nPoints - 1; i < _points.length; j = i, i++) {
 				p1 = _points[i];
 				p2 = _points[j];
 				
-				var distFromCenter:Number = (p2.x - p1.x) * (circle._y + circle.parent.y - p1.y - parent.y - _y) / (p2.y - p1.y) + p1.x + parent.x + _x;
+				var distFromCenter:Number = (p2.x - p1.x) * (circle._y + circle.parent.y - p1.y - offsetY) / (p2.y - p1.y) + p1.x + offsetX;
 				
-				if (((p1.y + parent.y + _y > circle._y + circle.parent.y) != (p2.y + parent.y + _y > circle._y + circle.parent.y))) {
+				if (((p1.y + offsetY > circle._y + circle.parent.y) != (p2.y + offsetY > circle._y + circle.parent.y))) {
 					if ((circle._x + circle.parent.x < distFromCenter)) 
 					{
 						edgesCrossed++;
@@ -208,7 +260,7 @@ package net.flashpunk.masks
 					Draw.dot(FP.halfWidth - 10 * i, p1.y + parent.y + _y);
 					Draw.dot(FP.halfWidth - 10 * i, p2.y + parent.y + _y);
 					Draw.dot(FP.halfWidth - 10 * i, circle._y + circle.parent.y, 0xffff00);
-					Draw.dot(distFromCenter, FP.halfHeight - 10 * i, 0xFF0000);
+					Draw.dot(FP.halfWidth + distFromCenter - parent.x - _x, FP.halfHeight, 0xFF0000);
 				});
 			}
 			
@@ -222,8 +274,6 @@ package net.flashpunk.masks
 			var radiusSqr:Number = circle.radius * circle.radius;
 			var cx:Number = circle._x + circle.parent.x;
 			var cy:Number = circle._y + circle.parent.y;
-			var offsetX:Number = parent.x + _x;
-			var offsetY:Number = parent.y + _y;
 			var minDistanceSqr:Number = 0;
 			var closestX:Number;
 			var closestY:Number;
@@ -458,9 +508,11 @@ package net.flashpunk.masks
 			return new Polygon(p);
 		}
 
-		private function rotate(angle:Number):void
+		private function rotate(angleDelta:Number):void
 		{
-			angle *= FP.RAD;
+			_angle += angleDelta;
+			
+			angleDelta *= FP.RAD;
 
 			var p:Point;
 			
@@ -473,8 +525,8 @@ package net.flashpunk.masks
 				var pointAngle:Number = Math.atan2(dy, dx);
 				var length:Number = Math.sqrt(dx * dx + dy * dy);
 
-				p.x = Math.cos(pointAngle + angle) * length + origin.x;
-				p.y = Math.sin(pointAngle + angle) * length + origin.y;
+				p.x = Math.cos(pointAngle + angleDelta) * length + origin.x;
+				p.y = Math.sin(pointAngle + angleDelta) * length + origin.y;
 			}
 			var a:Point;
 			
@@ -484,10 +536,9 @@ package net.flashpunk.masks
 
 				var axisAngle:Number = Math.atan2(a.y, a.x);
 
-				a.x = Math.cos(axisAngle + angle);
-				a.y = Math.sin(axisAngle + angle);
+				a.x = Math.cos(axisAngle + angleDelta);
+				a.y = Math.sin(axisAngle + angleDelta);
 			}
-			_angle += angle;
 		}
 
 		private function generateAxes():void

@@ -1,6 +1,7 @@
 package net.flashpunk.masks
 {
 
+	import flash.display.BitmapData;
 	import net.flashpunk.FP;
 	import net.flashpunk.Graphic;
 	import net.flashpunk.Mask;
@@ -25,6 +26,7 @@ package net.flashpunk.masks
 			this.radius = radius;
 			_x = x + radius;
 			_y = y + radius;
+			_fakePixelmask = new Pixelmask(new BitmapData(1, 1));
 
 			_check[Mask] = collideMask;
 			_check[Hitbox] = collideHitbox;
@@ -194,6 +196,7 @@ package net.flashpunk.masks
 
 		// Hitbox information.
 		protected var _radius:int;
-		protected var _squaredRadius:int; //Set automatically through the setter for radius
+		protected var _squaredRadius:int; 		//Set automatically through the setter for radius
+		private var _fakePixelmask:Pixelmask;	// used for Pixelmask collision
 	}
 }
