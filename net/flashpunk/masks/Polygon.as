@@ -1,5 +1,6 @@
 package net.flashpunk.masks
 {
+	
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.geom.Point;
@@ -9,6 +10,9 @@ package net.flashpunk.masks
 	import net.flashpunk.utils.Draw;
 
 
+	/** 
+	 * Uses polygon edges to check for collisions.
+	 */
 	public class Polygon extends Hitbox
 	{
 		/**
@@ -151,7 +155,7 @@ package net.flashpunk.masks
 
 		/**
 		 * Checks for collisions along the edges of the polygon.
-		 * May be very slow, mainly added for completeness sake.
+		 * May be slow, mainly added for completeness sake.
 		 */
 		private function collideGrid(grid:Grid):Boolean
 		{
@@ -182,7 +186,7 @@ package net.flashpunk.masks
 
 		/**
 		 * Checks for collision with a Pixelmask.
-		 * May be very slow, mainly added for completeness sake.
+		 * May be slow (especially with big polygons), mainly added for completeness sake.
 		 */
 		private function collidePixelmask(pixelmask:Pixelmask):Boolean
 		{
@@ -237,8 +241,8 @@ package net.flashpunk.masks
 			var p1:Point, p2:Point;
 			var i:int, j:int;
 			var nPoints:int = _points.length;
-			var offsetX:Number = parent.x + (_x >= 0 ? _x : parent.originX);
-			var offsetY:Number = parent.y + (_y >= 0 ? _y : parent.originY);
+			var offsetX:Number = parent.x + _x + parent.originX;
+			var offsetY:Number = parent.y + _y + parent.originY;
 			
 
 			// check if circle center is inside the polygon
@@ -248,28 +252,15 @@ package net.flashpunk.masks
 				
 				var distFromCenter:Number = (p2.x - p1.x) * (circle._y + circle.parent.y - p1.y - offsetY) / (p2.y - p1.y) + p1.x + offsetX;
 				
-				if (((p1.y + offsetY > circle._y + circle.parent.y) != (p2.y + offsetY > circle._y + circle.parent.y))) {
-					if ((circle._x + circle.parent.x < distFromCenter)) 
-					{
-						edgesCrossed++;
-					}
-				}
-				
-				Draw.enqueueCall(function ():void 
+				if ((p1.y + offsetY > circle._y + circle.parent.y) != (p2.y + offsetY > circle._y + circle.parent.y)
+					&& (circle._x + circle.parent.x < distFromCenter))
 				{
-					Draw.dot(FP.halfWidth - 10 * i, p1.y + parent.y + _y);
-					Draw.dot(FP.halfWidth - 10 * i, p2.y + parent.y + _y);
-					Draw.dot(FP.halfWidth - 10 * i, circle._y + circle.parent.y, 0xffff00);
-					Draw.dot(FP.halfWidth + distFromCenter - parent.x - _x, FP.halfHeight, 0xFF0000);
-				});
+					edgesCrossed++;
+				}
 			}
 			
-			if (edgesCrossed & 1) {
-				trace("pnpoly");
-				return true;
-			}
-  
-  
+			if (edgesCrossed & 1) return true;
+			
 			// check if minimum distance from circle center to each polygon side is less than radius
 			var radiusSqr:Number = circle.radius * circle.radius;
 			var cx:Number = circle._x + circle.parent.x;
@@ -301,12 +292,6 @@ package net.flashpunk.masks
 				closestY += offsetY;
 				
 				minDistanceSqr = (cx - closestX) * (cx - closestX) + (cy - closestY) * (cy - closestY);
-				
-				Draw.enqueueCall(function ():void 
-				{
-					Draw.dot(closestX, closestY);
-					Draw.text("" + t, 10, 20+10*i);
-				});
 				
 				if (minDistanceSqr <= radiusSqr) return true;
 			}

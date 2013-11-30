@@ -1,5 +1,6 @@
 package  
 {
+	import flash.display.BlendMode;
 	import flash.geom.Point;
 	import flash.system.System;
 	import flash.text.AntiAliasType;
@@ -35,6 +36,9 @@ package
 		private var eCircle:Entity;
 		private var circle:Circle;
 		private var polygon:Polygon;
+		private var text:Text;
+		private var messages:Vector.<String>;
+		private const MAX_MESSAGES:int = 7;
 		
 		public function TestWorld() 
 		{
@@ -53,16 +57,16 @@ package
 			points.push(new Point(0, 0));
 			points.push(new Point(30, 0));
 			points.push(new Point(30, 30));
-			ePoly = addMask(polygon = new Polygon(points), "polygon");
-			//ePoly = addMask(polygon = Polygon.createPolygon(5, 20, 360/10), "polygon");
+			//ePoly = addMask(polygon = new Polygon(points), "polygon");
+			ePoly = addMask(polygon = Polygon.createPolygon(5, 20, 360/10), "polygon");
 			ePoly.x = FP.halfWidth;
 			ePoly.y = FP.halfHeight;
-			ePoly.centerOrigin();
+			/*ePoly.centerOrigin();
 			polygon.x = ePoly.originX;
 			polygon.y = ePoly.originY;			
 			polygon.origin.x = ePoly.originX;
 			polygon.origin.y = ePoly.originY;
-			
+			*/
 			
 			// other MASKS
 			
@@ -96,14 +100,10 @@ package
 			var e4:Entity = addMask(gridMask, "grid", 5, 120);
 
 			// Polygon
-			var polyMask:Polygon = Polygon.createPolygon(5, 20);
+			var polyMask:Polygon = Polygon.createPolygon(8, 20);
 			var e5:Entity = addMask(polyMask, "polygon");
-			polyMask.origin.x = polyMask.parent.width/2;
-			polyMask.origin.y = polyMask.parent.height / 2;
-			polyMask.angle = 45;
 			e5.x = 130;
 			e5.y = 40;
-			polyMask.update();
 			
 			// Pixelmask
 			var pixelmask:Pixelmask = new Pixelmask(SKELETON);
@@ -111,7 +111,23 @@ package
 			e6.x = 260;
 			e6.y = 20;
 			
-			FP.log("~: enable Console | ARROWS: move Circle | SHIFT+ARROWS: move Polygon");
+			text = new Text("puppa!");
+			var textEntity:Entity = new Entity(5, 55, text);
+			text.blend = BlendMode.OVERLAY;
+			text.scrollX = 0;
+			text.scrollY = 0;
+			text.scale = .5;
+			text.setTextProperty("multiline", true);
+			add(textEntity);
+			
+			messages = new Vector.<String>();
+			messages.push("Enable the console...");
+			messages.push("hit the play button on top...")
+			messages.push("then use keys described below");
+			
+			text.text = messages.join("\n");
+			
+			FP.log("~: enable Console | SHIFT+ARROWS: move Circle | ARROWS: move Polygon");
 		}
 		
 		override public function update():void 
@@ -121,6 +137,11 @@ package
 			// ESC to exit
 			if (Input.pressed(Key.ESCAPE)) {
 				System.exit(1);
+			}
+			
+			// R to reset the world
+			if (Input.pressed(Key.R)) {
+				FP.world = new TestWorld();
 			}
 			
 			if (Input.pressed(Key.SPACE)) {
@@ -143,6 +164,15 @@ package
 			for (var i:int = 0; i < hitEntities.length; i++) {
 				var hitEntity:Entity = Entity(hitEntities[i]);
 				trace("hit " + hitEntity.type);
+				messages.push("hit " + hitEntity.type);
+				if (messages.length > MAX_MESSAGES) messages.splice(0, 1);
+				text.text = messages.join("\n");
+				
+				FP.alarm(.2, function ():void 
+				{
+					messages.splice(0, 1);
+					text.text = messages.join("\n");
+				});
 			}
 			
 		}
@@ -152,8 +182,6 @@ package
 			super.render();
 			
 			Draw.dot(FP.halfWidth, FP.halfHeight, 0x0000FF);
-			trace(polygon.x, ePoly.originX, polygon.origin.x, ePoly.width, polygon.width);
-			trace(polygon.y, ePoly.originY, polygon.origin.y, ePoly.height, polygon.height, "\n");
 		}
 	}
 

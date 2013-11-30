@@ -8,6 +8,7 @@ package net.flashpunk.masks
 	import net.flashpunk.masks.Grid;
 	import flash.display.Graphics;
 	import flash.geom.Point;
+	import net.flashpunk.utils.Draw;
 
 	/**
 	 * Uses circular area to determine collision.
@@ -31,6 +32,7 @@ package net.flashpunk.masks
 			_check[Mask] = collideMask;
 			_check[Hitbox] = collideHitbox;
 			_check[Grid] = collideGrid;
+			_check[Pixelmask] = collidePixelmask;
 			_check[Circle] = collideCircle;
 		}
 
@@ -136,6 +138,49 @@ package net.flashpunk.masks
 			}
 
 			return false;
+		}
+
+		/**
+		 * Checks for collision with a Pixelmask.
+		 * May be slow (especially with big polygons), mainly added for completeness sake.
+		 */
+		private function collidePixelmask(pixelmask:Pixelmask):Boolean
+		{
+			var data:BitmapData = _fakePixelmask._data;
+			
+			_fakePixelmask._x = _x - _radius;
+			_fakePixelmask._y = _y - _radius;
+			_fakePixelmask.parent = parent;
+			
+			_width = _height = _radius * 2;
+			
+			if (data == null || (data.width < _width || data.height < _height)) {
+				data = new BitmapData(_width, height, true, 0);
+			} else {
+				data.fillRect(data.rect, 0);
+			}
+			
+			var graphics:Graphics = FP.sprite.graphics;
+			graphics.clear();
+
+			graphics.beginFill(0xFFFFFF, 1);
+			graphics.lineStyle(1, 0xFFFFFF, 1);
+			
+			graphics.drawCircle(_x - _radius, _y - _radius, _radius);
+			
+			graphics.endFill();
+
+			data.draw(FP.sprite);
+			
+			Draw.enqueueCall(function ():void 
+			{
+				FP.buffer.copyPixels(_fakePixelmask.data, _fakePixelmask.data.rect, new Point(50, 70));
+				Draw.rectPlus(50, 70, data.width, data.height, 0xFF0000, .5, false);
+			});
+			
+			_fakePixelmask.data = data;
+			
+			return pixelmask.collide(_fakePixelmask);
 		}
 
 		/** @private Collides against a Circle. */
