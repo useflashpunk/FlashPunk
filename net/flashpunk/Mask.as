@@ -79,36 +79,28 @@
 			
 		}
 		
-		/** @private */
+		/** @private Projects this mask points on axis and returns min and max values in projection object. */
 		public function project(axis:Point, projection:Object):void
 		{
 			var cur:Number,
-				max:Number = -9999999999.0,
-				min:Number = 9999999999.0;
+				max:Number = Number.NEGATIVE_INFINITY,
+				min:Number = Number.POSITIVE_INFINITY;
 
 			cur = -parent.originX * axis.x - parent.originY * axis.y;
-			if (cur < min)
-				min = cur;
-			if (cur > max)
-				max = cur;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
 
 			cur = (-parent.originX + parent.width) * axis.x - parent.originY * axis.y;
-			if (cur < min)
-				min = cur;
-			if (cur > max)
-				max = cur;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
 
 			cur = -parent.originX * axis.x + (-parent.originY + parent.height) * axis.y;
-			if (cur < min)
-				min = cur;
-			if (cur > max)
-				max = cur;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
 
 			cur = (-parent.originX + parent.width) * axis.x + (-parent.originY + parent.height)* axis.y;
-			if (cur < min)
-				min = cur;
-			if (cur > max)
-				max = cur;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
 
 			projection.min = min;
 			projection.max = max;

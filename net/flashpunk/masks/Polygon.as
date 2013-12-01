@@ -11,7 +11,7 @@ package net.flashpunk.masks
 
 
 	/** 
-	 * Uses polygon edges to check for collisions.
+	 * Uses polygonal structure to check for collisions.
 	 */
 	public class Polygon extends Hitbox
 	{
@@ -22,11 +22,12 @@ package net.flashpunk.masks
 
 		/**
 		 * Constructor.
-		 * @param	points   an array of coordinates that define the polygon (must have at least 3)
+		 * @param	points   a vector of coordinates that define the polygon (must have at least 3)
 		 * @param	origin   origin point of the polygon
 		 */
 		public function Polygon(points:Vector.<Point>, origin:Point = null)
 		{
+			if (points.length < 3) throw "The polygon needs at least 3 sides";
 			_points = points;
 			_fakeEntity = new Entity();
 			_fakeTileHitbox = new Hitbox();
@@ -46,7 +47,7 @@ package net.flashpunk.masks
 		}
 
 		/**
-		 * Checks for collisions with a Entity.
+		 * Checks for collisions with an Entity.
 		 */
 		private function collideMask(other:Mask):Boolean
 		{
@@ -54,25 +55,27 @@ package net.flashpunk.masks
 				offsetX:Number = parent.x - other.parent.x,
 				offsetY:Number = parent.y - other.parent.y;
 
-			project(vertical, firstProj);//Project on the horizontal axis of the hitbox
-			other.project(vertical, secondProj);
+			// project on the vertical axis of the hitbox/mask
+			project(verticalAxis, firstProj);
+			other.project(verticalAxis, secondProj);
 
 			firstProj.min += offsetY;
 			firstProj.max += offsetY;
 
-			// if firstProj overlaps secondProj
+			// if firstProj not overlaps secondProj
 			if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 			{
 				return false;
 			}
-
-			project(horizontal, firstProj);//Project on the vertical axis of the hitbox
-			other.project(horizontal, secondProj);
+			
+			// project on the horizontal axis of the hitbox/mask
+			project(horizontalAxis, firstProj);
+			other.project(horizontalAxis, secondProj);
 
 			firstProj.min += offsetX;
 			firstProj.max += offsetX;
 
-			// if firstProj overlaps secondProj
+			// if firstProj not overlaps secondProj
 			if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 			{
 				return false;
@@ -80,6 +83,8 @@ package net.flashpunk.masks
 
 			var a:Point;
 			
+			// project hitbox/mask on polygon axes
+			// for a collision to be present all projections must overlap
 			for (var i:int = 0; i < _axes.length; i++)
 			{
 				a = _axes[i];
@@ -90,7 +95,7 @@ package net.flashpunk.masks
 				firstProj.min += offset;
 				firstProj.max += offset;
 
-				// if firstProj overlaps secondProj
+				// if firstProj not overlaps secondProj
 				if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 				{
 					return false;
@@ -100,7 +105,7 @@ package net.flashpunk.masks
 		}
 
 		/**
-		 * Checks for collisions with a hitbox.
+		 * Checks for collisions with a Hitbox.
 		 */
 		private function collideHitbox(hitbox:Hitbox):Boolean
 		{
@@ -108,25 +113,27 @@ package net.flashpunk.masks
 				offsetX:Number = parent.x - hitbox.parent.x,
 				offsetY:Number = parent.y - hitbox.parent.y;
 
-			project(vertical, firstProj);//Project on the horizontal axis of the hitbox
-			hitbox.project(vertical, secondProj);
+			// project on the vertical axis of the hitbox
+			project(verticalAxis, firstProj);
+			hitbox.project(verticalAxis, secondProj);
 
 			firstProj.min += offsetY;
 			firstProj.max += offsetY;
 
-			// if firstProj overlaps secondProj
+			// if firstProj not overlaps secondProj
 			if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 			{
 				return false;
 			}
 
-			project(horizontal, firstProj);//Project on the vertical axis of the hitbox
-			hitbox.project(horizontal, secondProj);
+			// project on the horizontal axis of the hitbox
+			project(horizontalAxis, firstProj);
+			hitbox.project(horizontalAxis, secondProj);
 
 			firstProj.min += offsetX;
 			firstProj.max += offsetX;
 
-			// if firstProj overlaps secondProj
+			// if firstProj not overlaps secondProj
 			if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 			{
 				return false;
@@ -134,6 +141,8 @@ package net.flashpunk.masks
 
 			var a:Point;
 			
+			// project hitbox on polygon axes
+			// for a collision to be present all projections must overlap
 			for (var i:int = 0; i < _axes.length; i++)
 			{
 				a = _axes[i];
@@ -144,7 +153,7 @@ package net.flashpunk.masks
 				firstProj.min += offset;
 				firstProj.max += offset;
 
-				// if firstProj overlaps secondProj
+				// if firstProj not overlaps secondProj
 				if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 				{
 					return false;
@@ -154,19 +163,21 @@ package net.flashpunk.masks
 		}
 
 		/**
-		 * Checks for collisions along the edges of the polygon.
-		 * May be slow, mainly added for completeness sake.
+		 * Checks for collisions with a Grid.
+		 * May be slow, added for completeness sake.
+		 * 
+		 * Internally sets up an Hitbox out of each solid Grid tile and uses that for collision check.
 		 */
 		private function collideGrid(grid:Grid):Boolean
 		{
 			var tileW:uint = grid.tileWidth;
 			var tileH:uint = grid.tileHeight;
 			var solidTile:Boolean;
-
+			
 			_fakeEntity.width = tileW;
 			_fakeEntity.height = tileH;
-			_fakeEntity.originX = grid.parent.originX;
-			_fakeEntity.originY = grid.parent.originY;
+			_fakeEntity.originX = grid.parent.originX + grid._x;
+			_fakeEntity.originY = grid.parent.originY + grid._y;
 			
 			_fakeTileHitbox._width = tileW;
 			_fakeTileHitbox._height = tileH;
@@ -186,7 +197,9 @@ package net.flashpunk.masks
 
 		/**
 		 * Checks for collision with a Pixelmask.
-		 * May be slow (especially with big polygons), mainly added for completeness sake.
+		 * May be slow (especially with big polygons), added for completeness sake.
+		 * 
+		 * Internally sets up a Pixelmask using the polygon representation and uses that for collision check.
 		 */
 		private function collidePixelmask(pixelmask:Pixelmask):Boolean
 		{
@@ -212,20 +225,14 @@ package net.flashpunk.masks
 			var offsetY:Number = _y + parent.originY * 2;
 			
 			graphics.moveTo(points[_points.length - 1].x + offsetX, _points[_points.length - 1].y + offsetY);
-			for (var ii:int = 0; ii < _points.length; ii++)
+			for (var i:int = 0; i < _points.length; i++)
 			{
-				graphics.lineTo(_points[ii].x + offsetX, _points[ii].y + offsetY);
+				graphics.lineTo(_points[i].x + offsetX, _points[i].y + offsetY);
 			}
 			
 			graphics.endFill();
 
 			data.draw(FP.sprite);
-			
-			Draw.enqueueCall(function ():void 
-			{
-				FP.buffer.copyPixels(_fakePixelmask.data, _fakePixelmask.data.rect, new Point(50, 70));
-				Draw.rectPlus(50, 70, data.width, data.height, 0xFF0000, .5, false);
-			});
 			
 			_fakePixelmask.data = data;
 			
@@ -246,7 +253,7 @@ package net.flashpunk.masks
 			
 
 			// check if circle center is inside the polygon
-			for (i = 0, j = nPoints - 1; i < _points.length; j = i, i++) {
+			for (i = 0, j = nPoints - 1; i < nPoints; j = i, i++) {
 				p1 = _points[i];
 				p2 = _points[j];
 				
@@ -269,7 +276,7 @@ package net.flashpunk.masks
 			var closestX:Number;
 			var closestY:Number;
 			
-			for (i = 0, j = nPoints - 1; i < _points.length; j = i, i++) {
+			for (i = 0, j = nPoints - 1; i < nPoints; j = i, i++) {
 				p1 = _points[i];
 				p2 = _points[j];
 
@@ -308,36 +315,40 @@ package net.flashpunk.masks
 			var offsetY:Number = parent.y - other.parent.y;
 			var a:Point;
 			
+			// project other on this polygon axes
+			// for a collision to be present all projections must overlap
 			for (var i:int = 0; i < _axes.length; i++)
 			{
 				a = _axes[i];
 				project(a, firstProj);
 				other.project(a, secondProj);
 
-				//Shift the first info with the offset
+				// shift the first info with the offset
 				var offset:Number = offsetX * a.x + offsetY * a.y;
 				firstProj.min += offset;
 				firstProj.max += offset;
 
-				// if firstProj overlaps secondProj
+				// if firstProj not overlaps secondProj
 				if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 				{
 					return false;
 				}
 			}
 
+			// project this polygon on other polygon axes
+			// for a collision to be present all projections must overlap
 			for (var j:int = 0; j < other._axes.length; j++)
 			{
 				a = other._axes[j];
 				project(a, firstProj);
 				other.project(a, secondProj);
 
-				//Shift the first info with the offset
+				// shift the first info with the offset
 				offset = offsetX * a.x + offsetY * a.y;
 				firstProj.min += offset;
 				firstProj.max += offset;
 
-				// if firstProj overlaps secondProj
+				// if firstProj not overlaps secondProj
 				if (firstProj.min > secondProj.max || firstProj.max < secondProj.min)
 				{
 					return false;
@@ -346,7 +357,7 @@ package net.flashpunk.masks
 			return true;
 		}
 
-		/** @private Projects polygon points on axis and returns min and max values in projection object. */
+		/** @private Projects this polygon points on axis and returns min and max values in projection object. */
 		override public function project(axis:Point, projection:Object):void
 		{
 			var p:Point = _points[0];
@@ -386,9 +397,9 @@ package net.flashpunk.masks
 				graphics.lineStyle(1, 0xFFFFFF, 0.25);
 				
 				graphics.moveTo((points[_points.length - 1].x + offsetX) * sx , (_points[_points.length - 1].y + offsetY) * sy);
-				for (var ii:int = 0; ii < _points.length; ii++)
+				for (var i:int = 0; i < _points.length; i++)
 				{
-					graphics.lineTo((_points[ii].x + offsetX) * sx, (_points[ii].y + offsetY) * sy);
+					graphics.lineTo((_points[i].x + offsetX) * sx, (_points[i].y + offsetY) * sy);
 				}
 				
 				graphics.endFill();
@@ -396,7 +407,7 @@ package net.flashpunk.masks
 		}
 
 		/**
-		 * Angle in degress that the polygon is rotated.
+		 * Rotation angle (in degress) of the polygon (rotates around origin point).
 		 */
 		public function get angle():Number { return _angle; }
 		public function set angle(value:Number):void
@@ -408,7 +419,9 @@ package net.flashpunk.masks
 
 		/**
 		 * The points representing the polygon.
-		 * If you need to set a point yourself instead of passing in a new Array<Point> you need to call update() to makes sure the axes update as well.
+		 * 
+		 * If you need to set a point yourself instead of passing in a new Array<Point> you need to call update() 
+		 * to makes sure the axes update as well.
 		 */
 		public function get points():Vector.<Point> { return _points; }
 		public function set points(value:Vector.<Point>):void
@@ -422,20 +435,20 @@ package net.flashpunk.masks
 		/** Updates the parent's bounds for this mask. */
 		override public function update():void
 		{
-			project(horizontal, firstProj); //width
+			project(horizontalAxis, firstProj); // width
 			_x = Math.ceil(firstProj.min);
 			_width = Math.ceil(firstProj.max - firstProj.min);
-			project(vertical, secondProj); //height
+			project(verticalAxis, secondProj); // height
 			_y = Math.ceil(secondProj.min);
 			_height = Math.ceil(secondProj.max - secondProj.min);
 
 			if (parent != null)
 			{
-				//update entity bounds
+				// update entity bounds
 				parent.width = _width;
 				parent.height = _height;
 
-				//Since the collision infos haven't changed we can use them to calculate hitbox placement
+				// since the collision infos haven't changed we can use them to calculate hitbox placement
 				parent.originX = int((_width - firstProj.max - firstProj.min)/2);
 				parent.originY = int((_height - secondProj.max - secondProj.min )/2);
 			}
@@ -445,7 +458,7 @@ package net.flashpunk.masks
 		}
 
 		/**
-		 * Creates a regular polygon.
+		 * Creates a regular polygon (edges of same length).
 		 * @param	sides	The number of sides in the polygon
 		 * @param	radius	The distance that the corners are at
 		 * @param	angle	How much the polygon is rotated
@@ -454,22 +467,23 @@ package net.flashpunk.masks
 		public static function createPolygon(sides:int = 3, radius:Number = 100, angle:Number = 0):Polygon
 		{
 			if (sides < 3) throw "The polygon needs at least 3 sides";
-			// create a return polygon
-			// figure out the angles required
+
+			// figure out the angle required for each step
 			var rotationAngle:Number = (Math.PI * 2) / sides;
 
 			// loop through and generate each point
 			var points:Vector.<Point> = new Vector.<Point>();
 
-			for (var ii:int = 0; ii < sides; ii++)
+			for (var i:int = 0; i < sides; i++)
 			{
-				var tempAngle:Number = ii * rotationAngle;
+				var tempAngle:Number = i * rotationAngle;
 				var p:Point = new Point();
 				p.x = Math.cos(tempAngle) * radius;
 				p.y = Math.sin(tempAngle) * radius;
 				points.push(p);
 			}
-			// return the point
+			
+			// return the polygon
 			var poly:Polygon = new Polygon(points);
 			poly.angle = angle;
 			return poly;
@@ -477,7 +491,7 @@ package net.flashpunk.masks
 
 		/**
 		 * Creates a polygon from an array were even numbers are x and odd are y
-		 * @param	points	Array containing the polygon's points.
+		 * @param	points	Vector containing the polygon's points.
 		 * 
 		 * @return	The polygon
 		 */
@@ -485,10 +499,10 @@ package net.flashpunk.masks
 		{
 			var p:Vector.<Point> = new Vector.<Point>();
 
-			var ii:int = 0;
-			while (ii < points.length)
+			var i:int = 0;
+			while (i < points.length)
 			{
-				p.push(new Point(points[ii++], points[ii++]));
+				p.push(new Point(points[i++], points[i++]));
 			}
 			return new Polygon(p);
 		}
@@ -529,50 +543,41 @@ package net.flashpunk.masks
 		private function generateAxes():void
 		{
 			_axes = new Vector.<Point>();
-			var store:Number;
-			var numberOfPoints:int = _points.length - 1;
+			var temp:Number;
+			var nPoints:int = _points.length - 1;
 			var edge:Point;
+			var i:int, j:int;
 			
-			for (var i:int = 0; i < numberOfPoints; i++)
-			{
+			for (i = 0, j = nPoints - 1; i < nPoints; j = i, i++) {
 				edge = new Point();
-				edge.x = _points[i].x - _points[i + 1].x;
-				edge.y = _points[i].y - _points[i + 1].y;
+				edge.x = _points[i].x - _points[j].x;
+				edge.y = _points[i].y - _points[j].y;
 
-				//Get the axis which is perpendicular to the edge
-				store = edge.y;
+				// get the axis which is perpendicular to the edge
+				temp = edge.y;
 				edge.y = -edge.x;
-				edge.x = store;
+				edge.x = temp;
 				edge.normalize(1);
 
 				_axes.push(edge);
 			}
-			edge = new Point();
-			//Add the last edge
-			edge.x = _points[numberOfPoints].x - _points[0].x;
-			edge.y = _points[numberOfPoints].y - _points[0].y;
-			store = edge.y;
-			edge.y = -edge.x;
-			edge.x = store;
-			edge.normalize(1);
-
-			_axes.push(edge);
 		}
 
 		private function removeDuplicateAxes():void
 		{
-			for (var ii:int = 0; ii < _axes.length; ii++ )
+			for (var i:int = 0; i < _axes.length; i++ )
 			{
-				for (var jj:int = 0; jj < _axes.length; jj++ )
+				for (var j:int = 0; j < _axes.length; j++ )
 				{
-					if (ii == jj || Math.max(ii, jj) >= _axes.length) continue;
+					if (i == j || Math.max(i, j) >= _axes.length) continue;
+					
 					// if the first vector is equal or similar to the second vector,
 					// remove it from the list. (for example, [1, 1] and [-1, -1]
-					// share the same relative path)
-					if ((_axes[ii].x == _axes[jj].x && _axes[ii].y == _axes[jj].y)
-						|| ( -_axes[ii].x == _axes[jj].x && -_axes[ii].y == _axes[jj].y))//First axis inverted
+					// represent the same axis)
+					if ((_axes[i].x == _axes[j].x && _axes[i].y == _axes[j].y)
+						|| ( -_axes[i].x == _axes[j].x && -_axes[i].y == _axes[j].y))	// first axis inverted
 					{
-						_axes.splice(jj, 1);
+						_axes.splice(j, 1);
 					}
 				}
 			}
@@ -599,7 +604,7 @@ package net.flashpunk.masks
 		private static var firstProj:* = { min: 0.0, max:0.0 };
 		private static var secondProj:* = { min: 0.0, max:0.0 };
 
-		public static var vertical:Point = new Point(0, 1);
-		public static var horizontal:Point = new Point(1, 0);
+		public static const verticalAxis:Point = new Point(0, 1);
+		public static const horizontalAxis:Point = new Point(1, 0);
 	}
 }

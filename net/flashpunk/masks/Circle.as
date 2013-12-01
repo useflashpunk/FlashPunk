@@ -13,7 +13,6 @@ package net.flashpunk.masks
 	/**
 	 * Uses circular area to determine collision.
 	 */
-
 	public class Circle extends Hitbox
 	{
 		/**
@@ -47,7 +46,7 @@ package net.flashpunk.masks
 
 			if (distanceX > _otherHalfWidth + radius || distanceY > _otherHalfHeight + radius)
 			{
-				return false;	//The hitbox is to far away so return false
+				return false;	// the hitbox/mask is too far away so return false
 			}
 			if (distanceX <= _otherHalfWidth || distanceY <= _otherHalfHeight)
 			{
@@ -70,7 +69,7 @@ package net.flashpunk.masks
 
 			if (distanceX > _otherHalfWidth + radius || distanceY > _otherHalfHeight + radius)
 			{
-				return false;	//The hitbox is to far away so return false
+				return false;	// the hitbox is too far away so return false
 			}
 			if (distanceX <= _otherHalfWidth || distanceY <= _otherHalfHeight)
 			{
@@ -142,7 +141,9 @@ package net.flashpunk.masks
 
 		/**
 		 * Checks for collision with a Pixelmask.
-		 * May be slow (especially with big polygons), mainly added for completeness sake.
+		 * May be slow (especially with big polygons), added for completeness sake.
+		 * 
+		 * Internally sets up a Pixelmask and uses that for collision check.
 		 */
 		private function collidePixelmask(pixelmask:Pixelmask):Boolean
 		{
@@ -171,12 +172,6 @@ package net.flashpunk.masks
 			graphics.endFill();
 
 			data.draw(FP.sprite);
-			
-			Draw.enqueueCall(function ():void 
-			{
-				FP.buffer.copyPixels(_fakePixelmask.data, _fakePixelmask.data.rect, new Point(50, 70));
-				Draw.rectPlus(50, 70, data.width, data.height, 0xFF0000, .5, false);
-			});
 			
 			_fakePixelmask.data = data;
 			
@@ -228,7 +223,7 @@ package net.flashpunk.masks
 		{
 			if (parent != null)
 			{
-				//update entity bounds
+				// update entity bounds
 				parent.originX = -_x + radius;
 				parent.originY = -_y + radius;
 				parent.height = parent.width = radius + radius;
@@ -241,7 +236,7 @@ package net.flashpunk.masks
 
 		// Hitbox information.
 		protected var _radius:int;
-		protected var _squaredRadius:int; 		//Set automatically through the setter for radius
+		protected var _squaredRadius:int; 		// set automatically through the setter for radius
 		private var _fakePixelmask:Pixelmask;	// used for Pixelmask collision
 	}
 }
