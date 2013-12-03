@@ -166,7 +166,7 @@ package net.flashpunk.masks
 			graphics.beginFill(0xFFFFFF, 1);
 			graphics.lineStyle(1, 0xFFFFFF, 1);
 			
-			graphics.drawCircle(_x - _radius, _y - _radius, _radius);
+			graphics.drawCircle(_x + parent.originX, _y + parent.originY, _radius);
 			
 			graphics.endFill();
 
