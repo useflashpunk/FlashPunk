@@ -7,7 +7,6 @@ package net.flashpunk.masks
 	import net.flashpunk.Entity;
 	import net.flashpunk.FP;
 	import net.flashpunk.Mask;
-	import net.flashpunk.utils.Draw;
 
 
 	/** 
@@ -311,6 +310,7 @@ package net.flashpunk.masks
 		 */
 		private function collidePolygon(other:Polygon):Boolean
 		{
+			var offset:Number;
 			var offsetX:Number = parent.x - other.parent.x;
 			var offsetY:Number = parent.y - other.parent.y;
 			var a:Point;
@@ -324,7 +324,7 @@ package net.flashpunk.masks
 				other.project(a, secondProj);
 
 				// shift the first info with the offset
-				var offset:Number = offsetX * a.x + offsetY * a.y;
+				offset = offsetX * a.x + offsetY * a.y;
 				firstProj.min += offset;
 				firstProj.max += offset;
 
@@ -544,7 +544,7 @@ package net.flashpunk.masks
 		{
 			_axes = new Vector.<Point>();
 			var temp:Number;
-			var nPoints:int = _points.length - 1;
+			var nPoints:int = _points.length;
 			var edge:Point;
 			var i:int, j:int;
 			

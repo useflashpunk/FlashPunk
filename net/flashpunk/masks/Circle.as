@@ -8,7 +8,6 @@ package net.flashpunk.masks
 	import net.flashpunk.masks.Grid;
 	import flash.display.Graphics;
 	import flash.geom.Point;
-	import net.flashpunk.utils.Draw;
 
 	/**
 	 * Uses circular area to determine collision.
