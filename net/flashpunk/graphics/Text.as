@@ -104,7 +104,6 @@
 				}
 			}
 			
-			_field.embedFonts = true;
 			_field.wordWrap = _wordWrap;
 			_form = new TextFormat(_font, _size, 0xFFFFFF);
 			_form.align = _align;
@@ -273,6 +272,7 @@
 				_field.setTextFormat(_form);
 			}
 			
+      _field.embedFonts = _font == 'default';
 			_field.width = _width;
 			_field.width = _textWidth = Math.ceil(_field.textWidth + 4);
 			_field.height = _textHeight = Math.ceil(_field.textHeight + 4);
