@@ -16,7 +16,7 @@
 		}
 		
 		/**
-		 * Starts moving along the curve.
+		 * Starts moving along the curve. You have to call start() to actually run it.
 		 * @param	fromX		X start.
 		 * @param	fromY		Y start.
 		 * @param	aX			First control x.
@@ -27,8 +27,10 @@
 		 * @param	toY			Y finish.
 		 * @param	duration	Duration of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotion(fromX:Number, fromY:Number, aX:Number, aY:Number, bX:Number, bY:Number, toX:Number, toY:Number, duration:Number, ease:Function = null):void
+		public function setMotion(fromX:Number, fromY:Number, aX:Number, aY:Number, bX:Number, bY:Number, toX:Number, toY:Number, duration:Number, ease:Function = null):CubicMotion
 		{
 			x = _fromX = fromX;
 			y = _fromY = fromY;
@@ -40,7 +42,7 @@
 			_toY = toY;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

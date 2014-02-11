@@ -22,30 +22,34 @@
 		}
 		
 		/**
-		 * Fades the Sfx to the target volume.
+		 * Fades the Sfx to the target volume. You have to call start() to actually run it.
 		 * @param	volume		The volume to fade to.
 		 * @param	duration	Duration of the fade.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function fadeTo(volume:Number, duration:Number, ease:Function = null):void
+		public function fadeTo(volume:Number, duration:Number, ease:Function = null):SfxFader
 		{
 			if (volume < 0) volume = 0;
 			_start = _sfx.volume;
 			_range = volume - _start;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/**
-		 * Fades out the Sfx, while also playing and fading in a replacement Sfx.
+		 * Fades out the Sfx, while also playing and fading in a replacement Sfx. You have to call start() to actually run it.
 		 * @param	play		The Sfx to play and fade in.
 		 * @param	loop		If the new Sfx should loop.
 		 * @param	duration	Duration of the crossfade.
 		 * @param	volume		The volume to fade in the new Sfx to.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function crossFade(play:Sfx, loop:Boolean, duration:Number, volume:Number = 1, ease:Function = null):void
+		public function crossFade(play:Sfx, loop:Boolean, duration:Number, volume:Number = 1, ease:Function = null):SfxFader
 		{
 			_crossSfx = play;
 			_crossRange = volume;
@@ -55,7 +59,7 @@
 			_ease = ease;
 			if (loop) _crossSfx.loop(0);
 			else _crossSfx.play(0);
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

@@ -79,20 +79,26 @@
 		
 		/**
 		 * Starts the Tween, or restarts it if it's currently running.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function start():void
+		public function start():Tween
 		{
 			_time = 0;
 			if (_target == 0)
 			{
 				active = false;
-				return;
 			}
-			active = true;
+			else {
+				active = true;
+			}
+			return this;
 		}
 		
 		/**
 		 * Immediately stops the Tween and removes it from its Tweener without calling the complete callback.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
 		public function cancel():void
 		{

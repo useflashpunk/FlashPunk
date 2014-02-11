@@ -18,13 +18,15 @@ package net.flashpunk.tweens.misc
 		}
 		
 		/**
-		 * Tweens multiple numeric public properties.
+		 * Tweens multiple numeric public properties. You have to call start() to actually run it.
 		 * @param	object		The object containing the properties.
 		 * @param	values		An object containing key/value pairs of properties and target values.
 		 * @param	duration	Duration of the tween.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function tween(object:Object, values:Object, duration:Number, ease:Function = null, delay:Number = 0):void
+		public function tween(object:Object, values:Object, duration:Number, ease:Function = null, delay:Number = 0):MultiVarTween
 		{
 			_object = object;
 			_vars.length = 0;
@@ -42,7 +44,7 @@ package net.flashpunk.tweens.misc
 				_start.push(a);
 				_range.push(values[p] - a);
 			}
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

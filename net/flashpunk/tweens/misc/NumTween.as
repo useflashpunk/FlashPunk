@@ -23,19 +23,21 @@
 		}
 		
 		/**
-		 * Tweens the value from one value to another.
+		 * Tweens the value from one value to another. You have to call start() to actually run it.
 		 * @param	fromValue		Start value.
 		 * @param	toValue			End value.
 		 * @param	duration		Duration of the tween.
 		 * @param	ease			Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function tween(fromValue:Number, toValue:Number, duration:Number, ease:Function = null):void
+		public function tween(fromValue:Number, toValue:Number, duration:Number, ease:Function = null):NumTween
 		{
 			_start = value = fromValue;
 			_range = toValue - value;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

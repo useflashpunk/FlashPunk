@@ -20,7 +20,7 @@
 		}
 		
 		/**
-		 * Starts moving along the curve.
+		 * Starts moving along the curve. You have to call start() to actually run it.
 		 * @param	fromX		X start.
 		 * @param	fromY		Y start.
 		 * @param	controlX	X control, used to determine the curve.
@@ -29,8 +29,10 @@
 		 * @param	toY			Y finish.
 		 * @param	duration	Duration of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotion(fromX:Number, fromY:Number, controlX:Number, controlY:Number, toX:Number, toY:Number, duration:Number, ease:Function = null):void
+		public function setMotion(fromX:Number, fromY:Number, controlX:Number, controlY:Number, toX:Number, toY:Number, duration:Number, ease:Function = null):QuadMotion
 		{
 			_distance = -1;
 			x = _fromX = fromX;
@@ -41,11 +43,11 @@
 			_toY = toY;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/**
-		 * Starts moving along the curve at the speed.
+		 * Starts moving along the curve at the speed. You have to call start() to actually run it.
 		 * @param	fromX		X start.
 		 * @param	fromY		Y start.
 		 * @param	controlX	X control, used to determine the curve.
@@ -54,8 +56,10 @@
 		 * @param	toY			Y finish.
 		 * @param	speed		Speed of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotionSpeed(fromX:Number, fromY:Number, controlX:Number, controlY:Number, toX:Number, toY:Number, speed:Number, ease:Function = null):void
+		public function setMotionSpeed(fromX:Number, fromY:Number, controlX:Number, controlY:Number, toX:Number, toY:Number, speed:Number, ease:Function = null):QuadMotion
 		{
 			_distance = -1;
 			x = _fromX = fromX;
@@ -66,7 +70,7 @@
 			_toY = toY;
 			_target = distance / speed;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

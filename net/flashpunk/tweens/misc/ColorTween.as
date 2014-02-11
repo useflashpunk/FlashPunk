@@ -29,15 +29,17 @@
 		}
 		
 		/**
-		 * Tweens the color to a new color and an alpha to a new alpha.
+		 * Tweens the color to a new color and an alpha to a new alpha. You have to call start() to actually run it.
 		 * @param	duration		Duration of the tween.
 		 * @param	fromColor		Start color.
 		 * @param	toColor			End color.
 		 * @param	fromAlpha		Start alpha
 		 * @param	toAlpha			End alpha.
 		 * @param	ease			Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function tween(duration:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1, ease:Function = null):void
+		public function tween(duration:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1, ease:Function = null):ColorTween
 		{
 			fromColor &= 0xFFFFFF;
 			toColor &= 0xFFFFFF;
@@ -55,7 +57,7 @@
 			_rangeA = toAlpha - alpha;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

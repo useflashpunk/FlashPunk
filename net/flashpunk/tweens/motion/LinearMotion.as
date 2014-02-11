@@ -16,15 +16,17 @@
 		}
 		
 		/**
-		 * Starts moving along a line.
+		 * Starts moving along a line. You have to call start() to actually run it.
 		 * @param	fromX		X start.
 		 * @param	fromY		Y start.
 		 * @param	toX			X finish.
 		 * @param	toY			Y finish.
 		 * @param	duration	Duration of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotion(fromX:Number, fromY:Number, toX:Number, toY:Number, duration:Number, ease:Function = null):void
+		public function setMotion(fromX:Number, fromY:Number, toX:Number, toY:Number, duration:Number, ease:Function = null):LinearMotion
 		{
 			_distance = -1;
 			x = _fromX = fromX;
@@ -33,19 +35,21 @@
 			_moveY = toY - fromY;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/**
-		 * Starts moving along a line at the speed.
+		 * Starts moving along a line at the speed. You have to call start() to actually run it.
 		 * @param	fromX		X start.
 		 * @param	fromY		Y start.
 		 * @param	toX			X finish.
 		 * @param	toY			Y finish.
 		 * @param	speed		Speed of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotionSpeed(fromX:Number, fromY:Number, toX:Number, toY:Number, speed:Number, ease:Function = null):void
+		public function setMotionSpeed(fromX:Number, fromY:Number, toX:Number, toY:Number, speed:Number, ease:Function = null):LinearMotion
 		{
 			_distance = -1;
 			x = _fromX = fromX;
@@ -54,7 +58,7 @@
 			_moveY = toY - fromY;
 			_target = distance / speed;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

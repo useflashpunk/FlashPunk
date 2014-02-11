@@ -19,19 +19,21 @@
 		}
 		
 		/**
-		 * Fades FP.volume to the target volume.
+		 * Fades FP.volume to the target volume. You have to call start() to actually run it.
 		 * @param	volume		The volume to fade to.
 		 * @param	duration	Duration of the fade.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function fadeTo(volume:Number, duration:Number, ease:Function = null):void
+		public function fadeTo(volume:Number, duration:Number, ease:Function = null):Fader
 		{
 			if (volume < 0) volume = 0;
 			_start = FP.volume;
 			_range = volume - _start;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

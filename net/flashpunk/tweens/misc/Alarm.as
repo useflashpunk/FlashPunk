@@ -19,7 +19,7 @@
 		}
 		
 		/**
-		 * Sets the alarm.
+		 * Sets the alarm and starts it.
 		 * @param	duration	Duration of the alarm.
 		 */
 		public function reset(duration:Number):void
