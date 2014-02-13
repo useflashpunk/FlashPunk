@@ -97,8 +97,6 @@
 		
 		/**
 		 * Immediately stops the Tween and removes it from its Tweener without calling the complete callback.
-		 * 
-		 * @return The tween itself for chaining.
 		 */
 		public function cancel():void
 		{
