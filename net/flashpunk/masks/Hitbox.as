@@ -1,5 +1,6 @@
 ﻿package net.flashpunk.masks 
 {
+	import flash.display.Graphics;
 	import net.flashpunk.*;
 	
 	/**
@@ -108,6 +109,17 @@
 				parent.width = _width;
 				parent.height = _height;
 			}
+		}
+		
+		public override function renderDebug(g:Graphics):void
+		{
+			// draw only if we're part of a Masklist
+			if (!list) return;
+			
+			var sx:Number = FP.screen.scaleX * FP.screen.scale;
+			var sy:Number = FP.screen.scaleY * FP.screen.scale;
+			
+			g.drawRect((parent.x - FP.camera.x + x) * sx, (parent.y - FP.camera.y + y) * sy, width * sx, height * sy);
 		}
 		
 		// Hitbox information.
