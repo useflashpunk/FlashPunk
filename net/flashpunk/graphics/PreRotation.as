@@ -67,6 +67,10 @@ package net.flashpunk.graphics
 					x = 0;
 					y += _frame.height;
 				}
+				_sourceWidthAndHeight[source] = [_sourceWidth, _sourceHeight];
+			} else {
+				_sourceWidth = _sourceWidthAndHeight[source][0];
+				_sourceHeight = _sourceWidthAndHeight[source][1];
 			}
 			_source = r;
 			_width = r.width;
@@ -149,6 +153,7 @@ package net.flashpunk.graphics
 		// Global information.
 		/** @private */ private static var _rotated:Dictionary = new Dictionary;
 		/** @private */ private static var _size:Dictionary = new Dictionary;
+		/** @private */ private static var _sourceWidthAndHeight:Dictionary = new Dictionary;
 		/** @private */ private static const _MAX_WIDTH:uint = 4000;
 
 	}
