@@ -137,7 +137,7 @@
 		 * Usage:
 		   text.setStyle("red", {color: 0xFF0000});
 		   text.setStyle("big", {size: text.size*2});
-		   text.richText = "<big>Hello</big> <red>world</red>";
+		   text.richText = "&lt;big&gt;Hello&lt;/big&gt; &lt;red&gt;world&lt;/red&gt;";
 		 */
 		public function setStyle(tagName:String, params:*):void
 		{
