@@ -26,7 +26,12 @@ package net.flashpunk.graphics
 		 */
 		public function PreRotation(source:*, frameCount:uint = 36, smooth:Boolean = false) 
 		{
-			var r:BitmapData = _rotated[source];
+			var r:BitmapData = null;
+			
+			if (_rotated[source] && _rotated[source][frameCount]) {
+				r = _rotated[source][frameCount];
+			}
+			
 			_frame = new Rectangle(0, 0, _size[source], _size[source]);
 			
 			var temp:BitmapData = (source is BitmapData) ? source : FP.getBitmap(source);
@@ -36,6 +41,10 @@ package net.flashpunk.graphics
 			
 			if (!r)
 			{
+				if (! _rotated[source]) {
+					_rotated[source] = new Array();
+				}
+				
 				// produce a rotated bitmap strip
 				var size:uint = _size[source] = Math.ceil(FP.distance(0, 0, temp.width, temp.height));
 				_frame.width = _frame.height = size;
@@ -46,7 +55,7 @@ package net.flashpunk.graphics
 					width = _MAX_WIDTH - (_MAX_WIDTH % _frame.width);
 					height = Math.ceil(frameCount / (width / _frame.width)) * _frame.height;
 				}
-				_rotated[source] = r = new BitmapData(width, height, true, 0);
+				_rotated[source][frameCount] = r = new BitmapData(width, height, true, 0);
 				var m:Matrix = FP.matrix,
 					a:Number = 0,
 					aa:Number = (Math.PI * 2) / -frameCount,
