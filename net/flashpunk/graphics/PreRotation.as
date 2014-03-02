@@ -26,13 +26,13 @@ package net.flashpunk.graphics
 		 */
 		public function PreRotation(source:*, frameCount:uint = 36, smooth:Boolean = false) 
 		{
-			var r:BitmapData = _rotated[source];
+			var r:BitmapData = _rotated[[source, frameCount]];
 			_frame = new Rectangle(0, 0, _size[source], _size[source]);
 			if (!r)
 			{
 				// produce a rotated bitmap strip
 				var temp:BitmapData = (source is BitmapData) ? source : (new source).bitmapData,
-					size:uint = _size[source] = Math.ceil(FP.distance(0, 0, temp.width, temp.height));
+					size:uint = _size[[source, frameCount]] = Math.ceil(FP.distance(0, 0, temp.width, temp.height));
 				_frame.width = _frame.height = size;
 				var width:uint = _frame.width * frameCount,
 					height:uint = _frame.height;
@@ -41,7 +41,7 @@ package net.flashpunk.graphics
 					width = _MAX_WIDTH - (_MAX_WIDTH % _frame.width);
 					height = Math.ceil(frameCount / (width / _frame.width)) * _frame.height;
 				}
-				_rotated[source] = r = new BitmapData(width, height, true, 0);
+				_rotated[[source, frameCount]] = r = new BitmapData(width, height, true, 0);
 				var m:Matrix = FP.matrix,
 					a:Number = 0,
 					aa:Number = (Math.PI * 2) / -frameCount,
@@ -67,6 +67,10 @@ package net.flashpunk.graphics
 					x = 0;
 					y += _frame.height;
 				}
+				_sourceWidthAndHeight[[source, frameCount]] = [_sourceWidth, _sourceHeight];
+			} else {
+				_sourceWidth = _sourceWidthAndHeight[[source, frameCount]][0];
+				_sourceHeight = _sourceWidthAndHeight[[source, frameCount]][1];
 			}
 			_source = r;
 			_width = r.width;
@@ -149,6 +153,7 @@ package net.flashpunk.graphics
 		// Global information.
 		/** @private */ private static var _rotated:Dictionary = new Dictionary;
 		/** @private */ private static var _size:Dictionary = new Dictionary;
+		/** @private */ private static var _sourceWidthAndHeight:Dictionary = new Dictionary;
 		/** @private */ private static const _MAX_WIDTH:uint = 4000;
 
 	}
