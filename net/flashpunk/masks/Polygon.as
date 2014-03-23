@@ -14,17 +14,29 @@ package net.flashpunk.masks
 	 */
 	public class Polygon extends Hitbox
 	{
+		
 		/**
-		 * The polygon rotates around this point when the angle is set.
+		 * X coord to use for rotations.
+		 * Defaults to top-left corner.
 		 */
-		public var origin:Point;
+		public var originX:Number = 0;
+		
+		/**
+		 * Y coord to use for rotations.
+		 * Defaults to top-left corner.
+		 */
+		public var originY:Number = 0;
+		
 
 		/**
 		 * Constructor.
-		 * @param	points   a vector of coordinates that define the polygon (must have at least 3)
-		 * @param	origin   origin point of the polygon
+		 * @param	points		An array of coordinates that define the polygon (must have at least 3).
+		 * @param	x			X offset of the polygon.
+		 * @param	y			Y offset of the polygon.
+		 * @param	originX		X pivot for rotations.
+		 * @param	originY		Y pivot for rotations.
 		 */
-		public function Polygon(points:Vector.<Point>, origin:Point = null)
+		public function Polygon(points:Vector.<Point>, x:int = 0, y:int = 0, originX:Number = 0, originY:Number = 0)
 		{
 			if (points.length < 3) throw "The polygon needs at least 3 sides";
 			_points = points;
@@ -39,7 +51,11 @@ package net.flashpunk.masks
 			_check[Circle] = collideCircle;
 			_check[Polygon] = collidePolygon;
 
-			this.origin = origin != null ? origin : new Point();
+			_x = x;
+			_y = y;
+			
+			this.originX = originX;
+			this.originY = originY;
 			_angle = 0;
 
 			updateAxes();
@@ -48,7 +64,7 @@ package net.flashpunk.masks
 		/**
 		 * Checks for collisions with an Entity.
 		 */
-		private function collideMask(other:Mask):Boolean
+		override protected function collideMask(other:Mask):Boolean
 		{
 			var offset:Number,
 				offsetX:Number = parent.x - other.parent.x,
@@ -106,15 +122,15 @@ package net.flashpunk.masks
 		/**
 		 * Checks for collisions with a Hitbox.
 		 */
-		private function collideHitbox(hitbox:Hitbox):Boolean
+		override protected function collideHitbox(other:Hitbox):Boolean
 		{
 			var offset:Number,
-				offsetX:Number = parent.x - hitbox.parent.x,
-				offsetY:Number = parent.y - hitbox.parent.y;
+				offsetX:Number = parent.x - other.parent.x,
+				offsetY:Number = parent.y - other.parent.y;
 
 			// project on the vertical axis of the hitbox
 			project(verticalAxis, firstProj);
-			hitbox.project(verticalAxis, secondProj);
+			other.project(verticalAxis, secondProj);
 
 			firstProj.min += offsetY;
 			firstProj.max += offsetY;
@@ -127,7 +143,7 @@ package net.flashpunk.masks
 
 			// project on the horizontal axis of the hitbox
 			project(horizontalAxis, firstProj);
-			hitbox.project(horizontalAxis, secondProj);
+			other.project(horizontalAxis, secondProj);
 
 			firstProj.min += offsetX;
 			firstProj.max += offsetX;
@@ -146,7 +162,7 @@ package net.flashpunk.masks
 			{
 				a = _axes[i];
 				project(a, firstProj);
-				hitbox.project(a, secondProj);
+				other.project(a, secondProj);
 
 				offset = offsetX * a.x + offsetY * a.y;
 				firstProj.min += offset;
@@ -167,26 +183,26 @@ package net.flashpunk.masks
 		 * 
 		 * Internally sets up an Hitbox out of each solid Grid tile and uses that for collision check.
 		 */
-		private function collideGrid(grid:Grid):Boolean
+		protected function collideGrid(other:Grid):Boolean
 		{
-			var tileW:uint = grid.tileWidth;
-			var tileH:uint = grid.tileHeight;
+			var tileW:uint = other.tileWidth;
+			var tileH:uint = other.tileHeight;
 			var solidTile:Boolean;
 			
 			_fakeEntity.width = tileW;
 			_fakeEntity.height = tileH;
-			_fakeEntity.originX = grid.parent.originX + grid._x;
-			_fakeEntity.originY = grid.parent.originY + grid._y;
+			_fakeEntity.originX = other.parent.originX + other._x;
+			_fakeEntity.originY = other.parent.originY + other._y;
 			
 			_fakeTileHitbox._width = tileW;
 			_fakeTileHitbox._height = tileH;
 			_fakeTileHitbox.parent = _fakeEntity;
 			
-			for (var r:int = 0; r < grid.rows; r++ ) {
-				for (var c:int = 0; c < grid.columns; c++) {
-					_fakeEntity.x = grid.parent.x + grid._x + c * tileW;
-					_fakeEntity.y = grid.parent.y + grid._y + r * tileH;
-					solidTile = grid.getTile(c, r);
+			for (var r:int = 0; r < other.rows; r++ ) {
+				for (var c:int = 0; c < other.columns; c++) {
+					_fakeEntity.x = other.parent.x + other._x + c * tileW;
+					_fakeEntity.y = other.parent.y + other._y + r * tileH;
+					solidTile = other.getTile(c, r);
 					
 					if (solidTile && collideHitbox(_fakeTileHitbox)) return true;
 				}
@@ -200,7 +216,7 @@ package net.flashpunk.masks
 		 * 
 		 * Internally sets up a Pixelmask using the polygon representation and uses that for collision check.
 		 */
-		private function collidePixelmask(pixelmask:Pixelmask):Boolean
+		protected function collidePixelmask(other:Pixelmask):Boolean
 		{
 			var data:BitmapData = _fakePixelmask._data;
 			
@@ -235,13 +251,13 @@ package net.flashpunk.masks
 			
 			_fakePixelmask.data = data;
 			
-			return pixelmask.collide(_fakePixelmask);
+			return other.collide(_fakePixelmask);
 		}
 		
 		/**
 		 * Checks for collision with a circle.
 		 */
-		private function collideCircle(circle:Circle):Boolean
+		protected function collideCircle(other:Circle):Boolean
 		{			
 			var edgesCrossed:int = 0;
 			var p1:Point, p2:Point;
@@ -256,10 +272,10 @@ package net.flashpunk.masks
 				p1 = _points[i];
 				p2 = _points[j];
 				
-				var distFromCenter:Number = (p2.x - p1.x) * (circle._y + circle.parent.y - p1.y - offsetY) / (p2.y - p1.y) + p1.x + offsetX;
+				var distFromCenter:Number = (p2.x - p1.x) * (other._y + other.parent.y - p1.y - offsetY) / (p2.y - p1.y) + p1.x + offsetX;
 				
-				if ((p1.y + offsetY > circle._y + circle.parent.y) != (p2.y + offsetY > circle._y + circle.parent.y)
-					&& (circle._x + circle.parent.x < distFromCenter))
+				if ((p1.y + offsetY > other._y + other.parent.y) != (p2.y + offsetY > other._y + other.parent.y)
+					&& (other._x + other.parent.x < distFromCenter))
 				{
 					edgesCrossed++;
 				}
@@ -268,9 +284,9 @@ package net.flashpunk.masks
 			if (edgesCrossed & 1) return true;
 			
 			// check if minimum distance from circle center to each polygon side is less than radius
-			var radiusSqr:Number = circle.radius * circle.radius;
-			var cx:Number = circle._x + circle.parent.x;
-			var cy:Number = circle._y + circle.parent.y;
+			var radiusSqr:Number = other.radius * other.radius;
+			var cx:Number = other._x + other.parent.x;
+			var cy:Number = other._y + other.parent.y;
 			var minDistanceSqr:Number = 0;
 			var closestX:Number;
 			var closestY:Number;
@@ -308,7 +324,7 @@ package net.flashpunk.masks
 		/**
 		 * Checks for collision with a polygon.
 		 */
-		private function collidePolygon(other:Polygon):Boolean
+		protected function collidePolygon(other:Polygon):Boolean
 		{
 			var offset:Number;
 			var offsetX:Number = parent.x - other.parent.x;
@@ -464,7 +480,7 @@ package net.flashpunk.masks
 		 * @param	angle	How much the polygon is rotated
 		 * @return	The polygon
 		 */
-		public static function createPolygon(sides:int = 3, radius:Number = 100, angle:Number = 0):Polygon
+		public static function createRegular(sides:int = 3, radius:Number = 100, angle:Number = 0):Polygon
 		{
 			if (sides < 3) throw "The polygon needs at least 3 sides";
 
@@ -518,14 +534,14 @@ package net.flashpunk.masks
 			for (var i:int = 0; i < _points.length; i++)
 			{
 				p = _points[i];
-				var dx:Number = p.x - origin.x;
-				var dy:Number = p.y - origin.y;
+				var dx:Number = p.x - originX;
+				var dy:Number = p.y - originY;
 
 				var pointAngle:Number = Math.atan2(dy, dx);
 				var length:Number = Math.sqrt(dx * dx + dy * dy);
 
-				p.x = Math.cos(pointAngle + angleDelta) * length + origin.x;
-				p.y = Math.sin(pointAngle + angleDelta) * length + origin.y;
+				p.x = Math.cos(pointAngle + angleDelta) * length + originX;
+				p.y = Math.sin(pointAngle + angleDelta) * length + originY;
 			}
 			var a:Point;
 			

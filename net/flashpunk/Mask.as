@@ -46,7 +46,7 @@
 		}
 		
 		/** @private Collide against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		protected function collideMask(other:Mask):Boolean
 		{
 			return parent.x - parent.originX + parent.width > other.parent.x - other.parent.originX
 				&& parent.y - parent.originY + parent.height > other.parent.y - other.parent.originY

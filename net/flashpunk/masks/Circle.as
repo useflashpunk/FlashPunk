@@ -35,7 +35,7 @@ package net.flashpunk.masks
 		}
 
 		/** @private Collides against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		override protected function collideMask(other:Mask):Boolean
 		{
 			var _otherHalfWidth:Number = other.parent.width * 0.5;
 			var _otherHalfHeight:Number = other.parent.height * 0.5;
@@ -58,7 +58,7 @@ package net.flashpunk.masks
 		}
 
 		/** @private Collides against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		override protected function collideHitbox(other:Hitbox):Boolean
 		{
 			var _otherHalfWidth:Number = other._width * 0.5;
 			var _otherHalfHeight:Number = other._height * 0.5;
@@ -144,7 +144,7 @@ package net.flashpunk.masks
 		 * 
 		 * Internally sets up a Pixelmask and uses that for collision check.
 		 */
-		private function collidePixelmask(pixelmask:Pixelmask):Boolean
+		private function collidePixelmask(other:Pixelmask):Boolean
 		{
 			var data:BitmapData = _fakePixelmask._data;
 			
@@ -174,7 +174,7 @@ package net.flashpunk.masks
 			
 			_fakePixelmask.data = data;
 			
-			return pixelmask.collide(_fakePixelmask);
+			return other.collide(_fakePixelmask);
 		}
 
 		/** @private Collides against a Circle. */

@@ -204,11 +204,11 @@
 			FP.elapsed *= FP.rate;
 			_last = _time;
 			
-			// update console
-			if (FP._console) FP._console.update();
-			
 			// update loop
 			if (!paused) update();
+			
+			// update console
+			if (FP._console) FP._console.update();
 			
 			// update input
 			Input.update();

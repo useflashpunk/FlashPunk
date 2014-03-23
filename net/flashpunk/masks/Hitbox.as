@@ -28,7 +28,7 @@
 		}
 		
 		/** @private Collides against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		override protected function collideMask(other:Mask):Boolean
 		{
 			return parent.x + _x + _width > other.parent.x - other.parent.originX
 				&& parent.y + _y + _height > other.parent.y - other.parent.originY
@@ -37,7 +37,7 @@
 		}
 		
 		/** @private Collides against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		protected function collideHitbox(other:Hitbox):Boolean
 		{
 			return parent.x + _x + _width > other.parent.x + other._x
 				&& parent.y + _y + _height > other.parent.y + other._y
@@ -114,7 +114,30 @@
 		/** @private */
 		override public function project(axis:Point, projection:Object):void
 		{
-			super.project(axis, projection);
+			var px:Number = _x,
+				py:Number = _y,
+				cur:Number,
+				max:Number = Number.NEGATIVE_INFINITY,
+				min:Number = Number.POSITIVE_INFINITY;
+
+			cur = px * axis.x + py * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			cur = (px + _width) * axis.x + py * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			cur = px * axis.x + (py + _height) * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			cur = (px + _width) * axis.x + (py + _height) * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			projection.min = min;
+			projection.max = max;
 		}
 		
 		// Hitbox information.
