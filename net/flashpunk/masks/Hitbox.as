@@ -1,5 +1,6 @@
 ﻿package net.flashpunk.masks 
 {
+	import flash.display.Graphics;
 	import flash.geom.Point;
 	import net.flashpunk.*;
 	
@@ -111,6 +112,18 @@
 			}
 		}
 		
+		override public function renderDebug(g:Graphics):void
+ 		{
+ 			// draw only if we're part of a Masklist
+ 			if (!list || list.count <= 1) return;
+ 			
+ 			var sx:Number = FP.screen.scaleX * FP.screen.scale;
+ 			var sy:Number = FP.screen.scaleY * FP.screen.scale;
+ 			
+			g.lineStyle(1, 0xFFFFFF, 0.25);
+ 			g.drawRect((parent.x - FP.camera.x + x) * sx, (parent.y - FP.camera.y + y) * sy, width * sx, height * sy);
+		}
+ 
 		/** @private */
 		override public function project(axis:Point, projection:Object):void
 		{

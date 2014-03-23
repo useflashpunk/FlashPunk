@@ -135,6 +135,8 @@
 		{
 			// find bounds of the contained masks
 			var t:int, l:int, r:int, b:int, h:Hitbox, i:int = _count;
+			l = t = int.MAX_VALUE;
+			r = b = int.MIN_VALUE;
 			while (i --)
 			{
 				if ((h = _masks[i] as Hitbox))

@@ -419,6 +419,9 @@ package net.flashpunk.masks
 				}
 				
 				graphics.endFill();
+				
+				// draw pivot
+				graphics.drawCircle((offsetX + originX) * sx, (offsetY + originY) * sy, 2);
 			}
 		}
 
