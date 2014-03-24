@@ -197,6 +197,7 @@ package net.flashpunk.masks
 			var sx:Number = FP.screen.scaleX * FP.screen.scale;
 			var sy:Number = FP.screen.scaleY * FP.screen.scale;
 			
+			graphics.lineStyle(1, 0xFFFFFF, 0.25);
 			graphics.drawCircle((parent.x + _x - FP.camera.x) * sx, (parent.y + _y - FP.camera.y) * sy, radius * sx);
 		}
 

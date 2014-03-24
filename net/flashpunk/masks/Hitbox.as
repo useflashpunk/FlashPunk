@@ -54,8 +54,7 @@
 		{
 			if (_x == value) return;
 			_x = value;
-			if (list) list.update();
-			else if (parent) update();
+			update();
 		}
 		
 		/**
@@ -66,8 +65,7 @@
 		{
 			if (_y == value) return;
 			_y = value;
-			if (list) list.update();
-			else if (parent) update();
+			update();
 		}
 		
 		/**
@@ -78,8 +76,7 @@
 		{
 			if (_width == value) return;
 			_width = value;
-			if (list) list.update();
-			else if (parent) update();
+			update();
 		}
 		
 		/**
@@ -90,8 +87,7 @@
 		{
 			if (_height == value) return;
 			_height = value;
-			if (list) list.update();
-			else if (parent) update();
+			update();
 		}
 		
 		/** @public Updates the parent's bounds for this mask. */

@@ -216,7 +216,7 @@ package net.flashpunk.graphics
 		 * @param	toAlpha		Alpha at end of gradient.
 		 * @return	A new Image object.
 		 */
-		public static function createGradient (width:uint, height:uint, fromX:Number, fromY:Number, toX:Number, toY:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1):Image
+		public static function createGradient(width:uint, height:uint, fromX:Number, fromY:Number, toX:Number, toY:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1):Image
 		{
 			var bitmap:BitmapData = new BitmapData(width, height, true, 0x0);
 			
@@ -264,7 +264,7 @@ package net.flashpunk.graphics
 		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 * @return	A new Image object.
 		 */
-		public static function createPolygonFromPoints(points:Vector.<Point>, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
+		public static function createPolygon(points:Vector.<Point>, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
 		{
 			var graphics:Graphics = FP.sprite.graphics;
 			var minX:Number, maxX:Number;
@@ -424,8 +424,8 @@ package net.flashpunk.graphics
 			originX = poly.originX;
 			originY = poly.originY;
 			angle = poly.angle;
-			x = poly.x + poly.originX;
-			y = poly.y + poly.originY;
+			x = poly.minX// + poly.originX;
+			y = poly.minY// + poly.originY;
 		}
 		
 		/**

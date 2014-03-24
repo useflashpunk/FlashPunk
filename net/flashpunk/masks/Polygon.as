@@ -15,19 +15,25 @@ package net.flashpunk.masks
 	public class Polygon extends Hitbox
 	{
 		
-		/**
-		 * X coord to use for rotations.
-		 * Defaults to top-left corner.
-		 */
+		/** X coord to use for rotations. Defaults to top-left corner. */
 		public var originX:Number = 0;
 		
-		/**
-		 * Y coord to use for rotations.
-		 * Defaults to top-left corner.
-		 */
+		/** Y coord to use for rotations. Defaults to top-left corner. */
 		public var originY:Number = 0;
 		
+		/** Leftmost X coord of the polygon. */
+		public function get minX():int { return _minX; }
+		
+		/** Rightmost X coord of the polygon. */
+		public function get maxX():int { return _maxX; }
+		
+		/** Topmost Y coord of the polygon. */
+		public function get minY():int { return _minY; }
+		
+		/** Bottommost Y coord of the polygon. */
+		public function get maxY():int { return _maxY; }
 
+		
 		/**
 		 * Constructor.
 		 * @param	points		An array of coordinates that define the polygon (must have at least 3).
@@ -67,8 +73,8 @@ package net.flashpunk.masks
 		override protected function collideMask(other:Mask):Boolean
 		{
 			var offset:Number,
-				offsetX:Number = parent.x - other.parent.x,
-				offsetY:Number = parent.y - other.parent.y;
+				offsetX:Number = parent.x + _x - other.parent.x,
+				offsetY:Number = parent.y + _y - other.parent.y;
 
 			// project on the vertical axis of the hitbox/mask
 			project(verticalAxis, firstProj);
@@ -125,8 +131,8 @@ package net.flashpunk.masks
 		override protected function collideHitbox(other:Hitbox):Boolean
 		{
 			var offset:Number,
-				offsetX:Number = parent.x - other.parent.x,
-				offsetY:Number = parent.y - other.parent.y;
+				offsetX:Number = parent.x + _x - other.parent.x,
+				offsetY:Number = parent.y + _y - other.parent.y;
 
 			// project on the vertical axis of the hitbox
 			project(verticalAxis, firstProj);
@@ -191,6 +197,8 @@ package net.flashpunk.masks
 			
 			_fakeEntity.width = tileW;
 			_fakeEntity.height = tileH;
+			_fakeEntity.x = parent.x;
+			_fakeEntity.y = parent.y;
 			_fakeEntity.originX = other.parent.originX + other._x;
 			_fakeEntity.originY = other.parent.originY + other._y;
 			
@@ -220,12 +228,19 @@ package net.flashpunk.masks
 		{
 			var data:BitmapData = _fakePixelmask._data;
 			
-			_fakePixelmask._x = _x;
-			_fakePixelmask._y = _y;
-			_fakePixelmask.parent = parent;
+			_fakeEntity.width = parent.width;
+			_fakeEntity.height = parent.height;
+			_fakeEntity.x = parent.x - _x;
+			_fakeEntity.y = parent.y - _y;
+			_fakeEntity.originX = parent.originX;
+			_fakeEntity.originY = parent.originY;
+
+			_fakePixelmask._x = _x - parent.originX;
+			_fakePixelmask._y = _y - parent.originY;
+			_fakePixelmask.parent = _fakeEntity;
 			
-			if (data == null || (data.width < _width || data.height < _height)) {
-				data = new BitmapData(_width, height, true, 0);
+			if (data == null || (data.width < parent.width || data.height < parent.height)) {
+				data = new BitmapData(parent.width, parent.height, true, 0);
 			} else {
 				data.fillRect(data.rect, 0);
 			}
@@ -236,8 +251,8 @@ package net.flashpunk.masks
 			graphics.beginFill(0xFFFFFF, 1);
 			graphics.lineStyle(1, 0xFFFFFF, 1);
 			
-			var offsetX:Number = _x + parent.originX * 2;
-			var offsetY:Number = _y + parent.originY * 2;
+			var offsetX:Number = _x + parent.originX;
+			var offsetY:Number = _y + parent.originY;
 			
 			graphics.moveTo(points[_points.length - 1].x + offsetX, _points[_points.length - 1].y + offsetY);
 			for (var i:int = 0; i < _points.length; i++)
@@ -263,8 +278,8 @@ package net.flashpunk.masks
 			var p1:Point, p2:Point;
 			var i:int, j:int;
 			var nPoints:int = _points.length;
-			var offsetX:Number = parent.x + _x + parent.originX;
-			var offsetY:Number = parent.y + _y + parent.originY;
+			var offsetX:Number = parent.x + _x;
+			var offsetY:Number = parent.y + _y;
 			
 
 			// check if circle center is inside the polygon
@@ -327,8 +342,8 @@ package net.flashpunk.masks
 		protected function collidePolygon(other:Polygon):Boolean
 		{
 			var offset:Number;
-			var offsetX:Number = parent.x - other.parent.x;
-			var offsetY:Number = parent.y - other.parent.y;
+			var offsetX:Number = parent.x + _x - other.parent.x - other.x;
+			var offsetY:Number = parent.y + _y - other.parent.y - other.y;
 			var a:Point;
 			
 			// project other on this polygon axes
@@ -386,14 +401,8 @@ package net.flashpunk.masks
 				p = _points[i];
 				var cur:Number = axis.x * p.x + axis.y * p.y;	// dot product
 
-				if (cur < min)
-				{
-					min = cur;
-				}
-				else if (cur > max)
-				{
-					max = cur;
-				}
+				if (cur < min) min = cur;
+				else if (cur > max) max = cur;
 			}
 			projection.min = min;
 			projection.max = max;
@@ -403,8 +412,8 @@ package net.flashpunk.masks
 		{
 			if (parent != null)
 			{
-				var	offsetX:Number = parent.x - FP.camera.x,
-					offsetY:Number = parent.y - FP.camera.y;
+				var	offsetX:Number = parent.x +_x - FP.camera.x,
+					offsetY:Number = parent.y +_y - FP.camera.y;
 
 				var sx:Number = FP.screen.scaleX * FP.screen.scale;
 				var sy:Number = FP.screen.scaleY * FP.screen.scale;
@@ -421,7 +430,7 @@ package net.flashpunk.masks
 				graphics.endFill();
 				
 				// draw pivot
-				graphics.drawCircle((offsetX + originX) * sx, (offsetY + originY) * sy, 2);
+				graphics.drawCircle((offsetX + originX) * sx + .5, (offsetY + originY) * sy + .5, 2);
 			}
 		}
 
@@ -432,7 +441,7 @@ package net.flashpunk.masks
 		public function set angle(value:Number):void
 		{
 			if (value == _angle) return;
-			rotate(_angle - value);
+			rotate(value - _angle);
 			if (list != null || parent != null) update();
 		}
 
@@ -455,25 +464,29 @@ package net.flashpunk.masks
 		override public function update():void
 		{
 			project(horizontalAxis, firstProj); // width
-			_x = Math.ceil(firstProj.min);
-			_width = Math.ceil(firstProj.max - firstProj.min);
+			var projX:int = Math.round(firstProj.min);
+			_width = Math.round(firstProj.max - firstProj.min);
 			project(verticalAxis, secondProj); // height
-			_y = Math.ceil(secondProj.min);
-			_height = Math.ceil(secondProj.max - secondProj.min);
+			var projY:int = Math.round(secondProj.min);
+			_height = Math.round(secondProj.max - secondProj.min);
 
-			if (parent != null)
+			_minX = _x + projX;
+			_minY = _y + projY;
+			_maxX = Math.round(minX + _width);
+			_maxY = Math.round(minY + _height);
+			
+			if (list != null)
 			{
-				// update entity bounds
+				// update parent list
+				list.update();
+			}
+			else if (parent != null)
+			{
+				parent.originX = -_x - projX;
+				parent.originY = -_y - projY;
 				parent.width = _width;
 				parent.height = _height;
-
-				// since the collision infos haven't changed we can use them to calculate hitbox placement
-				parent.originX = int((_width - firstProj.max - firstProj.min)/2);
-				parent.originY = int((_height - secondProj.max - secondProj.min )/2);
 			}
-
-			// update parent list
-			if (list != null) list.update();
 		}
 
 		/**
@@ -485,7 +498,7 @@ package net.flashpunk.masks
 		 */
 		public static function createRegular(sides:int = 3, radius:Number = 100, angle:Number = 0):Polygon
 		{
-			if (sides < 3) throw "The polygon needs at least 3 sides";
+			if (sides < 3) throw "The polygon needs at least 3 sides.";
 
 			// figure out the angle required for each step
 			var rotationAngle:Number = (Math.PI * 2) / sides;
@@ -493,13 +506,14 @@ package net.flashpunk.masks
 			// loop through and generate each point
 			var points:Vector.<Point> = new Vector.<Point>();
 
+			var startAngle:Number = 0;
 			for (var i:int = 0; i < sides; i++)
 			{
-				var tempAngle:Number = i * rotationAngle;
 				var p:Point = new Point();
-				p.x = Math.cos(tempAngle) * radius;
-				p.y = Math.sin(tempAngle) * radius;
+				p.x = Math.cos(startAngle) * radius;
+				p.y = Math.sin(startAngle) * radius;
 				points.push(p);
+				startAngle += rotationAngle;
 			}
 			
 			// return the polygon
@@ -514,7 +528,7 @@ package net.flashpunk.masks
 		 * 
 		 * @return	The polygon
 		 */
-		public static function createFromVector(points:Vector.<Number>):Polygon
+		public static function createFromFlatVector(points:Vector.<Number>):Polygon
 		{
 			var p:Vector.<Point> = new Vector.<Point>();
 
@@ -584,6 +598,7 @@ package net.flashpunk.masks
 
 		private function removeDuplicateAxes():void
 		{
+			_indicesToRemove.length = 0;
 			for (var i:int = 0; i < _axes.length; i++ )
 			{
 				for (var j:int = 0; j < _axes.length; j++ )
@@ -593,13 +608,15 @@ package net.flashpunk.masks
 					// if the first vector is equal or similar to the second vector,
 					// remove it from the list. (for example, [1, 1] and [-1, -1]
 					// represent the same axis)
-					if ((_axes[i].x == _axes[j].x && _axes[i].y == _axes[j].y)
-						|| ( -_axes[i].x == _axes[j].x && -_axes[i].y == _axes[j].y))	// first axis inverted
+					if ((_axes[i].x == _axes[j].x && _axes[i].y == _axes[j].y) ||
+						( -_axes[i].x == _axes[j].x && -_axes[i].y == _axes[j].y))	// first axis inverted
 					{
-						_axes.splice(j, 1);
+						_indicesToRemove.push(j);
 					}
 				}
 			}
+			// remove duplicate axes
+			for (var k:int = 0; k < _indicesToRemove.length; k++) _axes.splice(_indicesToRemove[k], 1);
 		}
 
 		private function updateAxes():void
@@ -615,10 +632,18 @@ package net.flashpunk.masks
 		private var _axes:Vector.<Point>;
 		private var _projection:* = { min: 0.0, max:0.0 };
 
-		private var _fakeEntity:Entity;			// used for Grid collision
+		// Polygon bounding box.
+		private var _minX:int = 0;
+		private var _minY:int = 0;
+		private var _maxX:int = 0;
+		private var _maxY:int = 0;
+		
+		private var _fakeEntity:Entity;			// used for Grid and Pixelmask collision
 		private var _fakeTileHitbox:Hitbox;		// used for Grid collision
 		private var _fakePixelmask:Pixelmask;	// used for Pixelmask collision
 		
+		private var _indicesToRemove:Vector.<int> = new Vector.<int>();		// used in removeDuplicateAxes()
+
 		private static var _axis:Point = new Point();
 		private static var firstProj:* = { min: 0.0, max:0.0 };
 		private static var secondProj:* = { min: 0.0, max:0.0 };
