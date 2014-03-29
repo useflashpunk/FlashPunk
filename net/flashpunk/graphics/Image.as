@@ -257,19 +257,23 @@ package net.flashpunk.graphics
 		
 		/**
 		 * Creates a new polygon Image from an array of points.
-		 * @param	points		Array containing the polygon's points.
+		 * @param	polygon		A Polygon object to create the Image from.
 		 * @param	color		Color of the polygon.
 		 * @param	alpha		Alpha of the polygon.
 		 * @param	fill		If the polygon should be filled with the color (true) or just an outline (false).
 		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 * @return	A new Image object.
 		 */
-		public static function createPolygon(points:Vector.<Point>, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
+		public static function createPolygon(polygon:Polygon, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
 		{
 			var graphics:Graphics = FP.sprite.graphics;
+			var points:Vector.<Point> = polygon.points;
 			var minX:Number, maxX:Number;
 			var minY:Number, maxY:Number;
 			var p:Point;
+			var originalAngle:Number = polygon.angle;
+			
+			polygon.angle = 0;	// set temporarily angle to 0 so we can sync with image angle later
 			
 			minX = minY = Number.POSITIVE_INFINITY;
 			maxX = maxY = Number.NEGATIVE_INFINITY;
@@ -309,6 +313,15 @@ package net.flashpunk.graphics
 			data.draw(FP.sprite, matrix);
 			
 			var image:Image = new Image(data);
+			
+			// adjust position, origin and angle
+			image.x = polygon.x + polygon.originX;
+			image.y = polygon.y + polygon.originY;
+			image.originX = image.x - polygon.minX;
+			image.originY = image.y - polygon.minY;
+			image.angle = originalAngle;
+			polygon.angle = originalAngle;
+			
 			return image;
 		}
 		
@@ -414,18 +427,6 @@ package net.flashpunk.graphics
 			
 			_tint.alphaMultiplier = _alpha;
 			updateBuffer();
-		}
-		
-		/**
-		 * Sync the image with the specified polygon mask.
-		 */
-		public function syncWithPolygon(poly:Polygon):void 
-		{
-			originX = poly.originX;
-			originY = poly.originY;
-			angle = poly.angle;
-			x = poly.minX// + poly.originX;
-			y = poly.minY// + poly.originY;
 		}
 		
 		/**

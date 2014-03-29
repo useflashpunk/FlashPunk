@@ -36,6 +36,7 @@ package net.flashpunk.masks
 		
 		/**
 		 * Constructor.
+		 * 
 		 * @param	points		An array of coordinates that define the polygon (must have at least 3).
 		 * @param	x			X offset of the polygon.
 		 * @param	y			Y offset of the polygon.
