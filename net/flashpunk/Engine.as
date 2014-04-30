@@ -39,6 +39,13 @@
 		 */
 		public var tickRate:uint = 4;
 		
+		/** Should Engine catch runtime errors? */
+		public function get catchRuntimeErrors():Boolean { return _update == debugUpdate; }
+		public function set catchRuntimeErrors(value:Boolean):void
+		{
+			_update = value ? debugUpdate : update;
+		}
+		
 		/**
 		 * Constructor. Defines startup information about your game.
 		 * @param	width			The width of your game.
@@ -96,6 +103,19 @@
 				FP._world.update();
 			}
 			FP._world.updateLists(false);
+		}
+		
+		/** Updates the game, updating the World and Entites, and catches runtime errors. */
+		public function debugUpdate():void
+		{
+			try
+			{
+				update();
+			}
+			catch (error:Error)
+			{
+				FP.log("["+error.name+"]", error.message);
+			}
 		}
 		
 		/**
@@ -208,7 +228,7 @@
 			if (FP._console) FP._console.update();
 			
 			// update loop
-			if (!paused) update();
+			if (!paused) _update();
 			
 			// update input
 			Input.update();
@@ -256,7 +276,7 @@
 				_prev = _time;
 				
 				// update loop
-				if (!paused) update();
+				if (!paused) _update();
 				
 				// update input
 				Input.update();
@@ -326,5 +346,7 @@
 		/** @private */ private var _frameLast:uint = 0;
 		/** @private */ private var _frameListSum:uint = 0;
 		/** @private */ private var _frameList:Vector.<uint> = new Vector.<uint>;
+		
+		/** @private */ private var _update:Function = update;
 	}
 }
