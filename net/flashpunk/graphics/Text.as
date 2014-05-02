@@ -18,12 +18,12 @@
 		/**
 		 * The font to assign to new Text objects.
 		 */
-		public static var font:String = "default";
+		public static var font:String = "Source Code Pro";
 		
 		/**
 		 * The font size to assign to new Text objects.
 		 */
-		public static var size:uint = 16;
+		public static var size:uint = 12;
 		
 		/**
 		 * The alignment to assign to new Text objects.
@@ -106,7 +106,7 @@
 			
 			_field.embedFonts = true;
 			_field.wordWrap = _wordWrap;
-			_form = new TextFormat(_font, _size, 0xFFFFFF);
+			_form = new TextFormat(_font, _size, 0x333333);
 			_form.align = _align;
 			_form.leading = _leading;
 			_field.defaultTextFormat = _form;
@@ -544,10 +544,10 @@
 		/** @protected */ protected var _wordWrap:Boolean;
 		
 		// Default font family.
-		// Use this option when compiling with Flex SDK 3 or lower
-		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
-		// Use this option when compiling with Flex SDK 4
-		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
+		[Embed(source = 'SourceCodePro-Regular.otf', embedAsCFF="false", fontFamily = "Source Code Pro")]
 		/** @private */ private static var _FONT_DEFAULT:Class;
+
+		[Embed(source = 'SourceCodePro-Bold.otf', embedAsCFF="false", fontFamily = "Source Code Pro", fontWeight = "bold")]
+		/** @private */ private static var _FONT_BOLD:Class;
 	}
 }
