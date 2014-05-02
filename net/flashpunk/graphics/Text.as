@@ -137,7 +137,7 @@
 		 * Usage:
 		   text.setStyle("red", {color: 0xFF0000});
 		   text.setStyle("big", {size: text.size*2});
-		   text.richText = "<big>Hello</big> <red>world</red>";
+		   text.richText = "&lt;big&gt;Hello&lt;/big&gt; &lt;red&gt;world&lt;/red&gt;";
 		 */
 		public function setStyle(tagName:String, params:*):void
 		{
@@ -306,7 +306,7 @@
 			var i:int;
 			
 			// reassign text to force a recalc of TextLineMetrics and so be sure they report correct values
-			_field.htmlText = _field.htmlText;
+			_richText ? _field.htmlText = _field.htmlText : _field.text = _field.text;
 			
 			var tlm: TextLineMetrics;
 			var remainder: Number;
