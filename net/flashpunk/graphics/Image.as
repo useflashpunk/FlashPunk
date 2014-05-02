@@ -256,7 +256,7 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * Creates a new polygon Image from an array of points.
+		 * Creates a new polygon Image from a Polygon.
 		 * @param	polygon		A Polygon object to create the Image from.
 		 * @param	color		Color of the polygon.
 		 * @param	alpha		Alpha of the polygon.
@@ -315,8 +315,8 @@ package net.flashpunk.graphics
 			var image:Image = new Image(data);
 			
 			// adjust position, origin and angle
-			image.x = polygon.x + polygon.originX;
-			image.y = polygon.y + polygon.originY;
+			image.x = polygon.x + polygon.pivotX;
+			image.y = polygon.y + polygon.pivotY;
 			image.originX = image.x - polygon.minX;
 			image.originY = image.y - polygon.minY;
 			image.angle = originalAngle;

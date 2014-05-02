@@ -16,10 +16,10 @@ package net.flashpunk.masks
 	{
 		
 		/** X coord to use for rotations. Defaults to top-left corner. */
-		public var originX:Number = 0;
+		public var pivotX:Number = 0;
 		
 		/** Y coord to use for rotations. Defaults to top-left corner. */
-		public var originY:Number = 0;
+		public var pivotY:Number = 0;
 		
 		/** Leftmost X coord of the polygon. */
 		public function get minX():int { return _minX; }
@@ -38,12 +38,10 @@ package net.flashpunk.masks
 		 * Constructor.
 		 * 
 		 * @param	points		An array of coordinates that define the polygon (must have at least 3).
-		 * @param	x			X offset of the polygon.
-		 * @param	y			Y offset of the polygon.
-		 * @param	originX		X pivot for rotations.
-		 * @param	originY		Y pivot for rotations.
+		 * @param	pivotX		X pivot for rotations.
+		 * @param	pivotY		Y pivot for rotations.
 		 */
-		public function Polygon(points:Vector.<Point>, x:int = 0, y:int = 0, originX:Number = 0, originY:Number = 0)
+		public function Polygon(points:Vector.<Point>, pivotX:Number = 0, pivotY:Number = 0)
 		{
 			if (points.length < 3) throw "The polygon needs at least 3 sides";
 			_points = points;
@@ -58,11 +56,8 @@ package net.flashpunk.masks
 			_check[Circle] = collideCircle;
 			_check[Polygon] = collidePolygon;
 
-			_x = x;
-			_y = y;
-			
-			this.originX = originX;
-			this.originY = originY;
+			this.pivotX = pivotX;
+			this.pivotY = pivotY;
 			_angle = 0;
 
 			updateAxes();
@@ -431,12 +426,12 @@ package net.flashpunk.masks
 				graphics.endFill();
 				
 				// draw pivot
-				graphics.drawCircle((offsetX + originX) * sx + .5, (offsetY + originY) * sy + .5, 2);
+				graphics.drawCircle((offsetX + pivotX) * sx + .5, (offsetY + pivotY) * sy + .5, 2);
 			}
 		}
 
 		/**
-		 * Rotation angle (in degress) of the polygon (rotates around origin point).
+		 * Rotation angle (in degress) of the polygon (rotates around pivot point).
 		 */
 		public function get angle():Number { return _angle; }
 		public function set angle(value:Number):void
@@ -497,7 +492,7 @@ package net.flashpunk.masks
 		 * @param	angle	How much the polygon is rotated
 		 * @return	The polygon
 		 */
-		public static function createRegular(sides:int = 3, radius:Number = 100, angle:Number = 0):Polygon
+		public static function createRegular(sides:int, radius:Number, angle:Number = 0):Polygon
 		{
 			if (sides < 3) throw "The polygon needs at least 3 sides.";
 
@@ -526,10 +521,11 @@ package net.flashpunk.masks
 		/**
 		 * Creates a polygon from an array were even numbers are x and odd are y
 		 * @param	points	Vector containing the polygon's points.
+		 * @param	angle	How much the polygon is rotated
 		 * 
 		 * @return	The polygon
 		 */
-		public static function createFromFlatVector(points:Vector.<Number>):Polygon
+		public static function createFromFlatVector(points:Vector.<Number>, angle:Number = 0):Polygon
 		{
 			var p:Vector.<Point> = new Vector.<Point>();
 
@@ -538,7 +534,9 @@ package net.flashpunk.masks
 			{
 				p.push(new Point(points[i++], points[i++]));
 			}
-			return new Polygon(p);
+			var poly:Polygon = new Polygon(p);
+			poly.angle = angle;
+			return poly;
 		}
 
 		private function rotate(angleDelta:Number):void
@@ -552,14 +550,14 @@ package net.flashpunk.masks
 			for (var i:int = 0; i < _points.length; i++)
 			{
 				p = _points[i];
-				var dx:Number = p.x - originX;
-				var dy:Number = p.y - originY;
+				var dx:Number = p.x - pivotX;
+				var dy:Number = p.y - pivotY;
 
 				var pointAngle:Number = Math.atan2(dy, dx);
 				var length:Number = Math.sqrt(dx * dx + dy * dy);
 
-				p.x = Math.cos(pointAngle + angleDelta) * length + originX;
-				p.y = Math.sin(pointAngle + angleDelta) * length + originY;
+				p.x = Math.cos(pointAngle + angleDelta) * length + pivotX;
+				p.y = Math.sin(pointAngle + angleDelta) * length + pivotY;
 			}
 			var a:Point;
 			
