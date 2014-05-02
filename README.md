@@ -92,4 +92,4 @@ FP.console.watch(player.speed);
 Community
 ---------
 
-If all this just isn't enough and you absolutely require a team of berets and neckbeards, the FlashPunk Developers community is an incredible resource eager to answer any question you can fathom. Oh, and its free as well.
+If all this just isn't enough and you absolutely require a team of berets and neckbeards, the [FlashPunk Developers community](http://developers.useflashpunk.net) is an incredible resource eager to answer any question you can fathom. Oh, and its free as well.
