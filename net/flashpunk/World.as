@@ -2,7 +2,6 @@
 {
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
-	import net.flashpunk.utils.Draw;
 
 	/**
 	 * Updated by Engine, main game container that holds all currently active Entities.
@@ -91,7 +90,6 @@
 					e = e._renderPrev;
 				}
 			}
-			Draw.renderCallQueue();
 		}
 		
 		/**

@@ -750,43 +750,52 @@
 		}
 
 		/**
-		 * Enqueues a call to a function, to be executed at the end of the next render step. 
-		 * Useful to debug draw directly from the update step, rather than having to override the render method.
-		 * 
-		 * Ex.:
-		 * Draw.enqueueCall(function():Void {
-		 *     Draw.line(player.x, player.y, enemy.x, enemy.y);
-		 * });
-		 * 
-		 * @param	method		The function to be enqueued.
+		 * Draws a polygon (or a polyline with closed = false) from an array of points.
+		 * @param	x			X position of the poly.
+		 * @param	y			Y position of the poly.
+		 * @param	points		Array containing the poly's points.
+		 * @param	color		Color of the poly.
+		 * @param	alpha		Alpha of the poly.
+		 * @param	fill		If the poly should be filled with the color (true) or just an outline (false).
+		 * @param	closed		If the poly should be closed (true) or a polyline (false).
+		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 */
-		public static function enqueueCall(method:Function):void
+		public static function poly(x:Number, y:Number, points:Vector.<Point>, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, closed:Boolean = true, thick:Number = 1):void
 		{
-			if (method != null)
-				_callQueue.push(method);
-			else	
-				throw new Error("[method] must be a non-null Function.");
-		}
-		
-		/**
-		 * Executes all the functions enqueued with Draw.enqueueCall(), and clears the queue. (called from World.render()).
-		 */
-		public static function renderCallQueue():void 
-		{
-			if (_callQueue.length <= 0) return;
+			x -= _camera.x;
+			y -= _camera.y;
 			
-			var len:int = _callQueue.length;
-			for (var i:int = 0; i < len; i++) {
-				_callQueue[i]();
+			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
+			_graphics.clear();
+			
+			fill = fill && closed;
+			if (fill) {
+				_graphics.beginFill(color, alpha);
+			} else {
+				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
 			}
-			_callQueue.length = 0;
+			
+			if (closed) _graphics.moveTo(points[points.length - 1].x, points[points.length - 1].y);
+			else _graphics.moveTo(points[0].x, points[0].y);
+			var p:Point;
+			for (var i:int = 0; i < points.length; i++)
+			{
+				p = points[i];
+				_graphics.lineTo(p.x, p.y);
+			}
+			if (fill) _graphics.endFill();
+			
+			var matrix:Matrix = FP.matrix;
+			matrix.identity();
+			matrix.translate(x, y);
+
+			_target.draw(FP.sprite, matrix, null, blend);
 		}
-		
+
 		// Drawing information.
 		/** @private */ private static var _target:BitmapData;
 		/** @private */ private static var _camera:Point;
 		/** @private */ private static var _graphics:Graphics = FP.sprite.graphics;
 		/** @private */ private static var _rect:Rectangle = FP.rect;
-		/** @private */ private static var _callQueue:Vector.<Function> = new Vector.<Function>();
 	}
 }
