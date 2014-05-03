@@ -132,26 +132,26 @@ package net.flashpunk.debug
 			_fpsReadText.height = 20;
 			_fpsReadText.x = 2;
 			_fpsReadText.y = 1;
-			
-			// The frame timing text.
-			if (big)
-			{
-				_topTray.addChild(_fpsInfo);
-				// Add text fields.
-				for (var i:uint = 0; i < _fpsInfoText.length; i++)
-				{
-					_fpsInfoText[i] = new TextField();
-					_fpsInfoText[i].defaultTextFormat = format(12);
-					_fpsInfoText[i].embedFonts = true;
-					_fpsInfoText[i].width = 100;
-					_fpsInfoText[i].height = 20;
-					_fpsInfoText[i].x = 100 * i;
-					_fpsInfoText[i].y = 1;
-					_fpsInfo.addChild(_fpsInfoText[i]);
-				}
 
-				_fpsInfo.x = 75;
+			_systemTimelineGraphs[0] = new TimelineGraph(100, 30, "Update", "ms", 0xff7ab2ff);
+			_systemTimelineGraphs[1] = new TimelineGraph(100, 30, "Render", "ms", 0xff7aff8c);
+			_systemTimelineGraphs[2] = new TimelineGraph(100, 30, "Game", "ms", 0xfffff47a);
+			_systemTimelineGraphs[3] = new TimelineGraph(100, 30, "Flash", "ms", 0xffffa27a);
+			
+			// The frame timing graphs.
+			_sprite.addChild(_systemTimelineGraphSprite);
+			_systemTimelineGraphSprite.visible = false;
+
+			// Add graphs.
+			for (var i:uint = 0; i < _systemTimelineGraphs.length; i++)
+			{
+				_systemTimelineGraphs[i].x = 106 * i;
+				_systemTimelineGraphs[i].y = 0;
+				_systemTimelineGraphSprite.addChild(_systemTimelineGraphs[i]);
 			}
+
+			_systemTimelineGraphSprite.x = 2;
+			_systemTimelineGraphSprite.y = 23;
 			
 			// The memory usage
 			_topTray.addChild(_memReadText);
@@ -159,7 +159,7 @@ package net.flashpunk.debug
 			_memReadText.embedFonts = true;
 			_memReadText.width = 110;
 			_memReadText.height = 20;
-			_memReadText.x = _fpsInfo.x + _fpsInfo.width + 5;
+			_memReadText.x = _fpsReadText.x + _fpsReadText.width + 5;
 			_memReadText.y = 1;
 
 			// The bottom tray.
@@ -173,19 +173,10 @@ package net.flashpunk.debug
 			
 			// The output log text.
 			_bottomTray.addChild(_logRead);
-			// TODO: Removed _logReadText0. Need to remove all traces.
-			_logRead.addChild(_logReadText1);
-			_logReadText0.defaultTextFormat = format(12, 0xFFFFFF);
-			_logReadText1.defaultTextFormat = format(12, 0xFFFFFF);
-			_logReadText0.embedFonts = true;
-			_logReadText1.embedFonts = true;
-			_logReadText0.selectable = false;
-			_logReadText0.width = 80;
-			_logReadText0.height = 20;
-			_logReadText1.width = width;
-			_logReadText0.x = 2;
-			_logReadText0.y = 3;
-			_logReadText0.text = "OUTPUT";
+			_logRead.addChild(_logReadText);
+			_logReadText.defaultTextFormat = format(12, 0xFFFFFF, "left", false, "Source Code Pro");
+			_logReadText.embedFonts = true;
+			_logReadText.width = width;
 			_logHeight = height - 60;
 			_logBar = new Rectangle(4, 4, 16, _logHeight - 8);
 			_logBarGlobal = _logBar.clone();
@@ -213,18 +204,17 @@ package net.flashpunk.debug
 			_debRead.y = height - (_debReadText1.y + _debReadText1.height);
 			
 			// The button panel buttons.
-			_sprite.addChild(_butRead);
+			_topTray.addChild(_butRead);
 			_butRead.addChild(_butDebug = new CONSOLE_DEBUG);
 			_butRead.addChild(_butOutput = new CONSOLE_OUTPUT);
 			_butRead.addChild(_butPlay = new CONSOLE_PLAY).x = 20;
 			_butRead.addChild(_butPause = new CONSOLE_PAUSE).x = 20;
 			_butRead.addChild(_butStep = new CONSOLE_STEP).x = 40;
 			updateButtons();
+
+			_butRead.x = _memReadText.x + _memReadText.width + 5;
 			
 			// The button panel.
-			_butRead.graphics.clear();
-			_butRead.graphics.beginFill(0, .75);
-			_butRead.graphics.drawRoundRectComplex(-20, 0, 100, 20, 0, 0, 20, 20);
 			
 			// Default the display to debug view
 			debug = true;
@@ -332,6 +322,21 @@ package net.flashpunk.debug
 			
 			// Console toggle.
 			if (Input.pressed(toggleKey)) paused = !_paused;
+
+
+			// Clicked the FPS text.
+			if (_fpsReadText.mouseX < 75 && _fpsReadText.mouseY < 20)
+			{
+				_fpsReadText.alpha = 0.5;
+				if (Input.mousePressed)
+				{
+					_systemTimelineGraphSprite.visible = !_systemTimelineGraphSprite.visible;
+				}
+			}
+			else
+			{
+				_fpsReadText.alpha = 1.0;
+			}
 		}
 		
 		/**
@@ -675,14 +680,14 @@ package net.flashpunk.debug
 					n = i + Math.min(_logLines, LOG.length);
 						
 					while (i < n) s += LOG[i ++] + "\n";
-					_logReadText1.text = s;
+					_logReadText.text = s;
 				}
-				else _logReadText1.text = "";
+				else _logReadText.text = "";
 				
 				// Indent the text for the scrollbar and size it to the log panel.
-				_logReadText1.height = _logHeight;
-				_logReadText1.x = _logBar.right + 4;
-				_logReadText1.y = 4;
+				_logReadText.height = _logHeight;
+				_logReadText.x = _logBar.right + 4;
+				_logReadText.y = 4;
 			}
 			else
 			{	
@@ -694,17 +699,17 @@ package net.flashpunk.debug
 				_bottomTray.graphics.drawRect(0, 0, width, 1);
 				_bottomTray.y = height - 21;
 
-				_logReadText1.text = LOG.length ? LOG[LOG.length - 1] : "";
-				_logReadText1.x = 2;
-				_logReadText1.y = 1;
+				_logReadText.text = LOG.length ? LOG[LOG.length - 1] : "";
+				_logReadText.x = 2;
+				_logReadText.y = 1;
 			}
 
 			// Update selectability of TextFields.
-				_logReadText1.selectable = _paused;
+				_logReadText.selectable = _paused;
 				_fpsReadText.selectable = _paused;
-				for each (var textField:TextField in _fpsInfoText)
+				for each (var graph:TimelineGraph in _systemTimelineGraphs)
 				{
-					textField.selectable = _paused;
+					graph.textField.selectable = _paused;
 				}
 				_memReadText.selectable = _paused;
 				_entReadText.selectable = _paused;
@@ -715,13 +720,13 @@ package net.flashpunk.debug
 		/** @private Update the FPS/frame timing panel text. */
 		private function updateFPSRead():void
 		{
-			_fpsReadText.text = "FPS: " + FP.frameRate.toFixed();
+			_fpsReadText.text = String(_systemTimelineGraphSprite.visible ? "–" : "+") + " FPS: " + FP.frameRate.toFixed();
 			_fpsReadText.textColor = FP.frameRate > 30 ? FP.frameRate > 45 ? 0x91ff00 : 0xffe500 : 0xff4d00;
-			_fpsInfoText[0].text = "Update: " + String(FP._updateTime) + "ms";
-			_fpsInfoText[1].text = "Render: " + String(FP._renderTime) + "ms";
-			_fpsInfoText[2].text = "Game: " + String(FP._gameTime) + "ms";
-			_fpsInfoText[3].text = "Flash: " + String(FP._flashTime) + "ms";
-			_memReadText.text = "MEM: " + Number(System.totalMemory/1024/1024).toFixed(2) + "MB";
+			_systemTimelineGraphs[0].addData(FP._updateTime);
+			_systemTimelineGraphs[1].addData(FP._renderTime);
+			_systemTimelineGraphs[2].addData(FP._gameTime);
+			_systemTimelineGraphs[3].addData(FP._flashTime);
+			_memReadText.text = "Memory: " + Number(System.totalMemory/1024/1024).toFixed(2) + "MB";
 		}
 		
 		/** @private Update the debug panel text. */
@@ -775,7 +780,6 @@ package net.flashpunk.debug
 		private function updateButtons():void
 		{
 			// Button visibility.
-			_butRead.x = _fpsInfo.x + _fpsInfo.width + int((_entRead.x - (_fpsInfo.x + _fpsInfo.width)) / 2) - 30;
 			_butDebug.visible = !_debug;
 			_butOutput.visible = _debug;
 			_butPlay.visible = FP.engine.paused;
@@ -811,12 +815,13 @@ package net.flashpunk.debug
 		}
 		
 		/** @private Gets a TextFormat object with the formatting. */
-		private function format(size:uint = 12, color:uint = 0xFFFFFF, align:String = "left", isBold:Boolean = false):TextFormat
+		private function format(size:uint = 12, color:uint = 0xFFFFFF, align:String = "left", isBold:Boolean = false, fontFamily:String = "Source Sans Pro"):TextFormat
 		{
 			_format.size = size;
 			_format.color = color;
 			_format.align = align;
 			_format.bold = isBold;
+			_format.font = fontFamily;
 			return _format;
 		}
 		
@@ -837,7 +842,7 @@ package net.flashpunk.debug
 		
 		// Console display objects.
 		/** @private */ private var _sprite:Sprite = new Sprite;
-		/** @private */ private var _format:TextFormat = new TextFormat("Source Code Pro");
+		/** @private */ private var _format:TextFormat = new TextFormat();
 		/** @private */ private var _back:Sprite = new Sprite;
 		/** @private */ private var _topTray:Sprite = new Sprite;
 		/** @private */ private var _bottomTray:Sprite = new Sprite;
@@ -846,13 +851,13 @@ package net.flashpunk.debug
 		/** @private */ private var _fpsRead:Sprite = new Sprite;
 		/** @private */ private var _fpsReadText:TextField = new TextField;
 		/** @private */ private var _fpsInfo:Sprite = new Sprite;
-		/** @private */ private var _fpsInfoText:Vector.<TextField> = new Vector.<TextField>(4);
+		/** @private */ private var _systemTimelineGraphs:Vector.<TimelineGraph> = new Vector.<TimelineGraph>(4);
+		/** @private */ private var _systemTimelineGraphSprite:Sprite = new Sprite;
 		/** @private */ private var _memReadText:TextField = new TextField;
 		
 		// Output panel information.
 		/** @private */ private var _logRead:Sprite = new Sprite;
-		/** @private */ private var _logReadText0:TextField = new TextField;
-		/** @private */ private var _logReadText1:TextField = new TextField;
+		/** @private */ private var _logReadText:TextField = new TextField;
 		/** @private */ private var _logHeight:uint;
 		/** @private */ private var _logBar:Rectangle;
 		/** @private */ private var _logBarGlobal:Rectangle;
