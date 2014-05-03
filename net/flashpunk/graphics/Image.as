@@ -256,38 +256,28 @@ package net.flashpunk.graphics
 		}
 		
 		/**
-		 * Creates a new polygon Image from a Polygon.
-		 * @param	polygon		A Polygon object to create the Image from.
+		 * Creates a new polygon Image from an array of points.
+		 * @param	points		An array of coordinates (must be positive) that define the polygon.
 		 * @param	color		Color of the polygon.
 		 * @param	alpha		Alpha of the polygon.
 		 * @param	fill		If the polygon should be filled with the color (true) or just an outline (false).
 		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 * @return	A new Image object.
 		 */
-		public static function createPolygon(polygon:Polygon, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
+		public static function createPolygon(points:Vector.<Point>, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
 		{
 			var graphics:Graphics = FP.sprite.graphics;
-			var points:Vector.<Point> = polygon.points;
-			var minX:Number, maxX:Number;
-			var minY:Number, maxY:Number;
 			var p:Point;
-			var originalAngle:Number = polygon.angle;
 			
-			polygon.angle = 0;	// set temporarily angle to 0 so we can sync with image angle later
+			var maxX:Number = Number.NEGATIVE_INFINITY;
+			var maxY:Number = Number.NEGATIVE_INFINITY;
 			
-			minX = minY = Number.POSITIVE_INFINITY;
-			maxX = maxY = Number.NEGATIVE_INFINITY;
-			
-			// find polygon bounds
+			// find max x and y coords
 			for (var i:int = 0; i < points.length; i++) {
 				p = points[i];
-				if (p.x < minX) minX = p.x;
 				if (p.x > maxX) maxX = p.x;
-				if (p.y < minY) minY = p.y;
 				if (p.y > maxY) maxY = p.y;
 			}
-			var w:int = Math.ceil(maxX - minX);
-			var h:int = Math.ceil(maxY - minY);
 			
 			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
 			graphics.clear();
@@ -305,24 +295,10 @@ package net.flashpunk.graphics
 			}
 			graphics.endFill();
 			
-			var matrix:Matrix = FP.matrix;
-			matrix.identity();
-			matrix.translate(-minX, -minY);
-
-			var data:BitmapData = new BitmapData(w, h, true, 0);
-			data.draw(FP.sprite, matrix);
+			var data:BitmapData = new BitmapData(maxX, maxY, true, 0);
+			data.draw(FP.sprite);
 			
-			var image:Image = new Image(data);
-			
-			// adjust position, origin and angle
-			image.x = polygon.x + polygon.pivotX;
-			image.y = polygon.y + polygon.pivotY;
-			image.originX = image.x - polygon.minX;
-			image.originY = image.y - polygon.minY;
-			image.angle = originalAngle;
-			polygon.angle = originalAngle;
-			
-			return image;
+			return new Image(data);
 		}
 		
 		/**

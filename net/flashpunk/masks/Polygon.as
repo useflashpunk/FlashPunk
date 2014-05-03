@@ -10,34 +10,14 @@ package net.flashpunk.masks
 
 
 	/** 
-	 * Uses polygonal structure to check for collisions.
+	 * Uses polygon edges to check for collisions (only works with convex polygons).
 	 */
 	public class Polygon extends Hitbox
 	{
-		
-		/** X coord to use for rotations. Defaults to top-left corner. */
-		public var pivotX:Number = 0;
-		
-		/** Y coord to use for rotations. Defaults to top-left corner. */
-		public var pivotY:Number = 0;
-		
-		/** Leftmost X coord of the polygon. */
-		public function get minX():int { return _minX; }
-		
-		/** Rightmost X coord of the polygon. */
-		public function get maxX():int { return _maxX; }
-		
-		/** Topmost Y coord of the polygon. */
-		public function get minY():int { return _minY; }
-		
-		/** Bottommost Y coord of the polygon. */
-		public function get maxY():int { return _maxY; }
-
-		
 		/**
 		 * Constructor.
 		 * 
-		 * @param	points		An array of coordinates that define the polygon (must have at least 3).
+		 * @param	points		An array of coordinates that define the convex polygon (must have at least 3).
 		 * @param	pivotX		X pivot for rotations.
 		 * @param	pivotY		Y pivot for rotations.
 		 */
@@ -45,6 +25,9 @@ package net.flashpunk.masks
 		{
 			if (points.length < 3) throw "The polygon needs at least 3 sides";
 			_points = points;
+			_transformedPoints = new Vector.<Point>();
+			for (var i:int = 0; i < points.length; i++) _transformedPoints[i] = points[i].clone();
+			
 			_fakeEntity = new Entity();
 			_fakeTileHitbox = new Hitbox();
 			_fakePixelmask = new Pixelmask(new BitmapData(1, 1));
@@ -250,10 +233,10 @@ package net.flashpunk.masks
 			var offsetX:Number = _x + parent.originX;
 			var offsetY:Number = _y + parent.originY;
 			
-			graphics.moveTo(points[_points.length - 1].x + offsetX, _points[_points.length - 1].y + offsetY);
-			for (var i:int = 0; i < _points.length; i++)
+			graphics.moveTo(points[_transformedPoints.length - 1].x + offsetX, _transformedPoints[_transformedPoints.length - 1].y + offsetY);
+			for (var i:int = 0; i < _transformedPoints.length; i++)
 			{
-				graphics.lineTo(_points[i].x + offsetX, _points[i].y + offsetY);
+				graphics.lineTo(_transformedPoints[i].x + offsetX, _transformedPoints[i].y + offsetY);
 			}
 			
 			graphics.endFill();
@@ -273,15 +256,15 @@ package net.flashpunk.masks
 			var edgesCrossed:int = 0;
 			var p1:Point, p2:Point;
 			var i:int, j:int;
-			var nPoints:int = _points.length;
+			var nPoints:int = _transformedPoints.length;
 			var offsetX:Number = parent.x + _x;
 			var offsetY:Number = parent.y + _y;
 			
 
 			// check if circle center is inside the polygon
 			for (i = 0, j = nPoints - 1; i < nPoints; j = i, i++) {
-				p1 = _points[i];
-				p2 = _points[j];
+				p1 = _transformedPoints[i];
+				p2 = _transformedPoints[j];
 				
 				var distFromCenter:Number = (p2.x - p1.x) * (other._y + other.parent.y - p1.y - offsetY) / (p2.y - p1.y) + p1.x + offsetX;
 				
@@ -303,8 +286,8 @@ package net.flashpunk.masks
 			var closestY:Number;
 			
 			for (i = 0, j = nPoints - 1; i < nPoints; j = i, i++) {
-				p1 = _points[i];
-				p2 = _points[j];
+				p1 = _transformedPoints[i];
+				p2 = _transformedPoints[j];
 
 				var segmentLenSqr:Number = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
 				
@@ -387,14 +370,14 @@ package net.flashpunk.masks
 		/** @private Projects this polygon points on axis and returns min and max values in projection object. */
 		override public function project(axis:Point, projection:Object):void
 		{
-			var p:Point = _points[0];
+			var p:Point = _transformedPoints[0];
 			
 			var min:Number = axis.x * p.x + axis.y * p.y,	// dot product
 				max:Number = min;
 
-			for (var i:int = 1; i < _points.length; i++)
+			for (var i:int = 1; i < _transformedPoints.length; i++)
 			{
-				p = _points[i];
+				p = _transformedPoints[i];
 				var cur:Number = axis.x * p.x + axis.y * p.y;	// dot product
 
 				if (cur < min) min = cur;
@@ -417,10 +400,10 @@ package net.flashpunk.masks
 				graphics.beginFill(0xFFFFFF, .15);
 				graphics.lineStyle(1, 0xFFFFFF, 0.25);
 				
-				graphics.moveTo((points[_points.length - 1].x + offsetX) * sx , (_points[_points.length - 1].y + offsetY) * sy);
-				for (var i:int = 0; i < _points.length; i++)
+				graphics.moveTo((points[_transformedPoints.length - 1].x + offsetX) * sx , (_transformedPoints[_transformedPoints.length - 1].y + offsetY) * sy);
+				for (var i:int = 0; i < _transformedPoints.length; i++)
 				{
-					graphics.lineTo((_points[i].x + offsetX) * sx, (_points[i].y + offsetY) * sy);
+					graphics.lineTo((_transformedPoints[i].x + offsetX) * sx, (_transformedPoints[i].y + offsetY) * sy);
 				}
 				
 				graphics.endFill();
@@ -431,30 +414,71 @@ package net.flashpunk.masks
 		}
 
 		/**
-		 * Rotation angle (in degress) of the polygon (rotates around pivot point).
+		 * Rotation angle (in degrees) of the polygon (rotates around pivot point).
 		 */
 		public function get angle():Number { return _angle; }
 		public function set angle(value:Number):void
 		{
 			if (value == _angle) return;
-			rotate(value - _angle);
+			_angle = value;
+			transformPoints();
+			
 			if (list != null || parent != null) update();
 		}
+	
+		/** X coord to use for rotations. Defaults to top-left corner. */
+		public function get pivotX():Number { return _pivotX; }
+		public function set pivotX(value:Number):void
+		{ 
+			if (_pivotX == value) return;
+			_pivotX = value;
+			transformPoints();
+			
+			if (list != null || parent != null) update();
+		}
+		
+		/** Y coord to use for rotations. Defaults to top-left corner. */
+		public function get pivotY():Number { return _pivotY; }
+		public function set pivotY(value:Number):void
+		{ 
+			if (_pivotY == value) return;
+			_pivotY = value;
+			transformPoints();
+			
+			if (list != null || parent != null) update();
+		}
+		
+		/** Leftmost X coord of the polygon. */
+		public function get minX():int { return _minX; }
+		
+		/** Rightmost X coord of the polygon. */
+		public function get maxX():int { return _maxX; }
+		
+		/** Topmost Y coord of the polygon. */
+		public function get minY():int { return _minY; }
+		
+		/** Bottommost Y coord of the polygon. */
+		public function get maxY():int { return _maxY; }
 
 		/**
-		 * The points representing the polygon.
+		 * The original points (non transformed/rotated) representing the polygon.
 		 * 
-		 * If you need to set a point yourself instead of passing in a new Array<Point> you need to call update() 
+		 * If you need to set a point yourself instead of passing in a new Vector.<Point> you need to call update() 
 		 * to makes sure the axes update as well.
 		 */
-		public function get points():Vector.<Point> { return _points; }
+		public function get points():Vector.<Point> { return _transformedPoints; }
 		public function set points(value:Vector.<Point>):void
 		{
-			if (_points == value) return;
-			_points = value;
+			if (_transformedPoints == value) return;
+			_transformedPoints = value;
 
 			if (list != null || parent != null) updateAxes();
 		}
+
+		/**
+		 * The transformed/rotated points representing the polygon.
+		 */
+		public function get transformedPoints():Vector.<Point> { return _transformedPoints; }
 
 		/** Updates the parent's bounds for this mask. */
 		override public function update():void
@@ -506,8 +530,8 @@ package net.flashpunk.masks
 			for (var i:int = 0; i < sides; i++)
 			{
 				var p:Point = new Point();
-				p.x = Math.cos(startAngle) * radius;
-				p.y = Math.sin(startAngle) * radius;
+				p.x = Math.cos(startAngle) * radius + radius;
+				p.y = Math.sin(startAngle) * radius + radius;
 				points.push(p);
 				startAngle += rotationAngle;
 			}
@@ -539,25 +563,24 @@ package net.flashpunk.masks
 			return poly;
 		}
 
-		private function rotate(angleDelta:Number):void
+		private function transformPoints():void 
 		{
-			_angle += angleDelta;
-			
-			angleDelta *= FP.RAD;
-
 			var p:Point;
+			var tp:Point;
+			var angleRad:Number = _angle * FP.RAD;
 			
 			for (var i:int = 0; i < _points.length; i++)
 			{
 				p = _points[i];
-				var dx:Number = p.x - pivotX;
-				var dy:Number = p.y - pivotY;
+				tp = _transformedPoints[i];
+				var dx:Number = p.x - _pivotX;
+				var dy:Number = p.y - _pivotY;
 
 				var pointAngle:Number = Math.atan2(dy, dx);
 				var length:Number = Math.sqrt(dx * dx + dy * dy);
 
-				p.x = Math.cos(pointAngle + angleDelta) * length + pivotX;
-				p.y = Math.sin(pointAngle + angleDelta) * length + pivotY;
+				tp.x = Math.cos(pointAngle + angleRad) * length + _pivotX;
+				tp.y = Math.sin(pointAngle + angleRad) * length + _pivotY;
 			}
 			var a:Point;
 			
@@ -567,8 +590,8 @@ package net.flashpunk.masks
 
 				var axisAngle:Number = Math.atan2(a.y, a.x);
 
-				a.x = Math.cos(axisAngle + angleDelta);
-				a.y = Math.sin(axisAngle + angleDelta);
+				a.x = Math.cos(axisAngle + angleRad);
+				a.y = Math.sin(axisAngle + angleRad);
 			}
 		}
 
@@ -576,14 +599,14 @@ package net.flashpunk.masks
 		{
 			_axes = new Vector.<Point>();
 			var temp:Number;
-			var nPoints:int = _points.length;
+			var nPoints:int = _transformedPoints.length;
 			var edge:Point;
 			var i:int, j:int;
 			
 			for (i = 0, j = nPoints - 1; i < nPoints; j = i, i++) {
 				edge = new Point();
-				edge.x = _points[i].x - _points[j].x;
-				edge.y = _points[i].y - _points[j].y;
+				edge.x = _transformedPoints[i].x - _transformedPoints[j].x;
+				edge.y = _transformedPoints[i].y - _transformedPoints[j].y;
 
 				// get the axis which is perpendicular to the edge
 				temp = edge.y;
@@ -627,10 +650,15 @@ package net.flashpunk.masks
 
 		// Hitbox information.
 		private var _angle:Number;
-		private var _points:Vector.<Point>;
+		private var _points:Vector.<Point>;				// original points (non transformed/rotated) as passed in the constructor
+		private var _transformedPoints:Vector.<Point>;	// transformed/rotated points
 		private var _axes:Vector.<Point>;
 		private var _projection:* = { min: 0.0, max:0.0 };
 
+		// Polygon pivot point.
+		private var _pivotX:Number = 0;
+		private var _pivotY:Number = 0;
+		
 		// Polygon bounding box.
 		private var _minX:int = 0;
 		private var _minY:int = 0;
