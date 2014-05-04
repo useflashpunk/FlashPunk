@@ -133,10 +133,10 @@ package net.flashpunk.debug
 			_fpsReadText.x = 2;
 			_fpsReadText.y = 1;
 
-			_systemTimelineGraphs[0] = new TimelineGraph(100, 30, "Update", "ms", 0xff7ab2ff);
-			_systemTimelineGraphs[1] = new TimelineGraph(100, 30, "Render", "ms", 0xff7aff8c);
-			_systemTimelineGraphs[2] = new TimelineGraph(100, 30, "Game", "ms", 0xfffff47a);
-			_systemTimelineGraphs[3] = new TimelineGraph(100, 30, "Flash", "ms", 0xffffa27a);
+			_systemTimelineGraphs[0] = new TimelineGraph(GRAPH_WIDTH, GRAPH_HEIGHT, "Update", "ms", 0xff7ab2ff);
+			_systemTimelineGraphs[1] = new TimelineGraph(GRAPH_WIDTH, GRAPH_HEIGHT, "Render", "ms", 0xff7aff8c);
+			_systemTimelineGraphs[2] = new TimelineGraph(GRAPH_WIDTH, GRAPH_HEIGHT, "Game", "ms", 0xfffff47a);
+			_systemTimelineGraphs[3] = new TimelineGraph(GRAPH_WIDTH, GRAPH_HEIGHT, "Flash", "ms", 0xffffa27a);
 			
 			// The frame timing graphs.
 			_sprite.addChild(_systemTimelineGraphSprite);
@@ -145,7 +145,7 @@ package net.flashpunk.debug
 			// Add graphs.
 			for (var i:uint = 0; i < _systemTimelineGraphs.length; i++)
 			{
-				_systemTimelineGraphs[i].x = 106 * i;
+				_systemTimelineGraphs[i].x = (GRAPH_WIDTH + 6) * i;
 				_systemTimelineGraphs[i].y = 0;
 				_systemTimelineGraphSprite.addChild(_systemTimelineGraphs[i]);
 			}
@@ -177,7 +177,7 @@ package net.flashpunk.debug
 			_logReadText.defaultTextFormat = format(12, 0xFFFFFF, "left", false, "Source Code Pro");
 			_logReadText.embedFonts = true;
 			_logReadText.width = width;
-			_logHeight = height - 60;
+			_logHeight = height - 51 - GRAPH_HEIGHT;
 			_logBar = new Rectangle(4, 4, 16, _logHeight - 8);
 			_logBarGlobal = _logBar.clone();
 			_logBarGlobal.y += 60;
@@ -185,23 +185,14 @@ package net.flashpunk.debug
 			
 			// The debug text.
 			_sprite.addChild(_debRead);
-			_debRead.addChild(_debReadText0);
-			_debRead.addChild(_debReadText1);
-			_debReadText0.defaultTextFormat = format(12, 0xFFFFFF);
-			_debReadText1.defaultTextFormat = format(12, 0xFFFFFF);
-			_debReadText0.embedFonts = true;
-			_debReadText1.embedFonts = true;
-			_debReadText0.selectable = false;
-			_debReadText0.width = 80;
-			_debReadText0.height = 20;
-			_debReadText1.width = 160;
-			_debReadText1.height = int(height / 4);
-			_debReadText0.x = 2;
-			_debReadText0.y = 3;
-			_debReadText1.x = 2;
-			_debReadText1.y = 24;
-			_debReadText0.text = "DEBUG:";
-			_debRead.y = height - (_debReadText1.y + _debReadText1.height);
+			_debRead.addChild(_debReadText);
+			_debReadText.defaultTextFormat = format(16, 0xFFFFFF);
+			_debReadText.embedFonts = true;
+			_debReadText.width = 160;
+			_debReadText.height = int(height / 4);
+			_debReadText.x = 2;
+			_debReadText.y = 0;
+			_debRead.y = height - (_debReadText.y + _debReadText.height);
 			
 			// The button panel buttons.
 			_topTray.addChild(_butRead);
@@ -257,7 +248,7 @@ package net.flashpunk.debug
 						if (Input.mousePressed)
 						{
 							// Mouse is within clickable area.
-							if (Input.mouseFlashY > 20 && (Input.mouseFlashX > _debReadText1.width || Input.mouseFlashY < _debRead.y))
+							if (Input.mouseFlashY > 20 && (Input.mouseFlashX > _debReadText.width || Input.mouseFlashY < _debRead.y))
 							{
 								if (Input.check(Key.SHIFT))
 								{
@@ -368,7 +359,6 @@ package net.flashpunk.debug
 			{
 				// Set the console to running mode.
 				_debRead.visible = false;
-				_logRead.visible = true;
 				updateLog();
 				ENTITY_LIST.length = 0;
 				SCREEN_LIST.length = 0;
@@ -388,7 +378,6 @@ package net.flashpunk.debug
 			// Set the console to debug mode.
 			_debug = value;
 			_debRead.visible = value;
-			_logRead.visible = !value;
 			
 			// Update console state.
 			if (value) updateEntityLists();
@@ -647,47 +636,64 @@ package net.flashpunk.debug
 			// If the console is paused.
 			if (_paused)
 			{
-				// Draw the log panel.
-				_bottomTray.y = 60;
-				_bottomTray.graphics.clear();
-				_bottomTray.graphics.beginFill(0, .7);
-				_bottomTray.graphics.drawRect(0, 1, width, _logHeight);
-				_bottomTray.graphics.beginFill(0, .8);
-				_bottomTray.graphics.drawRect(0, 0, width, 1);
-				_bottomTray.graphics.beginFill(0, 0.5);
-				_bottomTray.graphics.drawRoundRectComplex(_logBar.x, _logBar.y, _logBar.width, _logBar.height, 5, 5, 5, 5);
-				
-				// If the log has more lines than the display limit.
-				if (LOG.length > _logLines)
+				if (_debug)
 				{
-					// Draw the log scrollbar handle.
-					var y:uint = _logBar.y + 2 + (_logBar.height - 16) * _logScroll;
-					_bottomTray.graphics.beginFill(0xFFFFFF, 1);
-					_bottomTray.graphics.drawRoundRectComplex(_logBar.x + 2, y, 12, 12, 4, 4, 4, 4);
+					// Draw the single-line log text with the latests logged text.
+					_bottomTray.graphics.clear();
+					_bottomTray.graphics.beginFill(0x000000, 0.6);
+					_bottomTray.graphics.drawRect(0, 1, width, 20);
+					_bottomTray.graphics.beginFill(0x000000, 0.7);
+					_bottomTray.graphics.drawRect(0, 0, width, 1);
+					_bottomTray.y = height - 21;
+
+					_logReadText.text = LOG.length ? LOG[LOG.length - 1] : "";
+					_logReadText.x = 2;
+					_logReadText.y = 1;
 				}
-				
-				// Display the log text lines.
-				if (LOG.length)
+				else
 				{
-					var i:int = 0,
-						n:int = 0,
-						s:String = "";
+					// Draw the full log panel.
+					_bottomTray.y = 51 + GRAPH_HEIGHT;
+					_bottomTray.graphics.clear();
+					_bottomTray.graphics.beginFill(0, .7);
+					_bottomTray.graphics.drawRect(0, 1, width, _logHeight);
+					_bottomTray.graphics.beginFill(0, .8);
+					_bottomTray.graphics.drawRect(0, 0, width, 1);
+					_bottomTray.graphics.beginFill(0, 0.5);
+					_bottomTray.graphics.drawRoundRectComplex(_logBar.x, _logBar.y, _logBar.width, _logBar.height, 5, 5, 5, 5);
 					
-					if (LOG.length > _logLines) {
-						i = Math.round((LOG.length - _logLines) * _logScroll);
+					// If the log has more lines than the display limit.
+					if (LOG.length > _logLines)
+					{
+						// Draw the log scrollbar handle.
+						var y:uint = _logBar.y + 2 + (_logBar.height - 16) * _logScroll;
+						_bottomTray.graphics.beginFill(0xFFFFFF, 1);
+						_bottomTray.graphics.drawRoundRectComplex(_logBar.x + 2, y, 12, 12, 4, 4, 4, 4);
 					}
 					
-					n = i + Math.min(_logLines, LOG.length);
+					// Display the log text lines.
+					if (LOG.length)
+					{
+						var i:int = 0,
+							n:int = 0,
+							s:String = "";
 						
-					while (i < n) s += LOG[i ++] + "\n";
-					_logReadText.text = s;
+						if (LOG.length > _logLines) {
+							i = Math.round((LOG.length - _logLines) * _logScroll);
+						}
+						
+						n = i + Math.min(_logLines, LOG.length);
+							
+						while (i < n) s += LOG[i ++] + "\n";
+						_logReadText.text = s;
+					}
+					else _logReadText.text = "";
+					
+					// Indent the text for the scrollbar and size it to the log panel.
+					_logReadText.height = _logHeight;
+					_logReadText.x = _logBar.right + 4;
+					_logReadText.y = 4;
 				}
-				else _logReadText.text = "";
-				
-				// Indent the text for the scrollbar and size it to the log panel.
-				_logReadText.height = _logHeight;
-				_logReadText.x = _logBar.right + 4;
-				_logReadText.y = 4;
 			}
 			else
 			{	
@@ -705,16 +711,15 @@ package net.flashpunk.debug
 			}
 
 			// Update selectability of TextFields.
-				_logReadText.selectable = _paused;
-				_fpsReadText.selectable = _paused;
-				for each (var graph:TimelineGraph in _systemTimelineGraphs)
-				{
-					graph.textField.selectable = _paused;
-				}
-				_memReadText.selectable = _paused;
-				_entReadText.selectable = _paused;
-				_debReadText0.selectable = _paused;
-				_debReadText1.selectable = _paused;
+			_logReadText.selectable = _paused;
+			_fpsReadText.selectable = _paused;
+			for each (var graph:TimelineGraph in _systemTimelineGraphs)
+			{
+				graph.textField.selectable = _paused;
+			}
+			_memReadText.selectable = _paused;
+			_entReadText.selectable = _paused;
+			_debReadText.selectable = _paused;
 		}
 		
 		/** @private Update the FPS/frame timing panel text. */
@@ -757,17 +762,16 @@ package net.flashpunk.debug
 			}
 			
 			// Set the text and format.
-			_debReadText1.text = s;
-			_debReadText1.setTextFormat(format(big ? 16 : 8));
-			_debReadText1.width = Math.max(_debReadText1.textWidth + 4, _debReadText0.width);
-			_debReadText1.height = _debReadText1.y + _debReadText1.textHeight + 4;
+			_debReadText.text = s;
+			_debReadText.width = _debReadText.textWidth + 4;
+			_debReadText.height = _debReadText.y + _debReadText.textHeight + 4;
 			
 			// The debug panel.
-			_debRead.y = int(height - _debReadText1.height);
+			_debRead.y = int(height - 23 - _debReadText.height);
+			_debRead.x = 2;
 			_debRead.graphics.clear();
-			_debRead.graphics.beginFill(0, .75);
-			_debRead.graphics.drawRoundRectComplex(0, 0, _debReadText0.width, 20, 0, 20, 0, 0);
-			_debRead.graphics.drawRoundRectComplex(0, 20, _debReadText1.width + 20, height - _debRead.y - 20, 0, 20, 0, 0);
+			_debRead.graphics.beginFill(0, .8);
+			_debRead.graphics.drawRect(0, 0, _debReadText.width + 4, _debReadText.height);
 		}
 		
 		/** @private Updates the Entity count text. */
@@ -789,7 +793,11 @@ package net.flashpunk.debug
 			if (_butDebug.bitmapData.rect.contains(_butDebug.mouseX, _butDebug.mouseY))
 			{
 				_butDebug.alpha = _butOutput.alpha = 1;
-				if (Input.mousePressed) debug = !_debug;
+				if (Input.mousePressed)
+				{
+					debug = !_debug;
+					updateLog();
+				}
 			}
 			else _butDebug.alpha = _butOutput.alpha = .5;
 			
@@ -850,10 +858,14 @@ package net.flashpunk.debug
 		// FPS panel information.
 		/** @private */ private var _fpsRead:Sprite = new Sprite;
 		/** @private */ private var _fpsReadText:TextField = new TextField;
+		/** @private */ private var _memReadText:TextField = new TextField;
+
+		// FPS time graphs.
 		/** @private */ private var _fpsInfo:Sprite = new Sprite;
 		/** @private */ private var _systemTimelineGraphs:Vector.<TimelineGraph> = new Vector.<TimelineGraph>(4);
 		/** @private */ private var _systemTimelineGraphSprite:Sprite = new Sprite;
-		/** @private */ private var _memReadText:TextField = new TextField;
+		/** @private */ private const GRAPH_WIDTH:uint = 120;
+		/** @private */ private const GRAPH_HEIGHT:uint = 40;
 		
 		// Output panel information.
 		/** @private */ private var _logRead:Sprite = new Sprite;
@@ -869,8 +881,7 @@ package net.flashpunk.debug
 		
 		// Debug panel information.
 		/** @private */ private var _debRead:Sprite = new Sprite;
-		/** @private */ private var _debReadText0:TextField = new TextField;
-		/** @private */ private var _debReadText1:TextField = new TextField;
+		/** @private */ private var _debReadText:TextField = new TextField;
 
 		// Button panel information
 		/** @private */ private var _butRead:Sprite = new Sprite;
