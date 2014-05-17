@@ -302,13 +302,17 @@
 		 * Anchors the object to a position.
 		 * @param	object		The object to anchor.
 		 * @param	anchor		The anchor object.
-		 * @param	distance	The max distance object can be anchored to the anchor.
+		 * @param	maxDistance	The max distance object can be anchored to the anchor.
+		 * @param	minDistance	The min distance the object can be anchored to the anchor
 		 */
-		public static function anchorTo(object:Object, anchor:Object, distance:Number = 0):void
+		public static function anchorTo(object:Object, anchor:Object, maxDistance:Number = 0, minDistance:Number = NaN):void
 		{
 			point.x = object.x - anchor.x;
 			point.y = object.y - anchor.y;
-			if (point.length > distance) point.normalize(distance);
+			
+			if (point.length > maxDistance) point.normalize(maxDistance);
+			if (!isNaN(minDistance) && point.length < minDistance) point.normalize(minDistance);
+			
 			object.x = anchor.x + point.x;
 			object.y = anchor.y + point.y;
 		}
