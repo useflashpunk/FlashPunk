@@ -504,6 +504,15 @@ package net.flashpunk
 		}
 		
 		/**
+		 * Removes the graphic from the Entity if it has been added.
+		 * @param	g		Graphic to remove.
+		 */
+		public function removeGraphic(g:Graphic):Graphic
+		{
+			return Graphiclist(graphic).remove(g);
+		}
+		
+		/**
 		 * Sets the Entity's hitbox properties.
 		 * @param	width		Width of the hitbox.
 		 * @param	height		Height of the hitbox.
