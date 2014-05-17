@@ -137,7 +137,7 @@
 			// more timing stuff
 			t = getTimer();
 			_frameListSum += (_frameList[_frameList.length] = t - _frameLast);
-			if (_frameList.length > 10) _frameListSum -= _frameList.shift();
+			if (_frameList.length > 120) _frameListSum -= _frameList.shift();
 			FP.frameRate = 1000 / (_frameListSum / _frameList.length);
 			_frameLast = t;
 		}
