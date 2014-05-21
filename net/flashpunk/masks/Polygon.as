@@ -42,6 +42,7 @@ package net.flashpunk.masks
 			this.pivotX = pivotX;
 			this.pivotY = pivotY;
 			_angle = 0;
+			_lastAngle = 0;
 
 			updateAxes();
 		}
@@ -420,6 +421,7 @@ package net.flashpunk.masks
 		public function set angle(value:Number):void
 		{
 			if (value == _angle) return;
+			_lastAngle = _angle;
 			_angle = value;
 			transformPoints();
 			
@@ -568,6 +570,7 @@ package net.flashpunk.masks
 			var p:Point;
 			var tp:Point;
 			var angleRad:Number = _angle * FP.RAD;
+			var lastAngleRad:Number = _lastAngle * FP.RAD;
 			
 			for (var i:int = 0; i < _points.length; i++)
 			{
@@ -590,8 +593,8 @@ package net.flashpunk.masks
 
 				var axisAngle:Number = Math.atan2(a.y, a.x);
 
-				a.x = Math.cos(axisAngle + angleRad);
-				a.y = Math.sin(axisAngle + angleRad);
+				a.x = Math.cos(axisAngle + angleRad - lastAngleRad);
+				a.y = Math.sin(axisAngle + angleRad - lastAngleRad);
 			}
 		}
 
@@ -620,25 +623,27 @@ package net.flashpunk.masks
 
 		private function removeDuplicateAxes():void
 		{
-			_indicesToRemove.length = 0;
-			for (var i:int = 0; i < _axes.length; i++ )
+			var i:int = _axes.length - 1;
+			var j:int = i - 1;
+			while (i > 0) 
 			{
-				for (var j:int = 0; j < _axes.length; j++ )
+				// if the first vector is equal or similar to the second vector,
+				// remove it from the list. (for example, [1, 1] and [-1, -1]
+				// represent the same axis)
+				if ((Math.abs(_axes[i].x - _axes[j].x) < EPSILON && Math.abs(_axes[i].y - _axes[j].y) < EPSILON)
+					|| (Math.abs(_axes[j].x + _axes[i].x) < EPSILON && Math.abs(_axes[i].y + _axes[j].y) < EPSILON))	// first axis inverted
 				{
-					if (i == j || Math.max(i, j) >= _axes.length) continue;
-					
-					// if the first vector is equal or similar to the second vector,
-					// remove it from the list. (for example, [1, 1] and [-1, -1]
-					// represent the same axis)
-					if ((_axes[i].x == _axes[j].x && _axes[i].y == _axes[j].y) ||
-						( -_axes[i].x == _axes[j].x && -_axes[i].y == _axes[j].y))	// first axis inverted
-					{
-						_indicesToRemove.push(j);
-					}
+					_axes.splice(i, 1);
+					i--;
+				}
+				
+				j--;
+				if (j < 0) 
+				{
+					i--;
+					j = i - 1;
 				}
 			}
-			// remove duplicate axes
-			for (var k:int = 0; k < _indicesToRemove.length; k++) _axes.splice(_indicesToRemove[k], 1);
 		}
 
 		private function updateAxes():void
@@ -650,6 +655,7 @@ package net.flashpunk.masks
 
 		// Hitbox information.
 		private var _angle:Number;
+		private var _lastAngle:Number;
 		private var _points:Vector.<Point>;				// original points (non transformed/rotated) as passed in the constructor
 		private var _transformedPoints:Vector.<Point>;	// transformed/rotated points
 		private var _axes:Vector.<Point>;
@@ -669,7 +675,7 @@ package net.flashpunk.masks
 		private var _fakeTileHitbox:Hitbox;		// used for Grid collision
 		private var _fakePixelmask:Pixelmask;	// used for Pixelmask collision
 		
-		private var _indicesToRemove:Vector.<int> = new Vector.<int>();		// used in removeDuplicateAxes()
+		private static var EPSILON:Number = 0.000000001;	// used for axes comparison in removeDuplicateAxes
 
 		private static var _axis:Point = new Point();
 		private static var firstProj:* = { min: 0.0, max:0.0 };
