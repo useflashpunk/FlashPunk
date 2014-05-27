@@ -336,7 +336,7 @@
 					tlm_y += tlm.height;
 				}
 			} else {
-				_source.draw(_field, _field.transform.matrix);
+				_source.draw(_field);
 			}
 			
 			super.updateBuffer();
