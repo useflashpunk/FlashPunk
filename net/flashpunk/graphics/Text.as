@@ -1,179 +1,188 @@
-﻿package net.flashpunk.graphics 
+package net.flashpunk.graphics 
 {
 	import flash.display.BitmapData;
+	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
-
 	import net.flashpunk.FP;
-
+	import net.flashpunk.graphics.Image;
 	/**
-	 * Used for drawing text using embedded fonts.
-	 * 
-	 * Note that users of Flex 3 must edit this class to get FlashPunk games to compile.
-	 * The details of this can be found at the bottom of the file net/flashpunk/graphics/Text.as
+	 * ...
 	 */
 	public class Text extends Image
 	{
-		/**
-		 * The font to assign to new Text objects.
-		 */
-		public static var font:String = "default";
-		
-		/**
-		 * The font size to assign to new Text objects.
-		 */
-		public static var size:uint = 16;
-		
-		/**
-		 * The alignment to assign to new Text objects.
-		 */
-		public static var align:String = "left";
-		
-		/**
-		 * The leading to assign to new Text objects.
-		 */
-		public static var defaultLeading:Number = 0;
-		
-		/**
-		 * The wordWrap property to assign to new Text objects.
-		 */
-		public static var wordWrap:Boolean = false;
-		
-		/**
-		 * The resizable property to assign to new Text objects.
-		 */
-		public static var resizable: Boolean = true;
-		
-		/**
-		 * If the text field can automatically resize if its contents grow.
-		 */
-		public var resizable: Boolean;
-		
-		/**
-		 * Constructor.
-		 * @param	text		Text to display.
-		 * @param	x		X offset.
-		 * @param	y		Y offset.
-		 * @param	options		An object containing key/value pairs of the following optional parameters:
-		 * 						font		Font family.
-		 * 						size		Font size.
-		 * 						align		Alignment ("left", "center" or "right").
-		 * 						wordWrap	Automatic word wrapping.
-		 * 						resizable	If the text field can automatically resize if its contents grow.
-		 * 						width		Initial buffer width.
-		 * 						height		Initial buffer height.
-		 * 						color		Text color.
-		 * 						alpha		Text alpha.
-		 * 						angle		Rotation angle (see Image.angle).
-		 * 						blend		Blend mode (see Image.blend).
-		 * 						visible		Visibility (see Graphic.visible).
-		 * 						scrollX		See Graphic.scrollX.
-		 * 						scrollY		See Graphic.scrollY.
-		 * 						relative	See Graphic.relative.
-		 *				For backwards compatibility, if options is a Number, it will determine the initial buffer width.
-		 * @param	h		Deprecated. For backwards compatibility: if set and there is no options.height parameter set, will determine the initial buffer height.
-		 */
-		public function Text(text:String, x:Number = 0, y:Number = 0, options:Object = null, h:Number = 0)
+		public function Text(text:String = "", format:* = null, updateBuffer:Boolean = true) 
 		{
-			_font = Text.font;
-			_size = Text.size;
-			_align = Text.align;
-			_leading = Text.defaultLeading;
-			_wordWrap = Text.wordWrap;
-			resizable = Text.resizable;
-			var width:uint = 0;
-			var height:uint = h;
+			if (format == null) format = new TextFormatting;
 			
-			if (options)
+			_text = text;
+			
+			if (format is TextFormatting)
 			{
-				if (options is Number) // Backwards compatibility: options parameter has replaced width
+				_format = format;
+			}
+			else
+			{
+				_format = new TextFormatting;
+				_format.setOptions(format);
+			}
+			
+			super(new BitmapData(_format.width, _format.height, true, 0));
+			
+			
+			
+			_field = new TextField;
+			_field.embedFonts = true;
+			_field.multiline = true;
+			_field.defaultTextFormat = _format.defaultTextFormat;
+			
+			_format.parent = this;
+			
+			x = _format.x;
+			y = _format.y;
+			
+			if (updateBuffer) updateTextBuffer();
+		}
+		
+		//updates the buffer that contains the textfield rendered (renders it).
+		public function updateTextBuffer():void
+		{
+			_matrix = new Matrix(1, 0, 0, 1, 0, 0);
+			
+			//sets the texfield text and its format(s)
+			_field.text = _text;
+			matchStyles();
+			
+			//if multiline is not allowed, the text becomes only the first line
+			if (!_format.multiline)
+			{
+				_text = _text.split("\n")[0];
+			}
+			
+			//if it's resizable it resizes
+			if (_format.resizable)
+			{
+				if (_format.wordWrap)
 				{
-					width = Number(options);
-					options = null;
+					_field.wordWrap = false;
+					_format.wordWrap = false;
+				}
+				
+				if (_format.width < _field.textWidth)
+				{
+					_format.width = _field.textWidth;
+					_format.rectChanged = true;
+				}
+				if (_format.height < _field.textHeight)
+				{
+					_format.height = _field.textHeight;
+					_format.rectChanged = true;
+				}
+				
+			}
+			else //if resizes it will never word wrap (the jump of line is at the infinite)
+			{
+				if (_format.wordWrap)
+				{
+					_field.wordWrap = true;
+				}
+				_field.width = _format.width;
+				_field.height = _format.width;
+			}
+			
+			//change the buffer size if necesary (can be called becouse it was automatically resized).
+			if (_format.rectChanged)
+			{
+				_source = new BitmapData(_format.width, _format.height, true, 0);
+				_sourceRect = _source.rect;
+				_format.rectChanged = false;
+				createBuffer();
+				updateBuffer();
+			}
+			else
+			{
+				_source.fillRect(_sourceRect, 0);
+			}
+			
+			var ty:Number = 0;
+			_field.y = 0;
+			_field.scrollH = 0;
+			_field.scrollV = 0;
+			
+			//V align
+			if (_format.vAlign == "center")
+			{
+				ty = (_field.textHeight - _format.height) / 2;
+				if (ty <= 0)
+				{
+					_matrix.translate(0, -ty);
 				}
 				else
 				{
-					if (options.hasOwnProperty("font")) _font = options.font;
-					if (options.hasOwnProperty("size")) _size = options.size;
-					if (options.hasOwnProperty("align")) _align = options.align;
-					if (options.hasOwnProperty("wordWrap")) _wordWrap = options.wordWrap;
-					if (options.hasOwnProperty("resizable")) resizable = options.resizable;
-					if (options.hasOwnProperty("width")) width = options.width;
-					if (options.hasOwnProperty("height")) height = options.height;
+					_field.scrollV = ty;
 				}
 			}
-			
-			_field.embedFonts = true;
-			_field.wordWrap = _wordWrap;
-			_form = new TextFormat(_font, _size, 0xFFFFFF);
-			_form.align = _align;
-			_form.leading = _leading;
-			_field.defaultTextFormat = _form;
-			_field.text = _text = text;
-			_width = width || _field.textWidth + 4;
-			_height = height || _field.textHeight + 4;
-			_source = new BitmapData(_width, _height, true, 0);
-			super(_source);
-			updateTextBuffer();
-			this.x = x;
-			this.y = y;
-			
-			if (options)
+			else if (_format.vAlign == "bottom")
 			{
-				for (var property:String in options) {
-					if (hasOwnProperty(property)) {
-						this[property] = options[property];
-					} else {
-						throw new Error('"' + property + '" is not a property of Text');
-					}
+				ty = _field.textHeight - _format.height;
+				if (ty <= 0)
+				{
+					_matrix.translate(0, -ty);
+				}
+				else
+				{
+					_field.scrollV = ty;
 				}
 			}
+			
+			_field.scrollH += _format.textScrollX;
+			_field.scrollV += _format.textScrollY;
+			
+			_source.draw(_field, _matrix);
+			
+			//update the color tansform (it basically modifies the alpha)
+			updateColorTransform();
+			
+			//finally, update the buffer
+			updateBuffer();
 		}
 		
-		/**
-		 * Set the style for a subset of the text, for use with
-		 * the richText property.
-		 * Usage:
-		   text.setStyle("red", {color: 0xFF0000});
-		   text.setStyle("big", {size: text.size*2});
-		   text.richText = "&lt;big&gt;Hello&lt;/big&gt; &lt;red&gt;world&lt;/red&gt;";
-		 */
-		public function setStyle(tagName:String, params:*):void
+		override protected function updateColorTransform():void
 		{
-			var format:TextFormat;
-			
-			if (params is TextFormat || ! params) {
-				format = params;
+			if (_alpha == 1) {
+				_tint = null;
 			} else {
-				format = new TextFormat;
-				
-				for (var key:String in params) {
-					if (format.hasOwnProperty(key)) {
-						format[key] = params[key];
-					} else {
-						throw new Error('"' + key + '" is not a TextFormat property');
-					}
-				}
+				_tint = _colorTransform;
+				_tint.redMultiplier   = 1;
+				_tint.greenMultiplier = 1;
+				_tint.blueMultiplier  = 1;
+				_tint.redOffset       = 0;
+				_tint.greenOffset     = 0;
+				_tint.blueOffset      = 0;
+				_tint.alphaMultiplier = _alpha;
 			}
-			
-			_styles[tagName] = format;
-			
-			if (_richText) updateTextBuffer();
 		}
 		
-		protected var _styles:Object = new Object;
+		//sets the diferents styles ina rich text.
 		private static var _styleIndices:Vector.<int> = new Vector.<int>;
 		private static var _styleMatched:Array = new Array;
 		private static var _styleFormats:Vector.<TextFormat> = new Vector.<TextFormat>;
 		private static var _styleFrom:Vector.<int> = new Vector.<int>;
 		private static var _styleTo:Vector.<int> = new Vector.<int>;
+		private static var _fragments:Array = new Array;
 		
 		private function matchStyles():void
 		{
+			if (!_format.isRichText)
+			{
+				_field.defaultTextFormat = _format.defaultTextFormat;
+				return;
+			}
 			var i:int, j:int;
 			
-			var fragments:Array = _richText.split("<");
+			_fragments = _text.split("<");
 			
 			_styleIndices.length = 0;
 			_styleMatched.length = 0;
@@ -181,23 +190,23 @@
 			_styleFrom.length = 0;
 			_styleTo.length = 0;
 			
-			for (i = 1; i < fragments.length; i++) {
+			for (i = 1; i < _fragments.length; i++) {
 				if (_styleMatched[i]) continue;
 				
-				var substring:String = fragments[i];
+				var substring:String = _fragments[i];
 			
 				var tagLength:int = substring.indexOf(">");
 				
 				if (tagLength > 0) {
 					var tagName:String = substring.substr(0, tagLength);
 					if (_styles[tagName]) {
-						fragments[i] = substring.slice(tagLength + 1);
+						_fragments[i] = substring.slice(tagLength + 1);
 				
 						var endTagString:String = "/" + tagName + ">";
 				
-						for (j = i + 1; j < fragments.length; j++) {
-							if (fragments[j].substr(0, tagLength + 2) == endTagString) {
-								fragments[j] = fragments[j].slice(tagLength + 2);
+						for (j = i + 1; j < _fragments.length; j++) {
+							if (_fragments[j].substr(0, tagLength + 2) == endTagString) {
+								_fragments[j] = _fragments[j].slice(tagLength + 2);
 								_styleMatched[j] = true;
 							
 								break;
@@ -212,20 +221,20 @@
 					}
 				}
 				
-				fragments[i-1] = fragments[i-1].concat("<");
+				_fragments[i-1] = _fragments[i-1].concat("<");
 			}
 			
 			_styleIndices[0] = 0;
 			j = 0;
 			
-			for (i = 0; i < fragments.length; i++) {
-				j += fragments[i].length;
+			for (i = 0; i < _fragments.length; i++) {
+				j += _fragments[i].length;
 				_styleIndices[i+1] = j;
 			}
 			
-			_field.text = _text = fragments.join("");
+			_field.text = _text = _fragments.join("");
 			
-			_field.setTextFormat(_form);
+			_field.setTextFormat(_format.defaultTextFormat);
 			
 			for (i = 0; i < _styleFormats.length; i++) {
 				var start:int = _styleIndices[_styleFrom[i]];
@@ -235,319 +244,100 @@
 			}
 		}
 		
-		override protected function updateColorTransform():void {
-			if (_richText) {
-				if (_alpha == 1) {
-					_tint = null;
-				} else {
-					_tint = _colorTransform;
-					_tint.redMultiplier   = 1;
-					_tint.greenMultiplier = 1;
-					_tint.blueMultiplier  = 1;
-					_tint.redOffset       = 0;
-					_tint.greenOffset     = 0;
-					_tint.blueOffset      = 0;
-					_tint.alphaMultiplier = _alpha;
-				}
-				
-				if (_form.color != _color) {
-					updateTextBuffer();
-				} else {
-					updateBuffer();
-				}
-				
-				return;
-			}
-			
-			super.updateColorTransform();
-		}
-		
-		/** Updates the text buffer, which is the source for the image buffer. */
-		public function updateTextBuffer():void
+		public function setTextProperty(property:String, value:*):Boolean
 		{
-			if (_richText) {
-				_form.color = _color;
-				matchStyles();
-			} else {
-				_form.color = 0xFFFFFF;
-				_field.setTextFormat(_form);
-			}
-			
-			_field.width = _width;
-			_field.width = _textWidth = Math.ceil(_field.textWidth + 4);
-			_field.height = _textHeight = Math.ceil(_field.textHeight + 4);
-			
-			if (resizable)
-			{
-				if (_width < _textWidth) _width = _textWidth;
-				if (_height < _textHeight) _height = _textHeight;
-			}
-			
-			if (_width > _source.width || _height > _source.height)
-			{
-				_source = new BitmapData(
-					Math.max(_width, _source.width),
-					Math.max(_height, _source.height),
-					true, 0);
-				
-				_sourceRect = _source.rect;
-				createBuffer();
-			}
-			else
-			{
-				_source.fillRect(_sourceRect, 0);
-			}
-			
-			_field.width = _width;
-			_field.height = _height;
-			
-			var offsetRequired: Boolean = false;
-			
-			var i:int;
-			
-			// reassign text to force a recalc of TextLineMetrics and so be sure they report correct values
-			_richText ? _field.htmlText = _field.htmlText : _field.text = _field.text;
-			
-			var tlm: TextLineMetrics;
-			var remainder: Number;
-			var tlm_y:Number = 2;
-			for (i = 0; i < _field.numLines; i++) {
-				tlm = _field.getLineMetrics(i);
-				remainder = tlm.x % 1;
-				if (remainder > 0.1 && remainder < 0.9) {
-					offsetRequired = true;
-					break;
-				}
-			}
-			
-			if (offsetRequired) {
-				for (i = 0; i < _field.numLines; i++) {
-					tlm = _field.getLineMetrics(i);
-					remainder = tlm.x % 1;
-					_field.x = -remainder;
-					
-					FP.rect.x = 0;
-					FP.rect.y = tlm_y;
-					FP.rect.width = _width;
-					FP.rect.height = tlm.height;
-					
-					_source.draw(_field, _field.transform.matrix, null, null, FP.rect);
-					
-					tlm_y += tlm.height;
-				}
-			} else {
-				_source.draw(_field);
-			}
-			
-			super.updateBuffer();
+			return _format.setProperty(property, value, true);
 		}
 		
-		/** @private Centers the Text's originX/Y to its center. */
-		override public function centerOrigin():void 
-		{
-			originX = _width / 2;
-			originY = _height / 2;
-		}
-		
-		/**
-		 * Text string.
-		 */
 		public function get text():String { return _text; }
-		public function set text(value:String):void
+		public function set text(t:String):void
 		{
-			if (_text == value && !_richText) return;
-			_field.text = _text = value;
-			if (_richText) {
-				_richText = null;
-				super.updateColorTransform();
+			if (t && (t != text))
+			{
+				_text = t;
 			}
+			_format.isRichText = false;
+			
 			updateTextBuffer();
 		}
 		
-		/**
-		 * Rich-text string with markup.
-		 * Use setStyle() to control the appearance of marked-up text.
-		 */
-		public function get richText():String { return _richText || _text; }
-		public function set richText(value:String):void
+		public function get richText():String { return _text; }
+		public function set richText(t:String):void
 		{
-			if (_richText == value) return;
-			var fromPlain:Boolean = (! _richText);
-			_richText = value;
-			if (_richText == "") _field.text = _text = "";
-			if (fromPlain && _richText) {
-				/*
-				 * N.B. if _form.color != _color we call
-				 * updateTextBuffer() from updateColorTransform().
-				 * 
-				 * _color always has most significant byte 0 so
-				 * setting _form.color = 0xFFFFFFFF will always trigger this.
-				 */
-				_form.color = 0xFFFFFFFF;
-				updateColorTransform();
-			} else {
-				updateTextBuffer();
+			if (t && (t != text))
+			{
+				_text = t;
 			}
+			_format.isRichText = true;
+			
+			updateTextBuffer();
 		}
 		
-		/**
-		 * Font family.
-		 */
-		public function get font():String { return _font; }
-		public function set font(value:String):void
+		//to set all the format variables.
+		public function get textFont():String { return _format.font; }
+		public function set textFont(f:String):void { _format.font = f; }
+		
+		public function get textSize():uint { return _format.size; }
+		public function set textSize(s:uint):void { _format.size = s; }
+		
+		public function get textAlign():String { return _format.align; }
+		public function set textAlign(a:String):void { _format.align = a; }
+		
+		public function get textVAlign():String { return _format.vAlign; }
+		public function set textVAlign(a:String):void { _format.vAlign = a; }
+		
+		public function get textColorRGB():uint { return _format.colorRGB; }
+		public function set textColorRGB(c:uint):void { _format.colorRGB = c; }
+		
+		public function get textColorARGB():uint { return _format.colorARGB; }
+		public function set textColorARGB(c:uint):void { _format.colorARGB = c; }
+		
+		public function get textAlpha():Number { return _format.alpha; }
+		public function set textAlpha(a:Number):void { _format.alpha = a; }
+		
+		public function get textAlpaARGB():uint { return _format.alphaARGB; }
+		public function set textAlphaARGB(a:uint):void { _format.alphaARGB = a; }
+		
+		public function get textWidth():Number { return _format.width; }
+		public function set textWidth(w:Number):void { _format.width = w; }
+		
+		public function get textHeight():Number { return _format.height; }
+		public function set textHeight(h:Number):void { _format.height = h; }
+		
+		public function get resizable():Boolean { return _format.resizable; }
+		public function set resizable(r:Boolean):void { _format.resizable = r; }
+		
+		public function get textScrollX():Number { return _format.textScrollX; }
+		public function set textScrollX(s:Number):void { _format.textScrollX = s; }
+		
+		public function get multiline():Boolean { return _format.multiline; }
+		public function set multiline(m:Boolean):void { _format.multiline = m; }
+		
+		public function get wordWrap():Boolean { return _format.wordWrap; }
+		public function set wordWrap(w:Boolean):void { _format.wordWrap = w; }
+		
+		private function get _styles():Object
 		{
-			if (_font == value) return;
-			_form.font = _font = value;
-			updateTextBuffer();
+			return TextFormatting.styles;
 		}
 		
-		/**
-		 * Font size.
-		 */
-		public function get size():uint { return _size; }
-		public function set size(value:uint):void
+		private var _text:String;
+		private var _format:TextFormatting;
+		private var _field:TextField;
+		
+		private var _tlm:TextLineMetrics;
+		private var _tlm_y:Number;
+		
+		
+//-- --- Static part with all the rich text function and variables. Are directly called to the text format
+		public static function setStyle(name:String, options:Object):void
 		{
-			if (_size == value) return;
-			_form.size = _size = value;
-			updateTextBuffer();
+			TextFormatting.setStyle(name, options);
 		}
-		
-		/**
-		 * Alignment ("left", "center" or "right").
-		 */
-		public function get align():String { return _align; }
-		public function set align(value:String):void
+		public static function getStyle(name:String):TextFormat
 		{
-			if (_align == value) return;
-			_form.align = _align = value;
-			updateTextBuffer();
+			return TextFormatting.getStyle(name);
 		}
-		
-		/**
-		 * Leading (amount of vertical space between lines).
-		 */
-		public function get leading():Number { return _leading; }
-		public function set leading(value:Number):void
-		{
-			if (_leading == value) return;
-			_form.leading = _leading = value;
-			updateTextBuffer();
-		}
-		
-		/**
-		 * Automatic word wrapping.
-		 */
-		public function get wordWrap():Boolean { return _wordWrap; }
-		public function set wordWrap(value:Boolean):void
-		{
-			if (_wordWrap == value) return;
-			_field.wordWrap = _wordWrap = value;
-			updateTextBuffer();
-		}
-		
-		/**
-		 * Width of the text image.
-		 */
-		override public function get width():uint { return _width; }
-		public function set width(value:uint):void
-		{
-			if (_width == value) return;
-			_width = value;
-			updateTextBuffer();
-		}
-		
-		/**
-		 * Height of the text image.
-		 */
-		override public function get height():uint { return _height; }
-		public function set height(value:uint):void
-		{
-			if (_height == value) return;
-			_height = value;
-			updateTextBuffer();
-		}
-		
-		/**
-		 * The scaled width of the text.
-		 */
-		override public function get scaledWidth():Number { return _width * scaleX * scale; }
-		
-		/**
-		 * Set the scaled width of the text.
-		 */
-		override public function set scaledWidth(w:Number):void { scaleX = w / scale / _width; }
-		
-		/**
-		 * The scaled height of the text.
-		 */
-		override public function get scaledHeight():Number { return _height * scaleY * scale; }
-		
-		/**
-		 * Set the scaled height of the text.
-		 */
-		override public function set scaledHeight(h:Number):void { scaleY = h / scale / _height; }
-		
-		/**
-		 * Width of the text within the image.
-		 */
-		public function get textWidth():uint { return _textWidth; }
-		
-		/**
-		 * Height of the text within the image.
-		 */
-		public function get textHeight():uint { return _textHeight; }
-		
-		/** 
-		 * Set TextField or TextFormat property
-		 * returns true on success and false if property not found on either
-		 */
-		public function setTextProperty(name:String, value:*):Boolean {
-			if (_field.hasOwnProperty(name)) {
-				_field[name] = value;
-			} else if(_form.hasOwnProperty(name)) {
-				_form[name] = value;
-				_field.setTextFormat(_form);
-			} else {
-				return false;
-			}
-			updateTextBuffer();
-			return true;
-		}
-		
-		/** 
-		 * Get TextField or TextForm property
-		 */ 
-		public function getTextProperty(name:String):* {
-			if (_field.hasOwnProperty(name)) {
-				return _field[name];
-			} else if(_form.hasOwnProperty(name)) {
-				return _form[name];
-			} else {
-				// TODO need a better "cannot get" value here
-				return null;
-			}
-		}
-
-		// Text information.
-		/** @protected */ protected var _field:TextField = new TextField;
-		/** @protected */ protected var _width:uint;
-		/** @protected */ protected var _height:uint;
-		/** @protected */ protected var _textWidth:uint;
-		/** @protected */ protected var _textHeight:uint;
-		/** @protected */ protected var _form:TextFormat;
-		/** @protected */ protected var _text:String;
-		/** @protected */ protected var _richText:String;
-		/** @protected */ protected var _font:String;
-		/** @protected */ protected var _size:uint;
-		/** @protected */ protected var _align:String;
-		/** @protected */ protected var _leading:Number;
-		/** @protected */ protected var _wordWrap:Boolean;
-		
-		// Default font family.
-		// Use this option when compiling with Flex SDK 3 or lower
-		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
-		// Use this option when compiling with Flex SDK 4
-		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
-		/** @private */ private static var _FONT_DEFAULT:Class;
 	}
+
 }
