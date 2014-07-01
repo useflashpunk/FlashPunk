@@ -9,7 +9,11 @@ package net.flashpunk.graphics
 	import net.flashpunk.FP;
 	import net.flashpunk.graphics.Image;
 	/**
-	 * ...
+	 * Used for trawing an String ith embed fonts and custom formats.
+	 * Users of Flex SDK 3 have to goto the bottom of the TextFormatting.as file and cange the embed class.
+	 * 
+	 * NOTE: This clas is heavily based on the old Text class.
+	 * @author Copying
 	 */
 	public class Text extends Image
 	{

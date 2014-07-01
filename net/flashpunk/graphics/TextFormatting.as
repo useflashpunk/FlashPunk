@@ -4,7 +4,9 @@ package net.flashpunk.graphics
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	/**
-	 * Contains all the formatting needed for the GText.
+	 * Contains all the formatting needed for the Text.
+	 * Users of Flex SDK 3 have to goto the bottom of the file and cange the embed class.
+	 * 
 	 * @author Copying
 	 */
 	public class TextFormatting 
@@ -40,7 +42,7 @@ package net.flashpunk.graphics
 		/**
 		 * Constructor.
 		 * To set the options you have to use:
-		 * (format = new GTextFormat).setOptions(options);
+		 * (format = new TextFormatting).setOptions(options);
 		 */
 		public function TextFormatting() 
 		{
@@ -364,7 +366,7 @@ package net.flashpunk.graphics
 			{
 				if (!format.hasOwnProperty(key))
 				{
-					throw new ArgumentError ('"' + key + '" is not a TextFormat property (not the same as a general GTextFormat).');
+					throw new ArgumentError ('"' + key + '" is not a TextFormat property (not the same as a general TextFormatting).');
 					continue;
 				}
 				format[key] = options[key];
@@ -381,11 +383,12 @@ package net.flashpunk.graphics
 		
 //-- --- --- --- --- --- --- --- --- --- --- 
 		// Default font family.
-		// Use this option when compiling with Flex SDK 3 or lower
-		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')]
+		// Use this option when compiling with Flex SDK 3 or lower.
+		// [Embed(source = '04B_03__.TTF', fontFamily = 'default')] /* Delete the // of this line to set it
 		// Use this option when compiling with Flex SDK 4
 		[Embed(source = '04B_03__.TTF', embedAsCFF="false", fontFamily = 'default')]
-		/** @private */ private static var _FONT_DEFAULT:Class;	
+		private static var _FONT_DEFAULT:Class;
+		//*/
 	}
 
 }
