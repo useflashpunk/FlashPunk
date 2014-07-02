@@ -119,6 +119,15 @@
 			_data[name] = value;
 		}
 		
+		/**
+		 * Clears save file.
+		 * @param	filename Save file to clear.
+		 */
+		public static function clearSave(filename:String):void {
+			Data.load(clearSave);
+			_shared.clear();
+		}
+		
 		/** @private Reads a property from the data object. */
 		private static function read(name:String, defaultValue:*):*
 		{
