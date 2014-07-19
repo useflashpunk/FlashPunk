@@ -124,7 +124,7 @@
 		 * @param	filename Save file to clear.
 		 */
 		public static function clearSave(filename:String):void {
-			Data.load(clearSave);
+			Data.load(filename);
 			_shared.clear();
 		}
 		
