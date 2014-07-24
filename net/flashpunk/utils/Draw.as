@@ -17,11 +17,18 @@
 	public class Draw 
 	{
 		/**
-		 * The blending mode used by Draw functions. This will not
-		 * apply to Draw.line() or Draw.circle(), but will apply
-		 * to Draw.linePlus() and Draw.circlePlus().
+		 * The blending mode used by Draw functions. This will not apply
+		 * to Draw.line() or Draw.circle(), but will apply to others
+		 * (like Draw.linePlus() and Draw.circlePlus() for example).
 		 */
 		public static var blend:String;
+		
+		/**
+		 * The caps style used by Draw functions. This will not apply
+		 * to Draw.line() or Draw.arc(), but will apply to others
+		 * (like Draw.linePlus() and Draw.arcPlus() for example).
+		 */
+		public static var capsStyle:String;
 		
 		/**
 		 * Sets the drawing target for Draw functions.
@@ -158,7 +165,7 @@
 		public static function linePlus(x1:Number, y1:Number, x2:Number, y2:Number, color:uint = 0xFF000000, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
-			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NONE);
+			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NONE, capsStyle);
 			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
 			_graphics.lineTo(x2 - _camera.x, y2 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);
@@ -386,7 +393,7 @@
 		public static function curve(x1:Number, y1:Number, x2:Number, y2:Number, x3:Number, y3:Number, color:uint = 0, alpha:Number = 1, thick:Number = 1):void
 		{
 			_graphics.clear();
-			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
+			_graphics.lineStyle(thick, color & 0xFFFFFF, alpha, false, LineScaleMode.NORMAL, capsStyle);
 			_graphics.moveTo(x1 - _camera.x, y1 - _camera.y);
 			_graphics.curveTo(x2 - _camera.x, y2 - _camera.y, x3 - _camera.x, y3 - _camera.y);
 			_target.draw(FP.sprite, null, null, blend);
@@ -529,7 +536,7 @@
 			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
 			_graphics.clear();
 			
-			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
+			_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, capsStyle, JointStyle.MITER);
 			
 			linePlus(x1, y1, x2, y2, color, alpha, thick);
 			
@@ -665,7 +672,7 @@
 				_graphics.moveTo(centerX, centerY);
 				_graphics.lineTo(startX, startY);
 			} else {
-				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
+				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, capsStyle, JointStyle.MITER);
 				_graphics.moveTo(startX, startY);
 			}
 
@@ -772,7 +779,7 @@
 			if (fill) {
 				_graphics.beginFill(color, alpha);
 			} else {
-				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
+				_graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, capsStyle, JointStyle.MITER);
 			}
 			
 			if (closed) _graphics.moveTo(points[points.length - 1].x, points[points.length - 1].y);
