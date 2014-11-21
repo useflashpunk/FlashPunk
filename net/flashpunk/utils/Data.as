@@ -123,7 +123,7 @@
 		 * Clears save file.
 		 * @param	filename Save file to clear.
 		 */
-		public static function clearSave(filename:String):void {
+		public static function clear(filename:String):void {
 			Data.load(filename);
 			_shared.clear();
 		}
