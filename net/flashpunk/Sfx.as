@@ -39,8 +39,9 @@
 		 * Plays the sound once.
 		 * @param	vol		Volume factor, a value from 0 to 1.
 		 * @param	pan		Panning factor, a value from -1 to 1.
+		 * @param	loops		Amount of times to repeat the song.
 		 */
-		public function play(vol:Number = 1, pan:Number = 0):void
+		public function play(vol:Number = 1, pan:Number = 0, loops:int = 0):void
 		{
 			if (_channel) stop();
 			_pan = FP.clamp(pan, -1, 1);
@@ -49,7 +50,7 @@
 			_filteredVol = Math.max(0, _vol * getVolume(_type));
 			_transform.pan = _filteredPan;
 			_transform.volume = _filteredVol;
-			_channel = _sound.play(0, 0, _transform);
+			_channel = _sound.play(0, loops, _transform);
 			if (_channel)
 			{
 				addPlaying();
@@ -66,7 +67,7 @@
 		 */
 		public function loop(vol:Number = 1, pan:Number = 0):void
 		{
-			play(vol, pan);
+			play(vol, pan, int.MAX_VALUE);
 			_looping = true;
 		}
 		
@@ -90,7 +91,8 @@
 		 */
 		public function resume():void
 		{
-			_channel = _sound.play(_position, 0, _transform);
+			if (_looping) _channel = _sound.play(_position, int.MAX_VALUE, _transform);
+			else _channel = _sound.play(_position, 0, _transform);
 			if (_channel)
 			{
 				addPlaying();
@@ -102,9 +104,11 @@
 		/** @private Event handler for sound completion. */
 		private function onComplete(e:Event = null):void
 		{
-			if (_looping) loop(_vol, _pan);
-			else stop();
-			_position = 0;
+			if (!_looping) 
+			{
+				stop();
+				_position = 0;
+			}
 			if (complete != null) complete();
 		}
 		
