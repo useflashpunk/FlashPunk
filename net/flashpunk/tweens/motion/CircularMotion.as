@@ -18,7 +18,7 @@
 		}
 		
 		/**
-		 * Starts moving along a circle.
+		 * Starts moving along a circle. You have to call start() to actually run it.
 		 * @param	centerX		X position of the circle's center.
 		 * @param	centerY		Y position of the circle's center.
 		 * @param	radius		Radius of the circle.
@@ -26,8 +26,10 @@
 		 * @param	clockwise	If the motion is clockwise.
 		 * @param	duration	Duration of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotion(centerX:Number, centerY:Number, radius:Number, angle:Number, clockwise:Boolean, duration:Number, ease:Function = null):void
+		public function setMotion(centerX:Number, centerY:Number, radius:Number, angle:Number, clockwise:Boolean, duration:Number, ease:Function = null):CircularMotion
 		{
 			_centerX = centerX;
 			_centerY = centerY;
@@ -36,11 +38,11 @@
 			_angleFinish = _CIRC * (clockwise ? 1 : -1);
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/**
-		 * Starts moving along a circle at the speed.
+		 * Starts moving along a circle at the speed. You have to call start() to actually run it.
 		 * @param	centerX		X position of the circle's center.
 		 * @param	centerY		Y position of the circle's center.
 		 * @param	radius		Radius of the circle.
@@ -48,8 +50,10 @@
 		 * @param	clockwise	If the motion is clockwise.
 		 * @param	speed		Speed of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotionSpeed(centerX:Number, centerY:Number, radius:Number, angle:Number, clockwise:Boolean, speed:Number, ease:Function = null):void
+		public function setMotionSpeed(centerX:Number, centerY:Number, radius:Number, angle:Number, clockwise:Boolean, speed:Number, ease:Function = null):CircularMotion
 		{
 			_centerX = centerX;
 			_centerY = centerY;
@@ -58,7 +62,7 @@
 			_angleFinish = _CIRC * (clockwise ? 1 : -1);
 			_target = (_radius * _CIRC) / speed;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

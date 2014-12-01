@@ -24,13 +24,15 @@
 		}
 		
 		/**
-		 * Tweens the value from one angle to another.
+		 * Tweens the value from one angle to another. You have to call start() to actually run it.
 		 * @param	fromAngle		Start angle.
 		 * @param	toAngle			End angle.
 		 * @param	duration		Duration of the tween.
 		 * @param	ease			Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function tween(fromAngle:Number, toAngle:Number, duration:Number, ease:Function = null):void
+		public function tween(fromAngle:Number, toAngle:Number, duration:Number, ease:Function = null):AngleTween
 		{
 			_start = angle = fromAngle;
 			var d:Number = toAngle - angle,
@@ -40,7 +42,7 @@
 			else _range = FP.choose(180, -180);
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

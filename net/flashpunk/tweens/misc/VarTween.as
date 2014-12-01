@@ -18,14 +18,16 @@
 		}
 		
 		/**
-		 * Tweens a numeric public property.
+		 * Tweens a numeric public property. You have to call start() to actually run it.
 		 * @param	object		The object containing the property.
 		 * @param	property	The name of the property (eg. "x").
 		 * @param	to			Value to tween to.
 		 * @param	duration	Duration of the tween.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function tween(object:Object, property:String, to:Number, duration:Number, ease:Function = null):void
+		public function tween(object:Object, property:String, to:Number, duration:Number, ease:Function = null):VarTween
 		{
 			_object = object;
 			_property = property;
@@ -37,7 +39,7 @@
 			_range = to - _start;
 			_target = duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/** @private Updates the Tween. */

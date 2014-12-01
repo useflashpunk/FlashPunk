@@ -840,7 +840,7 @@
 			}
 			var tween:MultiVarTween = new MultiVarTween(complete, type);
 			tween.tween(object, values, duration, ease, delay);
-			tweener.addTween(tween);
+			tweener.addTween(tween, true);
 			return tween;
 		}
 		

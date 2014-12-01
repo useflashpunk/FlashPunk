@@ -21,31 +21,35 @@
 		}
 		
 		/**
-		 * Starts moving along the path.
+		 * Starts moving along the path. You have to call start() to actually run it.
 		 * @param	duration	Duration of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotion(duration:Number, ease:Function = null):void
+		public function setMotion(duration:Number, ease:Function = null):QuadPath
 		{
 			updatePath();
 			_target = duration;
 			_speed = _distance / duration;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/**
-		 * Starts moving along the path at the speed.
+		 * Starts moving along the path at the speed. You have to call start() to actually run it.
 		 * @param	speed		Speed of the movement.
 		 * @param	ease		Optional easer function.
+		 * 
+		 * @return The tween itself for chaining.
 		 */
-		public function setMotionSpeed(speed:Number, ease:Function = null):void
+		public function setMotionSpeed(speed:Number, ease:Function = null):QuadPath
 		{
 			updatePath();
 			_target = _distance / speed;
 			_speed = speed;
 			_ease = ease;
-			start();
+			return this;
 		}
 		
 		/**
