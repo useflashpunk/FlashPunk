@@ -2,6 +2,7 @@ package net.flashpunk.graphics
 {
 	import flash.display.*;
 	import flash.geom.*;
+	import net.flashpunk.masks.Polygon;
 
 	import net.flashpunk.*;
 
@@ -137,17 +138,38 @@ package net.flashpunk.graphics
 		 * @param	width		Width of the rectangle.
 		 * @param	height		Height of the rectangle.
 		 * @param	color		Color of the rectangle.
+		 * @param	alpha		Alpha of the rectangle.
+		 * @param	fill		If the rectangle should be filled with the color (true) or just an outline (false).
+		 * @param	thick		How thick the outline should be (only applicable when fill = false).
+		 * @param	radius		Round rectangle corners by this amount.
 		 * @return	A new Image object.
 		 */
-		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
+		public static function createRect(width:uint, height:uint, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1, radius:Number = 0):Image
 		{
-			var source:BitmapData = new BitmapData(width, height, true, 0xFFFFFFFF);
+			var graphics:Graphics = FP.sprite.graphics;
 			
-			var image:Image = new Image(source);
+			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
+			graphics.clear();
 			
-			image.color = color;
-			image.alpha = alpha;
+			var thickOffset:Number = 0;
+			if (fill) {
+				graphics.beginFill(color, alpha);
+			} else {
+				thickOffset = thick * .5;
+				graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
+			}
 			
+			if (radius <= 0) {
+				graphics.drawRect(0 + thickOffset, 0 + thickOffset, width - thickOffset * 2, height - thickOffset * 2);
+			} else {
+				graphics.drawRoundRect(0 + thickOffset, 0 + thickOffset, width - thickOffset * 2, height - thickOffset * 2, radius);
+			}
+			graphics.endFill();
+
+			var data:BitmapData = new BitmapData(width, height, true, 0);
+			data.draw(FP.sprite);
+			
+			var image:Image = new Image(data);
 			return image;
 		}
 		
@@ -156,21 +178,27 @@ package net.flashpunk.graphics
 		 * @param	radius		Radius of the circle.
 		 * @param	color		Color of the circle.
 		 * @param	alpha		Alpha of the circle.
+		 * @param	fill		If the circle should be filled with the color (true) or just an outline (false).
+		 * @param	thick		How thick the outline should be (only applicable when fill = false).
 		 * @return	A new Image object.
 		 */
-		public static function createCircle(radius:uint, color:uint = 0xFFFFFF, alpha:Number = 1):Image
+		public static function createCircle(radius:uint, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
 		{
-			FP.sprite.graphics.clear();
-			FP.sprite.graphics.beginFill(0xFFFFFF);
-			FP.sprite.graphics.drawCircle(radius, radius, radius);
+			var graphics:Graphics = FP.sprite.graphics;
+			
+			graphics.clear();
+			if (fill) {
+				graphics.beginFill(color & 0xFFFFFF, alpha);
+				graphics.drawCircle(radius, radius, radius);
+				graphics.endFill();
+			} else {
+				graphics.lineStyle(thick, color & 0xFFFFFF, alpha);
+				graphics.drawCircle(radius, radius, radius - thick * .5);
+			}
 			var data:BitmapData = new BitmapData(radius * 2, radius * 2, true, 0);
 			data.draw(FP.sprite);
 			
 			var image:Image = new Image(data);
-			
-			image.color = color;
-			image.alpha = alpha;
-			
 			return image;
 		}
 		
@@ -188,7 +216,7 @@ package net.flashpunk.graphics
 		 * @param	toAlpha		Alpha at end of gradient.
 		 * @return	A new Image object.
 		 */
-		public static function createGradient (width:uint, height:uint, fromX:Number, fromY:Number, toX:Number, toY:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1):Image
+		public static function createGradient(width:uint, height:uint, fromX:Number, fromY:Number, toX:Number, toY:Number, fromColor:uint, toColor:uint, fromAlpha:Number = 1, toAlpha:Number = 1):Image
 		{
 			var bitmap:BitmapData = new BitmapData(width, height, true, 0x0);
 			
@@ -225,6 +253,52 @@ package net.flashpunk.graphics
 			bitmap.draw(FP.sprite);
 			
 			return new Image(bitmap);
+		}
+		
+		/**
+		 * Creates a new polygon Image from an array of points.
+		 * @param	points		An array of coordinates (must be positive) that define the polygon.
+		 * @param	color		Color of the polygon.
+		 * @param	alpha		Alpha of the polygon.
+		 * @param	fill		If the polygon should be filled with the color (true) or just an outline (false).
+		 * @param	thick		How thick the outline should be (only applicable when fill = false).
+		 * @return	A new Image object.
+		 */
+		public static function createPolygon(points:Vector.<Point>, color:uint = 0xFFFFFF, alpha:Number = 1, fill:Boolean = true, thick:Number = 1):Image
+		{
+			var graphics:Graphics = FP.sprite.graphics;
+			var p:Point;
+			
+			var maxX:Number = Number.NEGATIVE_INFINITY;
+			var maxY:Number = Number.NEGATIVE_INFINITY;
+			
+			// find max x and y coords
+			for (var i:int = 0; i < points.length; i++) {
+				p = points[i];
+				if (p.x > maxX) maxX = p.x;
+				if (p.y > maxY) maxY = p.y;
+			}
+			
+			if (color > 0xFFFFFF) color = 0xFFFFFF & color;
+			graphics.clear();
+			
+			if (fill) {
+				graphics.beginFill(color, alpha);
+			} else {
+				graphics.lineStyle(thick, color, alpha, false, LineScaleMode.NORMAL, null, JointStyle.MITER);
+			}
+			
+			graphics.moveTo(points[points.length - 1].x, points[points.length - 1].y);
+			for (var j:int = 0; j < points.length; j++) {
+				p = points[j];
+				graphics.lineTo(p.x, p.y);
+			}
+			graphics.endFill();
+			
+			var data:BitmapData = new BitmapData(maxX, maxY, true, 0);
+			data.draw(FP.sprite);
+			
+			return new Image(data);
 		}
 		
 		/**

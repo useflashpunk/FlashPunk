@@ -48,7 +48,7 @@
 		 */
 		public function add(mask:Mask):Mask
 		{
-			_masks[_count ++] = mask;
+			_masks[_count++] = mask;
 			mask.list = this;
 			mask.parent = parent;
 			update();
@@ -70,7 +70,7 @@
 				{
 					mask.list = null;
 					mask.parent = null;
-					_count --;
+					_count--;
 					update();
 				}
 				else _temp[_temp.length] = m;
@@ -90,12 +90,12 @@
 			_temp.length = 0;
 			var i:int = _masks.length;
 			index %= i;
-			while (i --)
+			while (i--)
 			{
 				if (i == index)
 				{
 					_masks[index].list = null;
-					_count --;
+					_count--;
 					update();
 				}
 				else _temp[_temp.length] = _masks[index];
@@ -134,17 +134,28 @@
 		override public function update():void 
 		{
 			// find bounds of the contained masks
-			var t:int, l:int, r:int, b:int, h:Hitbox, i:int = _count;
+			var t:int, l:int, r:int, b:int, i:int = _count;
 			l = t = int.MAX_VALUE;
 			r = b = int.MIN_VALUE;
-			while (i --)
+			
+			var hitbox:Hitbox;
+			var poly:Polygon;
+			
+			while (i--)
 			{
-				if ((h = _masks[i] as Hitbox))
+				if ((poly = _masks[i] as Polygon))
 				{
-					if (h._x < l) l = h._x;
-					if (h._y < t) t = h._y;
-					if (h._x + h._width > r) r = h._x + h._width;
-					if (h._y + h._height > b) b = h._y + h._height;
+					if (poly.minX < l) l = poly.minX;
+					if (poly.minY < t) t = poly.minY;
+					if (poly.maxX > r) r = poly.maxX;
+					if (poly.maxY > b) b = poly.maxY;
+				} 
+				else if ((hitbox = _masks[i] as Hitbox))
+				{
+					if (hitbox._x < l) l = hitbox._x;
+					if (hitbox._y < t) t = hitbox._y;
+					if (hitbox._x + hitbox._width > r) r = hitbox._x + hitbox._width;
+					if (hitbox._y + hitbox._height > b) b = hitbox._y + hitbox._height;
 				}
 			}
 			

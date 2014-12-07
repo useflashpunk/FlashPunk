@@ -1,6 +1,7 @@
 ﻿package net.flashpunk
 {
 	import flash.display.Graphics;
+	import flash.geom.Point;
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
@@ -45,7 +46,7 @@
 		}
 		
 		/** @private Collide against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		protected function collideMask(other:Mask):Boolean
 		{
 			return parent.x - parent.originX + parent.width > other.parent.x - other.parent.originX
 				&& parent.y - parent.originY + parent.height > other.parent.y - other.parent.originY
@@ -78,6 +79,33 @@
 			
 		}
 		
+		/** @private Projects this mask points on axis and returns min and max values in projection object. */
+		public function project(axis:Point, projection:Object):void
+		{
+			var cur:Number,
+				max:Number = Number.NEGATIVE_INFINITY,
+				min:Number = Number.POSITIVE_INFINITY;
+
+			cur = -parent.originX * axis.x - parent.originY * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			cur = (-parent.originX + parent.width) * axis.x - parent.originY * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			cur = -parent.originX * axis.x + (-parent.originY + parent.height) * axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			cur = (-parent.originX + parent.width) * axis.x + (-parent.originY + parent.height)* axis.y;
+			if (cur < min) min = cur;
+			if (cur > max) max = cur;
+
+			projection.min = min;
+			projection.max = max;
+		}
+	
 		// Mask information.
 		/** @private */ private var _class:Class;
 		/** @private */ protected var _check:Dictionary = new Dictionary;

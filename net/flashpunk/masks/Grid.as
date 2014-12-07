@@ -196,7 +196,7 @@
 		public function get data():BitmapData { return _data; }
 		
 		/** @private Collides against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		override protected function collideMask(other:Mask):Boolean
 		{
 			_rect.x = other.parent.x - other.parent.originX - parent.x + parent.originX;
 			_rect.y = other.parent.y - other.parent.originY - parent.y + parent.originY;
@@ -210,7 +210,7 @@
 		}
 		
 		/** @private Collides against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		override protected function collideHitbox(other:Hitbox):Boolean
 		{
 			_rect.x = other.parent.x + other._x - parent.x - _x;
 			_rect.y = other.parent.y + other._y - parent.y - _y;
@@ -349,6 +349,7 @@
 			
 			var x:int, y:int;
 			
+			g.beginFill(0xFFFFFF, .15);
 			g.lineStyle(1, 0xFFFFFF, 0.25);
 			
 			for (y = 0; y < _rows; y ++)
@@ -361,6 +362,8 @@
 					}
 				}
 			}
+			
+			g.endFill();
 		}
 		
 		// Grid information.

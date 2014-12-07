@@ -40,7 +40,7 @@
 		}
 		
 		/** @private Collide against an Entity. */
-		private function collideMask(other:Mask):Boolean
+		override protected function collideMask(other:Mask):Boolean
 		{
 			_point.x = parent.x + _x;
 			_point.y = parent.y + _y;
@@ -52,7 +52,7 @@
 		}
 		
 		/** @private Collide against a Hitbox. */
-		private function collideHitbox(other:Hitbox):Boolean
+		override protected function collideHitbox(other:Hitbox):Boolean
 		{
 			_point.x = parent.x + _x;
 			_point.y = parent.y + _y;
