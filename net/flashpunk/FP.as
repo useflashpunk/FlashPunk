@@ -73,6 +73,11 @@
 		public static var elapsed:Number;
 		
 		/**
+		 * The ideal interval (in fractional seconds) between frames.
+		 */
+		public static function get interval():Number { return _interval; }
+		
+		/**
 		 * Timescale applied to FP.elapsed.
 		 */
 		public static var rate:Number = 1;
@@ -1030,6 +1035,7 @@
 		
 		// Time information.
 		/** @private */ internal static var _time:uint;
+		/** @private */ internal static var _interval:Number;
 		/** @private */ public static var _updateTime:uint;
 		/** @private */ public static var _renderTime:uint;
 		/** @private */ public static var _gameTime:uint;
