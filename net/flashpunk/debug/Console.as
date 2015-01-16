@@ -76,7 +76,7 @@ package net.flashpunk.debug
 			{
 				for each (i in properties) WATCH_LIST.push(i);
 			}
-			else if (properties[0] is Array || properties[0] is Vector.<*>)
+			else if (properties[0] is Array || properties[0] is Vector.<String>)
 			{
 				for each (i in properties[0]) WATCH_LIST.push(i);
 			}

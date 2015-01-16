@@ -211,7 +211,7 @@
 		 */
 		public static function choose(...objs):*
 		{
-			var c:* = (objs.length == 1 && (objs[0] is Array || objs[0] is Vector.<*>)) ? objs[0] : objs;
+			var c:* = (objs.length == 1 && (objs[0] is Array || isVector(objs[0]))) ? objs[0] : objs;
 			return c[rand(c.length)];
 		}
 		
@@ -905,7 +905,7 @@
 		 */
 		public static function shuffle(a:Object):void
 		{
-			if (a is Array || a is Vector.<*>)
+			if (a is Array || isVector(a))
 			{
 				var i:int = a.length, j:int, t:*;
 				while (-- i)
@@ -924,7 +924,7 @@
 		 */
 		public static function sort(object:Object, ascending:Boolean = true):void
 		{
-			if (object is Array || object is Vector.<*>)
+			if (object is Array || isVector(object))
 			{
 				// Only need to sort the array if it has more than one item.
 				if (object.length > 1)
@@ -942,7 +942,7 @@
 		 */
 		public static function sortBy(object:Object, property:String, ascending:Boolean = true):void
 		{
-			if (object is Array || object is Vector.<*>)
+			if (object is Array || isVector(object))
 			{
 				// Only need to sort the array if it has more than one item.
 				if (object.length > 1)
@@ -1024,6 +1024,11 @@
 			}
 			if (left < j) quicksortBy(a, left, j, ascending, property);
 			if (i < right) quicksortBy(a, i, right, ascending, property);
+		}
+		/** @private Determines whether an object is any of the four Vector specializations. */
+		private static function isVector(object:Object):Boolean
+		{
+			return object is Vector.<*> || object is Vector.<Number> || object is Vector.<uint> || object is Vector.<int>;
 		}
 		
 		// World information.
