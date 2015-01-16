@@ -120,11 +120,10 @@
 		}
 		
 		/**
-		 * Clears save file.
-		 * @param	filename Save file to clear.
+		 * Clears the current data.
 		 */
-		public static function clear(filename:String):void {
-			Data.load(filename);
+		public static function clear():void
+		{
 			_shared.clear();
 		}
 		

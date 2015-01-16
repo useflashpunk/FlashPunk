@@ -51,15 +51,24 @@
 			if (!_particle) return;
 			
 			// particle info
-			var e:Number = FP.timeInFrames ? 1 : FP.elapsed,
-				p:Particle = _particle,
+			var e:Number = FP.timeInFrames ? 1 : FP.elapsed;
+			simulate(e);
+		}
+		
+		/**
+		 * Simulate the emitter running for a given amount of time.
+		 * @param	time The time to run for, in seconds or frames depending on Engine timestep mode.
+		 */
+		public function simulate(time:Number):void
+		{
+			var p:Particle = _particle,
 				n:Particle;
 			
 			// loop through the particles
 			while (p)
 			{
 				// update time scale
-				p._time += e;
+				p._time += time;
 				
 				// remove on time-out
 				if (p._time >= p._duration)

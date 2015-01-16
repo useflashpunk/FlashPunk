@@ -63,6 +63,7 @@
 			FP.assignedFrameRate = frameRate;
 			FP.fixed = fixed;
 			FP.timeInFrames = fixed;
+			FP._interval = 1.0 / frameRate;
 			
 			// global game objects
 			FP.engine = this;
