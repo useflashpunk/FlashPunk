@@ -1,4 +1,4 @@
-Copyright (c) 2010 Chevy Ray Johnston
+Copyright (c) 2015 Chevy Ray Johnston
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
