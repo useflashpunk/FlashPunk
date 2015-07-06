@@ -1,4 +1,4 @@
-FlashPunk
+FlashPunk - Game
 =========
 
 Create games. Easy.
