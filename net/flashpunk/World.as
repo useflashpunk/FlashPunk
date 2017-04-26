@@ -418,6 +418,31 @@
 		}
 		
 		/**
+		 * Returns the Entity at front which collides with the point.
+		 * @param   x       X position
+		 * @param   y       Y position
+		 * @return The Entity at front which collides with the point, or null if not found.
+		 */
+		public function frontCollidePoint(x:Number, y:Number):Entity
+		{
+			var e:Entity,
+			i:int = 0,
+			l:int = _layerList.length;
+			do
+			{
+				e = _renderFirst[_layerList[i]];
+				while (e)
+				{
+					if(e.collidePoint(e.x, e.y, x, y)) return e;
+					e = e._renderNext
+				}
+				if(i > l) break;
+			}
+			while(++i);
+				return null;
+		}
+		
+		/**
 		 * Returns the first Entity found that collides with the line.
 		 * @param	type		The Entity type to check for.
 		 * @param	fromX		Start x of the line.
